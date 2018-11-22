@@ -1,7 +1,10 @@
+"
+A set of utilities.
+"
 Class {
 	#name : #BaselineOfGToolkitUtility,
 	#superclass : #BaselineOf,
-	#category : 'BaselineOfGToolkitUtility'
+	#category : #BaselineOfGToolkitUtility
 }
 
 { #category : #baseline }
