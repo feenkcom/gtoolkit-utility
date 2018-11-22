@@ -9,3 +9,8 @@ GtFileUtilityConstants class >> maxFileNameLenght [
 	"Return a maximum file name lenght, excluding extensions and parent directories."
 	^ 25
 ]
+
+{ #category : #accessing }
+GtFileUtilityConstants class >> pillarMatchingPattern [
+	^ '*.pillar'
+]

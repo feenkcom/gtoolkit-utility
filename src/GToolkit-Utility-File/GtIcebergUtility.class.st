@@ -18,7 +18,7 @@ GtIcebergUtility class >> documentsMatching: aPattern [
 { #category : #accessing }
 GtIcebergUtility class >> pillarDocuments [
 	<return: #Array of: #ReferenceFile>
-	^ self documentsMatching: '*.pillar'
+	^ self documentsMatching: GtFileUtilityConstants pillarMatchingPattern
 ]
 
 { #category : #accessing }
