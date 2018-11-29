@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFileMimeTypeResolver,
 	#superclass : #Object,
-	#category : 'GToolkit-Utility-File'
+	#category : #'GToolkit-Utility-File'
 }
 
 { #category : #accessing }

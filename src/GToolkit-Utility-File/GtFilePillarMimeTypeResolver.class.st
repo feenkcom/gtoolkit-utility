@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFilePillarMimeTypeResolver,
 	#superclass : #GtFileMimeTypeResolver,
-	#category : 'GToolkit-Utility-File'
+	#category : #'GToolkit-Utility-File'
 }
 
 { #category : #public }

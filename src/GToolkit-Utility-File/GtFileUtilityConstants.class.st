@@ -1,8 +1,19 @@
 Class {
 	#name : #GtFileUtilityConstants,
 	#superclass : #Object,
-	#category : 'GToolkit-Utility-File'
+	#category : #'GToolkit-Utility-File'
 }
+
+{ #category : #files }
+GtFileUtilityConstants class >> localGtDirectory [
+	<return: #FileReference>
+	^ Smalltalk imageDirectory / self localGtDirectoryName
+]
+
+{ #category : #files }
+GtFileUtilityConstants class >> localGtDirectoryName [
+	^ 'gt-extra'
+]
 
 { #category : #accessing }
 GtFileUtilityConstants class >> maxFileNameLenght [

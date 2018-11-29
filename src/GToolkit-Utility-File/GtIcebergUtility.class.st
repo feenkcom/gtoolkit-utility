@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : #accessing }
+GtIcebergUtility class >> documentAtPath: aPath [
+	"Return a document pointing to an Iceberg repository or to a local Gt directory"
+	<return: #FileReference>
+	| anIcebergFileReference aLocalFileReference |
+	anIcebergFileReference := GtIcebergUtility repositoriesLocation resolvePath: aPath.
+	anIcebergFileReference exists ifTrue: [ ^ anIcebergFileReference ].
+	aLocalFileReference := GtFileUtilityConstants localGtDirectory resolvePath: aPath.
+	aLocalFileReference exists ifTrue: [ ^ aLocalFileReference ].
+	^ anIcebergFileReference
+]
+
+{ #category : #accessing }
 GtIcebergUtility class >> documentsMatching: aPattern [
 	<return: #Array of: #ReferenceFile>
 	^ (IceRepository registry 

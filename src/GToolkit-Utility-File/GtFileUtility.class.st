@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFileUtility,
 	#superclass : #Object,
-	#category : 'GToolkit-Utility-File'
+	#category : #'GToolkit-Utility-File'
 }
 
 { #category : #'storing and loading file' }
