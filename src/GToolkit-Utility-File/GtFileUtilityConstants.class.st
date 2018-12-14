@@ -21,6 +21,11 @@ GtFileUtilityConstants class >> maxFileNameLenght [
 	^ 25
 ]
 
+{ #category : #'accessing - file' }
+GtFileUtilityConstants class >> pillarExtension [
+	^ GtFilePillarMimeTypeResolver supportedExtensions first 
+]
+
 { #category : #accessing }
 GtFileUtilityConstants class >> pillarMatchingPattern [
 	^ '*.pillar'
