@@ -17,7 +17,7 @@ GtAsyncAnnouncerExamples >> announceLater [
 	anAnnouncement := Announcement new.
 	anAnnouncer observedAnnouncer announce: anAnnouncement.
 	self assert: aQueue isEmpty.
-	aTimeout := aSemaphore waitTimeoutMSecs: (anAnnouncer suspencion * 2) asMilliSeconds.
+	aTimeout := aSemaphore waitTimeoutMSecs: (anAnnouncer suspencion * 20) asMilliSeconds.
 	self assert: aTimeout not.
 	self assert: aQueue size equals: 1.
 	self assert: aQueue first equals: anAnnouncement.
@@ -37,7 +37,7 @@ GtAsyncAnnouncerExamples >> announceLaterSecondRound [
 	anAnnouncement := Announcement new.
 	anAnnouncer observedAnnouncer announce: anAnnouncement.
 	self assert: aQueue isEmpty.
-	aTimeout := aSemaphore waitTimeoutMSecs: (anAnnouncer suspencion * 2) asMilliSeconds.
+	aTimeout := aSemaphore waitTimeoutMSecs: (anAnnouncer suspencion * 20) asMilliSeconds.
 	self assert: aTimeout not.
 	self assert: aQueue size equals: 1.
 	self assert: aQueue first equals: anAnnouncement.
