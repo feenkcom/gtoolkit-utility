@@ -1,17 +1,17 @@
 Trait {
-	#name : #GtAssertingTrait,
-	#category : 'GToolkit-Utility-Assertion'
+	#name : #TGtAssert,
+	#category : #'GToolkit-Utility-Assertion'
 }
 
 { #category : #asserting }
-GtAssertingTrait classSide >> assert: aBlock [
+TGtAssert classSide >> assert: aBlock [
 	self 
 		assert: aBlock 
 		description: [ AssertionFailure signal: 'Assertion failed' ]
 ]
 
 { #category : #asserting }
-GtAssertingTrait classSide >> assert: aBlock description: aStringOrBlock [
+TGtAssert classSide >> assert: aBlock description: aStringOrBlock [
 	"Throw an assertion error if aBlock does not evaluates to true.
 	We check for true explicitly to make the assertion fail for non booleans."
 	
@@ -21,23 +21,18 @@ GtAssertingTrait classSide >> assert: aBlock description: aStringOrBlock [
 ]
 
 { #category : #testing }
-GtAssertingTrait classSide >> isAssertionEnabled [
+TGtAssert classSide >> isAssertionEnabled [
 	"Return true if assertions should be executed"
 	<return: #Boolean>
 	^ GtAssertionSettings isAssertionEnabled
 ]
 
-{ #category : #testing }
-GtAssertingTrait classSide >> isDeprecated [
-	^ true
-]
-
 { #category : #asserting }
-GtAssertingTrait >> assert: aBlock [
+TGtAssert >> assert: aBlock [
 	self class assert: aBlock
 ]
 
 { #category : #asserting }
-GtAssertingTrait >> assert: aBlock description: aStringOrBlock [
+TGtAssert >> assert: aBlock description: aStringOrBlock [
 	self class assert: aBlock description: aStringOrBlock
 ]
