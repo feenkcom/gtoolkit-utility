@@ -7,6 +7,29 @@ Class {
 	#category : #'GToolkit-Utility-MessageTally'
 }
 
+{ #category : #opening }
+GtBlocUIProcessTally class >> inspectTally: aRootMessageTally [
+	"Find a tally for a new process that has as child the bloc UI process"
+	aRootMessageTally children
+		detect: [ :aTally | 
+			aTally children anySatisfy: [ :anotherTally |
+				self isTallyForBlocUIProcess: anotherTally ] ]
+		ifFound: [ :currentUIProcesTally |
+			"If we find a tally for the Bloc UI processs we can use the specialized viewer."
+			GtInspector openOn: (self new
+				initializeForUIProcessTally: currentUIProcesTally 
+				withRoot: aRootMessageTally) ]
+		ifNone: [
+			"In case we cannot locate the Bloc UI process we inspect the tally object"
+			GtInspector openOn: aRootMessageTally ].
+]
+
+{ #category : #testing }
+GtBlocUIProcessTally class >> isTallyForBlocUIProcess: aMessageTally [
+	^ (aMessageTally method selector = #createLoopTask) and: [ 
+			aMessageTally theClass = BlPulseLoop ] 
+]
+
 { #category : #ui }
 GtBlocUIProcessTally >> gtViewFramePhasesListFor: aView [
 	<gtView>
@@ -44,18 +67,6 @@ GtBlocUIProcessTally >> gtViewFullTextReportIn: aView [
 ]
 
 { #category : #initialization }
-GtBlocUIProcessTally >> initializeForRootTally: aRootTally [
-	| currentUIProcesTally |
-	"Find a tally for a new process that has as child the bloc UI process"
-	currentUIProcesTally := aRootTally children
-		detect: [ :aTally | 
-			aTally children anySatisfy: [ :anotherTally |
-				self isTallyForBlocUIProcess: anotherTally ] ]
-		ifNone: [ nil ].
-	self initializeForUIProcessTally: currentUIProcesTally withRoot: aRootTally.
-]
-
-{ #category : #initialization }
 GtBlocUIProcessTally >> initializeForUIProcessTally: aUIMessageTally withRoot: aRootMessageTally [
 	| allTallies runPhase currentFramePhase |
 	messageTally := aUIMessageTally.
@@ -71,10 +82,4 @@ GtBlocUIProcessTally >> initializeForUIProcessTally: aUIMessageTally withRoot: a
 		GtMessageTallyWrapper new
 			rootMessageTally: rootMessageTally;
 			messageTally: aTally ].
-]
-
-{ #category : #initialization }
-GtBlocUIProcessTally >> isTallyForBlocUIProcess: aMessageTally [
-	^ (aMessageTally method selector = #createLoopTask) and: [ 
-			aMessageTally theClass = BlPulseLoop ] 
 ]
