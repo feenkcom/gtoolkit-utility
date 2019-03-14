@@ -13,7 +13,8 @@ GtMessageTallyWrapper >> gtMessagesTreeIn: aView [
 	<gtView>
 	^ messageTally 
 		ifNil: [ aView ]
-		ifNotNil: [ messageTally gtMessagesTreeIn: aView ]
+		ifNotNil: [ (messageTally gtMessagesTreeIn: aView)
+			priority: 10 ]
 ]
 
 { #category : #ui }
@@ -21,7 +22,8 @@ GtMessageTallyWrapper >> gtSourceFor: aView [
 	<gtView>
 	^ messageTally 
 		ifNil: [ aView ]
-		ifNotNil: [ messageTally gtSourceFor: aView ]
+		ifNotNil: [ (messageTally gtSourceFor: aView)
+			priority: 20 ]
 ]
 
 { #category : #ui }
@@ -29,7 +31,8 @@ GtMessageTallyWrapper >> gtTextReportFor: aView [
 	<gtView>
 	^ messageTally 
 		ifNil: [ aView ]
-		ifNotNil: [ messageTally gtTextReportFor: aView ]
+		ifNotNil: [ (messageTally gtTextReportFor: aView)
+			priority: 30 ]
 ]
 
 { #category : #accessing }
