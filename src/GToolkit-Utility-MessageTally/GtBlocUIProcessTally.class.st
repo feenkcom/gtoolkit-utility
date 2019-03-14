@@ -44,12 +44,24 @@ GtBlocUIProcessTally >> gtViewFullTextReportIn: aView [
 ]
 
 { #category : #initialization }
+GtBlocUIProcessTally >> initializeForRootTally: aRootTally [
+	| currentUIProcesTally |
+	"Find a tally for a new process that has as child the bloc UI process"
+	currentUIProcesTally := aRootTally children
+		detect: [ :aTally | 
+			aTally children anySatisfy: [ :anotherTally |
+				self isTallyForBlocUIProcess: anotherTally ] ]
+		ifNone: [ nil ].
+	self initializeForUIProcessTally: currentUIProcesTally withRoot: aRootTally.
+]
+
+{ #category : #initialization }
 GtBlocUIProcessTally >> initializeForUIProcessTally: aUIMessageTally withRoot: aRootMessageTally [
 	| allTallies runPhase currentFramePhase |
 	messageTally := aUIMessageTally.
 	rootMessageTally := aRootMessageTally.
-	allTallies := messageTally withDeepCollect: #children.
 	
+	allTallies := messageTally withDeepCollect: #children.
 	runPhase := allTallies 
 		detect: [ :each | each method selector = #runCurrentPhaseOn: ]
 		ifNone: [ ^ self ].
@@ -59,4 +71,10 @@ GtBlocUIProcessTally >> initializeForUIProcessTally: aUIMessageTally withRoot: a
 		GtMessageTallyWrapper new
 			rootMessageTally: rootMessageTally;
 			messageTally: aTally ].
+]
+
+{ #category : #initialization }
+GtBlocUIProcessTally >> isTallyForBlocUIProcess: aMessageTally [
+	^ (aMessageTally method selector = #createLoopTask) and: [ 
+			aMessageTally theClass = BlPulseLoop ] 
 ]
