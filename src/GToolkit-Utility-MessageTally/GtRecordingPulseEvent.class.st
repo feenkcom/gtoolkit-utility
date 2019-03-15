@@ -2,7 +2,8 @@ Class {
 	#name : #GtRecordingPulseEvent,
 	#superclass : #Object,
 	#instVars : [
-		'blocEvent'
+		'blocEvent',
+		'spaceEvents'
 	],
 	#category : #'GToolkit-Utility-MessageTally'
 }
@@ -15,6 +16,22 @@ GtRecordingPulseEvent >> blocEvent [
 { #category : #accessing }
 GtRecordingPulseEvent >> blocEvent: aBlocEvent [
 	blocEvent := aBlocEvent
+]
+
+{ #category : #ui }
+GtRecordingPulseEvent >> gtViewSpacesIn: aView [
+	<gtView>
+	^ aView list 
+		title: 'Space events';
+		items: [ spaceEvents associations ];
+		itemFormat: [ :assoc | assoc key ];
+		send: [ :assoc | assoc value ]
+]
+
+{ #category : #initialization }
+GtRecordingPulseEvent >> initialize [
+	super initialize.
+	spaceEvents := OrderedDictionary new.
 ]
 
 { #category : #printing }
@@ -32,6 +49,15 @@ GtRecordingPulseEvent >> printTimeIncludingSeconds [
 		self timestamp printYMDOn: s.
 		s nextPut: Character space.
 		self timestamp printHMSOn: s ]
+]
+
+{ #category : #recording }
+GtRecordingPulseEvent >> recordSpaceEvent: aSpaceEvent [ 
+	| currentSpaceEvents |
+	currentSpaceEvents := spaceEvents 
+		at: aSpaceEvent space 
+		ifAbsentPut: [ GtRecordingSpaceFrameEventsGroup new ].
+	currentSpaceEvents addEvent: aSpaceEvent
 ]
 
 { #category : #accessing }

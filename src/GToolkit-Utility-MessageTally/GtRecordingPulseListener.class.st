@@ -1,14 +1,16 @@
 "
 pulseListener := GtRecordingPulseListener new.
-
-BlUniverse default addPulseListener: pulseListener.
-BlUniverse default removePulseListener: pulseListener.
+pulseListener 
+	registerPulseLoop;
+	registerSpaceListenerFor: BlUniverse default spaceManager spaces first.
+pulseListener unregisterAll.
 "
 Class {
 	#name : #GtRecordingPulseListener,
 	#superclass : #Object,
 	#instVars : [
-		'pulseEvents'
+		'pulseEvents',
+		'spaceListeners'
 	],
 	#category : #'GToolkit-Utility-MessageTally'
 }
@@ -16,6 +18,11 @@ Class {
 { #category : #accessing }
 GtRecordingPulseListener >> clear [
 	"Do nothing. This will be called in case the universe stops."
+]
+
+{ #category : #accessing }
+GtRecordingPulseListener >> currentPulseEvent [
+	^ self pulseEvents last
 ]
 
 { #category : #private }
@@ -44,7 +51,7 @@ GtRecordingPulseListener >> eventsGroupedByDuration: aDuration [
 GtRecordingPulseListener >> gtViewEventsFor: aView [
 	<gtView>
 	^ aView list
-		title: 'Events';
+		title: 'Pulse events';
 		priority: 50;
 		items: [ pulseEvents ]
 ]
@@ -70,7 +77,8 @@ GtRecordingPulseListener >> gtViewFrameFrequencyFor: aView [
 				eventsAtTime add: anEvent ].
 			groupedEvents associations ];
 		column: 'Time' format: #key;
-		column: 'Frames per second' format: [ :assoc | assoc value size ]
+		column: 'Frames per second' format: [ :assoc | assoc value size ];
+		send: [ :assoc | assoc value ]
 		
 ]
 
@@ -83,13 +91,29 @@ GtRecordingPulseListener >> gtViewFrameGroupFrequencyFor: aView [
 		items: [ 
 			self eventsGroupedByDuration: 5 seconds ];
 		column: 'Time' format: [ :assoc | assoc key asString, ' + 5 seconds' ];
-		column: 'Frames average' format: [ :assoc | (assoc value size / 5) asFloat round: 2 ]
+		column: 'Frames average per second' format: [ :assoc | (assoc value size / 5) asFloat round: 2 ];
+		send: [ :assoc | assoc value ]
+]
+
+{ #category : #ui }
+GtRecordingPulseListener >> gtViewSpacesFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Spaces';
+		priority: 30;
+		items: [ spaceListeners ]
+]
+
+{ #category : #accessing }
+GtRecordingPulseListener >> hasPulseEvents [
+	^ self pulseEvents notEmpty
 ]
 
 { #category : #initialization }
 GtRecordingPulseListener >> initialize [ 	
 	super initialize.
 	pulseEvents := OrderedCollection new.
+	spaceListeners := OrderedCollection new.
 ]
 
 { #category : #pulse }
@@ -101,4 +125,24 @@ GtRecordingPulseListener >> pulse [
 { #category : #accessing }
 GtRecordingPulseListener >> pulseEvents [
 	^ pulseEvents
+]
+
+{ #category : #registration }
+GtRecordingPulseListener >> registerPulseLoop [
+	BlUniverse default addPulseListener: self
+]
+
+{ #category : #registration }
+GtRecordingPulseListener >> registerSpaceListenerFor: aSpace [
+	| spaceListener |
+	spaceListener := GtRecordingSpaceListener new 
+		pulseListener: self;
+		registerSpace: aSpace.
+	spaceListeners add: spaceListener
+]
+
+{ #category : #registration }
+GtRecordingPulseListener >> unregisterAll [
+	BlUniverse default removePulseListener: self.
+	spaceListeners do: #unregister
 ]
