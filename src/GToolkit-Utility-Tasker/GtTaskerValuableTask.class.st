@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'valuable'
 	],
-	#category : #'GToolkit-Utility-Tasker'
+	#category : #'GToolkit-Utility-Tasker-GToolkit-Utility-Tasker'
 }
 
 { #category : #comparing }

@@ -9,7 +9,7 @@ Class {
 		'process',
 		'lastReceivedTaskTime'
 	],
-	#category : #'GToolkit-Utility-Tasker'
+	#category : #'GToolkit-Utility-Tasker-GToolkit-Utility-Tasker'
 }
 
 { #category : #adding }

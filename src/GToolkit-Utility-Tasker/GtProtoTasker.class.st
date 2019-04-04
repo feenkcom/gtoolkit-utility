@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtAssert',
 	#classTraits : 'TGtAssert classTrait',
-	#category : #'GToolkit-Utility-Tasker'
+	#category : #'GToolkit-Utility-Tasker-GToolkit-Utility-Tasker'
 }
 
 { #category : #adding }
