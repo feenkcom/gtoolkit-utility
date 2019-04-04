@@ -3,10 +3,19 @@ Extension { #name : #ImageReadWriter }
 { #category : #'*GToolkit-Utility-File' }
 ImageReadWriter class >> gtFormFromFileReference: aFileReference [
 	<return: #Form>
-	^ aFileReference binaryReadStreamDo: [ :aStream | 
-			| aPositionableReadStream |
-			aPositionableReadStream := ZnPositionableReadStream on: aStream.
-			ImageReadWriter formFromStream: aPositionableReadStream ]
+
+	| stream reader readerClass form fileReference |
+
+	fileReference := aFileReference asFileReference.
+	stream := GtBufferedReadStream on: 
+		(fileReference fileSystem binaryReadStreamOn: fileReference path).
+	form := [
+		readerClass := self readerClassFromStream: stream.
+		reader := readerClass new on: stream.
+		reader nextImage ]
+			ensure: [ stream close ].
+	^ form
+
 ]
 
 { #category : #'*GToolkit-Utility-File' }
