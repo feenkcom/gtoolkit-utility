@@ -17,7 +17,8 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-Announcer';
 			package: 'GToolkit-Utility-MessageTally';
 			package: 'GToolkit-Utility-System' with: [
-				spec requires: #( 'GToolkit-Utility-Assertion' ) ]
+				spec requires: #( 'GToolkit-Utility-Assertion' ) ];
+			package: 'GToolkit-Utility-Tests'
 	]
 
 ]
