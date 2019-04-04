@@ -5,6 +5,23 @@ Class {
 }
 
 { #category : #basic }
+GtTaskerExamples >> addingManySameTasksToPostponingTasker [
+	<gtExample>
+	| aTasker aSemaphore aValue aBlock aTask wasTimeouted |
+	aTasker := self basicPostponingTasker.
+	aSemaphore := Semaphore new.
+	aValue := 0.
+	aBlock := [ aValue := aValue + 1 ].
+	aTask := self emptyValuableTask valuable: aBlock.
+	50 timesRepeat: [ aTasker addTask: aTask ].
+	aTasker addTask: (self emptyValuableTask valuable: [ aSemaphore signal ]).
+	wasTimeouted := aSemaphore waitTimeoutMSecs: aTasker suspencion asMilliSeconds * 5.
+	self assert: wasTimeouted not.
+	self assert: aValue equals: 1.
+	^ aTasker
+]
+
+{ #category : #basic }
 GtTaskerExamples >> basicOrderedNonRepetitiveTasker [
 	<gtExample>
 	| aCollection aTask |
@@ -23,7 +40,7 @@ GtTaskerExamples >> basicOrderedNonRepetitiveTasker [
 GtTaskerExamples >> basicPostponingTasker [
 	<gtExample>
 	| aSubTasker aTasker |
-	aSubTasker := self basicOrderedNonRepetitiveTasker.
+	aSubTasker := self emptyOrderedNonRepetitiveTasker.
 	aTasker := aSubTasker asPostponingTasker.
 	self assert: aTasker tasker equals: aSubTasker.
 	^ aTasker

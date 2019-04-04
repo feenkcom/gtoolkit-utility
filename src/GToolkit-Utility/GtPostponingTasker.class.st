@@ -15,9 +15,10 @@ Class {
 { #category : #adding }
 GtPostponingTasker >> addTask: aTask [
 	self assertTasker.
-	self updateTimeOfLastReceivedTask.
-	self ensureActiveProcess.
-	self tasker addTask: aTask
+	mutex critical: [ 
+		self ensureActiveProcess.
+		self tasker addTask: aTask.
+		self updateTimeOfLastReceivedTask ]
 ]
 
 { #category : #asserting }
@@ -29,10 +30,9 @@ GtPostponingTasker >> assertTasker [
 
 { #category : #private }
 GtPostponingTasker >> ensureActiveProcess [
-	mutex critical: [
-		isActive ifTrue: [ ^ self ].
-		isActive := true.
-		self startProcess ]
+	isActive ifTrue: [ ^ self ].
+	isActive := true.
+	self startProcess
 ]
 
 { #category : #actions }
@@ -76,7 +76,7 @@ GtPostponingTasker >> size [
 GtPostponingTasker >> startProcess [
 	process := [ 
 		[ self isTaskActivityCalmedDown ] whileFalse: [ self suspencion wait ].
-		mutex critical: [ isActive := false ].
+		mutex critical: [ isActive := false. process := nil ].
 		self flush.
 		]
 			forkAt: Processor userBackgroundPriority 
@@ -103,7 +103,7 @@ GtPostponingTasker >> tasker: aGtTasker [
 	tasker := aGtTasker
 ]
 
-{ #category : #updating }
+{ #category : #private }
 GtPostponingTasker >> updateTimeOfLastReceivedTask [
-	mutex critical: [ lastReceivedTaskTime := DateAndTime now ].
+	lastReceivedTaskTime := DateAndTime now.
 ]
