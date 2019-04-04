@@ -1,8 +1,6 @@
 Class {
 	#name : #GtTasker,
-	#superclass : #Object,
-	#traits : 'TGtAssert',
-	#classTraits : 'TGtAssert classTrait',
+	#superclass : #GtProtoTasker,
 	#instVars : [
 		'collection',
 		'mutex'
@@ -20,6 +18,11 @@ GtTasker >> addTask: aTask [
 	"Add task to a collection if appropriate.
 	Mutex should be used."
 	self subclassResponsibility
+]
+
+{ #category : #converting }
+GtTasker >> asPostponingTasker [
+	^ GtPostponingTasker new tasker: self
 ]
 
 { #category : #asserting }

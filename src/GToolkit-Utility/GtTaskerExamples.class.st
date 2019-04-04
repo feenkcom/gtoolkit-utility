@@ -20,6 +20,16 @@ GtTaskerExamples >> basicOrderedNonRepetitiveTasker [
 ]
 
 { #category : #basic }
+GtTaskerExamples >> basicPostponingTasker [
+	<gtExample>
+	| aSubTasker aTasker |
+	aSubTasker := self basicOrderedNonRepetitiveTasker.
+	aTasker := aSubTasker asPostponingTasker.
+	self assert: aTasker tasker equals: aSubTasker.
+	^ aTasker
+]
+
+{ #category : #basic }
 GtTaskerExamples >> basicValuableTask [
 	<gtExample>
 	| aTask aValue aBlock |
