@@ -1,3 +1,6 @@
+"
+I examplify Tasker. I recommend you to start exploring documentation at ${class:GtProtoTasker}$.
+"
 Class {
 	#name : #GtTaskerExamples,
 	#superclass : #Object,
