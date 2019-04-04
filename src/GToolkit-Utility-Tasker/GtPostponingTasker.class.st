@@ -1,3 +1,10 @@
+"
+I am tasker that automatically execute collected tasks after an certain inactivity. I am not responsible how tasks are collected, it is a responsibility of another tasker that is set as an instance variable using ${method:GtPostponingTasker>>#tasker:}$. 
+
+The inactivity and suspencion time is currently fixed, see ${method:GtPostponingTasker>>#initialize|expanded=true}$. The value is returned by ${method:GtPostponingTasker>>#suspencion}$. It can be easily improved to be configurable if needed.
+
+The following example shows how many tasks are added and executed after the predetermined time of inactivity (the final task list is therefore empty): ${example:GtTaskerExamples>>#addingManySameTasksToPostponingTasker|previewExpanded=true}$
+"
 Class {
 	#name : #GtPostponingTasker,
 	#superclass : #GtProtoTasker,
