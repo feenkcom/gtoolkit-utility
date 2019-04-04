@@ -1,6 +1,9 @@
 Class {
 	#name : #GtTaskerExamples,
 	#superclass : #Object,
+	#instVars : [
+		'value'
+	],
 	#category : #'GToolkit-Utility-Tasker'
 }
 
@@ -103,22 +106,32 @@ GtTaskerExamples >> emptyValuableTask [
 ]
 
 { #category : #basic }
+GtTaskerExamples >> flushOrderedNonRepetitiveTasker [
+	<gtExample>
+	| aTasker |
+	aTasker := self keepOrderInOrderedNonRepetitiveTasker.
+	aTasker flush.
+	self assert: value equals: 25.
+	self assert: aTasker size equals: 0.
+	^ aTasker
+]
+
+{ #category : #basic }
 GtTaskerExamples >> keepOrderInOrderedNonRepetitiveTasker [
 	<gtExample>
-	| aCollection aTaskOne aValue aBlockOne aBlockTwo aTaskTwo aTaskThree |
-	aCollection := self emptyOrderedNonRepetitiveTasker.
-	aValue := 2.
-	aBlockOne := [ aValue := aValue + 3 ].
-	aBlockTwo := [ aValue := aValue * 5 ].
+	| aTasker aTaskOne aBlockOne aBlockTwo aTaskTwo aTaskThree |
+	aTasker := self emptyOrderedNonRepetitiveTasker.
+	value := 2.
+	aBlockOne := [ value := value + 3 ].
+	aBlockTwo := [ value := value * 5 ].
 	aTaskOne := self emptyValuableTask valuable: aBlockOne.
 	aTaskTwo := self emptyValuableTask valuable: aBlockTwo.
 	aTaskThree := self emptyValuableTask valuable: aBlockOne.
-	aCollection addTask: aTaskOne.
-	aCollection addTask: aTaskTwo.
-	aCollection addTask: aTaskThree.
-	self assert: aCollection size equals: 2.
-	aCollection flush.
-	self assert: aValue equals: 25.
-	self assert: aCollection size equals: 0.
-	^ aCollection
+	aTasker addTask: aTaskOne.
+	aTasker addTask: aTaskTwo.
+	aTasker addTask: aTaskThree.
+	self assert: aTasker size equals: 2.
+	self assert: aTasker collection asOrderedCollection first equals: aTaskThree.
+	self assert: aTasker collection asOrderedCollection second equals: aTaskTwo.
+	^ aTasker
 ]

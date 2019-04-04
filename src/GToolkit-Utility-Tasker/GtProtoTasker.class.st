@@ -14,6 +14,6 @@ GtProtoTasker >> addTask: aTask [
 
 { #category : #accessing }
 GtProtoTasker >> flush [
-	"Execute existing collection."
+	"Execute added tasks and eliminate them from a collection."
 	self subclassResponsibility
 ]

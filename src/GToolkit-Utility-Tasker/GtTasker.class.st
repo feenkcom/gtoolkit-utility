@@ -1,3 +1,8 @@
+"
+I am an abstract class for all sequential taskers that keep a collection of tasks.
+
+${class:GtTaskerOrderedNonRepetitive}$ can be instantiated by calling ${method:GtTasker class>>#orderedNonRepetitive}$.
+"
 Class {
 	#name : #GtTasker,
 	#superclass : #GtProtoTasker,
