@@ -1,3 +1,8 @@
+"
+I am an abstract class and I define an opperation to perform calling ${method:GtTaskerTask>>#execute}$. 
+I am used by ${class:GtTasker}$ which collects me and decides when to execute me.
+
+"
 Class {
 	#name : #GtTaskerTask,
 	#superclass : #Object,

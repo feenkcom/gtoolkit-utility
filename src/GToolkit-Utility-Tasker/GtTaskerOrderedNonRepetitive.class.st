@@ -1,5 +1,5 @@
 "
-I am a tasker that collects ${class:GtTaskerTask}$. If a task is igual with an already added task, I remove the previous one and add the new one at the same position. 
+I am a tasker that collects ${class:GtTaskerTask}$. If a task is igual with an already added task, I remove the previous one and add the new one at the same position. ${class:GtTaskerTask}$ subclasses should therefore implement ===== and ==hash== methods to collaborate correctly with me.
 
 The following example explains is better. ==aTaskOne== and ==aTaskThree== are equivalent, so the tasker keeps only two tasks and the first one is the ==aTaskThree==:
 ${example:GtTaskerExamples>>#keepOrderInOrderedNonRepetitiveTasker|previewExpanded=true}$

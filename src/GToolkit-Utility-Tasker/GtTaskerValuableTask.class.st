@@ -1,3 +1,8 @@
+"
+I am a ${class:GtTaskerTask}$ defining as an operation any object that understand message ==value==. Usually it is a ${class:BlockClosure}$ without parameters.
+
+The following example shows my basic usage: ${example:GtTaskerExamples>>#basicValuableTask}$
+"
 Class {
 	#name : #GtTaskerValuableTask,
 	#superclass : #GtTaskerTask,
