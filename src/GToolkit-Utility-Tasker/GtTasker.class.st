@@ -8,6 +8,11 @@ Class {
 	#category : #'GToolkit-Utility-Tasker'
 }
 
+{ #category : #factory }
+GtTasker class >> orderedNonRepetitive [
+	^ GtTaskerOrderedNonRepetitive new
+]
+
 { #category : #'gt-extension' }
 GtTasker >> addTask: aTask [
 	"Add task to a collection if appropriate.

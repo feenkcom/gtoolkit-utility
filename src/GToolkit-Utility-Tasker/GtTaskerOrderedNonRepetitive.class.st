@@ -1,7 +1,7 @@
 Class {
 	#name : #GtTaskerOrderedNonRepetitive,
 	#superclass : #GtTasker,
-	#category : #'GToolkit-Utility-Tasker-Tasker'
+	#category : #'GToolkit-Utility-Tasker'
 }
 
 { #category : #'gt-extension' }
