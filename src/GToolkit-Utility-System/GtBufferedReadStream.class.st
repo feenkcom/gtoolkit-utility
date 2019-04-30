@@ -1,16 +1,15 @@
 "
-GtBufferedReadStream subclasses ZnBufferedReadStream to provide two enhancements:
+GtBufferedReadStream subclasses ${class:ZnBufferedReadStream}$ to provide two enhancements:
 
-- #upToEnd is optimised to attempt to retrieve the entire contents in one call.
+- ${method:GtBufferedReadStream>>#upToEnd}$ is optimised to attempt to retrieve the entire contents in one call.
   Previously it would retrieve multiple buffers and write them to a WriteStream, resulting in unnecessary copying and garbage.
-- #savingPositionDo: has been added.  ZnBufferedReadStream supports position, so there's no reason to use a ZnPositionableReadStream in this case.
+- ${method:GtBufferedReadStream>>#savingPositionDo:}$ has been added. ${class:ZnBufferedReadStream}$ supports position, so there's no reason to use a ${class:ZnPositionableReadStream}$  in this case.
 
 Both of these will be submitted as enhancments to the core system.
 
-
 !!Internal Representation and Key Implementation Points.
 
-No other changes are made to ZnBufferedReadStream, the interface is the same.
+No other changes are made to ${class:ZnBufferedReadStream}$, the interface is the same.
 "
 Class {
 	#name : #GtBufferedReadStream,
