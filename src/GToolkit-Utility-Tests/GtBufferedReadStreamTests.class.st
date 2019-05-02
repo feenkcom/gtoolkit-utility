@@ -1,6 +1,6 @@
 Class {
 	#name : #GtBufferedReadStreamTests,
-	#superclass : #ZnBufferedReadStreamTests,
+	#superclass : #TestCase,
 	#category : #'GToolkit-Utility-Tests'
 }
 
