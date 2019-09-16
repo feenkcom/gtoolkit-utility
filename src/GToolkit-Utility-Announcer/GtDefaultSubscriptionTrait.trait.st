@@ -21,15 +21,25 @@ GtDefaultSubscriptionTrait >> removeSubscription: subscription [
 ]
 
 { #category : #'announcer - subscription' }
-GtDefaultSubscriptionTrait >> subscribe: anAnnouncementClass do: aValuable [ 
+GtDefaultSubscriptionTrait >> subscribe: anAnnouncementClass do: aValuable [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed."
-	^ self announcer subscribe: anAnnouncementClass do: aValuable 
+	
+	self
+		deprecated: 'Please use #when:do: instead'
+		transformWith: '`@receiver subscribe: `@statements1 do: `@statements2' 
+						-> '`@receiver when: `@statements1 do: `@statements2'.
+
+	^ self when: anAnnouncementClass do: aValuable
 ]
 
 { #category : #'announcer - subscription' }
 GtDefaultSubscriptionTrait >> subscribe: anAnnouncementClass send: aSelector to: anObject [
 	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
-	^ self announcer subscribe: anAnnouncementClass send: aSelector to: anObject
+	self
+		deprecated: 'Please use #when:send:to: instead'
+		transformWith: '`@receiver subscribe: `@statements1 send: `@statements2 to: `@anObject' 
+						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject'.
+	^ self when: anAnnouncementClass do: (MessageSend receiver: anObject selector: aSelector)
 ]
 
 { #category : #'announcer - subscription' }

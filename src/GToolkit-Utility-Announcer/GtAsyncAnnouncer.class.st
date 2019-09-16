@@ -20,7 +20,7 @@ GtAsyncAnnouncer >> ensureActiveProcess [
 ]
 
 { #category : #'private - subscriptions' }
-GtAsyncAnnouncer >> handleObservedAnnouncement: anAnnouncement. [
+GtAsyncAnnouncer >> handleObservedAnnouncement: anAnnouncement [.
 	self ensureActiveProcess.
 	receivedAnnouncements nextPut: anAnnouncement
 ]
