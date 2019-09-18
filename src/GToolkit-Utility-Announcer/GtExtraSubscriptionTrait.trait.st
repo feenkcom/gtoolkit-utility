@@ -6,21 +6,38 @@ Trait {
 { #category : #'announcer - subscription' }
 GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass do: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed."
-	^ (self subscribe: anAnnouncementClass do: aValuable) subscriber: aSubscriber
+	
+	self
+		deprecated: 'Please use #when:do:for: instead'
+		transformWith: '`@receiver subscribe: `@statements1 do: `@aValuable for: `@aSubscriber' 
+						-> '`@receiver when: `@statements1 do: `@aValuable for: `@aSubscriber'.
+	
+	^ self when: anAnnouncementClass do: aValuable for: aSubscriber
 ]
 
 { #category : #'announcer - subscription' }
 GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
-	^ (self subscribe: anAnnouncementClass send: aSelector to: anObject) 
-			subscriber: aSubscriber
+	self
+		deprecated: 'Please use #when:send:to:for: instead'
+		transformWith: '`@receiver subscribe: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber' 
+						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber'.
+
+	^ self when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
+]
+
+{ #category : #'announcer - subscription' }
+GtExtraSubscriptionTrait >> when: anAnnouncementClass do: aValuable for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
+
+	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
 ]
 
 { #category : #'announcer - subscription' }
 GtExtraSubscriptionTrait >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber.
 	A valuable is executed ONCE, and then a subscriber gets unsubscribed"
-	^ self announcer
+	^ self
 		when: anAnnouncementClass
 		do: [ :anAnnouncement |
 			self unsubscribe: aSubscriber.
@@ -30,10 +47,7 @@ GtExtraSubscriptionTrait >> when: anAnnouncementClass doOnce: aValuable for: aSu
 
 { #category : #'announcer - subscription' }
 GtExtraSubscriptionTrait >> when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
-	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector.
-    When the message expects one argument (eg #fooAnnouncement:) the announcement is passed as argument.
-    When the message expects two arguments (eg #fooAnnouncement:announcer:) both the announcement and the announcer 
-    are passed as argument"
-		^ (self announcer when: anAnnouncementClass send: aSelector to: anObject)
-				subscriber: aSubscriber
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+
+	^ (self when: anAnnouncementClass send: aSelector to: anObject) subscriber: aSubscriber
 ]
