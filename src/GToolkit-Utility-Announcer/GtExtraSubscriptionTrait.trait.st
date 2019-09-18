@@ -28,16 +28,16 @@ GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass send: aSelector to: a
 
 { #category : #'announcer - subscription' }
 GtExtraSubscriptionTrait >> when: anAnnouncementClass do: aValuable for: aSubscriber [
-	"Declare that when anAnnouncementClass is raised, aValuable is executed."
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
 
-	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber
+	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
 ]
 
 { #category : #'announcer - subscription' }
 GtExtraSubscriptionTrait >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber.
 	A valuable is executed ONCE, and then a subscriber gets unsubscribed"
-	^ self announcer
+	^ self
 		when: anAnnouncementClass
 		do: [ :anAnnouncement |
 			self unsubscribe: aSubscriber.
