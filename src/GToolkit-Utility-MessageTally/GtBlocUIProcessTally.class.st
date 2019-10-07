@@ -27,7 +27,7 @@ GtBlocUIProcessTally class >> inspectTally: aRootMessageTally [
 { #category : #testing }
 GtBlocUIProcessTally class >> isTallyForBlocUIProcess: aMessageTally [
 	^ (aMessageTally method selector = #createLoopTask) and: [ 
-			aMessageTally theClass = BlPulseLoop ] 
+			aMessageTally theClass = BlHostPulseLoop ] 
 ]
 
 { #category : #ui }
