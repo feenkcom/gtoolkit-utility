@@ -1,8 +1,8 @@
 Class {
 	#name : #GtSystemUtility,
 	#superclass : #Object,
-	#traits : 'GtAssertingTrait',
-	#classTraits : 'GtAssertingTrait classTrait',
+	#traits : 'TGtAssert',
+	#classTraits : 'TGtAssert classTrait',
 	#category : #'GToolkit-Utility-System'
 }
 
