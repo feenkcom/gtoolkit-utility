@@ -1,8 +1,8 @@
 Class {
 	#name : #GtAnnouncer,
 	#superclass : #Announcer,
-	#traits : 'GtExtraSubscriptionTrait + GtAssertingTrait',
-	#classTraits : 'GtExtraSubscriptionTrait classTrait + GtAssertingTrait classTrait',
+	#traits : 'GtExtraSubscriptionTrait + TGtAssert',
+	#classTraits : 'GtExtraSubscriptionTrait classTrait + TGtAssert classTrait',
 	#instVars : [
 		'observedAnnouncer'
 	],
