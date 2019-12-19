@@ -35,3 +35,9 @@ GtFileUtilityConstants class >> pillarMatchingPattern [
 GtFileUtilityConstants class >> pillarMimeType [
 	^ GtFilePillarMimeTypeResolver mimeType
 ]
+
+{ #category : #files }
+GtFileUtilityConstants class >> resourcesGtDirectory [
+	<return: #FileReference>
+	^ Smalltalk imageDirectory / '..' / 'Resources' / self localGtDirectoryName
+]
