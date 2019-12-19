@@ -8,11 +8,13 @@ Class {
 GtIcebergUtility class >> documentAtPath: aPath [
 	"Return a document pointing to an Iceberg repository or to a local Gt directory"
 	<return: #FileReference>
-	| anIcebergFileReference aLocalFileReference |
+	| anIcebergFileReference aLocalFileReference aResourcesFileReference|
 	anIcebergFileReference := GtIcebergUtility repositoriesLocation resolvePath: aPath.
 	anIcebergFileReference exists ifTrue: [ ^ anIcebergFileReference ].
 	aLocalFileReference := GtFileUtilityConstants localGtDirectory resolvePath: aPath.
 	aLocalFileReference exists ifTrue: [ ^ aLocalFileReference ].
+	aResourcesFileReference := GtFileUtilityConstants resourcesGtDirectory resolvePath: aPath.
+	aResourcesFileReference exists ifTrue: [ ^ aResourcesFileReference ].
 	^ anIcebergFileReference
 ]
 
