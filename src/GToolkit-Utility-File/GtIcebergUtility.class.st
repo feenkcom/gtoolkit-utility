@@ -40,6 +40,9 @@ GtIcebergUtility class >> repositoriesLocation [
 	"Return an Iceberg repositories location. 
 	It is a local disk location where source code repositories take place"
 	<return: #FileReference>
+	| resources |
 	SystemVersion current major = 6 ifTrue: [ ^ IceRepository repositoriesLocation ].
+	resources := (FileLocator localDirectory / '..' / '..' / 'Resources' / 'gt-extra' / 'pharo-local' / 'iceberg') asFileReference.
+	resources exists ifTrue: [ ^ resources ].
 	^ (self environment at: #IceLibgitRepository) repositoriesLocation
 ]
