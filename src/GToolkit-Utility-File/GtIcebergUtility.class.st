@@ -66,15 +66,16 @@ GtIcebergUtility class >> resourceAtPath: aPath [
 	"Return a resource (file, directory) pointing to an Iceberg repository or to a local (deployed) Gt directory.
 	See the ${class:GtIcebergUtility}$ class comment for more details."
 	<return: #FileReference>
-	| anIcebergFileReference aLocalFileReference anOnSpecificFileReference |
+	| anIcebergFileReference aLocalFileReference anOsSpecificFileReference |
 	"Search the path in Iceberg repositories."
 	anIcebergFileReference := self repositoriesLocation resolvePath: aPath.
 	anIcebergFileReference exists ifTrue: [ ^ anIcebergFileReference ].
 	"Search the path in local (deployed) directory"
 	aLocalFileReference := GtFileUtilityConstants localGtDirectory resolvePath: aPath.
 	aLocalFileReference exists ifTrue: [ ^ aLocalFileReference ].
-	"Search the path in a macOS Resources file"
-	anOnSpecificFileReference := OSPlatform current gtResourceAtPath: aPath using: self.
-	anOnSpecificFileReference exists ifTrue: [ ^ anOnSpecificFileReference ].
+	"Search the path in OS specific directories"
+	anOsSpecificFileReference := OSPlatform current gtResourceAtPath: aPath using: self.
+	(anOsSpecificFileReference isNotNil and: [ anOsSpecificFileReference exists ]) 
+		ifTrue: [ ^ anOsSpecificFileReference ].
 	^ anIcebergFileReference
 ]
