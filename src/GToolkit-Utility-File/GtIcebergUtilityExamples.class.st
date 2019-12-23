@@ -23,3 +23,12 @@ GtIcebergUtilityExamples >> gtResourceAtFeenkUtilityDefinedAsString [
 	self assert: aDir exists.
 	^ aDir
 ]
+
+{ #category : #'examples - resources' }
+GtIcebergUtilityExamples >> gtResourceAtNonExistingPath [
+	<gtExample>
+	| aDir |
+	aDir := GtIcebergUtility resourceAtPath: Path * 'this' / 'is' / 'an' / 'non-existing' / 'resource'.
+	self assert: aDir exists not.
+	^ aDir
+]

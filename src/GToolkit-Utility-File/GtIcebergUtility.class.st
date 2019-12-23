@@ -9,6 +9,8 @@ ${example:GtIcebergUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsPath}$
 Or you can pass a ${class:String}$ as a relative resource path:
 ${example:GtIcebergUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsString}$
 
+In case of non-existing path, it will return a possible reference inside of the ${method:IceLibgitRepository class>>#repositoriesLocation}$ directory:
+${example:GtIcebergUtilityExamples>>#gtResourceAtNonExistingPath}$
 
 "
 Class {
