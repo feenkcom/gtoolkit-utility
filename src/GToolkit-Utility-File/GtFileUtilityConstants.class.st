@@ -4,17 +4,6 @@ Class {
 	#category : #'GToolkit-Utility-File'
 }
 
-{ #category : #files }
-GtFileUtilityConstants class >> localGtDirectory [
-	<return: #FileReference>
-	^ Smalltalk imageDirectory / self localGtDirectoryName
-]
-
-{ #category : #files }
-GtFileUtilityConstants class >> localGtDirectoryName [
-	^ 'gt-extra'
-]
-
 { #category : #accessing }
 GtFileUtilityConstants class >> maxFileNameLenght [
 	"Return a maximum file name lenght, excluding extensions and parent directories."
@@ -34,10 +23,4 @@ GtFileUtilityConstants class >> pillarMatchingPattern [
 { #category : #'accessing - file' }
 GtFileUtilityConstants class >> pillarMimeType [
 	^ GtFilePillarMimeTypeResolver mimeType
-]
-
-{ #category : #files }
-GtFileUtilityConstants class >> resourcesGtDirectory [
-	<return: #FileReference>
-	^ Smalltalk imageDirectory / '..' / 'Resources' / self localGtDirectoryName
 ]

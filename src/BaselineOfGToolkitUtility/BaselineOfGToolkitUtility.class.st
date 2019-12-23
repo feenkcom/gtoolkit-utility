@@ -12,7 +12,10 @@ BaselineOfGToolkitUtility >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		spec
-			package: 'GToolkit-Utility-File';
+			baseline: 'GToolkitResourcesUtility' with: [
+				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
+			package: 'GToolkit-Utility-File' with: [
+				spec requires: #( 'GToolkitResourcesUtility' ) ];
 			package: 'GToolkit-Utility-Assertion';
 			package: 'GToolkit-Utility-Announcer';
 			package: 'GToolkit-Utility-MessageTally';
