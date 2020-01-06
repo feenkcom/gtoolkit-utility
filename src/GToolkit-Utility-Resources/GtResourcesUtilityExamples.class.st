@@ -144,7 +144,8 @@ GtResourcesUtilityExamples >> macOSResourcesLocation [
 	aPath := self existingPath.
 	aResult := aLocation resourceAtPath: aPath.
 	self assert: aResult file isNotNil.
-	self assert: aResult file equals: GtResourcesUtilityConstants resourcesGtDirectory.
+	OSPlatform current isMacOS ifTrue: [ 
+		self assert: aResult file equals: GtResourcesUtilityConstants resourcesGtDirectory ].
 	^ aResult
 ]
 
