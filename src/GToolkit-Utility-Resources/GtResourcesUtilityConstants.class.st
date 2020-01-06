@@ -8,9 +8,15 @@ Class {
 }
 
 { #category : #files }
+GtResourcesUtilityConstants class >> icebergRepositoriesLocation [
+	<return: #FileReference>
+	^ IceLibgitRepository repositoriesLocation
+]
+
+{ #category : #files }
 GtResourcesUtilityConstants class >> localGtDirectory [
 	<return: #FileReference>
-	^ Smalltalk imageDirectory / self localGtDirectoryName
+	^ FileLocator imageDirectory / self localGtDirectoryName
 ]
 
 { #category : #files }
@@ -21,5 +27,5 @@ GtResourcesUtilityConstants class >> localGtDirectoryName [
 { #category : #files }
 GtResourcesUtilityConstants class >> resourcesGtDirectory [
 	<return: #FileReference>
-	^ Smalltalk imageDirectory / '..' / 'Resources' / self localGtDirectoryName
+	^ FileLocator vmBinary asFileReference parent parent / 'Resources' / self localGtDirectoryName
 ]

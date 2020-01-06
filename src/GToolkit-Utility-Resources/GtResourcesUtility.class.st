@@ -1,5 +1,8 @@
 "
-I find a ${class:FileReference}$ to a directory or file that is either in a ${method:IceLibgitRepository class>>#repositoriesLocation}$ or in another (deployment) location. See ${method:GtResourcesUtility>>#resourceAtPath:}$ for more details.
+I find a ${class:FileReference}$ to a directory or file that in one of a locations.
+My main method is ${method:GtResourcesUtility>>#resourceAtPath:}$.
+
+I keep ${class:GtResourcesUtilityLocation}$ instances. Each instance defines where a resource is searched. Check individual class comments ${class:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:|height=150}$ for more details.
 
 !! Example 
 
@@ -16,6 +19,9 @@ ${example:GtResourcesUtilityExamples>>#gtResourceAtNonExistingPath}$
 Class {
 	#name : #GtResourcesUtility,
 	#superclass : #Object,
+	#instVars : [
+		'locations'
+	],
 	#classInstVars : [
 		'uniqueInstance'
 	],
@@ -47,9 +53,34 @@ GtResourcesUtility class >> uniqueInstance [
 	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
 ]
 
+{ #category : #initialization }
+GtResourcesUtility >> defaultLocations [
+	| aCollection |
+	aCollection := GtResourcesUtilityLocation allSubclasses
+		reject: [ :eachClass | eachClass isAbstract ].
+	aCollection sort: [ :a :b | a defaultPriority < b defaultPriority ].
+	^ aCollection collect: [ :eachClass | eachClass new ] as: Array
+]
+
+{ #category : #initialization }
+GtResourcesUtility >> initialize [
+	super initialize.
+	self locations: self defaultLocations.
+]
+
 { #category : #accessing }
 GtResourcesUtility >> localGtDirectory [
 	^ GtResourcesUtilityConstants localGtDirectory
+]
+
+{ #category : #accessing }
+GtResourcesUtility >> locations [
+	^ locations
+]
+
+{ #category : #accessing }
+GtResourcesUtility >> locations: anObject [
+	locations := anObject
 ]
 
 { #category : #accessing }
@@ -59,29 +90,19 @@ GtResourcesUtility >> repositoriesLocation [
 	Always consider using ${method:GtIcebergUtility>>#resourceAtPath:}$ instead of this method.
 	See the ${class:GtIcebergUtility}$ class comment for usage."
 	<return: #FileReference>
-	^ IceLibgitRepository repositoriesLocation
+	^ GtResourcesUtilityConstants icebergRepositoriesLocation
 ]
 
 { #category : #accessing }
-GtResourcesUtility >> resourceAtMacOSResourcesDirectory: aPath [
-	^ GtResourcesUtilityConstants resourcesGtDirectory resolvePath: aPath.
-]
-
-{ #category : #accessing }
-GtResourcesUtility >> resourceAtPath: aPath [
+GtResourcesUtility >> resourceAtPath: aPathOrString [
 	"Return a resource (file, directory) pointing to an Iceberg repository or to a local (deployed) Gt directory.
 	See the ${class:GtIcebergUtility}$ class comment for more details."
 	<return: #FileReference>
-	| anIcebergFileReference aLocalFileReference anOsSpecificFileReference |
-	"Search the path in Iceberg repositories."
-	anIcebergFileReference := self repositoriesLocation resolvePath: aPath.
-	anIcebergFileReference exists ifTrue: [ ^ anIcebergFileReference ].
-	"Search the path in local (deployed) directory"
-	aLocalFileReference := self localGtDirectory resolvePath: aPath.
-	aLocalFileReference exists ifTrue: [ ^ aLocalFileReference ].
-	"Search the path in OS specific directories"
-	anOsSpecificFileReference := OSPlatform current gtResourceAtPath: aPath using: self.
-	(anOsSpecificFileReference isNotNil and: [ anOsSpecificFileReference exists ]) 
-		ifTrue: [ ^ anOsSpecificFileReference ].
-	^ anIcebergFileReference
+	| aFirstResult aResult |
+	aFirstResult := nil.
+	self locations do: [ :eachLocation | 
+		aResult := eachLocation resourceAtPath: aPathOrString.
+		aResult exists ifTrue: [ aResult file ].
+		aFirstResult ifNil: [ aFirstResult := aResult ] ].
+	^ aFirstResult file
 ]
