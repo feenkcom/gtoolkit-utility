@@ -1,3 +1,8 @@
+"
+I search for a resource (file or directory) in a MacOS resources directory:
+${example:GtResourcesUtilityExamples>>#basicMacOSResourcesLocation|previewExpanded=true|noCode}$
+
+"
 Class {
 	#name : #GtResourcesUtilityMacOSResourcesLocation,
 	#superclass : #GtResourcesUtilityLocation,
@@ -18,7 +23,7 @@ GtResourcesUtilityMacOSResourcesLocation >> printOn: aStream [
 GtResourcesUtilityMacOSResourcesLocation >> resourceAtMacOSResourcesDirectory: aPath [
 	<return: #GtResourcesUtilityLocationResult>
 	| aFile |
-	aFile := GtResourcesUtilityConstants resourcesGtDirectory resolvePath: aPath.
+	aFile := GtResourcesUtilityConstants resourcesGtDirectory asFileReference resolvePath: aPath.
 	^ self resultForFile: aFile
 ]
 

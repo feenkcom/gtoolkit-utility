@@ -1,3 +1,8 @@
+"
+I search for a resource (file or directory) in a ${example:GtResourcesUtilityExamples>>#gtExtraDirectory|label=#basename}$ directory:
+${example:GtResourcesUtilityExamples>>#basicGtExtraLocation|previewExpanded=true|noCode}$
+
+"
 Class {
 	#name : #GtResourcesUtilityGtExtraLocation,
 	#superclass : #GtResourcesUtilityLocation,
@@ -7,11 +12,6 @@ Class {
 { #category : #initialization }
 GtResourcesUtilityGtExtraLocation class >> defaultPriority [
 	^ 12
-]
-
-{ #category : #files }
-GtResourcesUtilityGtExtraLocation >> localGtDirectory [
-	^ GtResourcesUtility default localGtDirectory
 ]
 
 { #category : #printing }
@@ -24,6 +24,6 @@ GtResourcesUtilityGtExtraLocation >> resourceAtPath: aPath [
 	"Search the path in local (deployed) directory"
 	<return: #GtResourcesUtilityLocationResult>
 	| aFileReference |
-	aFileReference := self localGtDirectory resolvePath: aPath.
+	aFileReference := GtResourcesUtilityConstants localGtDirectory asFileReference resolvePath: aPath.
 	^ self resultForFile: aFileReference
 ]

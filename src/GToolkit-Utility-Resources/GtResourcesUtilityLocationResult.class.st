@@ -1,3 +1,12 @@
+"
+I represent a search result which can be either
+- positive: ${class:GtResourcesUtilityLocationExistingResult}$, or
+- negative: ${class:GtResourcesUtilityLocationNoResult}$.
+I am used by ${class:GtResourcesUtilityLocation}$.
+
+My subclasses are created in ${method:GtResourcesUtilityLocation>>#resultForFile:|expanded=true}$.
+
+"
 Class {
 	#name : #GtResourcesUtilityLocationResult,
 	#superclass : #Object,
@@ -6,11 +15,6 @@ Class {
 	],
 	#category : #'GToolkit-Utility-Resources'
 }
-
-{ #category : #factory }
-GtResourcesUtilityLocationResult class >> null [ 
-	^ GtResourcesUtilityLocationNoResult new
-]
 
 { #category : #testing }
 GtResourcesUtilityLocationResult >> exists [

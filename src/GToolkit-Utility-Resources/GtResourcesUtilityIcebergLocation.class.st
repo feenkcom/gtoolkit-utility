@@ -1,3 +1,8 @@
+"
+I search for a resource (file or directory) in Iceberg repositories directory:
+${example:GtResourcesUtilityExamples>>#basicIcebergLocation|previewExpanded=true|noCode}$
+
+"
 Class {
 	#name : #GtResourcesUtilityIcebergLocation,
 	#superclass : #GtResourcesUtilityLocation,
@@ -15,15 +20,10 @@ GtResourcesUtilityIcebergLocation >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtResourcesUtilityIcebergLocation >> repositoriesLocation [
-	^ GtResourcesUtility default repositoriesLocation
-]
-
-{ #category : #accessing }
 GtResourcesUtilityIcebergLocation >> resourceAtPath: aPath [
 	"Search the path in Iceberg repositories."
 	<return: #GtResourcesUtilityLocationResult>
 	| aFileReference |
-	aFileReference := self repositoriesLocation resolvePath: aPath.
+	aFileReference := GtResourcesUtilityConstants icebergRepositoriesLocation resolvePath: aPath.
 	^ self resultForFile: aFileReference
 ]

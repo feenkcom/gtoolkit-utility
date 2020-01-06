@@ -1,3 +1,10 @@
+"
+I represent a location where a ${class:Path}$ (file or directory) is searched for.
+My subclasses should implement ${method:GtResourcesUtilityLocation>>#resourceAtPath:}$. 
+My subclasses are used by ${class:GtResourcesUtility}$.
+
+See my subclasses for more details ${class:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:}$.
+"
 Class {
 	#name : #GtResourcesUtilityLocation,
 	#superclass : #Object,
@@ -12,7 +19,7 @@ GtResourcesUtilityLocation class >> defaultPriority [
 { #category : #accessing }
 GtResourcesUtilityLocation >> resourceAtPath: aPath [
 	<return: #GtResourcesUtilityLocationResult>
-	^ GtResourcesUtilityLocationResult null
+	^ self subclassResponsibility
 ]
 
 { #category : #private }

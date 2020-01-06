@@ -8,9 +8,15 @@ Class {
 }
 
 { #category : #files }
+GtResourcesUtilityConstants class >> icebergRepositoriesLocation [
+	<return: #FileReference>
+	^ IceLibgitRepository repositoriesLocation
+]
+
+{ #category : #files }
 GtResourcesUtilityConstants class >> localGtDirectory [
 	<return: #FileReference>
-	^ Smalltalk imageDirectory / self localGtDirectoryName
+	^ FileLocator imageDirectory / self localGtDirectoryName
 ]
 
 { #category : #files }
