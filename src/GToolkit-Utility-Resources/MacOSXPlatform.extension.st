@@ -1,7 +1,7 @@
 Extension { #name : #MacOSXPlatform }
 
 { #category : #'*GToolkit-Utility-Resources' }
-MacOSXPlatform >> gtResourceAtPath: aPath using: aGtIcebergUtility [
+MacOSXPlatform >> gtResourceAtPath: aPath using: aGtResourcesUtilityLocation [
 	"Specific platforms can search resources in other places"
-	^ aGtIcebergUtility resourceAtMacOSResourcesDirectory: aPath
+	^ aGtResourcesUtilityLocation resourceAtMacOSResourcesDirectory: aPath
 ]

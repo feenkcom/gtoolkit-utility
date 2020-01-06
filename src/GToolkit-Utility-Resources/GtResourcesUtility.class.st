@@ -16,6 +16,9 @@ ${example:GtResourcesUtilityExamples>>#gtResourceAtNonExistingPath}$
 Class {
 	#name : #GtResourcesUtility,
 	#superclass : #Object,
+	#instVars : [
+		'locations'
+	],
 	#classInstVars : [
 		'uniqueInstance'
 	],
@@ -47,9 +50,34 @@ GtResourcesUtility class >> uniqueInstance [
 	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
 ]
 
+{ #category : #initialization }
+GtResourcesUtility >> defaultLocations [
+	| aCollection |
+	aCollection := GtResourcesUtilityLocation allSubclasses
+		reject: [ :eachClass | eachClass isAbstract ].
+	aCollection sort: [ :a :b | a defaultPriority < b defaultPriority ].
+	^ aCollection collect: [ :eachClass | eachClass new ] as: Array
+]
+
+{ #category : #initialization }
+GtResourcesUtility >> initialize [
+	super initialize.
+	self locations: self defaultLocations.
+]
+
 { #category : #accessing }
 GtResourcesUtility >> localGtDirectory [
 	^ GtResourcesUtilityConstants localGtDirectory
+]
+
+{ #category : #accessing }
+GtResourcesUtility >> locations [
+	^ locations
+]
+
+{ #category : #accessing }
+GtResourcesUtility >> locations: anObject [
+	locations := anObject
 ]
 
 { #category : #accessing }
@@ -69,6 +97,20 @@ GtResourcesUtility >> resourceAtMacOSResourcesDirectory: aPath [
 
 { #category : #accessing }
 GtResourcesUtility >> resourceAtPath: aPath [
+	"Return a resource (file, directory) pointing to an Iceberg repository or to a local (deployed) Gt directory.
+	See the ${class:GtIcebergUtility}$ class comment for more details."
+	<return: #FileReference>
+	| aFirstResult aResult |
+	aFirstResult := nil.
+	self locations do: [ :eachLocation | 
+		aResult := eachLocation resourceAtPath: aPath.
+		aResult exists ifTrue: [ aResult file ].
+		aFirstResult ifNil: [ aFirstResult := aResult ] ].
+	^ aFirstResult file
+]
+
+{ #category : #accessing }
+GtResourcesUtility >> resourceAtPathOld: aPath [
 	"Return a resource (file, directory) pointing to an Iceberg repository or to a local (deployed) Gt directory.
 	See the ${class:GtIcebergUtility}$ class comment for more details."
 	<return: #FileReference>
