@@ -4,7 +4,12 @@ My main method is ${method:GtResourcesUtility>>#resourceAtPath:}$.
 
 I keep ${class:GtResourcesUtilityLocation}$ instances. Each instance defines where a resource is searched. Check individual class comments ${class:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:|height=150}$ for more details.
 
-!! Example 
+!! Live Search 
+
+You can search live here by clicking on the search icon in the inspector: 
+${example:GtResourcesUtilityExamples>>#resourceUtility|noCode|previewHeight=200}$
+
+!! Usage
 
 You can either use a relative ${class:Path}$ to a recourse:
 ${example:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsPath}$
