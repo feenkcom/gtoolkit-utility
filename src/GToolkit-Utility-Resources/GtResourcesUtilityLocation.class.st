@@ -16,6 +16,12 @@ GtResourcesUtilityLocation class >> defaultPriority [
 	^ 50
 ]
 
+{ #category : #testing }
+GtResourcesUtilityLocation >> exists [
+	<return: #Boolean>
+	^ (self resourceAtPath: Path * '.') exists
+]
+
 { #category : #accessing }
 GtResourcesUtilityLocation >> resourceAtPath: aPath [
 	<return: #GtResourcesUtilityLocationResult>

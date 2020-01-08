@@ -101,13 +101,13 @@ GtResourcesUtility >> repositoriesLocation [
 { #category : #accessing }
 GtResourcesUtility >> resourceAtPath: aPathOrString [
 	"Return a resource (file, directory) pointing to an Iceberg repository or to a local (deployed) Gt directory.
-	See the ${class:GtIcebergUtility}$ class comment for more details."
+	See the ${class:GtResourcesUtility}$ class comment for more details."
 	<return: #FileReference>
 	| aFirstResult aResult |
 	aFirstResult := nil.
 	self locations do: [ :eachLocation | 
 		aResult := eachLocation resourceAtPath: aPathOrString.
-		aResult exists ifTrue: [ aResult file ].
+		aResult exists ifTrue: [ ^ aResult file ].
 		aFirstResult ifNil: [ aFirstResult := aResult ] ].
 	^ aFirstResult file
 ]
