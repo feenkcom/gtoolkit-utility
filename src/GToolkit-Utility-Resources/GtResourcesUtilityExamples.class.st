@@ -4,7 +4,7 @@ I exemplify ${class:GtResourcesUtility}$
 Class {
 	#name : #GtResourcesUtilityExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Examples'
 }
 
 { #category : #'examples - results' }

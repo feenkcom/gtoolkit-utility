@@ -30,7 +30,7 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Core'
 }
 
 { #category : #cleanup }
@@ -86,6 +86,15 @@ GtResourcesUtility >> locations [
 { #category : #accessing }
 GtResourcesUtility >> locations: anObject [
 	locations := anObject
+]
+
+{ #category : #accessing }
+GtResourcesUtility >> locationsAtPath: aPathOrString [
+	<return: #Array of: #GtResourcesUtilityResultContext>
+	^ self locations collect: [ :eachLocation |
+		GtResourcesUtilityResultContext new
+			location: eachLocation; 
+			result: (eachLocation resourceAtPath: aPathOrString) ].
 ]
 
 { #category : #accessing }

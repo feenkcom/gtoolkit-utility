@@ -6,7 +6,7 @@ ${example:GtResourcesUtilityExamples>>#basicGtExtraLocation|previewExpanded=true
 Class {
 	#name : #GtResourcesUtilityGtExtraLocation,
 	#superclass : #GtResourcesUtilityLocation,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Locations'
 }
 
 { #category : #initialization }

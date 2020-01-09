@@ -8,7 +8,7 @@ See my subclasses for more details ${class:GtResourcesUtilityLocation|expanded=t
 Class {
 	#name : #GtResourcesUtilityLocation,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Locations'
 }
 
 { #category : #initialization }

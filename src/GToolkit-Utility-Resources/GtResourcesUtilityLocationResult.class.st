@@ -13,7 +13,7 @@ Class {
 	#instVars : [
 		'file'
 	],
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Locations'
 }
 
 { #category : #testing }

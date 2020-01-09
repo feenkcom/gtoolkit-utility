@@ -10,10 +10,19 @@ ${example:GtResourcesUtilityExamples>>#noResult|codeExpanded=false|previewExpand
 Class {
 	#name : #GtResourcesUtilityLocationNoResult,
 	#superclass : #GtResourcesUtilityLocationResult,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Locations'
 }
 
 { #category : #testing }
 GtResourcesUtilityLocationNoResult >> exists [
 	^ false
+]
+
+{ #category : #printing }
+GtResourcesUtilityLocationNoResult >> printOn: aStream [
+	self file ifNil: [ ^ super printOn: aStream ].
+	aStream
+		nextPutAll: 'Missing ';
+		print: self file basename;
+		nextPutAll: ' resource'
 ]
