@@ -4,7 +4,7 @@ Use ${class:GtResourcesUtility}$ instead.
 Class {
 	#name : #GtIcebergUtility,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Core'
 }
 
 { #category : #testing }

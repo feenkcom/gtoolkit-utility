@@ -4,7 +4,7 @@ I keep constrants used by ${class:GtResourcesUtility}$.
 Class {
 	#name : #GtResourcesUtilityConstants,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Core'
 }
 
 { #category : #files }

@@ -6,7 +6,7 @@ ${example:GtResourcesUtilityExamples>>#basicMacOSResourcesLocation|previewExpand
 Class {
 	#name : #GtResourcesUtilityMacOSResourcesLocation,
 	#superclass : #GtResourcesUtilityLocation,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Locations'
 }
 
 { #category : #initialization }

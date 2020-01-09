@@ -6,7 +6,7 @@ ${example:GtResourcesUtilityExamples>>#basicIcebergLocation|previewExpanded=true
 Class {
 	#name : #GtResourcesUtilityIcebergLocation,
 	#superclass : #GtResourcesUtilityLocation,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Locations'
 }
 
 { #category : #initialization }

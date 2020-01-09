@@ -17,7 +17,7 @@ ${example:GtResourcesUtilityPathExtractorExamples>>#unwantedUnarySender2}$
 Class {
 	#name : #GtResourcesUtilityPathExtractor,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Support'
 }
 
 { #category : #testing }

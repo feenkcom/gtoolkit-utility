@@ -4,7 +4,7 @@ I exemplify ${class:GtResourcesUtilityPathExtractor}$.
 Class {
 	#name : #GtResourcesUtilityPathExtractorExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-Resources'
+	#category : #'GToolkit-Utility-Resources-Examples'
 }
 
 { #category : #'examples - basic' }
