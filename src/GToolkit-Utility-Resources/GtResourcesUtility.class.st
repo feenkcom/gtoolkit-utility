@@ -1,5 +1,5 @@
 "
-I find a ${class:FileReference}$ to a directory or file that in one of a locations.
+I find a ${class:FileReference}$ resource (file or directory)) that is in one of locations.
 My main method is ${method:GtResourcesUtility>>#resourceAtPath:}$.
 
 I keep ${class:GtResourcesUtilityLocation}$ instances. Each instance defines where a resource is searched. Check individual class comments ${class:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:|height=150}$ for more details.
@@ -17,7 +17,7 @@ ${example:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsPath}$
 Or you can pass a ${class:String}$ as a relative resource path:
 ${example:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsString}$
 
-In case of non-existing path, it will return a possible reference inside of the ${method:IceLibgitRepository class>>#repositoriesLocation}$ directory:
+In case of a non-existing path, I will return a possible reference inside of the ${method:IceLibgitRepository class>>#repositoriesLocation}$ directory:
 ${example:GtResourcesUtilityExamples>>#gtResourceAtNonExistingPath}$
 
 "

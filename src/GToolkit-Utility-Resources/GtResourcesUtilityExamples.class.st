@@ -1,5 +1,5 @@
 "
-I exemplify ${class:GtResourcesUtility}$
+I exemplify ${class:GtResourcesUtility}$ and ${class:GtResourceReference}$.
 "
 Class {
 	#name : #GtResourcesUtilityExamples,
@@ -110,6 +110,39 @@ GtResourcesUtilityExamples >> gtResourceAtNonExistingPath [
 	| aDir |
 	aDir := GtResourcesUtility resourceAtPath: Path * 'this' / 'is' / 'an' / 'non-existing' / 'resource'.
 	self assert: (aDir isKindOf: AbstractFileReference).
+	self assert: aDir exists not.
+	^ aDir
+]
+
+{ #category : #'examples - resource reference' }
+GtResourcesUtilityExamples >> gtResourceReferenceOfExistingPath [
+	<gtExample>
+	| aDir |
+	aDir := GtResourceReference path: self existingPath.
+	self assert: aDir class equals: GtResourceReference.
+	self assert: aDir asFileReference == aDir.
+	self assert: aDir exists.
+	^ aDir
+]
+
+{ #category : #'examples - resource reference' }
+GtResourcesUtilityExamples >> gtResourceReferenceOfExistingStringPath [
+	<gtExample>
+	| aDir |
+	aDir := GtResourceReference path: 'feenkcom/gtoolkit/doc/gtoolkit.png'.
+	self assert: aDir class equals: GtResourceReference.
+	self assert: aDir asFileReference == aDir.
+	self assert: aDir exists.
+	^ aDir
+]
+
+{ #category : #'examples - resource reference' }
+GtResourcesUtilityExamples >> gtResourceReferenceOfNotExistingPath [
+	<gtExample>
+	| aDir |
+	aDir := GtResourceReference path: self notExistingPath.
+	self assert: aDir class equals: GtResourceReference.
+	self assert: aDir asFileReference == aDir.
 	self assert: aDir exists not.
 	^ aDir
 ]
