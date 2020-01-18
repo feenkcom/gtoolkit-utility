@@ -37,12 +37,6 @@ GtResourceReference >> fullName [
 ]
 
 { #category : #accessing }
-GtResourceReference >> initialize [
-	super initialize.
-	utility := GtResourcesUtility default.
-]
-
-{ #category : #accessing }
 GtResourceReference >> path [
 	^ path
 ]
@@ -52,9 +46,14 @@ GtResourceReference >> path: anObject [
 	path := anObject
 ]
 
+{ #category : #printing }
+GtResourceReference >> printOn: aStream [
+	self fileReference printOn: aStream
+]
+
 { #category : #accessing }
 GtResourceReference >> utility [
-	^ utility
+	^ utility ifNil: [ GtResourcesUtility default ]
 ]
 
 { #category : #accessing }

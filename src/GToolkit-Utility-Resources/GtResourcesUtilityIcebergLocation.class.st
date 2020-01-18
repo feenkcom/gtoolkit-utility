@@ -20,10 +20,8 @@ GtResourcesUtilityIcebergLocation >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtResourcesUtilityIcebergLocation >> resourceAtPath: aPath [
+GtResourcesUtilityIcebergLocation >> resourceAtPath: aStringOrPath [
 	"Search the path in Iceberg repositories."
 	<return: #GtResourcesUtilityLocationResult>
-	| aFileReference |
-	aFileReference := GtResourcesUtilityConstants icebergRepositoriesLocation resolvePath: aPath.
-	^ self resultForFile: aFileReference
+	^ self resultForPath: aStringOrPath in: GtResourcesUtilityConstants icebergRepositoriesLocation
 ]

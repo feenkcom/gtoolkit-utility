@@ -132,7 +132,7 @@ GtResourcesUtilityExamples >> icebergLocation [
 	aPath := self existingPath.
 	aResult := aLocation resourceAtPath: aPath.
 	self assert: aResult file isNotNil.
-	self assert: aResult file equals: GtResourcesUtilityConstants icebergRepositoriesLocation.
+	self assert: aResult file equals: GtResourcesUtilityConstants icebergRepositoriesLocation asFileReference.
 	^ aResult
 ]
 

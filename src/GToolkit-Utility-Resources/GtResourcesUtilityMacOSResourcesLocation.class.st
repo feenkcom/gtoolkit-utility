@@ -20,11 +20,9 @@ GtResourcesUtilityMacOSResourcesLocation >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtResourcesUtilityMacOSResourcesLocation >> resourceAtMacOSResourcesDirectory: aPath [
+GtResourcesUtilityMacOSResourcesLocation >> resourceAtMacOSResourcesDirectory: aStringOrPath [
 	<return: #GtResourcesUtilityLocationResult>
-	| aFile |
-	aFile := GtResourcesUtilityConstants resourcesGtDirectory asFileReference resolvePath: aPath.
-	^ self resultForFile: aFile
+	^ self resultForPath: aStringOrPath in: GtResourcesUtilityConstants resourcesGtDirectory
 ]
 
 { #category : #accessing }
