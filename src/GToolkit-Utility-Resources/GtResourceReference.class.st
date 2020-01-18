@@ -52,6 +52,12 @@ GtResourceReference >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtResourceReference >> results [
+	<return: #Array of: #GtResourcesUtilityResultContext>
+	^ self utility locationsAtPath: self path
+]
+
+{ #category : #accessing }
 GtResourceReference >> utility [
 	^ utility ifNil: [ GtResourcesUtility default ]
 ]
