@@ -35,3 +35,11 @@ GtResourcesUtilityLocation >> resultForFile: aFileReference [
 		ifTrue: [ GtResourcesUtilityLocationExistingResult new file: aFileReference ]
 		ifFalse: [ GtResourcesUtilityLocationNoResult new file: aFileReference ].
 ]
+
+{ #category : #private }
+GtResourcesUtilityLocation >> resultForPath: aStringOrPath in: aDirectory [
+	<return: #GtResourcesUtilityLocationResult>
+	| aFileReference |
+	aFileReference := aDirectory asFileReference resolvePath: aStringOrPath.
+	^ self resultForFile: aFileReference
+]

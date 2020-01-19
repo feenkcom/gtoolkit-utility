@@ -20,10 +20,8 @@ GtResourcesUtilityGtExtraLocation >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtResourcesUtilityGtExtraLocation >> resourceAtPath: aPath [
+GtResourcesUtilityGtExtraLocation >> resourceAtPath: aStringOrPath [
 	"Search the path in local (deployed) directory"
 	<return: #GtResourcesUtilityLocationResult>
-	| aFileReference |
-	aFileReference := GtResourcesUtilityConstants localGtDirectory asFileReference resolvePath: aPath.
-	^ self resultForFile: aFileReference
+	^ self resultForPath: aStringOrPath in: GtResourcesUtilityConstants localGtDirectory
 ]
