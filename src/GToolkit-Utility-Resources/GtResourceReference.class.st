@@ -34,6 +34,16 @@ GtResourceReference class >> path: aPath [
 	^ self new path: aPath
 ]
 
+{ #category : #navigating }
+GtResourceReference >> , anExtension [
+	self path: self path , anExtension
+]
+
+{ #category : #navigating }
+GtResourceReference >> / aString [ 
+	self path: self path / aString
+]
+
 { #category : #converting }
 GtResourceReference >> asFileReference [
 	^ self
