@@ -60,7 +60,7 @@ GtRecordingSpaceListener >> registerSpace: aSpace [
 	self assert: [ space isNil ]  description: 'Already listening for events in a space.'.
 	space := aSpace.
 	self listenForEvent: BlSpaceRenderEndEvent inSpace: aSpace.
-	self listenForEvent: BlSpaceEventEndEvent inSpace: aSpace.
+	self listenForEvent: BlSpaceEventsProcessedEvent inSpace: aSpace.
 	self listenForEvent: BlSpaceLayoutEndEvent inSpace: aSpace.
 	self listenForEvent: BlSpaceTasksEndEvent inSpace: aSpace.
 ]
