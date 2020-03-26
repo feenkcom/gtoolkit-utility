@@ -1,15 +1,15 @@
 Trait {
-	#name : #GtAnnouncingTrait,
+	#name : #TGtAnnouncing,
 	#category : #'GToolkit-Utility-Announcer-Traits'
 }
 
 { #category : #announcer }
-GtAnnouncingTrait >> announce: anAnnouncement [
+TGtAnnouncing >> announce: anAnnouncement [
 	^ self announcer announce: anAnnouncement
 ]
 
 { #category : #announcer }
-GtAnnouncingTrait >> announcer [
+TGtAnnouncing >> announcer [
 	<return: #Announcer>
 	^ self explicitRequirement
 ]
