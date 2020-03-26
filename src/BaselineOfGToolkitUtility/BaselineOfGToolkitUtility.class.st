@@ -14,17 +14,16 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
-			package: 'GToolkit-Utility-File' with: [
-				spec requires: #( 'GToolkitResourcesUtility' ) ];
-			package: 'GToolkit-Utility-Assertion';
+			baseline: 'GToolkitAssertionUtility' with: [
+				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
+			baseline: 'GToolkitFileUtility' with: [
+				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
 			package: 'GToolkit-Utility-Announcer';
 			package: 'GToolkit-Utility-MessageTally';
-			package: 'GToolkit-Utility-System' with: [
-				spec requires: #( 'GToolkit-Utility-Assertion' ) ];
 			package: 'GToolkit-Utility-Tasker' with: [
-				spec requires: #( 'GToolkit-Utility-Assertion' ) ];
+				spec requires: #( 'GToolkitAssertionUtility' ) ];
 			package: 'GToolkit-Utility-Tests' with: [
-				spec requires: #( 'GToolkit-Utility-System' ) ]
+				spec requires: #( 'GToolkitFileUtility' ) ]
 	]
 
 ]
