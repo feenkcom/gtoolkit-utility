@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtAnnouncer,
-	#traits : 'GtAnnouncingTrait + GtSubscriptionTrait',
-	#classTraits : 'GtAnnouncingTrait classTrait + GtSubscriptionTrait classTrait',
+	#traits : 'TGtAnnouncing + TGtSubscription',
+	#classTraits : 'TGtAnnouncing classTrait + TGtSubscription classTrait',
 	#category : #'GToolkit-Utility-Announcer-Traits'
 }

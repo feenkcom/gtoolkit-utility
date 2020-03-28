@@ -1,10 +1,10 @@
 Trait {
-	#name : #GtExtraSubscriptionTrait,
+	#name : #TGtExtraSubscription,
 	#category : #'GToolkit-Utility-Announcer-Traits'
 }
 
 { #category : #'announcer - subscription' }
-GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass do: aValuable for: aSubscriber [
+TGtExtraSubscription >> subscribe: anAnnouncementClass do: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed."
 	
 	self
@@ -16,7 +16,7 @@ GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass do: aValuable for: aS
 ]
 
 { #category : #'announcer - subscription' }
-GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
+TGtExtraSubscription >> subscribe: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
 	self
 		deprecated: 'Please use #when:send:to:for: instead'
@@ -27,14 +27,14 @@ GtExtraSubscriptionTrait >> subscribe: anAnnouncementClass send: aSelector to: a
 ]
 
 { #category : #'announcer - subscription' }
-GtExtraSubscriptionTrait >> when: anAnnouncementClass do: aValuable for: aSubscriber [
+TGtExtraSubscription >> when: anAnnouncementClass do: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
 
 	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
 ]
 
 { #category : #'announcer - subscription' }
-GtExtraSubscriptionTrait >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
+TGtExtraSubscription >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber.
 	A valuable is executed ONCE, and then a subscriber gets unsubscribed"
 	^ self
@@ -46,7 +46,7 @@ GtExtraSubscriptionTrait >> when: anAnnouncementClass doOnce: aValuable for: aSu
 ]
 
 { #category : #'announcer - subscription' }
-GtExtraSubscriptionTrait >> when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
+TGtExtraSubscription >> when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
 
 	^ (self when: anAnnouncementClass send: aSelector to: anObject) subscriber: aSubscriber
