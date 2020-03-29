@@ -10,20 +10,20 @@ Class {
 { #category : #baseline }
 BaselineOfGToolkitUtility >> baseline: spec [
 	<baseline>
-	spec for: #common do: [ 
-		spec
+	spec for: #'common' do: [
+		spec 
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.7.18/src' ];
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.7.18/src' ];
 			baseline: 'GToolkitFileUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.7.18/src' ].
+		spec 
 			package: 'GToolkit-Utility-Announcer';
 			package: 'GToolkit-Utility-MessageTally';
 			package: 'GToolkit-Utility-Tasker' with: [
-				spec requires: #( 'GToolkitAssertionUtility' ) ];
+				spec requires: #('GToolkitAssertionUtility' ). ];
 			package: 'GToolkit-Utility-Tests' with: [
-				spec requires: #( 'GToolkitFileUtility' ) ]
-	]
+				spec requires: #('GToolkitFileUtility' ). ]. ].
 
 ]
