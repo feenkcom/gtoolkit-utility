@@ -22,6 +22,11 @@ TGtUniqueInstance classSide >> default [
 ]
 
 { #category : #accessing }
+TGtUniqueInstance classSide >> instance [
+	^ self uniqueInstance
+]
+
+{ #category : #accessing }
 TGtUniqueInstance classSide >> uniqueInstance [
 	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
 ]
