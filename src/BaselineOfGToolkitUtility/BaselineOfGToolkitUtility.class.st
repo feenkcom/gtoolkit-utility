@@ -20,8 +20,6 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
 			package: 'GToolkit-Utility-Announcer';
 			package: 'GToolkit-Utility-MessageTally';
-			package: 'GToolkit-Utility-Tasker' with: [
-				spec requires: #( 'GToolkitAssertionUtility' ) ];
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #( 'GToolkitFileUtility' ) ]
 	]
