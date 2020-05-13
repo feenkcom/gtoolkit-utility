@@ -16,12 +16,12 @@ GtBlocUIProcessTally class >> inspectTally: aRootMessageTally [
 				self isTallyForBlocUIProcess: anotherTally ] ]
 		ifFound: [ :currentUIProcesTally |
 			"If we find a tally for the Bloc UI processs we can use the specialized viewer."
-			Gt2Inspector openOn: (self new
+			GtInspector openOn: (self new
 				initializeForUIProcessTally: currentUIProcesTally 
 				withRoot: aRootMessageTally) ]
 		ifNone: [
 			"In case we cannot locate the Bloc UI process we inspect the tally object"
-			Gt2Inspector openOn: aRootMessageTally ].
+			GtInspector openOn: aRootMessageTally ].
 ]
 
 { #category : #testing }
