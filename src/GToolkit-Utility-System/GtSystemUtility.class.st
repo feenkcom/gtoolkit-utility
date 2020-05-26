@@ -37,6 +37,7 @@ GtSystemUtility class >> methodDefinitionFromString: aString [
 		description: [ 'Method definition name has to be a non-empty string' ].
 
 	aCollection := '>>#' split: aString.
+	aCollection size = 1 ifTrue: [ aCollection := '>>' split: aString ].
 	aMethodClassName := aCollection first trimBoth.
 	aMethodName := aCollection size = 2 ifTrue: [ aCollection second trimBoth ] ifFalse: [ '' ].
 
