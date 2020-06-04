@@ -17,6 +17,8 @@ Public API and Key Messages
 
 - command:arguments: 	(class) create an instance with the supplied parameters
 - errorBlock: 			Set the block to be evaluated if the process exits unsuccessfully.
+		Note that this is only called if the process is successfully started and subsequently fails.
+		Supplying a non-existing path, or a command that can't be found, will raise an error in the calling process.
 - removeLD_LIBRARY_PATH: 	Remove LD_LIBRARY_PATH from the environment passed to the subprocess.
 		This is useful on linux if the command expects the system installation of openssl.
 - runAndWait: 			Execute the command and wait for completion.
@@ -156,8 +158,8 @@ GtUnixSubprocess >> runAndWait [
 { #category : #private }
 GtUnixSubprocess >> runProcess [
 	"Run the requested command as a separate process"
+	| stdoutStream stderrStream |
 
-	[ | stdoutStream stderrStream |
 	stdoutStream := String new writeStream.
 	stderrStream := String new writeStream.
 	self process
@@ -165,20 +167,23 @@ GtUnixSubprocess >> runProcess [
 		arguments: arguments;
 		redirectStdout;
 		redirectStderr;
-		runAndWaitPollingEvery: (Delay forMilliseconds: 500)
-			doing: [ :proc :outStream :errStream | 
+		run.
+
+	[ self process
+		waitForExitPollingEvery: (Delay forMilliseconds: 500)
+		doing: [ :proc :outStream :errStream | 
 			stdoutStream nextPutAll: outStream upToEnd.
-			stderrStream nextPutAll: errStream upToEnd ]
-			onExitDo: [ :proc :outStream :errStream | 
-				proc closeAndCleanStreams.
-				stdout := stdoutStream contents.
-				stderr := stderrStream contents.
-				"Async processes have errors signalled here.
-				If waiting, raise the error after signalling the semaphore (in #runAndWait)"
-				semaphore
-					ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
-							ifTrue: [ errorBlock value: self ] ]
-					ifNotNil: [ semaphore signal ] ] ] fork
+			stderrStream nextPutAll: errStream upToEnd ].
+	self process closeAndCleanStreams.
+	stdout := stdoutStream contents.
+	stderr := stderrStream contents.
+	"Async processes have errors signalled here.
+	If waiting, raise the error after signalling the semaphore (in #runAndWait)"
+	semaphore
+		ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
+				ifTrue: [ errorBlock value: self ] ]
+		ifNotNil: [ semaphore signal ] ] fork.
+
 ]
 
 { #category : #'OS signal sending' }
