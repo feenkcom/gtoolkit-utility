@@ -104,15 +104,15 @@ GtFileUtility class >> secureFileName: fileNameStringOrNil extension: extensionS
 ]
 
 { #category : #'accessing - file' }
-GtFileUtility class >> secureFileName: fileNameStringOrNil extension: extensionString maxLenght: anInteger [
+GtFileUtility class >> secureFileName: aFileNameString extension: anExtensionStringOrNil maxLenght: anInteger [
 	"Return a filename that is file system secure, e.g., does not include special characters"
 	<return: #String>
-	| basename |
-	fileNameStringOrNil ifNil: [ ^ 'xd-file.', extensionString ].
-	basename := String 
+	| aBasename |
+	self assert: [ aFileNameString isNotNil ] description: [ 'Filename must be non-nil' ].
+	aBasename := String 
 		streamContents: [ :aStream | | previousCharacter |
 			previousCharacter := nil.
-			fileNameStringOrNil do: [ :eachCharacter | 
+			aFileNameString do: [ :eachCharacter | 
 				eachCharacter isAlphaNumeric 
 					ifTrue: [ aStream nextPut: eachCharacter asLowercase ]
 					ifFalse: [ previousCharacter = self secureCharacter 
@@ -120,7 +120,9 @@ GtFileUtility class >> secureFileName: fileNameStringOrNil extension: extensionS
 				previousCharacter := eachCharacter ]
 			 ] 
 		limitedTo: anInteger.
-	^ basename, '.', extensionString
+	^ anExtensionStringOrNil 
+		ifNotNil: [ aBasename, '.', anExtensionStringOrNil ]
+		ifNil: [ aBasename ]
 ]
 
 { #category : #'accessing - file' }
