@@ -11,15 +11,13 @@ Class {
 { #category : #'instance creation' }
 GtRBAddTraitUsageToClassByNameTransformation class >> traitName: aTraitName inClassNamed: aClassName [
 	^ self new
-		className: aClassName traitName: aTraitName;
-		yourself
+		className: aClassName asSymbol 
+		traitName: aTraitName asSymbol
 ]
 
 { #category : #private }
 GtRBAddTraitUsageToClassByNameTransformation >> checkClassDoesNotIncludeTraitFor: aClass [ 
-	| class |
-	class := aClass asClassWithTrait.
-	class withAllSuperclasses
+	aClass withAllSuperclasses
 		do: [ :each | 
 			(self includesTrait: traitName in: each)
 				ifTrue: [ ^ self
@@ -48,7 +46,7 @@ GtRBAddTraitUsageToClassByNameTransformation >> includesTrait: aString in: aRBCl
 { #category : #preconditions }
 GtRBAddTraitUsageToClassByNameTransformation >> preconditions [
 	| class |
-	class := RBClass existingNamed: className.
+	class := (self model classNamed: className) asClassWithTrait.
 	
 	^ (RBCondition isMetaclass: class) not
 		&
@@ -69,7 +67,7 @@ GtRBAddTraitUsageToClassByNameTransformation >> preconditions [
 { #category : #transforming }
 GtRBAddTraitUsageToClassByNameTransformation >> transform [
 	| newExpression class |
-	class := RBClass existingNamed: className.
+	class := self model classNamed: className.
 	newExpression := class traitExpression
 		ifNil: [ traitName ]
 		ifNotNil: [ :exp | exp , ' + ' , traitName ].
