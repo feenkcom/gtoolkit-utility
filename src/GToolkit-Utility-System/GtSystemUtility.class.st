@@ -24,6 +24,12 @@ GtSystemUtility class >> classDefinitionFromString: aString [
 		ifFalse: [ aDefinition ]
 ]
 
+{ #category : #testing }
+GtSystemUtility class >> isClass: aSubClass sameOrSubclassOf: aSuperClass [
+	<return: #Boolean>
+	^ aSubClass = aSuperClass or: [ aSubClass inheritsFrom: aSuperClass ]
+]
+
 { #category : #'ring definition' }
 GtSystemUtility class >> methodDefinitionFromString: aString [
 	"Extract a method definition, e.g., MyClass>>#methodOne and return method definition"
