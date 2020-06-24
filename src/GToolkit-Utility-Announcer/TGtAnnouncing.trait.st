@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtAnnouncing,
-	#category : #'GToolkit-Utility-Announcer-Traits'
+	#category : #'GToolkit-Utility-Announcer'
 }
 
 { #category : #announcer }
