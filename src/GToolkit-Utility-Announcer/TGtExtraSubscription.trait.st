@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtExtraSubscription,
-	#category : #'GToolkit-Utility-Announcer-Traits'
+	#category : #'GToolkit-Utility-Announcer'
 }
 
 { #category : #'announcer - subscription' }
