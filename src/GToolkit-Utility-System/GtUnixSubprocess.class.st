@@ -51,7 +51,8 @@ Class {
 		'semaphore',
 		'stdout',
 		'stderr',
-		'errorBlock'
+		'errorBlock',
+		'workingDirectory'
 	],
 	#category : #'GToolkit-Utility-System'
 }
@@ -166,8 +167,10 @@ GtUnixSubprocess >> runProcess [
 		command: command;
 		arguments: arguments;
 		redirectStdout;
-		redirectStderr;
-		run.
+		redirectStderr.
+	workingDirectory ifNotNil: 
+		[ self process workingDirectory: workingDirectory fullName ].
+	self process run.
 
 	[ self process
 		waitForExitPollingEvery: (Delay forMilliseconds: 500)
@@ -201,4 +204,15 @@ GtUnixSubprocess >> stderr [
 { #category : #accessing }
 GtUnixSubprocess >> stdout [
 	^ stdout
+]
+
+{ #category : #accessing }
+GtUnixSubprocess >> workingDirectory [
+	^ workingDirectory
+]
+
+{ #category : #accessing }
+GtUnixSubprocess >> workingDirectory: aFileReference [
+
+	workingDirectory := aFileReference asFileReference
 ]
