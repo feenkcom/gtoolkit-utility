@@ -43,6 +43,16 @@ GtNullAnnouncer >> when: anAnnouncementClass do: aValuable [
 ]
 
 { #category : #'announcer - subscription' }
+GtNullAnnouncer >> when: anAnnouncementClass do: aValuable for: aSubscriber [
+	"do nothing"
+]
+
+{ #category : #'announcer - subscription' }
+GtNullAnnouncer >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
+	"do nothing"
+]
+
+{ #category : #'announcer - subscription' }
 GtNullAnnouncer >> when: anAnnouncementClass send: aSelector to: anObject [
 	"do nothing"
 ]
