@@ -5,3 +5,8 @@ Class {
 	#classTraits : 'TGtExtraSubscription classTrait',
 	#category : #'GToolkit-Utility-Announcer'
 }
+
+{ #category : #factory }
+GtAnnouncer class >> null [
+	^ GtNullAnnouncer
+]
