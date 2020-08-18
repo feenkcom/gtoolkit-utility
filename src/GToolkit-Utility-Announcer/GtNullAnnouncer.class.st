@@ -27,6 +27,11 @@ GtNullAnnouncer >> removeSubscription: subscription [
 ]
 
 { #category : #'announcer - subscription' }
+GtNullAnnouncer >> subscriber: aSubscriber [
+	"do nothing"
+]
+
+{ #category : #'announcer - subscription' }
 GtNullAnnouncer >> unsubscribe: anObject [
 	"do nothing"
 ]
