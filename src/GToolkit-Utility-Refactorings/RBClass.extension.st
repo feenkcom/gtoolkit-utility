@@ -1,6 +1,21 @@
 Extension { #name : #RBClass }
 
 { #category : #'*GToolkit-Utility-Refactorings' }
+RBClass >> asClassWithTrait [
+	"Hack to add a trait expression variable to the class"
+
+	| classWithTrait |
+	classWithTrait := RBClassWithTrait new.
+	1 to: self class instSize do: [ :i | classWithTrait instVarAt: i put: (self instVarAt: i) ].
+	
+	(model changedClasses includesKey: self name)
+		ifTrue: [ (model changedClasses at: self name) at: 1 put: classWithTrait ]
+		ifFalse: [ (model newClasses at: self name) at: 1 put: classWithTrait ].
+	
+	^ classWithTrait
+]
+
+{ #category : #'*GToolkit-Utility-Refactorings' }
 RBClass >> gtDefinitionString [
 	^ String
 		streamContents: [ :definitionStream | 
