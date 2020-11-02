@@ -1,22 +1,22 @@
 Class {
-	#name : #GtRBAddTraitUsageToClassByNameTransformation,
+	#name : #RBAddTraitUsageToClassByNameRefactoring,
 	#superclass : #RBRefactoring,
 	#instVars : [
 		'className',
 		'traitName'
 	],
-	#category : #'GToolkit-Utility-Refactorings'
+	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #'instance creation' }
-GtRBAddTraitUsageToClassByNameTransformation class >> traitName: aTraitName inClassNamed: aClassName [
+RBAddTraitUsageToClassByNameRefactoring class >> traitName: aTraitName inClassNamed: aClassName [
 	^ self new
 		className: aClassName asSymbol 
 		traitName: aTraitName asSymbol
 ]
 
 { #category : #private }
-GtRBAddTraitUsageToClassByNameTransformation >> checkClassDoesNotIncludeTraitFor: aClass [ 
+RBAddTraitUsageToClassByNameRefactoring >> checkClassDoesNotIncludeTraitFor: aClass [ 
 	aClass withAllSuperclasses
 		do: [ :each | 
 			(self includesTrait: traitName in: each)
@@ -25,13 +25,13 @@ GtRBAddTraitUsageToClassByNameTransformation >> checkClassDoesNotIncludeTraitFor
 ]
 
 { #category : #'initialize-release' }
-GtRBAddTraitUsageToClassByNameTransformation >> className: aClassName traitName: aTraitName [
+RBAddTraitUsageToClassByNameRefactoring >> className: aClassName traitName: aTraitName [
 	className := aClassName.
 	traitName := aTraitName
 ]
 
 { #category : #private }
-GtRBAddTraitUsageToClassByNameTransformation >> includesTrait: aString in: aRBClass [
+RBAddTraitUsageToClassByNameRefactoring >> includesTrait: aString in: aRBClass [
 	| expression |
 	aRBClass traitExpression isNil
 		ifTrue: [ ^ false ].
@@ -44,7 +44,7 @@ GtRBAddTraitUsageToClassByNameTransformation >> includesTrait: aString in: aRBCl
 ]
 
 { #category : #preconditions }
-GtRBAddTraitUsageToClassByNameTransformation >> preconditions [
+RBAddTraitUsageToClassByNameRefactoring >> preconditions [
 	| class |
 	class := (self model classNamed: className) asClassWithTrait.
 	
@@ -65,7 +65,7 @@ GtRBAddTraitUsageToClassByNameTransformation >> preconditions [
 ]
 
 { #category : #transforming }
-GtRBAddTraitUsageToClassByNameTransformation >> transform [
+RBAddTraitUsageToClassByNameRefactoring >> transform [
 	| newExpression class |
 	class := self model classNamed: className.
 	newExpression := class traitExpression
