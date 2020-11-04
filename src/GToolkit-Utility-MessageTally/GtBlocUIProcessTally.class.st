@@ -33,16 +33,17 @@ GtBlocUIProcessTally class >> isTallyForBlocUIProcess: aMessageTally [
 { #category : #ui }
 GtBlocUIProcessTally >> gtViewFramePhasesListFor: aView [
 	<gtView>
-	^ aView columnedList 
+	^ aView columnedList
 		title: 'Frame phases' translated;
 		priority: 5;
 		items: [ framePhaseTallies ];
-		column: 'Phase' format: #selectorDescription;
-		column: 'Percentage' 
-			format: [ :aTally | (aTally tallyPercentage printShowingDecimalPlaces: 1), '%']
+		column: 'Phase' text: #selectorDescription;
+		column: 'Percentage'
+			text:
+				[ :aTally | (aTally tallyPercentage printShowingDecimalPlaces: 1) , '%' ]
 			width: 100;
-		column: 'Time' 
-			format: [ :aTally | aTally timeInMilliseconds asString, 'ms' ] 
+		column: 'Time'
+			text: [ :aTally | aTally timeInMilliseconds asString , 'ms' ]
 			width: 100
 ]
 
