@@ -35,6 +35,9 @@ GtFileUtility class >> fileNameOfUri: aFileName [
 
 { #category : #'accessing - file' }
 GtFileUtility class >> fileReferenceOfFileName: relativeFileName relativeTo: directoryFileReference [ 
+	"This is basically the equivalent of `directoryFileReference / relativeFileName`, 
+	which should be used in preference to this method.
+	Once all senders of this method have been removed, it will be too."
 	<return: #FileReference>
 	| path |
 	path := Path from: relativeFileName.
