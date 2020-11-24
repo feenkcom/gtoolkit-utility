@@ -8,7 +8,9 @@ Trait {
 
 { #category : #cleanup }
 TGtUniqueInstance classSide >> cleanUniqueInstance [
-	uniqueInstance := nil
+	uniqueInstance ifNotNil: [ :anInstance | 
+		self onRemoveUniqueInstance: anInstance ].
+	uniqueInstance := nil.
 ]
 
 { #category : #cleanup }
@@ -24,6 +26,11 @@ TGtUniqueInstance classSide >> default [
 { #category : #accessing }
 TGtUniqueInstance classSide >> instance [
 	^ self uniqueInstance
+]
+
+{ #category : #'private - hooks' }
+TGtUniqueInstance classSide >> onRemoveUniqueInstance: anInstance [
+	"Classes may perform some activities on a singleton that is about to be released"
 ]
 
 { #category : #accessing }
