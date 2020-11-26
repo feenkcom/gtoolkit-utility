@@ -132,7 +132,7 @@ GtMethodsSortFunction >> compareMethodNameOf: aMethodOrName1 withMethodNameOf: a
 	"binary methods appear before the rest"
 	^ (methodName1 isBinary = methodName2 isBinary)
 		ifTrue: [ methodName1 threeWayCompareTo: methodName2 ]
-		ifFalse: [ methodName1 isBinary ]
+		ifFalse: [ -1 ]
 ]
 
 { #category : #'private - comparison' }
