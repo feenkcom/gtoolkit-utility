@@ -15,6 +15,7 @@ BaselineOfGToolkitFileUtility >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
 			package: 'GToolkit-Utility-File' with: [ 
 				spec requires: #( 'GToolkit-Utility-System' 'GToolkitResourcesUtility' ) ];
+			package: 'GToolkit-Utility-URL';
 			package: 'GToolkit-Utility-System' with: [ 
 				spec requires: #( 'GToolkitAssertionUtility' ) ]
 	]
