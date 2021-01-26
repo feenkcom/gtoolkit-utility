@@ -7,16 +7,17 @@ Class {
 { #category : #baseline }
 BaselineOfGToolkitFileUtility >> baseline: spec [
 	<baseline>
-	spec for: #common do: [ 
-		spec
+	spec for: #'common' do: [
+		spec 
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.10/src' ];
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
-			package: 'GToolkit-Utility-File' with: [ 
-				spec requires: #( 'GToolkit-Utility-System' 'GToolkitResourcesUtility' ) ];
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.10/src' ].
+		spec 
 			package: 'GToolkit-Utility-URL';
-			package: 'GToolkit-Utility-System' with: [ 
-				spec requires: #( 'GToolkitAssertionUtility' ) ]
-	]
+			package: 'GToolkit-Utility-System' with: [
+				spec requires: #('GToolkitAssertionUtility' ). ];
+			package: 'GToolkit-Utility-File' with: [
+				spec requires: #('GToolkit-Utility-System' 'GToolkitResourcesUtility' ). ]. ].
+
 ]
