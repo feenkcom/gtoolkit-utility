@@ -117,6 +117,21 @@ GtResourceReference >> copyAllTo: aResolvable [
 	self fileReference copyAllTo: aResolvable
 ]
 
+{ #category : #copying }
+GtResourceReference >> copyWithPath: newPath [
+	^ self copy path: newPath
+]
+
+{ #category : #operations }
+GtResourceReference >> createDirectory [
+	self fileReference createDirectory
+]
+
+{ #category : #operations }
+GtResourceReference >> createFile [
+	self fileReference createFile
+]
+
 { #category : #operations }
 GtResourceReference >> delete [
 	"Delete the receiver, does raise an error if it is not present."
@@ -397,6 +412,21 @@ GtResourceReference >> utility [
 { #category : #accessing }
 GtResourceReference >> utility: anObject [
 	utility := anObject
+]
+
+{ #category : #navigating }
+GtResourceReference >> withExtension: aString [
+	| aNewPath |
+	aNewPath := self path withExtension: aString.
+	(self path == aNewPath) ifTrue: [ ^ self ].
+	^ self copy path: aNewPath
+]
+
+{ #category : #navigating }
+GtResourceReference >> withPath: newPath [
+	^ self path == newPath
+		ifTrue: [ self ] 
+		ifFalse: [ self copyWithPath: newPath ]
 ]
 
 { #category : #streams }
