@@ -36,17 +36,38 @@ GtResourceReference class >> path: aPath [
 
 { #category : #navigating }
 GtResourceReference >> , anExtension [
-	self path: self path , anExtension
+	^ self copy path: self path , anExtension
 ]
 
 { #category : #navigating }
 GtResourceReference >> / aString [ 
-	self path: self path / aString
+	"Return new instance"
+	^ self copy path: self path / aString
+]
+
+{ #category : #converting }
+GtResourceReference >> asAbsolute [
+	^ self fileReference asAbsolute
 ]
 
 { #category : #converting }
 GtResourceReference >> asFileReference [
 	^ self
+]
+
+{ #category : #converting }
+GtResourceReference >> asPath [
+	^ self path
+]
+
+{ #category : #accessing }
+GtResourceReference >> basename [
+	^ self fileReference basename
+]
+
+{ #category : #streams }
+GtResourceReference >> binaryReadStream [
+	^ self fileReference binaryReadStream
 ]
 
 { #category : #streams }
@@ -57,6 +78,101 @@ GtResourceReference >> binaryReadStreamDo: doBlock [
 { #category : #streams }
 GtResourceReference >> binaryReadStreamDo: doBlock ifAbsent: absentBlock [
 	^ self fileReference binaryReadStreamDo: doBlock ifAbsent: absentBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> binaryReadStreamIfAbsent: absentBlock [
+	^ self fileReference binaryReadStreamIfAbsent: absentBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> binaryWriteStream [
+	"Answer a binary write stream on the receiver"
+	^ self fileReference binaryWriteStream
+]
+
+{ #category : #streams }
+GtResourceReference >> binaryWriteStreamDo: aBlock [
+	"Pass a binary write stream on the receiver to the supplied block, and ensure that the stream is closed after evaluation."
+	^ self fileReference binaryWriteStreamDo: aBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> binaryWriteStreamDo: doBlock ifPresent: presentBlock [
+	^ self fileReference binaryWriteStreamDo: doBlock ifPresent: presentBlock
+]
+
+{ #category : #enumerating }
+GtResourceReference >> childrenMatching: patterns [
+	"
+	FileSystem disk workingDirectory childrenMatching: '*'
+	FileSystem disk workingDirectory childrenMatching: '*.image;*.changes'
+	"
+	^ self fileReference childrenMatching: patterns
+]
+
+{ #category : #operations }
+GtResourceReference >> copyAllTo: aResolvable [
+	"Performs a deep copy of the receiver, to a location specified by the argument. If the receiver is a file, the file will be copied; if a directory, the directory and its contents will be copied recursively. The argument must be a reference that doesn't exist; it will be created by the copy."
+	self fileReference copyAllTo: aResolvable
+]
+
+{ #category : #operations }
+GtResourceReference >> delete [
+	"Delete the receiver, does raise an error if it is not present."
+	^ self fileReference delete
+]
+
+{ #category : #operations }
+GtResourceReference >> deleteAll [
+	"Delete this directory and all children of it, raise an error if the file does not exist.
+	Don't follow symbolic links (so files outside the receiver's tree will not be deleted)."
+	^ self fileReference deleteAll
+]
+
+{ #category : #operations }
+GtResourceReference >> deleteAllChildren [
+	"Delete all children of the receiver, raise an error if the receiver does not exist.
+	Don't follow symbolic links (so files outside the receiver's tree will not be deleted)."
+	^ self fileReference deleteAllChildren
+]
+
+{ #category : #operations }
+GtResourceReference >> deleteIfAbsent: aBlock [
+	"Delete the receiver, when it does not exist evaluate the block"
+	^ self fileReference deleteIfAbsent: aBlock
+]
+
+{ #category : #operations }
+GtResourceReference >> ensureCreateDirectory [
+	"Verifies that the directory does not exist and only creates if necessary. Do not remove files contained if they exist.Creates the parents if needed"
+	self fileReference ensureCreateDirectory
+]
+
+{ #category : #operations }
+GtResourceReference >> ensureCreateFile [
+	"Create if necessary a file for the receiver. If the parent does not exist creates it"
+	self fileReference ensureCreateFile
+]
+
+{ #category : #operations }
+GtResourceReference >> ensureDelete [
+	"Delete the file and does not raise exception if it does not exist contrary to delete.
+	However if it is a directory and it has children an error is signaled. If it is required to 
+	delete even with children, use #ensureDeleteAll."
+	self fileReference ensureDelete
+]
+
+{ #category : #operations }
+GtResourceReference >> ensureDeleteAll [
+	"Delete this directory and all children of it, and does not raise an error if the file does not exist."
+	self fileReference ensureDeleteAll
+]
+
+{ #category : #operations }
+GtResourceReference >> ensureDeleteAllChildren [
+	"delete all children of the receiver and does not raise an error if the receiver does not exist"
+	self fileReference ensureDeleteAllChildren
 ]
 
 { #category : #testing }
@@ -78,9 +194,57 @@ GtResourceReference >> fullName [
 ]
 
 { #category : #testing }
+GtResourceReference >> hasChildren [
+	<return: #Boolean>
+	^ self fileReference hasChildren
+]
+
+{ #category : #testing }
+GtResourceReference >> hasDirectories [
+	<return: #Boolean>
+	^ self fileReference hasDirectories
+]
+
+{ #category : #testing }
+GtResourceReference >> hasFiles [
+	<return: #Boolean>
+	^ self fileReference hasFiles
+]
+
+{ #category : #testing }
+GtResourceReference >> ifFile: fBlock ifDirectory: dBlock ifAbsent: aBlock [
+	<return: #Boolean>
+	^ self fileReference ifFile: fBlock ifDirectory: dBlock ifAbsent: aBlock
+]
+
+{ #category : #testing }
+GtResourceReference >> isAbsolute [
+	<return: #Boolean>
+	^ self path isAbsolute
+]
+
+{ #category : #testing }
+GtResourceReference >> isChildOf: anObject [
+	<return: #Boolean>
+	^ self fileReference isChildOf: anObject
+]
+
+{ #category : #testing }
 GtResourceReference >> isDirectory [
 	<return: #Boolean>
 	^ self fileReference isDirectory
+]
+
+{ #category : #testing }
+GtResourceReference >> isExecutable [
+	<return: #Boolean>
+	^ self fileReference isExecutable
+]
+
+{ #category : #testing }
+GtResourceReference >> isFIFO [
+	<return: #Boolean>
+	^ self fileReference isFIFO
 ]
 
 { #category : #testing }
@@ -95,14 +259,71 @@ GtResourceReference >> isReadable [
 	^ self fileReference isReadable
 ]
 
+{ #category : #testing }
+GtResourceReference >> isRelative [
+	<return: #Boolean>
+	^ self path isRelative
+]
+
+{ #category : #testing }
+GtResourceReference >> isRoot [
+	<return: #Boolean>
+	^ self fileReference isRoot
+]
+
+{ #category : #testing }
+GtResourceReference >> isSocket [
+	<return: #Boolean>
+	^ self fileReference isSocket
+]
+
+{ #category : #testing }
+GtResourceReference >> isSymlink [
+	<return: #Boolean>
+	^ self fileReference isSymlink
+]
+
+{ #category : #testing }
+GtResourceReference >> isWritable [
+	<return: #Boolean>
+	^ self fileReference isWritable
+]
+
+{ #category : #operations }
+GtResourceReference >> moveTo: aReference [
+	"Move the receiver in the location passed as argument.
+	
+	(FileSystem disk workingDirectory / 'paf' ) ensureCreateFile.
+	(FileSystem disk workingDirectory / 'fooFolder') ensureCreateDirectory. 
+	(FileSystem disk workingDirectory / 'paf' ) moveTo: (FileSystem disk workingDirectory / 'fooFolder' / 'paf')
+	
+	Note that the receiver is modified to point to the new location."
+	^ self fileReference moveTo: aReference
+]
+
+{ #category : #streams }
+GtResourceReference >> openWritable: aBoolean [
+	^ self fileReference openWritable: aBoolean
+]
+
 { #category : #accessing }
 GtResourceReference >> path [
 	^ path
 ]
 
 { #category : #accessing }
-GtResourceReference >> path: anObject [
-	path := anObject
+GtResourceReference >> path: aStringOrPath [
+
+	| aPath |
+	aPath := aStringOrPath isString 
+		ifTrue: [ aPath := Path * aStringOrPath ]
+		ifFalse: [ aPath := aStringOrPath ].
+		
+	self 
+		assert: [ (aPath isKindOf: Path) and: [ aPath isRelative ] ]
+		description: [ 'Resource reference path must be a relative path' ].
+		
+	path := aPath
 ]
 
 { #category : #printing }
@@ -111,8 +332,13 @@ GtResourceReference >> printOn: aStream [
 ]
 
 { #category : #streams }
-GtResourceReference >> readStreamDo: doBlock [
-	^ self fileReference readStreamDo: doBlock
+GtResourceReference >> readStream [
+	^ self fileReference readStream
+]
+
+{ #category : #streams }
+GtResourceReference >> readStreamDo: aBlock [
+	^ self fileReference readStreamDo: aBlock
 ]
 
 { #category : #streams }
@@ -121,8 +347,28 @@ GtResourceReference >> readStreamDo: doBlock ifAbsent: absentBlock [
 ]
 
 { #category : #streams }
-GtResourceReference >> readStreamEncoded: anEncoding do: doBlock [
-	^ self fileReference readStreamEncoded: anEncoding do: doBlock
+GtResourceReference >> readStreamEncoded: anEncoding [
+	^ self fileReference readStreamEncoded: anEncoding
+]
+
+{ #category : #streams }
+GtResourceReference >> readStreamEncoded: anEncoding do: aBlock [
+	^ self fileReference readStreamEncoded: anEncoding do: aBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> readStreamIfAbsent: absentBlock [
+	^ self fileReference readStreamIfAbsent: absentBlock
+]
+
+{ #category : #operations }
+GtResourceReference >> renameTo: newBasename [
+	self fileReference renameTo: newBasename
+]
+
+{ #category : #navigating }
+GtResourceReference >> resolve [
+	^ self
 ]
 
 { #category : #accessing }
@@ -138,6 +384,11 @@ GtResourceReference >> size [
 	^ self fileReference size
 ]
 
+{ #category : #streams }
+GtResourceReference >> streamWritable: writable do: aBlock [
+	^ self fileReference streamWritable: writable do: aBlock
+]
+
 { #category : #accessing }
 GtResourceReference >> utility [
 	^ utility ifNil: [ GtResourcesUtility default ]
@@ -146,4 +397,34 @@ GtResourceReference >> utility [
 { #category : #accessing }
 GtResourceReference >> utility: anObject [
 	utility := anObject
+]
+
+{ #category : #streams }
+GtResourceReference >> writeStream [
+	^ self fileReference writeStream
+]
+
+{ #category : #streams }
+GtResourceReference >> writeStreamDo: aBlock [
+	^ self fileReference writeStreamDo: aBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> writeStreamDo: doBlock ifPresent: presentBlock [
+	^ self fileReference writeStreamDo: doBlock ifPresent: presentBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> writeStreamEncoded: anEncoding [
+	^ self fileReference writeStreamEncoded: anEncoding
+]
+
+{ #category : #streams }
+GtResourceReference >> writeStreamEncoded: anEncoding do: aBlock [
+	^ self fileReference writeStreamEncoded: anEncoding do: aBlock
+]
+
+{ #category : #streams }
+GtResourceReference >> writeStreamIfPresent: presentBlock [
+	^ self fileReference writeStreamIfPresent: presentBlock
 ]
