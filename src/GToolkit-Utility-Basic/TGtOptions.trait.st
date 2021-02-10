@@ -17,6 +17,22 @@ TGtOptions >> assertOptionDoesNotExist: aKey [
 ]
 
 { #category : #'options - basic' }
+TGtOptions >> clearOption: aKey [
+	"Remove the specified option from the dictionary"
+
+	options ifNil: [ KeyNotFound new key: aKey; signal ].
+	options removeKey: aKey
+]
+
+{ #category : #'options - basic' }
+TGtOptions >> clearOption: aKey ifAbsent: absentBlock [
+	"Remove the specified option from the dictionary"
+
+	options ifNil: [ ^ absentBlock value ].
+	options removeKey: aKey ifAbsent: absentBlock
+]
+
+{ #category : #'options - basic' }
 TGtOptions >> ensureOptions [
 	options ifNil: [ options := Dictionary new ]
 ]
