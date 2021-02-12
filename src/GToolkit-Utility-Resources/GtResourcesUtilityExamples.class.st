@@ -67,6 +67,78 @@ GtResourcesUtilityExamples >> existingResult [
 	^ aResult	
 ]
 
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator [
+	<gtExample>
+	| aLocator |
+	aLocator := FileLocator gtResource.
+	
+	self assert: aLocator origin equals: #gtResource.
+	self assert: aLocator path equals: Path workingDirectory.
+	
+	^ aLocator
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_asFileReference [
+	<gtExample>
+	| aLocator aFileReference |
+	aLocator := self fileLocator.
+	aFileReference := aLocator asFileReference.
+	
+	self assert: aFileReference class equals: FileReference.
+	self assert: aFileReference path isAbsolute.
+	
+	^ aFileReference
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_resolve [
+	<gtExample>
+	| aLocator aFileReference |
+	aLocator := self fileLocator.
+	aFileReference := aLocator resolve.
+	
+	self assert: aFileReference class equals: FileReference.
+	self assert: aFileReference path isAbsolute.
+	
+	^ aFileReference
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_withSlash [
+	<gtExample>
+	| aLocator aFileReference aNewLocator aNewFileReference |
+	aLocator := self fileLocator.
+	aNewLocator := aLocator / 'something'.
+	
+	aFileReference := aLocator asFileReference.
+	aNewFileReference := aNewLocator asFileReference.
+	
+	self assert: aNewFileReference class equals: FileReference.
+	self assert: aNewFileReference path isAbsolute.
+	self assert: aNewFileReference parent equals: aFileReference.
+	
+	^ aNewLocator
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_withSlashes [
+	<gtExample>
+	| aLocator aFileReference aNewLocator aNewFileReference |
+	aLocator := self fileLocator.
+	aNewLocator := aLocator / 'feenkcom/gtoolkit/doc'.
+	
+	aFileReference := aLocator asFileReference.
+	aNewFileReference := aNewLocator asFileReference.
+	
+	self assert: aNewFileReference class equals: FileReference.
+	self assert: aNewFileReference path isAbsolute.
+	self assert: aNewFileReference parent parent parent equals: aFileReference.
+	
+	^ aNewLocator
+]
+
 { #category : #'examples - locations' }
 GtResourcesUtilityExamples >> gtExtraDirectory [
 	<gtExample>
