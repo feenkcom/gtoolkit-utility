@@ -3,7 +3,8 @@ I am like ${class:FileReference}$. You can use me to dynamically resolve a resou
 Users can use me to read resourcers, e.g., ${method:GtResourceReference>>#binaryReadStreamDo:}$, ${method:GtResourceReference>>#readStreamEncoded:do:}$.
 
 Whenever I am asked to access a file or a directory, I ask ${class:GtResourcesUtility}$ using ${method:GtResourceReference>>#utility}$ to provide me a ${class:FileReference}$. See the ${class:GtResourcesUtility}$ class comment for more details.
-
+!! Convenience Usage
+For the convenience, we recommend to use ${method:FileLocator class>>#gtResource}$ instead of direct usage of ${class:GtResourceReference}$: ${example:GtResourcesUtilityExamples>>#fileLocator_withSlashes|previewExpanded=true}$ 
 !! Live Search 
 
 You can search live here by clicking on the search icon in the inspector: 
@@ -42,7 +43,17 @@ GtResourceReference >> , anExtension [
 { #category : #navigating }
 GtResourceReference >> / aString [ 
 	"Return new instance"
-	^ self copy path: self path / aString
+	^ self copyWithPath: self path / aString
+]
+
+{ #category : #accessing }
+GtResourceReference >> absolutePath [
+	^ self fileReference absolutePath
+]
+
+{ #category : #accessing }
+GtResourceReference >> accessTime [
+	^ self fileReference accessTime
 ]
 
 { #category : #converting }
@@ -58,6 +69,12 @@ GtResourceReference >> asFileReference [
 { #category : #converting }
 GtResourceReference >> asPath [
 	^ self path
+]
+
+{ #category : #accessing }
+GtResourceReference >> base [
+	"Returns the base of the basename, i.e. /foo/gloops.taz base is 'gloops'"
+	^ self fileReference base
 ]
 
 { #category : #accessing }
@@ -111,6 +128,11 @@ GtResourceReference >> childrenMatching: patterns [
 	^ self fileReference childrenMatching: patterns
 ]
 
+{ #category : #accessing }
+GtResourceReference >> contents [
+	^ self fileReference contents
+]
+
 { #category : #operations }
 GtResourceReference >> copyAllTo: aResolvable [
 	"Performs a deep copy of the receiver, to a location specified by the argument. If the receiver is a file, the file will be copied; if a directory, the directory and its contents will be copied recursively. The argument must be a reference that doesn't exist; it will be created by the copy."
@@ -130,6 +152,11 @@ GtResourceReference >> createDirectory [
 { #category : #operations }
 GtResourceReference >> createFile [
 	self fileReference createFile
+]
+
+{ #category : #accessing }
+GtResourceReference >> creationTime [
+	^ self fileReference creationTime
 ]
 
 { #category : #operations }
@@ -156,6 +183,11 @@ GtResourceReference >> deleteAllChildren [
 GtResourceReference >> deleteIfAbsent: aBlock [
 	"Delete the receiver, when it does not exist evaluate the block"
 	^ self fileReference deleteIfAbsent: aBlock
+]
+
+{ #category : #enumerating }
+GtResourceReference >> directories [
+	^ self fileReference directories
 ]
 
 { #category : #operations }
@@ -203,6 +235,16 @@ GtResourceReference >> fileReference [
 ]
 
 { #category : #accessing }
+GtResourceReference >> fileSystem [
+	^ self fileReference fileSystem
+]
+
+{ #category : #enumerating }
+GtResourceReference >> files [
+	^ self fileReference files
+]
+
+{ #category : #accessing }
 GtResourceReference >> fullName [
 	<return: #String>
 	^ self fileReference fullName
@@ -224,6 +266,11 @@ GtResourceReference >> hasDirectories [
 GtResourceReference >> hasFiles [
 	<return: #Boolean>
 	^ self fileReference hasFiles
+]
+
+{ #category : #accessing }
+GtResourceReference >> humanReadableSize [
+	^ self fileReference humanReadableSize
 ]
 
 { #category : #testing }
@@ -323,7 +370,7 @@ GtResourceReference >> openWritable: aBoolean [
 
 { #category : #accessing }
 GtResourceReference >> path [
-	^ path
+	^ path ifNil: [ path := Path * '.' ]
 ]
 
 { #category : #accessing }
@@ -386,6 +433,36 @@ GtResourceReference >> resolve [
 	^ self
 ]
 
+{ #category : #navigating }
+GtResourceReference >> resolve: anObject [
+	<return: #FileReference>
+	^ self fileReference resolve: anObject
+]
+
+{ #category : #navigating }
+GtResourceReference >> resolvePath: anObject [
+	^ self withPath: (self path resolve: anObject)
+]
+
+{ #category : #navigating }
+GtResourceReference >> resolveReference: aReference [
+	
+	| aFileSystem |
+	aFileSystem := self fileSystem.
+	
+	^ (aFileSystem = aReference fileSystem or: [ aReference isRelative ])
+		ifTrue: [ self copyWithPath: (self path resolvePath: aReference path) ]
+		ifFalse: [ aReference ]
+]
+
+{ #category : #navigating }
+GtResourceReference >> resolveString: aString [
+	| filesystem thePath |
+	filesystem := self fileSystem.
+	thePath := filesystem pathFromString: aString.
+	^ self withPath: (path resolvePath: thePath)
+]
+
 { #category : #accessing }
 GtResourceReference >> results [
 	<return: #Array of: #GtResourcesUtilityResultContext>
@@ -420,6 +497,12 @@ GtResourceReference >> withExtension: aString [
 	aNewPath := self path withExtension: aString.
 	(self path == aNewPath) ifTrue: [ ^ self ].
 	^ self copy path: aNewPath
+]
+
+{ #category : #accessing }
+GtResourceReference >> withParents [
+	<return: #Array of: #FileReference>
+	^ self fileReference withParents
 ]
 
 { #category : #navigating }
