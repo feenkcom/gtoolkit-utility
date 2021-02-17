@@ -1,5 +1,5 @@
 "
-! View Trait generator
+! View Model Trait generator
 "
 Class {
 	#name : #GtWithViewModelTraitGenerator,
@@ -17,7 +17,7 @@ Class {
 
 { #category : #'private - template' }
 GtWithViewModelTraitGenerator >> __HAS_VIEW_MODEL__ [
-	"Return a true if __MODEL_NAME__ view model is assigned to the receiver element, false otherwise"
+	"Return a true if __MODEL_NAME__ __MODEL_NAME_SUFFIX__ is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
 
 	^ __VIEW_MODEL_SLOT__ notNil
@@ -25,40 +25,40 @@ GtWithViewModelTraitGenerator >> __HAS_VIEW_MODEL__ [
 
 { #category : #'private - template' }
 GtWithViewModelTraitGenerator >> __SUBSCRIBE_TO_VIEW_MODEL_HOOK__ [
-	"Is sent after a new __MODEL_NAME__ view model is assigned to the element.
-	It is required to unsubscribe from the view model or domain model by implementing
+	"Is sent after a new __MODEL_NAME__ __MODEL_NAME_SUFFIX__ is assigned to the element.
+	It is required to unsubscribe from the __MODEL_NAME_SUFFIX__ or domain model by implementing
 	#__UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__ if elements subscribe to them"
 ]
 
 { #category : #'private - template' }
 GtWithViewModelTraitGenerator >> __UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__ [
-	"Is sent before a new __MODEL_NAME__ view model is assigned to the element.
-	Elements that subscribe to __MODEL_NAME__ view model in domain model are required to implement this methods"
+	"Is sent before a new __MODEL_NAME__ __MODEL_NAME_SUFFIX__ is assigned to the element.
+	Elements that subscribe to __MODEL_NAME__ __MODEL_NAME_SUFFIX__ in domain model are required to implement this methods"
 ]
 
 { #category : #'private - template' }
 GtWithViewModelTraitGenerator >> __VIEW_MODEL_CHANGED_HOOK__ [
-	"Is sent when a new __MODEL_NAME__ view model is assigned to the element"
+	"Is sent when a new __MODEL_NAME__ __MODEL_NAME_SUFFIX__ is assigned to the element"
 	
 	self explicitRequirement
 ]
 
 { #category : #'private - template' }
 GtWithViewModelTraitGenerator >> __VIEW_MODEL_SLOT__ [
-	"Return a not-null __MODEL_NAME__ view model assigned to the receiver element"
+	"Return a not-null __MODEL_NAME__ __MODEL_NAME_SUFFIX__ assigned to the receiver"
 	self
 		assert: [ __VIEW_MODEL_SLOT__ notNil ]
-		description: [ '__MODEL_NAME__ view model should be initialized' ].
+		description: [ '__MODEL_NAME__ __MODEL_NAME_SUFFIX__ should be initialized' ].
 
 	^ __VIEW_MODEL_SLOT__
 ]
 
 { #category : #'private - template' }
 GtWithViewModelTraitGenerator >> __VIEW_MODEL_SLOT__: a__MODEL_NAME__ViewModel [
-	"Set a not-null __MODEL_NAME__ view model assigned to the receiver element"
+	"Set a not-null __MODEL_NAME__ __MODEL_NAME_SUFFIX__ assigned to the receiver"
 	self
 		assert: [ a__MODEL_NAME__ViewModel notNil ]
-		description: [ '__MODEL_NAME__ view model must not be nil' ].
+		description: [ '__MODEL_NAME__ __MODEL_NAME_SUFFIX__ must not be nil' ].
 
 	__VIEW_MODEL_SLOT__ == a__MODEL_NAME__ViewModel 
 		ifTrue: [ ^ self ].
@@ -75,15 +75,16 @@ GtWithViewModelTraitGenerator >> createMethodsIn: aTrait [
 	| templateMethods templateMap |
 	
 	templateMethods := { 
-		GtWithViewModelTraitGenerator >> #__VIEW_MODEL_SLOT__.
-		GtWithViewModelTraitGenerator >> #__VIEW_MODEL_SLOT__:.
-		GtWithViewModelTraitGenerator >> #__VIEW_MODEL_CHANGED_HOOK__.
-		GtWithViewModelTraitGenerator >> #__HAS_VIEW_MODEL__.
-		GtWithViewModelTraitGenerator >> #__SUBSCRIBE_TO_VIEW_MODEL_HOOK__.
-		GtWithViewModelTraitGenerator >> #__UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__.
+		self class lookupSelector: #__VIEW_MODEL_SLOT__.
+		self class lookupSelector: #__VIEW_MODEL_SLOT__:.
+		self class lookupSelector: #__VIEW_MODEL_CHANGED_HOOK__.
+		self class lookupSelector: #__HAS_VIEW_MODEL__.
+		self class lookupSelector: #__SUBSCRIBE_TO_VIEW_MODEL_HOOK__.
+		self class lookupSelector: #__UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__.
 	}.
 	templateMap := { 
 		#__MODEL_NAME__ -> self modelName capitalized.
+		#__MODEL_NAME_SUFFIX__ -> self modelNameSuffixInText.
 		#__VIEW_MODEL_SLOT__ -> self slotName.
 		#__HAS_VIEW_MODEL__ -> self hasViewModelName.
 		#__VIEW_MODEL_CHANGED_HOOK__ -> self viewModelChangedName.
@@ -125,11 +126,16 @@ GtWithViewModelTraitGenerator >> hasViewModelName [
 
 { #category : #private }
 GtWithViewModelTraitGenerator >> methodProtocolName [
-	^ 'api - {1} view model' format: {
+	^ self methodProtocolPattern format: {
 		String streamContents: [ :aStream | 
 			self modelName gtPiecesCutWhereCamelCase 
 				do: [ :eachPiece | aStream nextPutAll: eachPiece asLowercase ]
 				separatedBy: [ aStream nextPut: Character space ] ] }
+]
+
+{ #category : #private }
+GtWithViewModelTraitGenerator >> methodProtocolPattern [
+	^ 'api - {1} view model'
 ]
 
 { #category : #accessing }
@@ -140,6 +146,19 @@ GtWithViewModelTraitGenerator >> modelName [
 { #category : #accessing }
 GtWithViewModelTraitGenerator >> modelName: anObject [
 	modelName := anObject
+]
+
+{ #category : #private }
+GtWithViewModelTraitGenerator >> modelNameSuffix [
+	^ 'ViewModel'
+]
+
+{ #category : #private }
+GtWithViewModelTraitGenerator >> modelNameSuffixInText [
+	^ String streamContents: [ :aStream | 
+			self modelNameSuffix gtPiecesCutWhereCamelCase
+				do: [ :eachPiece | aStream nextPutAll: eachPiece asLowercase ]
+				separatedBy: [ aStream nextPut: Character space ] ]
 ]
 
 { #category : #accessing }
@@ -164,7 +183,7 @@ GtWithViewModelTraitGenerator >> projectPrefix: anObject [
 
 { #category : #private }
 GtWithViewModelTraitGenerator >> slotName [
-	^ (self modelName uncapitalized, 'ViewModel') asSymbol
+	^ (self modelName uncapitalized, self modelNameSuffix) asSymbol
 ]
 
 { #category : #private }
@@ -182,7 +201,7 @@ GtWithViewModelTraitGenerator >> traitName [
 			nextPutAll: self projectPrefix;
 			nextPutAll: 'With';
 			nextPutAll: self modelName capitalized;
-			nextPutAll: 'ViewModel' ]
+			nextPutAll: self modelNameSuffix ]
 ]
 
 { #category : #private }
