@@ -1,5 +1,14 @@
 "
 ! View Trait generator
+
+Usage example:
+[[[
+GtWithViewModelTraitGenerator new
+	modelName: 'testModel';
+	projectPrefix: 'Pr';
+	packageName: 'GToolkit-MVVM-Test';
+	generate	
+]]]
 "
 Class {
 	#name : #GtWithViewModelTraitGenerator,
@@ -9,127 +18,48 @@ Class {
 		'projectPrefix',
 		'packageName'
 	],
-	#classVars : [
-		'__VIEW_MODEL_SLOT__'
-	],
-	#category : #'GToolkit-MVVM'
+	#category : #'GToolkit-MVVM-Generators'
 }
 
-{ #category : #'private - template' }
-GtWithViewModelTraitGenerator >> __HAS_VIEW_MODEL__ [
-	"Return a true if __MODEL_NAME__ view model is assigned to the receiver element, false otherwise"
-	<return: #Boolean>
-
-	^ __VIEW_MODEL_SLOT__ notNil
-]
-
-{ #category : #'private - template' }
-GtWithViewModelTraitGenerator >> __SUBSCRIBE_TO_VIEW_MODEL_HOOK__ [
-	"Is sent after a new __MODEL_NAME__ view model is assigned to the element.
-	It is required to unsubscribe from the view model or domain model by implementing
-	#__UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__ if elements subscribe to them"
-]
-
-{ #category : #'private - template' }
-GtWithViewModelTraitGenerator >> __UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__ [
-	"Is sent before a new __MODEL_NAME__ view model is assigned to the element.
-	Elements that subscribe to __MODEL_NAME__ view model in domain model are required to implement this methods"
-]
-
-{ #category : #'private - template' }
-GtWithViewModelTraitGenerator >> __VIEW_MODEL_CHANGED_HOOK__ [
-	"Is sent when a new __MODEL_NAME__ view model is assigned to the element"
+{ #category : #private }
+GtWithViewModelTraitGenerator >> formatString: aString mapping: aDictionaryOfReplacements [
+	| aFormattedString |
 	
-	self explicitRequirement
-]
-
-{ #category : #'private - template' }
-GtWithViewModelTraitGenerator >> __VIEW_MODEL_SLOT__ [
-	"Return a not-null __MODEL_NAME__ view model assigned to the receiver element"
-	self
-		assert: [ __VIEW_MODEL_SLOT__ notNil ]
-		description: [ '__MODEL_NAME__ view model should be initialized' ].
-
-	^ __VIEW_MODEL_SLOT__
-]
-
-{ #category : #'private - template' }
-GtWithViewModelTraitGenerator >> __VIEW_MODEL_SLOT__: a__MODEL_NAME__ViewModel [
-	"Set a not-null __MODEL_NAME__ view model assigned to the receiver element"
-	self
-		assert: [ a__MODEL_NAME__ViewModel notNil ]
-		description: [ '__MODEL_NAME__ view model must not be nil' ].
-
-	__VIEW_MODEL_SLOT__ == a__MODEL_NAME__ViewModel 
-		ifTrue: [ ^ self ].
-
-	__VIEW_MODEL_SLOT__ ifNotNil: [ self __UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__ ].
-	__VIEW_MODEL_SLOT__ := a__MODEL_NAME__ViewModel.
-
-	self __VIEW_MODEL_CHANGED_HOOK__.
-	self __SUBSCRIBE_TO_VIEW_MODEL_HOOK__
-]
-
-{ #category : #generation }
-GtWithViewModelTraitGenerator >> createMethodsIn: aTrait [
-	| templateMethods templateMap |
-	
-	templateMethods := { 
-		GtWithViewModelTraitGenerator >> #__VIEW_MODEL_SLOT__.
-		GtWithViewModelTraitGenerator >> #__VIEW_MODEL_SLOT__:.
-		GtWithViewModelTraitGenerator >> #__VIEW_MODEL_CHANGED_HOOK__.
-		GtWithViewModelTraitGenerator >> #__HAS_VIEW_MODEL__.
-		GtWithViewModelTraitGenerator >> #__SUBSCRIBE_TO_VIEW_MODEL_HOOK__.
-		GtWithViewModelTraitGenerator >> #__UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__.
-	}.
-	templateMap := { 
-		#__MODEL_NAME__ -> self modelName capitalized.
-		#__VIEW_MODEL_SLOT__ -> self slotName.
-		#__HAS_VIEW_MODEL__ -> self hasViewModelName.
-		#__VIEW_MODEL_CHANGED_HOOK__ -> self viewModelChangedName.
-		#__SUBSCRIBE_TO_VIEW_MODEL_HOOK__ -> self subscribeToName.
-		#__UNSUBSCRIBE_FROM_VIEW_MODEL_HOOK__ -> self unsubscribeFromName
-	}.
-	
-	templateMethods do: [ :eachTemplateMethod |
-		| methodSource |
-		
-		methodSource := eachTemplateMethod sourceCode.
-		templateMap do: [ :eachAssociation | methodSource := methodSource copyReplaceAll: eachAssociation key with: eachAssociation value ].
-		aTrait compile: methodSource classified: self methodProtocolName ]
-]
-
-{ #category : #generation }
-GtWithViewModelTraitGenerator >> createTrait [
-	<return: #Trait>
-	
-	^ Trait named: self traitName
-		uses: {}
-		slots: { self slotName }
-		package: self packageName
+	aFormattedString := aString.
+	aDictionaryOfReplacements associationsDo: [ :eachAssociation |
+		aFormattedString := aFormattedString copyReplaceAll: eachAssociation key with: eachAssociation value ].
+	^ aFormattedString
 ]
 
 { #category : #generation }
 GtWithViewModelTraitGenerator >> generate [
-	| aNewTrait |
-
-	aNewTrait := self createTrait.
-	self createMethodsIn: aNewTrait.
-	^ aNewTrait
-]
-
-{ #category : #private }
-GtWithViewModelTraitGenerator >> hasViewModelName [
-	^ ('has', self slotName asString capitalized) asSymbol
-]
-
-{ #category : #private }
-GtWithViewModelTraitGenerator >> methodProtocolName [
-	^ 'api - {1} view model' format: {
-		String streamContents: [ :aStream | 
+	| templateMap generatedTrait templateSlots |
+	<return: #Trait>
+	
+	templateMap := {
+		#__MODEL_NAME__ -> self modelName.
+		#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
+		#__MODEL_NAME_TEXT__ -> (String streamContents: [ :aStream | 
 			self modelName gtPiecesCutWhereCamelCase 
 				do: [ :eachPiece | aStream nextPutAll: eachPiece asLowercase ]
-				separatedBy: [ aStream nextPut: Character space ] ] }
+				separatedBy: [ aStream nextPut: Character space ] ]) } asOrderedDictionary.
+	
+	templateSlots := TGtWithViewModelTraitTemplate slots collect: [ :eachSlot |
+		eachSlot copy name: (self formatString: eachSlot name mapping: templateMap) ].
+	
+	generatedTrait := Trait named: self traitName
+		uses: {}
+		slots: templateSlots
+		package: self packageName.
+
+	TGtWithViewModelTraitTemplate localMethods do: [ :eachTemplateMethod |
+		| methodSource methodProtocol |
+		
+		methodSource := self formatString: eachTemplateMethod sourceCode mapping: templateMap.
+		methodProtocol := self formatString: eachTemplateMethod protocol mapping: templateMap.
+		generatedTrait compile: methodSource classified: methodProtocol ].
+	
+	^ generatedTrait
 ]
 
 { #category : #accessing }
@@ -163,16 +93,6 @@ GtWithViewModelTraitGenerator >> projectPrefix: anObject [
 ]
 
 { #category : #private }
-GtWithViewModelTraitGenerator >> slotName [
-	^ (self modelName uncapitalized, 'ViewModel') asSymbol
-]
-
-{ #category : #private }
-GtWithViewModelTraitGenerator >> subscribeToName [
-	^ ('subscribeTo', self slotName asString capitalized) asSymbol
-]
-
-{ #category : #private }
 GtWithViewModelTraitGenerator >> traitName [
 	<return: #Symbol>
 
@@ -183,14 +103,4 @@ GtWithViewModelTraitGenerator >> traitName [
 			nextPutAll: 'With';
 			nextPutAll: self modelName capitalized;
 			nextPutAll: 'ViewModel' ]
-]
-
-{ #category : #private }
-GtWithViewModelTraitGenerator >> unsubscribeFromName [
-	^ ('unsubscribeFrom', self slotName asString capitalized) asSymbol
-]
-
-{ #category : #private }
-GtWithViewModelTraitGenerator >> viewModelChangedName [
-	^ ('on', self slotName asString capitalized, 'Changed') asSymbol
 ]
