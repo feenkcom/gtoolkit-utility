@@ -62,6 +62,11 @@ GtWithViewModelTraitGenerator >> generate [
 	^ generatedTrait
 ]
 
+{ #category : #private }
+GtWithViewModelTraitGenerator >> methodProtocolPattern [
+	^ 'api - {1} view model'
+]
+
 { #category : #accessing }
 GtWithViewModelTraitGenerator >> modelName [
 	^ modelName
@@ -70,6 +75,19 @@ GtWithViewModelTraitGenerator >> modelName [
 { #category : #accessing }
 GtWithViewModelTraitGenerator >> modelName: anObject [
 	modelName := anObject
+]
+
+{ #category : #private }
+GtWithViewModelTraitGenerator >> modelNameSuffix [
+	^ 'ViewModel'
+]
+
+{ #category : #private }
+GtWithViewModelTraitGenerator >> modelNameSuffixInText [
+	^ String streamContents: [ :aStream | 
+			self modelNameSuffix gtPiecesCutWhereCamelCase
+				do: [ :eachPiece | aStream nextPutAll: eachPiece asLowercase ]
+				separatedBy: [ aStream nextPut: Character space ] ]
 ]
 
 { #category : #accessing }
