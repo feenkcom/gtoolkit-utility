@@ -5,6 +5,28 @@ Class {
 }
 
 { #category : #private }
+RBAddTraitUsageRefactoring >> checkClassDoesNotHaveSameSlotsAsTrait [
+	| aTrait theTraitSlots aClass |
+
+	aClass := class.
+	aTrait := Smalltalk globals
+		at: traitName asSymbol
+		ifAbsent: [ ^ false ].
+
+	theTraitSlots := aTrait slotNames asSet.
+	({ aClass }, aClass allSubclasses, aClass allSuperclasses) do: [ :eachClass |
+		| theClassSlotNames |
+		theClassSlotNames := eachClass instanceVariableNames.
+		theClassSlotNames
+			do: [ :eachSlotName |
+				(theTraitSlots includes: eachSlotName)
+					ifTrue: [
+						^ false ] ] ].
+			
+	^ true
+]
+
+{ #category : #private }
 RBAddTraitUsageRefactoring >> checkClassDoesNotIncludeTrait [
 	class := class asClassWithTrait.
 	class withAllSuperclasses
@@ -16,11 +38,15 @@ RBAddTraitUsageRefactoring >> checkClassDoesNotIncludeTrait [
 
 { #category : #preconditions }
 RBAddTraitUsageRefactoring >> preconditions [
-	^ super preconditions
+	^ (super preconditions
 		&
 			(RBCondition
 				withBlock: [ self checkClassDoesNotIncludeTrait.
-					true ])
+					true ]))
+				&
+			(RBCondition
+				withBlock: [ self checkClassDoesNotHaveSameSlotsAsTrait ]
+				errorString: 'Class (superclasses or subclasses) already has slot from the ', traitName)
 ]
 
 { #category : #transforming }
