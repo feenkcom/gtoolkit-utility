@@ -15,7 +15,7 @@ TGtWithModelPropertyTraitTemplate >> __PROPERTY_NAME__ [
 
 { #category : #'api - __PROPERTY_NAME__' }
 TGtWithModelPropertyTraitTemplate >> __PROPERTY_NAME__: aNew__PROPERTY_NAME_CAPITALIZED__ [
-	self __PROPERTY_NAME__ = aNew__PROPERTY_NAME_CAPITALIZED__
+	(self __PROPERTY_NAME__ __PROPERTY_COMPARATOR__ aNew__PROPERTY_NAME_CAPITALIZED__)
 		ifTrue: [ ^ self ].
 
 	__PROPERTY_NAME__ := aNew__PROPERTY_NAME_CAPITALIZED__.
