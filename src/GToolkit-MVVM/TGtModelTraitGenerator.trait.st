@@ -1,5 +1,5 @@
 Trait {
-	#name : #TGtMVVMTraitGenerator,
+	#name : #TGtModelTraitGenerator,
 	#instVars : [
 		'modelName',
 		'projectPrefix',
@@ -9,7 +9,7 @@ Trait {
 }
 
 { #category : #translating }
-TGtMVVMTraitGenerator >> generate [
+TGtModelTraitGenerator >> generate [
 	<return: #Trait>
 
 	^ GtWithTraitGenerator new
@@ -27,42 +27,42 @@ TGtMVVMTraitGenerator >> generate [
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> modelName [
+TGtModelTraitGenerator >> modelName [
 	^ modelName
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> modelName: anObject [
+TGtModelTraitGenerator >> modelName: anObject [
 	modelName := anObject
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> packageName [
+TGtModelTraitGenerator >> packageName [
 	^ packageName
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> packageName: anObject [
+TGtModelTraitGenerator >> packageName: anObject [
 	packageName := anObject
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> projectPrefix [
+TGtModelTraitGenerator >> projectPrefix [
 	^ projectPrefix
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> projectPrefix: anObject [
+TGtModelTraitGenerator >> projectPrefix: anObject [
 	projectPrefix := anObject
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> templateTrait [
+TGtModelTraitGenerator >> templateTrait [
 	^ self explicitRequirement
 ]
 
 { #category : #accessing }
-TGtMVVMTraitGenerator >> traitName [
+TGtModelTraitGenerator >> traitName [
 	<return: #Symbol>
 	
 	^ self explicitRequirement
