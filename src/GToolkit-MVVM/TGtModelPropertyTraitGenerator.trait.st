@@ -3,6 +3,7 @@ Trait {
 	#instVars : [
 		'propertyName',
 		'propertyType',
+		'propertyComparator',
 		'projectPrefix',
 		'packageName'
 	],
@@ -20,7 +21,8 @@ TGtModelPropertyTraitGenerator >> generate [
 		templateMap: {
 			#__PROPERTY_NAME__ -> self propertyName asSymbol.
 			#__PROPERTY_NAME_CAPITALIZED__-> self propertyName capitalized asSymbol.
-			#__PROPERTY_TYPE__ -> self propertyType asString };
+			#__PROPERTY_TYPE__ -> self propertyType asString.
+			#__PROPERTY_COMPARATOR__ -> self propertyComparator };
 		generate
 ]
 
@@ -42,6 +44,16 @@ TGtModelPropertyTraitGenerator >> projectPrefix [
 { #category : #accessing }
 TGtModelPropertyTraitGenerator >> projectPrefix: anObject [
 	projectPrefix := anObject
+]
+
+{ #category : #accessing }
+TGtModelPropertyTraitGenerator >> propertyComparator [
+	^ propertyComparator ifNil: [ #= ]
+]
+
+{ #category : #accessing }
+TGtModelPropertyTraitGenerator >> propertyComparator: anObject [
+	propertyComparator := anObject
 ]
 
 { #category : #accessing }

@@ -6,6 +6,7 @@ Usage example:
 GtWithModelPropertyTraitGenerator new
 	propertyName: 'size';
 	propertyType: 'Point';
+	propertyComparator: #closeTo:;
 	projectPrefix: 'Pr';
 	packageName: 'GToolkit-MVVM-Test';
 	generate.
