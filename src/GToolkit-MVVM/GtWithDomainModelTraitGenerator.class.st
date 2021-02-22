@@ -13,8 +13,8 @@ GtWithDomainModelTraitGenerator new
 Class {
 	#name : #GtWithDomainModelTraitGenerator,
 	#superclass : #Object,
-	#traits : 'TGtMVVMTraitGenerator',
-	#classTraits : 'TGtMVVMTraitGenerator classTrait',
+	#traits : 'TGtModelTraitGenerator',
+	#classTraits : 'TGtModelTraitGenerator classTrait',
 	#category : #'GToolkit-MVVM-Generators'
 }
 

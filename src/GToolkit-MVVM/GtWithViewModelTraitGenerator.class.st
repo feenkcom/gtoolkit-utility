@@ -13,8 +13,8 @@ GtWithViewModelTraitGenerator new
 Class {
 	#name : #GtWithViewModelTraitGenerator,
 	#superclass : #Object,
-	#traits : 'TGtMVVMTraitGenerator',
-	#classTraits : 'TGtMVVMTraitGenerator classTrait',
+	#traits : 'TGtModelTraitGenerator',
+	#classTraits : 'TGtModelTraitGenerator classTrait',
 	#category : #'GToolkit-MVVM-Generators'
 }
 
