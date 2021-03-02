@@ -23,6 +23,13 @@ TGtWithModelPropertyTraitTemplate >> __PROPERTY_NAME__: aNew__PROPERTY_NAME_CAPI
 ]
 
 { #category : #'api - __PROPERTY_NAME__' }
+TGtWithModelPropertyTraitTemplate >> has__PROPERTY_NAME_CAPITALIZED__ [
+	<return: #Boolean>
+
+	^ __PROPERTY_NAME__ notNil
+]
+
+{ #category : #'api - __PROPERTY_NAME__' }
 TGtWithModelPropertyTraitTemplate >> notify__PROPERTY_NAME_CAPITALIZED__Changed [
 	self explicitRequirement
 ]
