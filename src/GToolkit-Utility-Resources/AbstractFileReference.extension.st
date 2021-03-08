@@ -4,5 +4,5 @@ Extension { #name : #AbstractFileReference }
 AbstractFileReference >> gtWithClosestFileLocatorParent [
 	^ GtResourceClosestFileLocator new
 		file: self;
-		find
+		transform
 ]
