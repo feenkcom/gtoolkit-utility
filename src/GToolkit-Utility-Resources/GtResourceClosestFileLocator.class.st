@@ -25,6 +25,8 @@ GtResourceClosestFileLocator >> closestParent [
 		(eachFileLocator contains: self file) or: [ 
 			eachFileLocator asFileReference = self file asFileReference ] ].
 
+	allParents ifEmpty: [ ^ nil ].
+			
 	aClosestParent := allParents detectMax: [ :e | e asFileReference fullName size ].
 	
 	"Prefer image directory to vm directory"
@@ -51,6 +53,8 @@ GtResourceClosestFileLocator >> file: anObject [
 GtResourceClosestFileLocator >> transform [
 	| aClosestParent aPath aTransformedFile |
 	aClosestParent := self closestParent.
+	
+	aClosestParent ifNil: [ ^ self file ].
 	
 	aClosestParent asFileReference = self file asFileReference 
 		ifTrue: [ ^ aClosestParent ].
