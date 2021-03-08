@@ -4,10 +4,10 @@ I search for a ${class:FileLocator}$ parent that is closest to a referenced file
 !! Usage
 You can use ${method:AbstractFileReference>>#gtWithClosestFileLocatorParent}$ to transform a ${class:FileReference}$ into ${class:FileLocator}$.
 !! Local Directory Example
-The following example shows an original file reference transformed to ${method:FileLocator class>>#localDirectory|label=#selector}$: ${example:GtResourceClosestFileLocatorExamples>>#locator_FileReference_localDirectoryChild|previewExpanded=true|codeExpanded=false}$
+The following example shows an original file reference transformed to ${method:FileLocator class>>#localDirectory|label=#selector}$: ${example:GtResourceClosestFileLocatorExamples>>#locator_FileReference_localDirectoryChild|previewExpanded=true|codeExpanded=false|previewHeight=200}$
 !! Resource Directory Example
 Similarly we can transform a file reference into a ${method:FileLocator class>>#gtResource|label=#selector}$:
-${example:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResourceChild|previewExpanded=true|codeExpanded=false}$
+${example:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResourceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}$
 "
 Class {
 	#name : #GtResourceClosestFileLocator,
