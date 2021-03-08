@@ -128,6 +128,12 @@ GtResourceReference >> childrenMatching: patterns [
 	^ self fileReference childrenMatching: patterns
 ]
 
+{ #category : #comparing }
+GtResourceReference >> contains: anObject [
+	"Return true if anObject is in a subfolder of me"
+	^ self fileReference contains: anObject
+]
+
 { #category : #accessing }
 GtResourceReference >> contents [
 	^ self fileReference contents
