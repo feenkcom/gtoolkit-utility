@@ -30,11 +30,12 @@ TGtWithViewModelTraitTemplate >> __MODEL_NAME__ViewModel: a__MODEL_NAME_CAPITALI
 	__MODEL_NAME__ViewModel := a__MODEL_NAME_CAPITALIZED__ViewModel.
 
 	self on__MODEL_NAME_CAPITALIZED__ViewModelChanged.
-	self subscribeTo__MODEL_NAME_CAPITALIZED__ViewModel
+	self subscribeTo__MODEL_NAME_CAPITALIZED__ViewModel.
+	self onPost__MODEL_NAME_CAPITALIZED__ViewModelChanged
 ]
 
 { #category : #'api - __MODEL_NAME_TEXT__ view model' }
-TGtWithViewModelTraitTemplate >> has__MODEL_NAME_CAPITALIZED__ [
+TGtWithViewModelTraitTemplate >> has__MODEL_NAME_CAPITALIZED__ViewModel [
 	"Return a true if __MODEL_NAME__ view model is assigned to the receiver element, false otherwise"
 	<return: #Boolean>
 
@@ -42,9 +43,20 @@ TGtWithViewModelTraitTemplate >> has__MODEL_NAME_CAPITALIZED__ [
 ]
 
 { #category : #'api - __MODEL_NAME_TEXT__ view model' }
+TGtWithViewModelTraitTemplate >> onPost__MODEL_NAME_CAPITALIZED__ViewModelChanged [
+	"I am an optional hook method that is sent after #subscribeTo__MODEL_NAME_CAPITALIZED__ViewModel.
+	I do nothing by default but allow users to perform update operations when a receiver object is already
+	subscribed to announcements."
+]
+
+{ #category : #'api - __MODEL_NAME_TEXT__ view model' }
 TGtWithViewModelTraitTemplate >> on__MODEL_NAME_CAPITALIZED__ViewModelChanged [
-	"Is sent when a new __MODEL_NAME__ view model is assigned to the element"
-	
+	"Is sent when a new __MODEL_NAME__ view model is assigned to the element.
+	Note: #on__MODEL_NAME_CAPITALIZED__ViewModelChanged is sent before #subscribeTo__MODEL_NAME_CAPITALIZED__ViewModel
+	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
+	didn't get a chance to subscribe to any announcement. Override #onPost__MODEL_NAME_CAPITALIZED__ViewModelChanged if you
+	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
+
 	self explicitRequirement
 ]
 
@@ -58,5 +70,5 @@ TGtWithViewModelTraitTemplate >> subscribeTo__MODEL_NAME_CAPITALIZED__ViewModel 
 { #category : #'api - __MODEL_NAME_TEXT__ view model' }
 TGtWithViewModelTraitTemplate >> unsubscribeFrom__MODEL_NAME_CAPITALIZED__ViewModel [
 	"Is sent before a new __MODEL_NAME__ view model is assigned to the element.
-	Elements that subscribe to __MODEL_NAME__ view model in domain model are required to implement this methods"
+	Elements that subscribe to __MODEL_NAME__ view model in domain model are required to implement this methods."
 ]
