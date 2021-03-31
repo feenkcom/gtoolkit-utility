@@ -65,7 +65,7 @@ GtFileReferenceWithRanges >> gtStyledCodeFor: aView [
 		priority: 10;
 		stencil: [ | editor |
 			editor := BrEditor new
-				look: BrGlamorousCodeEditorLook new;
+				aptitude: BrGlamorousCodeEditorAptitude new;
 				styler: styler;
 				text: self highlightedText;
 				yourself.
