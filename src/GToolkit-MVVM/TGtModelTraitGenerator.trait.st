@@ -19,10 +19,7 @@ TGtModelTraitGenerator >> generate [
 		templateMap: {
 			#__MODEL_NAME__ -> self modelName.
 			#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
-			#__MODEL_NAME_TEXT__ -> (String streamContents: [ :aStream | 
-				self modelName gtPiecesCutWhereCamelCase 
-					do: [ :eachPiece | aStream nextPutAll: eachPiece asLowercase ]
-					separatedBy: [ aStream nextPut: Character space ] ]) };
+			#__MODEL_NAME_TEXT__ -> (GtWithTraitGenerator camelCaseToSentence: self modelName) };
 		generate
 ]
 

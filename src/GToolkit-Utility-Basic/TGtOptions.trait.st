@@ -54,6 +54,14 @@ TGtOptions >> hasOptions [
 ]
 
 { #category : #'options - basic' }
+TGtOptions >> optionAt: aKey [
+	"Return my option/settings stored under key.
+	Signal an error if such key does not exist"
+
+	^ self optionAt: aKey ifAbsent: [ KeyNotFound signalFor: aKey ]
+]
+
+{ #category : #'options - basic' }
 TGtOptions >> optionAt: aKey ifAbsent: anAbsentBlock [
 	"Return my option/settings stored under key.
 	Execute block if I have no such option/setting."

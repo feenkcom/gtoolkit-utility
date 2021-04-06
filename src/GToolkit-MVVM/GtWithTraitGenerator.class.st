@@ -26,6 +26,14 @@ Class {
 	#category : #'GToolkit-MVVM-Support'
 }
 
+{ #category : #conversion }
+GtWithTraitGenerator class >> camelCaseToSentence: aString [
+	^ String streamContents: [ :aStream | 
+		aString gtPiecesCutWhereCamelCase 
+			do: [ :eachPiece | aStream nextPutAll: eachPiece asLowercase ]
+			separatedBy: [ aStream nextPut: Character space ] ]
+]
+
 { #category : #private }
 GtWithTraitGenerator >> formatString: aString mapping: aDictionaryOfReplacements [
 	| aFormattedString |
@@ -48,6 +56,8 @@ GtWithTraitGenerator >> generate [
 		uses: {}
 		slots: templateSlots
 		package: self packageName.
+		
+	generatedTrait comment: (self formatString: self templateTrait comment mapping: templateMap).
 
 	self templateTrait localMethods do: [ :eachTemplateMethod |
 		| methodSource methodProtocol |
