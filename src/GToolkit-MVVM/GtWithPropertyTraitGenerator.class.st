@@ -20,6 +20,27 @@ Class {
 	#category : #'GToolkit-MVVM-Generators'
 }
 
+{ #category : #translating }
+GtWithPropertyTraitGenerator >> generate [
+	<return: #Trait>
+
+	^ GtTraitGenerator new
+		traitName: self traitName;
+		packageName: self packageName;
+		templateTrait: self templateTrait;
+		templateMap: {
+			#__PROPERTY_NAME__ -> self propertyName asSymbol.
+			#__PROPERTY_SETTER__ -> self propertySetter asSymbol.
+			#__PROPERTY_UNSETTER__ -> self propertyUnsetter asSymbol.
+			#__PROPERTY_NAME_CAPITALIZED__-> self propertyName capitalized asSymbol.
+			#__PROPERTY_NAME_TEXT__-> (GtGeneratorUtilities camelCaseToSentence: self propertyName).
+			#__PROPERTY_TYPE__ -> self propertyType asString.
+			#__PROPERTY_COMPARATOR__ -> self propertyComparator.
+			#__TRAIT_NAME__ -> self traitName asSymbol.
+			#__GENERATOR_SOURCE_CODE__ -> self storeString };
+		generate
+]
+
 { #category : #printing }
 GtWithPropertyTraitGenerator >> storeOn: aStream [
 	aStream

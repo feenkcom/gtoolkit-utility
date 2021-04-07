@@ -16,7 +16,7 @@ Trait {
 TGtModelPropertyTraitGenerator >> generate [
 	<return: #Trait>
 
-	^ GtWithTraitGenerator new
+	^ GtTraitGenerator new
 		traitName: self traitName;
 		packageName: self packageName;
 		templateTrait: self templateTrait;
@@ -25,7 +25,7 @@ TGtModelPropertyTraitGenerator >> generate [
 			#__PROPERTY_SETTER__ -> self propertySetter asSymbol.
 			#__PROPERTY_UNSETTER__ -> self propertyUnsetter asSymbol.
 			#__PROPERTY_NAME_CAPITALIZED__-> self propertyName capitalized asSymbol.
-			#__PROPERTY_NAME_TEXT__-> (GtWithTraitGenerator camelCaseToSentence: self propertyName).
+			#__PROPERTY_NAME_TEXT__-> (GtGeneratorUtilities camelCaseToSentence: self propertyName).
 			#__PROPERTY_TYPE__ -> self propertyType asString.
 			#__PROPERTY_COMPARATOR__ -> self propertyComparator.
 			#__TRAIT_NAME__ -> self traitName asSymbol.

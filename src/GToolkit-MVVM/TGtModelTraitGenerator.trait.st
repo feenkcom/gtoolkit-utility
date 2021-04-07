@@ -12,14 +12,14 @@ Trait {
 TGtModelTraitGenerator >> generate [
 	<return: #Trait>
 
-	^ GtWithTraitGenerator new
+	^ GtTraitGenerator new
 		traitName: self traitName;
 		packageName: self packageName;
 		templateTrait: self templateTrait;
 		templateMap: {
 			#__MODEL_NAME__ -> self modelName.
 			#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
-			#__MODEL_NAME_TEXT__ -> (GtWithTraitGenerator camelCaseToSentence: self modelName) };
+			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName) };
 		generate
 ]
 
