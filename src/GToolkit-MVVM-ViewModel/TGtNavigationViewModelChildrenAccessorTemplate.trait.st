@@ -1,8 +1,5 @@
 Trait {
 	#name : #TGtNavigationViewModelChildrenAccessorTemplate,
-	#instVars : [
-		'__Child_view_model_class__'
-	],
 	#classInstVars : [
 		'__Child_view_model_class__'
 	],
