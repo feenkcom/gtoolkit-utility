@@ -3,6 +3,7 @@ Class {
 	#superclass : #GtNavigationViewModelProgramNode,
 	#instVars : [
 		'hierarchy',
+		'settings',
 		'definitions'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Ast'
@@ -43,5 +44,19 @@ GtNavigationViewModelFullDefinitionNode >> hierarchy: aGtNavigationViewModelHier
 
 { #category : #generated }
 GtNavigationViewModelFullDefinitionNode >> nodeVariables [
-	^ #(#hierarchy #definitions)
+	^ #(#hierarchy #settings #definitions)
+]
+
+{ #category : #generated }
+GtNavigationViewModelFullDefinitionNode >> settings [
+	^ settings
+]
+
+{ #category : #generated }
+GtNavigationViewModelFullDefinitionNode >> settings: aGtNavigationViewModelSettingsNode [
+	self settings notNil
+		ifTrue: [ self settings parent: nil ].
+	settings := aGtNavigationViewModelSettingsNode.
+	self settings notNil
+		ifTrue: [ self settings parent: self ]
 ]

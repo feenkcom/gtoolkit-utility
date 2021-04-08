@@ -2,7 +2,8 @@ Class {
 	#name : #GtNavigationViewModelModelAnnotationNode,
 	#superclass : #GtNavigationViewModelProgramNode,
 	#instVars : [
-		'name'
+		'name',
+		'api'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Ast'
 }
@@ -10,6 +11,23 @@ Class {
 { #category : #generated }
 GtNavigationViewModelModelAnnotationNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitModelAnnotation: self
+]
+
+{ #category : #generated }
+GtNavigationViewModelModelAnnotationNode >> api [
+	^ api
+]
+
+{ #category : #generated }
+GtNavigationViewModelModelAnnotationNode >> api: aSmaCCToken [
+	api := aSmaCCToken
+]
+
+{ #category : #accessing }
+GtNavigationViewModelModelAnnotationNode >> apiNameString [
+	<return: #String>
+
+	^ (self api ifNil: [ ^ nil ]) source asSymbol
 ]
 
 { #category : #generated }
@@ -31,5 +49,5 @@ GtNavigationViewModelModelAnnotationNode >> nameString [
 
 { #category : #generated }
 GtNavigationViewModelModelAnnotationNode >> tokenVariables [
-	^ #(#name)
+	^ #(#name #api)
 ]

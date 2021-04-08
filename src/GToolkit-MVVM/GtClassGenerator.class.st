@@ -19,6 +19,7 @@ Class {
 	#name : #GtClassGenerator,
 	#superclass : #Object,
 	#instVars : [
+		'environment',
 		'templateClass',
 		'traits',
 		'templateMap',
@@ -36,6 +37,16 @@ GtClassGenerator >> className [
 { #category : #accessing }
 GtClassGenerator >> className: anObject [
 	className := anObject
+]
+
+{ #category : #accessing }
+GtClassGenerator >> environment [
+	^ environment
+]
+
+{ #category : #accessing }
+GtClassGenerator >> environment: anEnvironment [
+	environment := anEnvironment
 ]
 
 { #category : #generation }
@@ -61,6 +72,48 @@ GtClassGenerator >> generate [
 		methodSource := GtGeneratorUtilities formatString: eachTemplateMethod sourceCode mapping: templateMap.
 		methodProtocol := GtGeneratorUtilities formatString: eachTemplateMethod protocol mapping: templateMap.
 		generatedClass compile: methodSource classified: methodProtocol ].
+	
+	^ generatedClass
+]
+
+{ #category : #generation }
+GtClassGenerator >> generateBehaviorDefinition [
+	| generatedClass aComment aClassName |
+	<return: #RGBehavior>
+
+	aClassName := self className asSymbol.
+
+	generatedClass := GtBehaviorDefinition fromBehavior: self templateClass.
+	generatedClass name: aClassName.	
+	generatedClass instanceSideDefinition category package name: self packageName.
+	generatedClass instanceSideDefinition category tag name: ''.
+	
+	self environment
+		ifNotNil: [ :anEnvironment |
+			generatedClass environment: anEnvironment.
+			anEnvironment registerBehavior: generatedClass ].
+	
+	self traits do: [ :eachTrait | generatedClass instanceSideDefinition traits addTraitNamed: eachTrait name  ].
+	
+	generatedClass instanceSideDefinition slots removeAllSlots.
+	self templateClass slots do: [ :eachSlot |
+		| eachSlotName |
+		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: templateMap) asSymbol.
+		generatedClass instanceSideDefinition slots addSlotNamed: eachSlotName ].
+	
+	generatedClass withMethodsFromClass: self templateClass.
+	generatedClass instanceSideDefinition methods do: [ :eachMethodDefinition |
+		| methodSource methodProtocol |
+		
+		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: templateMap.
+		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: templateMap.
+		
+		eachMethodDefinition protocol: methodProtocol.
+		eachMethodDefinition sourceCode: methodSource ].
+
+	"aComment := RGComment parent: generatedClass.
+	aComment content: (GtGeneratorUtilities formatString: self templateClass comment mapping: templateMap).	
+	generatedClass comment: aComment."
 	
 	^ generatedClass
 ]

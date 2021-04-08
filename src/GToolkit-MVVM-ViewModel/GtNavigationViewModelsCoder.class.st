@@ -54,5 +54,6 @@ GtNavigationViewModelsCoder >> newCompletionStrategy [
 GtNavigationViewModelsCoder >> primitiveEvaluate: aSourceString inContext: aGtSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
 	^ GtNavigationViewModelsGenerator new
 		hierarchy: aSourceString;
-		generate
+		generate;
+		yourself
 ]

@@ -12,6 +12,11 @@ GtNavigationViewModelPropertyValueNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitPropertyValue: self
 ]
 
+{ #category : #accessing }
+GtNavigationViewModelPropertyValueNode >> literalValue [
+	^ self value source
+]
+
 { #category : #generated }
 GtNavigationViewModelPropertyValueNode >> tokenVariables [
 	^ #(#value)

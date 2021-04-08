@@ -18,6 +18,7 @@ Class {
 	#name : #GtTraitGenerator,
 	#superclass : #Object,
 	#instVars : [
+		'environment',
 		'templateTrait',
 		'templateMap',
 		'traitName',
@@ -25,6 +26,16 @@ Class {
 	],
 	#category : #'GToolkit-MVVM-Support'
 }
+
+{ #category : #accessing }
+GtTraitGenerator >> environment [
+	^ environment
+]
+
+{ #category : #accessing }
+GtTraitGenerator >> environment: anEnvironment [
+	environment := anEnvironment
+]
 
 { #category : #generation }
 GtTraitGenerator >> generate [
@@ -47,6 +58,42 @@ GtTraitGenerator >> generate [
 		methodSource := GtGeneratorUtilities formatString: eachTemplateMethod sourceCode mapping: templateMap.
 		methodProtocol := GtGeneratorUtilities formatString: eachTemplateMethod protocol mapping: templateMap.
 		generatedTrait compile: methodSource classified: methodProtocol ].
+	
+	^ generatedTrait
+]
+
+{ #category : #generation }
+GtTraitGenerator >> generateBehaviorDefinition [
+	| generatedTrait |
+	<return: #Trait>
+	
+	generatedTrait := GtBehaviorDefinition fromBehavior: self templateTrait.
+	generatedTrait name: self traitName.
+	generatedTrait category package name: self packageName.
+	generatedTrait category tag name: ''.
+	
+	self environment
+		ifNotNil: [ :anEnvironment |
+			generatedTrait environment: anEnvironment.
+			anEnvironment registerBehavior: generatedTrait ].
+
+	generatedTrait slots removeAllSlots.
+	self templateTrait slots do: [ :eachSlot |
+		| eachSlotName |
+		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: templateMap) asSymbol.
+		generatedTrait slots addSlotNamed: eachSlotName ].
+
+	"generatedTrait comment: (GtGeneratorUtilities formatString: self templateTrait comment mapping: templateMap)."
+
+	generatedTrait withMethodsFromTrait: self templateTrait.
+	generatedTrait methods do: [ :eachMethodDefinition |
+		| methodSource methodProtocol |
+		
+		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: templateMap.
+		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: templateMap.
+		
+		eachMethodDefinition protocol: methodProtocol.
+		eachMethodDefinition sourceCode: methodSource ].
 	
 	^ generatedTrait
 ]

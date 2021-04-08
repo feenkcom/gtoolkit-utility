@@ -26,6 +26,16 @@ TGtNavigationViewModelProgramNodeVisitor >> visitFullDefinition: aFullDefinition
 ]
 
 { #category : #generated }
+TGtNavigationViewModelProgramNodeVisitor >> visitGenericProperty: aGenericProperty [
+	^ self visitProperty: aGenericProperty
+]
+
+{ #category : #generated }
+TGtNavigationViewModelProgramNodeVisitor >> visitGlobalPropertyValue: aGlobalPropertyValue [
+	^ self visitPropertyValue: aGlobalPropertyValue
+]
+
+{ #category : #generated }
 TGtNavigationViewModelProgramNodeVisitor >> visitHierarchy: aHierarchy [
 	^ self visitProgram: aHierarchy
 ]
@@ -33,6 +43,11 @@ TGtNavigationViewModelProgramNodeVisitor >> visitHierarchy: aHierarchy [
 { #category : #generated }
 TGtNavigationViewModelProgramNodeVisitor >> visitHierarchyError: aHierarchyError [
 	^ self visitHierarchy: aHierarchyError
+]
+
+{ #category : #generated }
+TGtNavigationViewModelProgramNodeVisitor >> visitItemsProperty: anItemsProperty [
+	^ self visitProperty: anItemsProperty
 ]
 
 { #category : #generated }
@@ -53,6 +68,11 @@ TGtNavigationViewModelProgramNodeVisitor >> visitLevelForOne: aLevelForOne [
 { #category : #generated }
 TGtNavigationViewModelProgramNodeVisitor >> visitModelAnnotation: aModelAnnotation [
 	^ self visitProgram: aModelAnnotation
+]
+
+{ #category : #generated }
+TGtNavigationViewModelProgramNodeVisitor >> visitNameProperty: aNameProperty [
+	^ self visitProperty: aNameProperty
 ]
 
 { #category : #generated }
@@ -83,6 +103,16 @@ TGtNavigationViewModelProgramNodeVisitor >> visitPropertyName: aPropertyName [
 { #category : #generated }
 TGtNavigationViewModelProgramNodeVisitor >> visitPropertyValue: aPropertyValue [
 	^ self visitProgram: aPropertyValue
+]
+
+{ #category : #generated }
+TGtNavigationViewModelProgramNodeVisitor >> visitSetting: aSetting [
+	^ self visitProgram: aSetting
+]
+
+{ #category : #generated }
+TGtNavigationViewModelProgramNodeVisitor >> visitSettings: aSettings [
+	^ self visitProgram: aSettings
 ]
 
 { #category : #generated }

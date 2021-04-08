@@ -1,6 +1,7 @@
 Trait {
 	#name : #TGtModelPropertyTraitGenerator,
 	#instVars : [
+		'environment',
 		'propertyName',
 		'propertySetter',
 		'propertyUnsetter',
@@ -12,11 +13,36 @@ Trait {
 	#category : #'GToolkit-MVVM-Support'
 }
 
+{ #category : #accessing }
+TGtModelPropertyTraitGenerator >> environment [
+	^ environment
+]
+
+{ #category : #accessing }
+TGtModelPropertyTraitGenerator >> environment: anObject [
+	environment := anObject
+]
+
 { #category : #translating }
 TGtModelPropertyTraitGenerator >> generate [
 	<return: #Trait>
 
+	^ self generator generate
+]
+
+{ #category : #translating }
+TGtModelPropertyTraitGenerator >> generateBehaviorDefinition [
+	<return: #GtTraitDefinition>
+
+	^ self generator generateBehaviorDefinition
+]
+
+{ #category : #translating }
+TGtModelPropertyTraitGenerator >> generator [
+	<return: #Trait>
+
 	^ GtTraitGenerator new
+		environment: self environment;
 		traitName: self traitName;
 		packageName: self packageName;
 		templateTrait: self templateTrait;
@@ -29,8 +55,7 @@ TGtModelPropertyTraitGenerator >> generate [
 			#__PROPERTY_TYPE__ -> self propertyType asString.
 			#__PROPERTY_COMPARATOR__ -> self propertyComparator.
 			#__TRAIT_NAME__ -> self traitName asSymbol.
-			#__GENERATOR_SOURCE_CODE__ -> self storeString };
-		generate
+			#__GENERATOR_SOURCE_CODE__ -> self storeString }
 ]
 
 { #category : #accessing }
@@ -101,6 +126,25 @@ TGtModelPropertyTraitGenerator >> propertyUnsetter [
 { #category : #accessing }
 TGtModelPropertyTraitGenerator >> propertyUnsetter: aString [
 	propertyUnsetter := aString
+]
+
+{ #category : #printing }
+TGtModelPropertyTraitGenerator >> storeOn: aStream [
+	aStream
+		nextPutAll: self class name; space; nextPutAll: 'new'; cr;
+		tab; nextPutAll: 'propertyName:'; space; print: self propertyName; nextPut: $;; cr.
+
+	propertySetter ifNotNil: [ :aPropertySetter |
+		aStream tab; nextPutAll: 'propertySetter:'; space; print: aPropertySetter; nextPut: $;; cr ].
+	propertyUnsetter ifNotNil: [ :aPropertyUnsetter |
+		aStream tab; nextPutAll: 'propertyUnsetter:'; space; print: aPropertyUnsetter; nextPut: $;; cr ].
+
+	aStream
+		tab; nextPutAll: 'propertyType:'; space; print: self propertyType; nextPut: $;; cr;
+		tab; nextPutAll: 'propertyComparator:'; space; print: self propertyComparator; nextPut: $;; cr;
+		tab; nextPutAll: 'projectPrefix:'; space; print: self projectPrefix; nextPut: $;; cr;
+		tab; nextPutAll: 'packageName:'; space; print: self packageName; nextPut: $;; cr;
+		tab; nextPutAll: 'generate'
 ]
 
 { #category : #accessing }

@@ -13,13 +13,12 @@ GtNavigationViewModelsBrowseStyler >> style: aText ast: theAst [
 		ensure: [ text := nil ]
 ]
 
-{ #category : #generated }
-GtNavigationViewModelsBrowseStyler >> visitModelAnnotation: aModelAnnotation [
+{ #category : #private }
+GtNavigationViewModelsBrowseStyler >> styleGlobalNamed: aSymbol token: aSmaCCToken [
 	| aGlobal |
-	self visitProgram: aModelAnnotation.
-	
+
 	aGlobal := self class environment
-		at: aModelAnnotation nameString asSymbol
+		at: aSymbol
 		ifAbsent: [ ^ self ].
 	
 	aGlobal isBehavior
@@ -39,6 +38,31 @@ GtNavigationViewModelsBrowseStyler >> visitModelAnnotation: aModelAnnotation [
 					icon: BrGlamorousVectorIcons browse;
 					action: [ :aButton | aButton phlow spawnTool: (GtClassCoderTool forClass: aGlobal) ] ] asStencil)
 		}
-		from: aModelAnnotation name stopPosition
-		to: aModelAnnotation name stopPosition
+		from: aSmaCCToken stopPosition
+		to: aSmaCCToken stopPosition
+]
+
+{ #category : #generated }
+GtNavigationViewModelsBrowseStyler >> visitGlobalPropertyValue: aGlobalPropertyValue [
+	self visitPropertyValue: aGlobalPropertyValue.
+	
+	self
+		styleGlobalNamed: aGlobalPropertyValue value source asSymbol
+		token: aGlobalPropertyValue value
+]
+
+{ #category : #generated }
+GtNavigationViewModelsBrowseStyler >> visitModelAnnotation: aModelAnnotation [
+	self visitProgram: aModelAnnotation.
+	
+	self
+		styleGlobalNamed: aModelAnnotation nameString asSymbol
+		token: aModelAnnotation name.
+		
+	aModelAnnotation api
+		ifNil: [ ^ self ].
+		
+	self
+		styleGlobalNamed: aModelAnnotation apiNameString asSymbol
+		token: aModelAnnotation api
 ]

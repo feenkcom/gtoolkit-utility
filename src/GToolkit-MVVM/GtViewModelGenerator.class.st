@@ -13,10 +13,13 @@ Class {
 GtViewModelGenerator >> className [
 	<return: #Symbol>
 	
+	self viewModelName
+		ifNotNil: [ :aViewModelName | ^ aViewModelName ].
+	
 	^ Symbol streamContents: [ :aStream |
 		aStream
 			nextPutAll: self projectPrefix;
-			nextPutAll: (self viewModelName ifNil: [ self modelName ]) capitalized;
+			nextPutAll: self modelName capitalized;
 			nextPutAll: 'ViewModel' ]
 ]
 
@@ -24,40 +27,12 @@ GtViewModelGenerator >> className [
 GtViewModelGenerator >> initialize [
 	super initialize.
 	
-	properties := #()
+	traits := #()
 ]
 
 { #category : #accessing }
 GtViewModelGenerator >> templateClass [
 	^ GtViewModelClassTemplate
-]
-
-{ #category : #accessing }
-GtViewModelGenerator >> traits [
-	| aWithModelTraitName thePropertyTraitNames |
-
-	aWithModelTraitName := GtWithDomainModelTraitGenerator new
-		modelName: self modelName;
-		projectPrefix: self projectPrefix;
-		packageName: self packageName;
-		traitName.
-		
-	thePropertyTraitNames := self properties collect: [ :eachPropertyNameOrTrait |
-		eachPropertyNameOrTrait isTrait
-			ifTrue: [ eachPropertyNameOrTrait name ]
-			ifFalse: [
-				GtWithPropertyTraitGenerator new
-					propertyName: eachPropertyNameOrTrait;
-					projectPrefix: self projectPrefix;
-					packageName: self packageName;
-					traitName ] ].
-
-	^ ({ aWithModelTraitName }, thePropertyTraitNames)
-		collect: [ :eachTraitName |
-			self class environment
-				at: eachTraitName asSymbol
-				ifAbsent: [ nil ] ]
-		thenSelect: [ :eachTrait | eachTrait notNil ]
 ]
 
 { #category : #accessing }

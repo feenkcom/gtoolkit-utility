@@ -14,6 +14,11 @@ GtNavigationViewModelDefinitionNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitDefinition: self
 ]
 
+{ #category : #accessing }
+GtNavigationViewModelDefinitionNode >> fullNameString [
+	^ self level fullNameString
+]
+
 { #category : #generated }
 GtNavigationViewModelDefinitionNode >> level [
 	^ level

@@ -14,6 +14,26 @@ GtNavigationViewModelsStyler >> style: aText ast: theAst [
 ]
 
 { #category : #generated }
+GtNavigationViewModelsStyler >> visitGlobalPropertyValue: aGlobalPropertyValue [
+	self visitPropertyValue: aGlobalPropertyValue.
+	
+	self
+		attribute: (BlTextForegroundAttribute color: Color blue muchDarker)
+		from: aGlobalPropertyValue startPosition
+		to: aGlobalPropertyValue stopPosition
+]
+
+{ #category : #generated }
+GtNavigationViewModelsStyler >> visitItemsProperty: anItemsProperty [
+	self visitProperty: anItemsProperty.
+	
+	self
+		attribute: (BlTextForegroundAttribute color: Color cyan muchDarker)
+		from: anItemsProperty name startPosition
+		to: anItemsProperty name stopPosition
+]
+
+{ #category : #generated }
 GtNavigationViewModelsStyler >> visitLevelForMany: aLevelForMany [
 	self visitSimpleLevel: aLevelForMany.
 	
@@ -41,11 +61,37 @@ GtNavigationViewModelsStyler >> visitModelAnnotation: aModelAnnotation [
 		ifAbsent: [ Color red ].
 	
 	self
-		attributes: {
-			BlTextForegroundAttribute color: aColor
-		}
-		from: aModelAnnotation startPosition
-		to: aModelAnnotation stopPosition
+		attribute: (BlTextForegroundAttribute color: aColor)
+		from: aModelAnnotation name startPosition
+		to: aModelAnnotation name stopPosition.
+	
+	aModelAnnotation apiNameString
+		ifNil: [ ^ self ].
+	
+	aColor := self class environment
+		at: aModelAnnotation apiNameString asSymbol
+		ifPresent: [ :aGlobal |
+			aGlobal isBehavior
+				ifTrue: [ Color green muchDarker ]
+				ifFalse: [ Color red ] ]
+		ifAbsent: [ Color red ].
+	
+	self
+		attribute: (BlTextForegroundAttribute color: aColor)
+		from: aModelAnnotation api startPosition
+		to: aModelAnnotation api stopPosition.
+		
+	
+]
+
+{ #category : #generated }
+GtNavigationViewModelsStyler >> visitNameProperty: aNameProperty [
+	self visitProperty: aNameProperty.
+	
+	self
+		attribute: (BlTextForegroundAttribute color: Color cyan muchDarker)
+		from: aNameProperty name startPosition
+		to: aNameProperty name stopPosition
 ]
 
 { #category : #generated }
@@ -56,6 +102,16 @@ GtNavigationViewModelsStyler >> visitNestedLevel: aNestedLevel [
 		attribute: (BlTextForegroundAttribute color: Color gray)
 		from: aNestedLevel follows startPosition
 		to: aNestedLevel follows stopPosition
+]
+
+{ #category : #generated }
+GtNavigationViewModelsStyler >> visitSetting: aSetting [
+	self visitProgram: aSetting.
+	
+	self
+		attribute: (BlTextForegroundAttribute color: Color gray)
+		from: aSetting startPosition
+		to: aSetting stopPosition
 ]
 
 { #category : #generated }

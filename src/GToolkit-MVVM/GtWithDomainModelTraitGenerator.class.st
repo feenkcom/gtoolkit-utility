@@ -18,21 +18,6 @@ Class {
 	#category : #'GToolkit-MVVM-Generators'
 }
 
-{ #category : #translating }
-GtWithDomainModelTraitGenerator >> generate [
-	<return: #Trait>
-
-	^ GtTraitGenerator new
-		traitName: self traitName;
-		packageName: self packageName;
-		templateTrait: self templateTrait;
-		templateMap: {
-			#__MODEL_NAME__ -> self modelName.
-			#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
-			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName) };
-		generate
-]
-
 { #category : #accessing }
 GtWithDomainModelTraitGenerator >> templateTrait [
 	^ TGtWithDomainModelTraitTemplate

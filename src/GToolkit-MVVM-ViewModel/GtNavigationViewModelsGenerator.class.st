@@ -6,7 +6,11 @@ Class {
 	#instVars : [
 		'hierarchy',
 		'ast',
-		'viewModels'
+		'viewModels',
+		'environment',
+		'settings',
+		'definitions',
+		'changes'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Generator'
 }
@@ -40,14 +44,57 @@ GtNavigationViewModelsGenerator >> ensureViewModelForOneExists: aNameString [
 ]
 
 { #category : #translating }
-GtNavigationViewModelsGenerator >> generate [	
+GtNavigationViewModelsGenerator >> generate [
 	ast := GtNavigationViewModelParser
 		parse: self hierarchy
 		startingAt: GtNavigationViewModelParser startingStateForFullDefinition.
 	
 	viewModels := OrderedCollection new.
+	settings := Dictionary new.
+	
+	self accept: ast.
+	
+	viewModels do: [ :eachModel | eachModel settings: settings ].
+	
+	environment := GtPharoVirtualEnvironment new.
+	definitions := OrderedCollection new.
+	viewModels do: [ :eachModel |
+		| theNewDefinitions |
+		
+		theNewDefinitions := (eachModel generateBehaviorDefinitionIn: environment) asOrderedCollection.
+		theNewDefinitions do: [ :eachNewDefinition |
+			(definitions includes: eachNewDefinition)
+				ifFalse: [ definitions add: eachNewDefinition ] ] ].
 
-	self accept: ast
+	changes := RBCompositeRefactoryChange named: 'Generate view models'.
+	definitions do: [ :eachDefinition | changes addChange: eachDefinition createChange ].
+
+	^ changes
+]
+
+{ #category : #'gt-extension' }
+GtNavigationViewModelsGenerator >> gtBehaviorsFor: aView [
+	<gtView>
+	
+	definitions ifNil: [ ^ aView empty ].
+	
+	^ aView list
+		title: 'Behaviors';
+		priority: 5;
+		items: [ definitions ]
+]
+
+{ #category : #'gt-extension' }
+GtNavigationViewModelsGenerator >> gtChangesFor: aView [
+	<gtView>
+	
+	changes ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Changes';
+		priority: 1;
+		object: [ changes ];
+		view: #gtChangesFor:
 ]
 
 { #category : #'gt-extension' }
@@ -74,6 +121,16 @@ GtNavigationViewModelsGenerator >> hierarchy: aString [
 ]
 
 { #category : #private }
+GtNavigationViewModelsGenerator >> viewModelForProperty: aPropertyNode ifFound: aBlock [
+	| aName |
+
+	aName := ((aPropertyNode parentOfType: GtNavigationViewModelDefinitionNode)
+		ifNil: [ ^ self ]) fullNameString.
+
+	^ self viewModelNamed: aName ifFound: aBlock
+]
+
+{ #category : #private }
 GtNavigationViewModelsGenerator >> viewModelNamed: aFullName ifAbsent: aBlock [
 	^ viewModels detect: [ :each | each name = aFullName ] ifNone: aBlock
 ]
@@ -90,7 +147,7 @@ GtNavigationViewModelsGenerator >> visitLevelForMany: aLevelForMany [
 	aParentModel := self ensureViewModelForManyExists: aLevelForMany fullNameString.
 	aChildModel := self ensureViewModelForOneExists: aLevelForMany nameString.
 	
-	aParentModel addChild: aChildModel
+	aParentModel forOneModel: aChildModel
 ]
 
 { #category : #generated }
@@ -106,7 +163,8 @@ GtNavigationViewModelsGenerator >> visitModelAnnotation: aModelAnnotation [
 		viewModelNamed: aModelAnnotation parent level fullNameString
 		ifAbsent: [ ^ self ].
 	
-	aViewModel model: aModelAnnotation nameString
+	aViewModel model: aModelAnnotation nameString.
+	aViewModel modelApi: aModelAnnotation apiNameString
 ]
 
 { #category : #generated }
@@ -128,4 +186,26 @@ GtNavigationViewModelsGenerator >> visitNestedLevel: aNestedLevel [
 		self
 			viewModelNamed: eachChildName
 			ifFound: [ :eachChildModel | aParentViewModel addChild: eachChildModel ] ].
+]
+
+{ #category : #generated }
+GtNavigationViewModelsGenerator >> visitProperties: aProperties [
+	| theProperties |
+	self visitProgram: aProperties.
+	
+	theProperties := (aProperties properties collect: [ :eachProperty |
+		eachProperty nameString -> eachProperty literalValue
+	]) asDictionary.
+
+	self
+		viewModelForProperty: aProperties
+		ifFound: [ :aViewModelModel |
+			aViewModelModel properties: theProperties ]
+]
+
+{ #category : #generated }
+GtNavigationViewModelsGenerator >> visitSetting: aSetting [
+	settings
+		at: aSetting nameString asSymbol
+		put: aSetting literalString
 ]

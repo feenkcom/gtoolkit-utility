@@ -1,10 +1,11 @@
 Trait {
 	#name : #TGtModelClassGenerator,
 	#instVars : [
+		'environment',
 		'modelName',
 		'projectPrefix',
 		'packageName',
-		'properties'
+		'traits'
 	],
 	#category : #'GToolkit-MVVM-Support'
 }
@@ -16,11 +17,36 @@ TGtModelClassGenerator >> className [
 	^ self explicitRequirement
 ]
 
+{ #category : #accessing }
+TGtModelClassGenerator >> environment [
+	^ environment
+]
+
+{ #category : #accessing }
+TGtModelClassGenerator >> environment: anObject [
+	environment := anObject
+]
+
 { #category : #translating }
 TGtModelClassGenerator >> generate [
 	<return: #Trait>
 
+	^ self generator generate
+]
+
+{ #category : #translating }
+TGtModelClassGenerator >> generateBehaviorDefinition [
+	<return: #Trait>
+
+	^ self generator generateBehaviorDefinition
+]
+
+{ #category : #translating }
+TGtModelClassGenerator >> generator [
+	<return: #GtClassGenerator>
+
 	^ GtClassGenerator new
+		environment: self environment;
 		className: self className;
 		packageName: self packageName;
 		templateClass: self templateClass;
@@ -28,8 +54,7 @@ TGtModelClassGenerator >> generate [
 		templateMap: {
 			#__MODEL_NAME__ -> self modelName.
 			#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
-			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName) };
-		generate
+			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName) }
 ]
 
 { #category : #accessing }
@@ -63,21 +88,16 @@ TGtModelClassGenerator >> projectPrefix: anObject [
 ]
 
 { #category : #accessing }
-TGtModelClassGenerator >> properties [
-	^ properties
-]
-
-{ #category : #accessing }
-TGtModelClassGenerator >> properties: anObject [
-	properties := anObject
-]
-
-{ #category : #accessing }
 TGtModelClassGenerator >> templateClass [
 	^ self explicitRequirement
 ]
 
 { #category : #accessing }
 TGtModelClassGenerator >> traits [
-	^ self explicitRequirement
+	^ traits
+]
+
+{ #category : #accessing }
+TGtModelClassGenerator >> traits: anObject [
+	traits := anObject
 ]

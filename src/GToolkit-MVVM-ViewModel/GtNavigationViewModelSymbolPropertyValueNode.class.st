@@ -19,3 +19,8 @@ GtNavigationViewModelSymbolPropertyValueNode >> asSymbol [
 		ifTrue: [ name := (name copyFrom: 2 to: name size - 1) copyReplaceAll: '''''' with: '''' ].
 	^ name asSymbol
 ]
+
+{ #category : #accessing }
+GtNavigationViewModelSymbolPropertyValueNode >> literalValue [
+	^ self asSymbol
+]

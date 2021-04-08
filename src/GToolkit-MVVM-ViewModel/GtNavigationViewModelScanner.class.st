@@ -7,7 +7,7 @@ Class {
 { #category : #'generated-initialization' }
 GtNavigationViewModelScanner class >> initializeKeywordMap [
 	keywordMap := Dictionary new.
-	#(#(3 'and' 12))
+	#(#(3 'and' 12) #(3 'items' 16) #(3 'name' 15))
 		do: [ :each | 
 			(keywordMap at: each first ifAbsentPut: [ Dictionary new ])
 				at: (each at: 2)
@@ -22,12 +22,12 @@ GtNavigationViewModelScanner >> andId [
 
 { #category : #generated }
 GtNavigationViewModelScanner >> emptySymbolTokenId [
-	^ 35
+	^ 44
 ]
 
 { #category : #generated }
 GtNavigationViewModelScanner >> errorTokenId [
-	^ 36
+	^ 45
 ]
 
 { #category : #generated }
@@ -160,6 +160,8 @@ GtNavigationViewModelScanner >> scanForToken [
 				ifTrue: [ ^ self scan6 ].
 			currentCharacter == $>
 				ifTrue: [ ^ self recordAndReportMatch: #(14) ].
+			currentCharacter == $@
+				ifTrue: [ ^ self recordAndReportMatch: #(17) ].
 			currentCharacter == ${
 				ifTrue: [ ^ self recordAndReportMatch: #(1) ].
 			currentCharacter == $}

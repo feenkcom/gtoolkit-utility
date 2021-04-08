@@ -13,23 +13,36 @@ GtNavigationViewModelPropertyNode >> acceptVisitor: aProgramVisitor [
 	^ aProgramVisitor visitProperty: self
 ]
 
+{ #category : #accessing }
+GtNavigationViewModelPropertyNode >> literalValue [
+	^ self value literalValue
+]
+
 { #category : #generated }
 GtNavigationViewModelPropertyNode >> name [
 	^ name
 ]
 
 { #category : #generated }
-GtNavigationViewModelPropertyNode >> name: aGtNavigationViewModelPropertyNameNode [
-	self name notNil
-		ifTrue: [ self name parent: nil ].
-	name := aGtNavigationViewModelPropertyNameNode.
-	self name notNil
-		ifTrue: [ self name parent: self ]
+GtNavigationViewModelPropertyNode >> name: anObject [
+	self setParent: self name to: nil.
+	name := anObject.
+	self setParent: self name to: self
+]
+
+{ #category : #accessing }
+GtNavigationViewModelPropertyNode >> nameString [
+	^ self name source
 ]
 
 { #category : #generated }
 GtNavigationViewModelPropertyNode >> nodeVariables [
-	^ #(#name #value)
+	^ #(#value)
+]
+
+{ #category : #generated }
+GtNavigationViewModelPropertyNode >> otherVariables [
+	^ #(#name)
 ]
 
 { #category : #generated }
@@ -38,10 +51,10 @@ GtNavigationViewModelPropertyNode >> value [
 ]
 
 { #category : #generated }
-GtNavigationViewModelPropertyNode >> value: aGtNavigationViewModelSymbolPropertyValueNode [
+GtNavigationViewModelPropertyNode >> value: aGtNavigationViewModelPropertyValueNode [
 	self value notNil
 		ifTrue: [ self value parent: nil ].
-	value := aGtNavigationViewModelSymbolPropertyValueNode.
+	value := aGtNavigationViewModelPropertyValueNode.
 	self value notNil
 		ifTrue: [ self value parent: self ]
 ]
