@@ -13,7 +13,7 @@ GtNavigationViewModelParser class >> ambiguousTransitions [
 
 { #category : #'generated-accessing' }
 GtNavigationViewModelParser class >> cacheId [
-	^'2021-04-07T21:56:22.682355+02:00'
+	^'2021-04-08T21:22:57.797154+02:00'
 ]
 
 { #category : #generated }
@@ -157,8 +157,7 @@ FullDefinition
 	| Settings 'settings'? Hierarchy'hierarchy'<period>Definitions'definitions' {{}}
 	;
 PropertyName
-	: <name> 'name' <leftParen><name>'suffix'<rightParen> {{}}
-	| <name> 'name' {{}}
+	: <name> 'name' {{}}
 	;
 NameProperty
 	: <nameToken>'name'<colon>GlobalPropertyValue 'value' {{}}
@@ -171,6 +170,7 @@ GlobalPropertyValue
 	;
 ItemsProperty
 	: <itemsToken>'name'<colon>SymbolPropertyValue 'value' {{}}
+	| <name> 'name' <leftParen><name>'suffix'<rightParen> <colon>SymbolPropertyValue 'value' {{}}
 	;
 Setting
 	: <at>'at'<name>'name' PropertyValue'value' {{}}
@@ -193,17 +193,17 @@ GtNavigationViewModelParser class >> reduceTable [
 	#(25 1 #liftFirstValue: 1807363 false ) 
 	#(26 1 #reduceActionForHierarchy1: 1890305 false ) 
 	#(36 1 #reduceActionForFullDefinition1: 2648065 false ) 
-	#(43 1 #reduceActionForSettings1: 3246081 false ) 
+	#(43 1 #reduceActionForSettings1: 3281921 false ) 
 	#(26 2 #reduceActionForHierarchy1: 1890306 false ) 
 	#(36 2 #reduceActionForFullDefinition2: 2648066 false ) 
-	#(43 2 #reduceActionForSettings2: 3246082 false ) 
+	#(43 2 #reduceActionForSettings2: 3281922 false ) 
 	#(24 3 #reduceActionForNestedLevel2: 1555458 false ) 
 	#(24 3 #reduceActionForNestedLevel2: 1555459 false ) 
 	#(24 3 #reduceActionForNestedLevel2: 1555457 false ) 
 	#(23 3 #reduceActionForCompositeLevel1: 1479681 false ) 
-	#(40 1 #reduceActionForGlobalPropertyValue1: 3056641 false ) 
+	#(40 1 #reduceActionForGlobalPropertyValue1: 2995201 false ) 
 	#(28 1 #reduceActionForSymbolPropertyValue1: 1998849 false ) 
-	#(42 3 #reduceActionForSetting1: 3183617 false ) 
+	#(42 3 #reduceActionForSetting1: 3219457 false ) 
 	#(27 1 #liftFirstValue: 1934337 false ) 
 	#(27 1 #liftFirstValue: 1934338 false ) 
 	#(33 1 #reduceActionForDefinition1: 2351105 false ) 
@@ -214,7 +214,7 @@ GtNavigationViewModelParser class >> reduceTable [
 	#(33 2 #reduceActionForDefinition2: 2351106 false ) 
 	#(35 2 #reduceActionForDefinitions1: 2599938 false ) 
 	#(36 4 #reduceActionForFullDefinition4: 2648068 false ) 
-	#(37 1 #reduceActionForPropertyName2: 2802690 false ) 
+	#(37 1 #reduceActionForPropertyName1: 2802689 false ) 
 	#(31 1 #reduceActionForDefinitionList1: 2217985 false ) 
 	#(32 1 #reduceActionForProperties1: 2304001 false ) 
 	#(30 1 #liftFirstValue: 2152449 false ) 
@@ -224,13 +224,13 @@ GtNavigationViewModelParser class >> reduceTable [
 	#(32 2 #reduceActionForProperties1: 2304002 false ) 
 	#(33 4 #reduceActionForDefinition3: 2351107 false ) 
 	#(29 3 #reduceActionForModelAnnotation1: 2048001 false ) 
-	#(38 3 #reduceActionForNameProperty1: 2903041 false ) 
-	#(41 3 #reduceActionForItemsProperty1: 3103745 false ) 
+	#(38 3 #reduceActionForNameProperty1: 2841601 false ) 
+	#(41 3 #reduceActionForItemsProperty1: 3042305 false ) 
 	#(31 3 #reduceActionForDefinitionList2: 2217986 false ) 
-	#(39 3 #reduceActionForGenericProperty1: 2980865 false ) 
+	#(39 3 #reduceActionForGenericProperty1: 2919425 false ) 
 	#(33 5 #reduceActionForDefinition4: 2351108 false ) 
-	#(37 4 #reduceActionForPropertyName1: 2802689 false ) 
-	#(29 6 #reduceActionForModelAnnotation2: 2048002 false )
+	#(29 6 #reduceActionForModelAnnotation2: 2048002 false ) 
+	#(41 6 #reduceActionForItemsProperty2: 3042306 false )
 	).
 ]
 
@@ -344,9 +344,11 @@ GtNavigationViewModelParser class >> transitionTable [
 #[0 0 178 0 2 0 10] 
 #[0 1 61 0 3] 
 #[0 0 182 0 8 0 44] 
-#[0 0 186 0 9] 
-#[0 1 65 0 14] 
-#[0 0 190 0 1 0 8 0 44]
+#[0 1 65 0 9] 
+#[0 1 69 0 14] 
+#[1 0 137 0 11 1 73 0 28] 
+#[0 0 186 0 1 0 8 0 44] 
+#[0 0 190 0 2 0 10]
 	).
 ]
 
@@ -491,6 +493,16 @@ GtNavigationViewModelParser >> reduceActionForItemsProperty1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
+GtNavigationViewModelParser >> reduceActionForItemsProperty2: nodes [
+	| result |
+	result := GtNavigationViewModelItemsPropertyNode new.
+	result name: (nodes at: 1).
+	result suffix: (nodes at: 3).
+	result value: (nodes at: 6).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
 GtNavigationViewModelParser >> reduceActionForLevelForMany1: nodes [
 	| result |
 	result := GtNavigationViewModelLevelForManyNode new.
@@ -553,15 +565,6 @@ GtNavigationViewModelParser >> reduceActionForProperties1: nodes [
 
 { #category : #'generated-reduction actions' }
 GtNavigationViewModelParser >> reduceActionForPropertyName1: nodes [
-	| result |
-	result := GtNavigationViewModelPropertyNameNode new.
-	result name: (nodes at: 1).
-	result suffix: (nodes at: 3).
-	^ result
-]
-
-{ #category : #'generated-reduction actions' }
-GtNavigationViewModelParser >> reduceActionForPropertyName2: nodes [
 	| result |
 	result := GtNavigationViewModelPropertyNameNode new.
 	result name: (nodes at: 1).

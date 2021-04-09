@@ -12,9 +12,38 @@ Class {
 	#category : #'GToolkit-MVVM-ViewModel-Generator'
 }
 
+{ #category : #private }
+GtNavigationViewModelModel >> childViewModelsNameFor: aChildViewModel [
+	^ '{prefix}{name}{suffix}ViewModel{ending}'
+		format: { 
+			#prefix -> self prefix uncapitalized.
+			#name -> aChildViewModel name capitalized.
+			#suffix -> self suffix capitalized.
+			#ending -> (aChildViewModel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
+		} asDictionary
+]
+
 { #category : #'private - generation' }
 GtNavigationViewModelModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 	^ #()
+]
+
+{ #category : #'private - generation' }
+GtNavigationViewModelModel >> generateDomainModelAccessorsFor: aViewModelDefinition [
+	self modelApiTrait
+		ifNotNil: [ :aTrait |
+			| aDomainModelTraitDefinition |
+			aDomainModelTraitDefinition := GtTraitDefinition fromTrait: aTrait in: aViewModelDefinition environment.
+			aViewModelDefinition instanceSideDefinition traits addTrait: aDomainModelTraitDefinition ]
+		ifNil: [
+			| aDomainModelTraitDefinition |
+			aDomainModelTraitDefinition := GtWithDomainModelTraitGenerator new
+				modelName: self name;
+				projectPrefix: self project, self prefix capitalized;
+				packageName: self package;
+				generateBehaviorDefinition.
+			
+			self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aViewModelDefinition ]
 ]
 
 { #category : #'private - generation' }
@@ -29,15 +58,75 @@ GtNavigationViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBeh
 		traitName: #Virtial;
 		packageName: 'MyPackage';
 		templateMap: { 
-			#__view_model__ -> self parentViewModelSelectorName.
+			#__view_model__ -> self parentViewModelSelectorName uncapitalized.
 			#__View_model__ -> self parentViewModelSelectorName capitalized.
-			#__View_model_class__ -> self parent viewModelClassName
+			#__View_model_class__ -> self parent viewModelClassName capitalized
 		};
 		generateBehaviorDefinition.
 
 	self
-		mergeTraitDefinition: aTemplateDefinition
+		mergeBehaviorDefinition: aTemplateDefinition
 		into: aViewModelBehaviorDefinition
+]
+
+{ #category : #'private - generation' }
+GtNavigationViewModelModel >> generateSelectableChildAccessorsFor: aViewModelDefinition [
+	| aSelectableDefinition |
+
+	aSelectableDefinition := GtClassGenerator new
+		templateClass: TGtNavigationPropertyForChildTemplate;
+		className: ('T', self project, self prefix capitalized, 'Selectable', self name capitalized, self suffix capitalized, 'ViewModel');
+		packageName: self package;
+		templateMap: { 
+			#__property__ -> 'selection'.
+			#__Status__ -> 'Selected'.
+			#__status__ -> 'selected'.
+			#__Status_not__ -> 'Deselected'.
+			#__Set__ -> 'Select'.
+			#__set__ -> 'select'.
+			#__Unset__ -> 'deselect'.
+			#__unset__ -> 'deselect'.
+			#__object__ -> 'package'.
+			#__Object__ -> 'Package'.
+			#__has_parent_property__ -> #hasSelectedPackageViewModel.
+			#__parent_object_getter__ -> #pharoPackagesNavigationViewModel.
+			#__parent_property_getter__ -> #selectedPackageViewModel.
+			#__parent_property_setter__ -> #selectPackageViewModel:
+		};
+		generateBehaviorDefinition.
+
+	self
+		mergeBehaviorDefinition: aSelectableDefinition instanceSideDefinition
+		into: aViewModelDefinition
+]
+
+{ #category : #'private - generation' }
+GtNavigationViewModelModel >> generateSelectionPropertyTraitIn: aPharoEnvironment [
+	self hasParent
+		ifTrue: [ ^ self ].
+
+	^ GtClassGenerator new
+		environment: aPharoEnvironment;
+		templateClass: TGtNavigationPropertyForChildTemplate;
+		className: ('T', self project, self prefix capitalized, 'Selectable', self name capitalized, self suffix capitalized, 'ViewModel');
+		packageName: self package;
+		templateMap: { 
+			#__property__ -> 'selection'.
+			#__Status__ -> 'Selected'.
+			#__status__ -> 'selected'.
+			#__Status_not__ -> 'Deselected'.
+			#__Set__ -> 'Select'.
+			#__set__ -> 'select'.
+			#__Unset__ -> 'deselect'.
+			#__unset__ -> 'deselect'.
+			#__object__ -> 'package'.
+			#__Object__ -> 'Package'.
+			#__has_parent_property__ -> #hasSelectedPackageViewModel.
+			#__parent_object_getter__ -> #pharoPackagesNavigationViewModel.
+			#__parent_property_getter__ -> #selectedPackageViewModel.
+			#__parent_property_setter__ -> #selectPackageViewModel:
+		};
+		generateBehaviorDefinition
 ]
 
 { #category : #'gt-extension' }
@@ -51,7 +140,7 @@ GtNavigationViewModelModel >> gtInfoFor: aView [
 		'Parent view model name' -> (self hasParent
 			ifTrue: [ self parentViewModelSelectorName printString ] 
 			ifFalse: [ '-----' ]).
-	 } asOrderedDictionary, settings) gtItemsFor: aView)
+	 } asOrderedDictionary, properties, settings) gtItemsFor: aView)
 			title: 'Info';
 			priority: 2
 ]
@@ -92,15 +181,15 @@ GtNavigationViewModelModel >> isForOne [
 ]
 
 { #category : #private }
-GtNavigationViewModelModel >> mergeTraitDefinition: aTraitDefinition into: aViewModelDefinition [
-	"Merge the given trait definition into the view model definition.
-	This is useful when we want to actually compile-in methods and slots from template traits."
+GtNavigationViewModelModel >> mergeBehaviorDefinition: aBehaviorDefinition into: aViewModelDefinition [
+	"Merge the given behavior (trait or class) definition into the view model definition.
+	This is useful when we want to actually compile-in methods and slots from template behaviors."
 	
-	aTraitDefinition slots do: [ :eachSlot |
+	aBehaviorDefinition slots do: [ :eachSlot |
 		aViewModelDefinition instanceSideDefinition slots
 			addSlotNamed: eachSlot name ].
 		
-	aTraitDefinition methods do: [ :eachMethod |
+	aBehaviorDefinition methods do: [ :eachMethod |
 		aViewModelDefinition instanceSideDefinition methods
 			addMethod: eachMethod sourceCode
 			protocol: eachMethod protocol ]
@@ -158,6 +247,11 @@ GtNavigationViewModelModel >> modelGetterSelector [
 		ifNil: [ aFallbackSelector ]
 ]
 
+{ #category : #accessing }
+GtNavigationViewModelModel >> modelNameForViewModel [
+	^ self model ifNil: [ self name ]
+]
+
 { #category : #'api - accessing' }
 GtNavigationViewModelModel >> modelSetterSelector [
 	| aFallbackSelector |
@@ -207,7 +301,7 @@ GtNavigationViewModelModel >> parentViewModelSelectorName [
 		assert: [ self parent notNil ]
 		description: [ 'Can not create parent selector if there is no parent' ].
 
-	^ (self prefix uncapitalized, self parent name capitalized, self suffix capitalized, 'ViewModel') asSymbol
+	^ ('parent', self prefix capitalized, self parent name capitalized, self suffix capitalized, 'ViewModel') asSymbol
 ]
 
 { #category : #'api - accessing' }

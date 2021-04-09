@@ -2,8 +2,7 @@ Class {
 	#name : #GtNavigationViewModelPropertyNameNode,
 	#superclass : #GtNavigationViewModelProgramNode,
 	#instVars : [
-		'name',
-		'suffix'
+		'name'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Ast'
 }
@@ -23,17 +22,12 @@ GtNavigationViewModelPropertyNameNode >> name: aSmaCCToken [
 	name := aSmaCCToken
 ]
 
-{ #category : #generated }
-GtNavigationViewModelPropertyNameNode >> suffix [
-	^ suffix
-]
-
-{ #category : #generated }
-GtNavigationViewModelPropertyNameNode >> suffix: aSmaCCToken [
-	suffix := aSmaCCToken
+{ #category : #accessing }
+GtNavigationViewModelPropertyNameNode >> nameString [
+	^ self name source
 ]
 
 { #category : #generated }
 GtNavigationViewModelPropertyNameNode >> tokenVariables [
-	^ #(#name #suffix)
+	^ #(#name)
 ]

@@ -28,51 +28,50 @@ GtNavigationViewModelForOneModel >> children: anObject [
 
 { #category : #'private - generation' }
 GtNavigationViewModelForOneModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
-	| aModelTraitDefinition aSelectableTraitDefinition aDefinition |
-
-	aModelTraitDefinition := self modelApiTrait
-		ifNotNil: [ :aTrait | GtTraitDefinition fromTrait: aTrait in: aPharoEnvironment ].
-		
-	aSelectableTraitDefinition := self generateSelectionPropertyTraitIn: aPharoEnvironment.
+	| aDefinition |
 
 	aDefinition := GtViewModelGenerator new
 		environment: aPharoEnvironment;
-		modelName: self model;
+		modelName: self modelNameForViewModel;
 		viewModelName: self viewModelClassName;
 		projectPrefix: self project;
 		packageName: self package;
-		traits: ({ aModelTraitDefinition . aSelectableTraitDefinition } select: #notNil);
 		generateBehaviorDefinition.
-		
-	self generateParentViewModelAccessorsFor: aDefinition.
 	
-	^ { aSelectableTraitDefinition . aDefinition }
+	self generateDomainModelAccessorsFor: aDefinition.
+	self generateChildViewModelsAccessorFor: aDefinition.
+	self generateParentViewModelAccessorsFor: aDefinition.
+	self generateSelectableChildAccessorsFor: aDefinition.
+	
+	^ { aDefinition }
 ]
 
 { #category : #'private - generation' }
-GtNavigationViewModelForOneModel >> generateSelectionPropertyTraitIn: aPharoEnvironment [
-	^ GtTraitGenerator new
-		environment: aPharoEnvironment;
-		templateTrait: TGtNavigationPropertyForChildTemplate;
-		traitName: ('T', self project, self prefix capitalized, 'Selectable', self name capitalized, self suffix capitalized, 'ViewModel');
-		packageName: self package;
-		templateMap: { 
-			#__property__ -> 'selection'.
-			#__Status__ -> 'Selected'.
-			#__status__ -> 'selected'.
-			#__Status_not__ -> 'Deselected'.
-			#__Set__ -> 'Select'.
-			#__set__ -> 'select'.
-			#__Unset__ -> 'deselect'.
-			#__unset__ -> 'deselect'.
-			#__object__ -> 'package'.
-			#__Object__ -> 'Package'.
-			#__has_parent_property__ -> #hasSelectedPackageViewModel.
-			#__parent_object_getter__ -> #pharoPackagesNavigationViewModel.
-			#__parent_property_getter__ -> #selectedPackageViewModel.
-			#__parent_property_setter__ -> #selectPackageViewModel:
-		};
-		generateBehaviorDefinition
+GtNavigationViewModelForOneModel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
+	children do: [ :eachChildModel |
+		properties
+			at: eachChildModel name
+			ifPresent: [ :theChildrenAccessor |
+				| theChildrenAccessorsDefinition |
+				
+				theChildrenAccessorsDefinition := GtClassGenerator new
+					templateClass: TGtNavigationViewModelChildrenForOneAccessorTemplate;
+					className: #VirtialClass;
+					packageName: 'MyPackage';
+					templateMap: { 
+						#__child_view_models__ -> (self childViewModelsNameFor: eachChildModel) uncapitalized.
+						#__Child_view_models__ -> (self childViewModelsNameFor: eachChildModel) capitalized.
+						#__model__ -> self modelGetterSelector uncapitalized.
+						#__children__ -> theChildrenAccessor uncapitalized.
+						#__Child_view_model_class__ -> eachChildModel viewModelClassName capitalized.
+						#__child_parent_view_model_setter__ -> eachChildModel parentViewModelSelectorName uncapitalized asSymbol asMutator.
+						#__child_model_setter__ -> eachChildModel modelSetterSelector uncapitalized
+					};
+					generateBehaviorDefinition.
+					
+				self
+					mergeBehaviorDefinition: theChildrenAccessorsDefinition instanceSideDefinition
+					into: aViewModelDefinition ] ]
 ]
 
 { #category : #testing }

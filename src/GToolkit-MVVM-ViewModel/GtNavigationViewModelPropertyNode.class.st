@@ -32,7 +32,7 @@ GtNavigationViewModelPropertyNode >> name: anObject [
 
 { #category : #accessing }
 GtNavigationViewModelPropertyNode >> nameString [
-	^ self name source
+	^ self name nameString
 ]
 
 { #category : #generated }

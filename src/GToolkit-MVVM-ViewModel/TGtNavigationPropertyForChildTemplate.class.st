@@ -1,5 +1,6 @@
-Trait {
+Class {
 	#name : #TGtNavigationPropertyForChildTemplate,
+	#superclass : #Object,
 	#category : #'GToolkit-MVVM-ViewModel-Generator'
 }
 

@@ -25,34 +25,12 @@ GtNavigationViewModelForManyModel >> addSelectionNotifierMethodTo: aViewModelDef
 
 { #category : #'api - accessing' }
 GtNavigationViewModelForManyModel >> childViewModelsName [
-	^ '{prefix}{name}{suffix}ViewModels'
-		format: { 
-			#prefix -> self prefix uncapitalized.
-			#name -> self forOneModel name capitalized.
-			#suffix -> self suffix capitalized.
-		} asDictionary
+	^ self childViewModelsNameFor: self forOneModel
 ]
 
 { #category : #accessing }
 GtNavigationViewModelForManyModel >> children [
 	^ { self forOneModel }
-]
-
-{ #category : #private }
-GtNavigationViewModelForManyModel >> createItemsViewCodersSourceCode [
-	^
-'create{childViewModelsName}
-	^ self {modelGetter} {itemsAccessor} collect: [ :eachModel |
-		{forOneViewModel} new
-			pharoPackagesNavigationViewModel: self;
-			{childModelSetter} eachModel ]'
-	format: { 
-		#childViewModelsName -> self childViewModelsName capitalized.
-		#modelGetter -> self modelGetterSelector.
-		#itemsAccessor -> self itemsAccessorSelector.
-		#forOneViewModel -> self forOneModel viewModelClassName.
-		#childModelSetter -> self forOneModel modelSetterSelector
-	} asDictionary
 ]
 
 { #category : #accessing }
@@ -68,13 +46,10 @@ GtNavigationViewModelForManyModel >> forOneModel: anObject [
 
 { #category : #'private - generation' }
 GtNavigationViewModelForManyModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
-	| aSelectionTraitDefinition aSelectionAnnouncementDefinition aModelTraitDefinition aDefinition |
+	| aSelectionTraitDefinition aSelectionAnnouncementDefinition aDefinition |
 	
 	aSelectionTraitDefinition := self generateSelectionTraitIn: aPharoEnvironment.
 	aSelectionAnnouncementDefinition := self generateSelectionChangedAnnouncementDefinitionIn: aPharoEnvironment.
-
-	aModelTraitDefinition := self modelApiTrait
-		ifNotNil: [ :aTrait | GtTraitDefinition fromTrait: aTrait in: aPharoEnvironment ].
 
 	aDefinition := GtViewModelGenerator new
 		environment: aPharoEnvironment;
@@ -82,19 +57,11 @@ GtNavigationViewModelForManyModel >> generateBehaviorDefinitionIn: aPharoEnviron
 		viewModelName: self viewModelClassName;
 		projectPrefix: self project;
 		packageName: self package;
-		traits: ({ aSelectionTraitDefinition . aModelTraitDefinition } select: #notNil);
+		traits: ({ aSelectionTraitDefinition });
 		generateBehaviorDefinition.
 
-	aDefinition instanceSideDefinition slots addSlotNamed: self childViewModelsName.
-
-	aDefinition instanceSideDefinition methods
-		addMethod: (self createItemsViewCodersSourceCode)
-		protocol: 'private - instance creation'.
-		
-	aDefinition instanceSideDefinition methods
-		addMethod: (self itemsViewCodersSourceCode)
-		protocol: 'api - accessing'.
-
+	self generateDomainModelAccessorsFor: aDefinition.
+	self generateChildViewModelsAccessorFor: aDefinition.
 	self generateParentViewModelAccessorsFor: aDefinition.
 
 	self
@@ -102,6 +69,30 @@ GtNavigationViewModelForManyModel >> generateBehaviorDefinitionIn: aPharoEnviron
 		selectionTrait: aSelectionTraitDefinition.
 
 	^ { aSelectionTraitDefinition . aSelectionAnnouncementDefinition. aDefinition }
+]
+
+{ #category : #'private - generation' }
+GtNavigationViewModelForManyModel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
+	| aDefinition |
+
+	aDefinition := GtClassGenerator new
+		templateClass: TGtNavigationViewModelChildrenForManyAccessorTemplate;
+		className: #VirtialClass;
+		packageName: 'MyPackage';
+		templateMap: { 
+			#__child_view_models__ -> self childViewModelsName uncapitalized.
+			#__Child_view_models__ -> self childViewModelsName capitalized.
+			#__model__ -> self modelGetterSelector uncapitalized.
+			#__children__ -> self itemsAccessorSelector uncapitalized.
+			#__Child_view_model_class__ -> self forOneModel viewModelClassName capitalized.
+			#__child_parent_view_model_setter__ -> self forOneModel parentViewModelSelectorName uncapitalized asSymbol asMutator.
+			#__child_model_setter__ -> self forOneModel modelSetterSelector uncapitalized
+		};
+		generateBehaviorDefinition.
+
+	self
+		mergeBehaviorDefinition: aDefinition instanceSideDefinition
+		into: aViewModelDefinition
 ]
 
 { #category : #'private - generation' }
@@ -142,17 +133,6 @@ GtNavigationViewModelForManyModel >> itemsAccessorSelector [
 	^ properties
 		at: #items
 		ifAbsent: [ #yourself ]
-]
-
-{ #category : #private }
-GtNavigationViewModelForManyModel >> itemsViewCodersSourceCode [
-	^
-'{childViewModelsName}
-	^  {childViewModelsName} ifNil: [ {childViewModelsName} := self create{childViewModelsNameCapitalized} ]'
-	format: { 
-		#childViewModelsName -> self childViewModelsName.
-		#childViewModelsNameCapitalized -> self childViewModelsName capitalized.
-	} asDictionary
 ]
 
 { #category : #private }
