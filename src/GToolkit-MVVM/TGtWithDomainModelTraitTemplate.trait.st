@@ -1,3 +1,11 @@
+"
+!! Generation
+${class:__TRAIT_NAME__}$ was automatically generated with the following code:
+[[[
+__GENERATOR_SOURCE_CODE__
+]]] 
+
+"
 Trait {
 	#name : #TGtWithDomainModelTraitTemplate,
 	#instVars : [
@@ -9,6 +17,7 @@ Trait {
 { #category : #'api - __MODEL_NAME_TEXT__ model' }
 TGtWithDomainModelTraitTemplate >> __MODEL_NAME__Model [
 	"Return a not-null __MODEL_NAME__ model assigned to the receiver view model"
+	<modelGetter>
 	self
 		assert: [ __MODEL_NAME__Model notNil ]
 		description: [ '__MODEL_NAME__ model should be initialized' ].
@@ -19,6 +28,7 @@ TGtWithDomainModelTraitTemplate >> __MODEL_NAME__Model [
 { #category : #'api - __MODEL_NAME_TEXT__ model' }
 TGtWithDomainModelTraitTemplate >> __MODEL_NAME__Model: a__MODEL_NAME_CAPITALIZED__Model [
 	"Set a not-null __MODEL_NAME__ domain model assigned to the receiver view model"
+	<modelSetter>
 	self
 		assert: [ a__MODEL_NAME_CAPITALIZED__Model notNil ]
 		description: [ '__MODEL_NAME__ model must not be nil' ].
@@ -44,8 +54,6 @@ TGtWithDomainModelTraitTemplate >> has__MODEL_NAME_CAPITALIZED__ [
 { #category : #'api - __MODEL_NAME_TEXT__ model' }
 TGtWithDomainModelTraitTemplate >> on__MODEL_NAME_CAPITALIZED__ModelChanged [
 	"Is sent when a new __MODEL_NAME__ model is assigned to the view model"
-	
-	self explicitRequirement
 ]
 
 { #category : #'api - __MODEL_NAME_TEXT__ model' }

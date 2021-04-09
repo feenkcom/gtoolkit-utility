@@ -71,6 +71,7 @@ TGtWithModelPropertyTraitTemplate >> has__PROPERTY_NAME_CAPITALIZED__ [
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> notify__PROPERTY_NAME_CAPITALIZED__Changed [
 	"Override this notify method to announce changes to the property"
+	<propertyChangeNotifier: #__PROPERTY_NAME__>
 ]
 
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
