@@ -28,12 +28,15 @@ Trait {
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> __PROPERTY_NAME__ [
 	<return: #__PROPERTY_TYPE__>
+	<propertyGetter: #__PROPERTY_NAME__>
 
 	^ __PROPERTY_NAME__
 ]
 
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> __PROPERTY_SETTER__: aNew__PROPERTY_NAME_CAPITALIZED__ [
+	<propertySetter: #__PROPERTY_NAME__>
+
 	(self __PROPERTY_NAME__ __PROPERTY_COMPARATOR__ aNew__PROPERTY_NAME_CAPITALIZED__)
 		ifTrue: [ ^ self ].
 	
@@ -50,6 +53,7 @@ TGtWithModelPropertyTraitTemplate >> __PROPERTY_SETTER__: aNew__PROPERTY_NAME_CA
 
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> __PROPERTY_UNSETTER__ [
+	<propertyUnsetter: #__PROPERTY_NAME__>
 	| aPrevious__PROPERTY_NAME_CAPITALIZED__ |
 
 	__PROPERTY_NAME__
@@ -64,6 +68,7 @@ TGtWithModelPropertyTraitTemplate >> __PROPERTY_UNSETTER__ [
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> has__PROPERTY_NAME_CAPITALIZED__ [
 	<return: #Boolean>
+	<propertyTester: #__PROPERTY_NAME__>
 
 	^ __PROPERTY_NAME__ notNil
 ]
@@ -77,9 +82,11 @@ TGtWithModelPropertyTraitTemplate >> notify__PROPERTY_NAME_CAPITALIZED__Changed 
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> onNew__PROPERTY_NAME_CAPITALIZED__Set: aNew__PROPERTY_NAME_CAPITALIZED__ [
 	"Is sent after a new value of the __PROPERTY_NAME__ is assigned"
+	<propertySetHook: #__PROPERTY_NAME__>
 ]
 
 { #category : #'api - __PROPERTY_NAME_TEXT__' }
 TGtWithModelPropertyTraitTemplate >> onPrevious__PROPERTY_NAME_CAPITALIZED__Unset: aPrevious__PROPERTY_NAME_CAPITALIZED__ [
 	"Is sent after a previous value of the __PROPERTY_NAME__ is de-assigned"
+	<propertyUnsetHook: #__PROPERTY_NAME__>
 ]
