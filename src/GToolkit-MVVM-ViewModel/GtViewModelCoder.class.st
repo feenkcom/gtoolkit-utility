@@ -10,7 +10,7 @@ folder => folder(s) and file(s).
 folder {
 	folder(s): #directories,
 	file(s): #files
-}.			
+}.
 
 
 !! Simple system browser:

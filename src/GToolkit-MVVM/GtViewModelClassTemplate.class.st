@@ -1,3 +1,6 @@
+"
+! __MODEL_NAME__ View Model
+"
 Class {
 	#name : #GtViewModelClassTemplate,
 	#superclass : #Object,
