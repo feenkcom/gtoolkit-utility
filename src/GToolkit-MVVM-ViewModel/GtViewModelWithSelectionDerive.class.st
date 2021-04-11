@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelWithSelectionDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtViewModelWithChoicePropertyFromManyDirective,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 
@@ -26,7 +26,7 @@ GtViewModelWithSelectionDerive >> applyOnViewModelModelsWithCodeDefinitions: aGt
 				eachViewModelModelWithCodeDefinition definition instanceSideDefinition traits addTrait: aSelectionTraitDefinition.
 				
 				aSelectedViewModelChangedAnnouncement := self
-					generateSelectedViewModelChangedAnnouncementFor: eachViewModelModelWithCodeDefinition viewModelModel.
+					generatePropertyChangedAnnouncementFor: eachViewModelModelWithCodeDefinition viewModelModel.
 				
 				eachViewModelModelWithCodeDefinition addExtraDefinitions: {
 					aSelectionTraitDefinition.
@@ -52,23 +52,12 @@ GtViewModelWithSelectionDerive >> applyOnViewModelModelsWithCodeDefinitions: aGt
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
 		eachViewModelModelWithCodeDefinition isForMany
 			ifTrue: [
-				self generateSelectedViewModelChangedNotifierMethodFor: eachViewModelModelWithCodeDefinition.
+				self generatePropertyChangedNotifierMethodFor: eachViewModelModelWithCodeDefinition.
 				self generateSelectionSetHookMethodTo: eachViewModelModelWithCodeDefinition.
 				self generateSelectionUnsetHookMethodTo: eachViewModelModelWithCodeDefinition
 			] ].
 	
 
-]
-
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> deselectedNotifierNameOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForOne ]
-		description: [ 'Only view model for one can have child specific selection method' ].
-
-	^ (self
-		selectionPropertyMethodOfType: #propertyUnsetNotifier:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - generate' }
@@ -85,7 +74,7 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 		ifEmpty: [ ^ self ].
 
 	aMethodDefinition := self
-		selectionPropertyUnsetOthersMethodOf: aViewModelModelWithCodeDefinition.
+		propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition.
 	
 	aMethodDefinition
 		ifNil: [ ^ self ].
@@ -102,7 +91,7 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 					space;
 					nextPutAll: (aViewModelModel childViewModelsNameFor: eachChildViewModelModelWithCodeDefinition viewModelModel) uncapitalized;
 					space;
-					nextPutAll: (self selectionPropertyUnsetterNameOf: eachChildViewModelModelWithCodeDefinition);
+					nextPutAll: (self propertyUnsetterSelectorOf: eachChildViewModelModelWithCodeDefinition);
 					nextPut: $. ] ].
 
 	aMethodDefinition sourceCode: methodSourceCode
@@ -122,7 +111,7 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 		ifEmpty: [ ^ self ].
 
 	aMethodDefinition := self
-		selectionPropertyMethodOfType: #propertyTestOthers:
+		propertyMethodOfType: #propertyTestOthers:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition.
 
 	aMethodDefinition
@@ -150,7 +139,7 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 				space;
 				nextPutAll: (aViewModelModel childViewModelsNameFor: eachChildViewModelModelWithCodeDefinition viewModelModel) uncapitalized;
 				space;
-				nextPutAll: (self selectionPropertyTesterNameOf: eachChildViewModelModelWithCodeDefinition) ].
+				nextPutAll: (self propertyTesterSelectorOf: eachChildViewModelModelWithCodeDefinition) ].
 		
 		((theChildrenViewModelModelsWithCodeDefinition size - 1) max: 0) timesRepeat: [ aStream space; nextPut: $] ] ].
 
@@ -174,13 +163,13 @@ GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor:
 			#__unset__ -> 'deselect'.
 			#__object__ -> aViewModelModelWithCodeDefinition name.
 			#__Object__ -> aViewModelModelWithCodeDefinition name capitalized.
-			#__has_parent_property__ -> (self selectionPropertyTesterNameOf: aViewModelModelWithCodeDefinition parent).
+			#__has_parent_property__ -> (self propertyTesterSelectorOf: aViewModelModelWithCodeDefinition parent).
 			#__parent_object_getter__ -> aViewModelModelWithCodeDefinition parentViewModelSelectorName.
-			#__parent_property_getter__ -> (self selectionPropertyGetterNameOf: aViewModelModelWithCodeDefinition parent).
-			#__parent_property_setter__ -> (self selectionPropertySetterNameOf: aViewModelModelWithCodeDefinition parent).
+			#__parent_property_getter__ -> (self propertyGetterSelectorOf: aViewModelModelWithCodeDefinition parent).
+			#__parent_property_setter__ -> (self propertySetterSelectorOf: aViewModelModelWithCodeDefinition parent).
 			#__Status_announcement__ -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
 			#__Status_not_announcement__ -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
-			#__property_name__ -> (self selectionPropertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel)
+			#__property_name__ -> (self propertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel)
 		};
 		generateBehaviorDefinition
 ]
@@ -205,40 +194,6 @@ GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsFor: aViewMode
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateSelectedViewModelChangedAnnouncementFor: aViewModelModel [
-	| aDefinition |
-	
-	self
-		assert: [ aViewModelModel isForMany ]
-		description: [ 'Only view model for many can announce selected view model changed event' ].
-	
-	aDefinition := GtClassDefinition forNew.
-	aDefinition name: (self selectedViewModelChangedAnnouncementNameFor: aViewModelModel).
-	aDefinition superclass name: #Announcement.
-	aDefinition category package name: aViewModelModel package.
-	
-	^ aDefinition
-]
-
-{ #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateSelectedViewModelChangedNotifierMethodFor: aViewModelModelWithCodeDefinition [
-	| aMethodDefinition methodSourceCode |
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can implement parent specific selection methods' ].
-
-	aMethodDefinition := self
-		selectionPropertyChangeNotifierMethodOf: aViewModelModelWithCodeDefinition.
-			
-	methodSourceCode := aMethodDefinition sourceCode, String cr, String cr, String tab, 
-		'self announce: ', (self selectedViewModelChangedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel),' new'.
-
-	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
-		addMethod: methodSourceCode
-		protocol: aMethodDefinition protocol
-]
-
-{ #category : #'private - generate' }
 GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelModelWithCodeDefinition [
 	| aMethodDefinition methodSourceCode aArgumentName |
 
@@ -246,7 +201,7 @@ GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelMo
 		assert: [ aViewModelModelWithCodeDefinition isForMany ]
 		description: [ 'Only view model for many can implement parent specific selection methods' ].
 
-	aMethodDefinition := self selectionPropertySetHookMethodOf: aViewModelModelWithCodeDefinition.
+	aMethodDefinition := self propertySetHookMethodOf: aViewModelModelWithCodeDefinition.
 
 	aArgumentName := aMethodDefinition arguments first.
 
@@ -259,7 +214,7 @@ GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelMo
 			ifTrue: [
 				| aSetterMethod |
 				
-				aSetterMethod := self selectionPropertySetterMethodOf: aViewModelModelWithCodeDefinition parent.
+				aSetterMethod := self propertySetterMethodOf: aViewModelModelWithCodeDefinition parent.
 				aSetterMethod ifNotNil: [
 					aStream
 						tab;
@@ -272,7 +227,7 @@ GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelMo
 						cr ] ].
 
 		aStream
-			tab; nextPutAll: aArgumentName; space; nextPutAll: (self selectedNotifierNameOf: aViewModelModelWithCodeDefinition forOneModel) ].
+			tab; nextPutAll: aArgumentName; space; nextPutAll: (self propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ].
 
 	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 		addMethod: methodSourceCode
@@ -287,7 +242,7 @@ GtViewModelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: aViewModel
 		assert: [ aViewModelModelWithCodeDefinition isForMany ]
 		description: [ 'Only view model for many can implement parent specific selection methods' ].
 
-	aMethodDefinition := self selectionPropertyUnsetHookMethodOf: aViewModelModelWithCodeDefinition.
+	aMethodDefinition := self propertyUnsetHookMethodOf: aViewModelModelWithCodeDefinition.
 
 	aArgumentName := aMethodDefinition arguments first.
 
@@ -297,11 +252,11 @@ GtViewModelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: aViewModel
 			cr;
 			tab;
 				nextPutAll: aArgumentName; space;
-				nextPutAll: (self selectionPropertyUnsetOthersNameOf: aViewModelModelWithCodeDefinition forOneModel);
+				nextPutAll: (self propertyUnsetOthersSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel);
 				nextPut: $.; cr;
 			tab;
 				nextPutAll: aArgumentName; space;
-				nextPutAll: (self deselectedNotifierNameOf: aViewModelModelWithCodeDefinition forOneModel) ].
+				nextPutAll: (self propertyUnsetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ].
 
 	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 		addMethod: methodSourceCode
@@ -371,7 +326,7 @@ GtViewModelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewMo
 
 	^ GtWithPropertyTraitGenerator new
 		environment: aCodeDefinition environment;
-		propertyName: (self selectionPropertyNameFor: aViewModelModel);
+		propertyName: (self propertyNameFor: aViewModelModel);
 		propertySetter: 'select', aViewModelModel forOneModel name capitalized ,'ViewModel';
 		propertyUnsetter: 'deselect', aViewModelModel forOneModel name capitalized ,'ViewModel';
 		propertyType: aViewModelModel forOneModel viewModelClassName;
@@ -381,60 +336,13 @@ GtViewModelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewMo
 		generateBehaviorDefinition
 ]
 
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectedNotifierNameOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForOne ]
-		description: [ 'Only view model for one can have child specific selection method' ].
-
-	^ (self
-		selectionPropertyMethodOfType: #propertySetNotifier:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition) selector
-]
-
-{ #category : #'private - class names' }
-GtViewModelWithSelectionDerive >> selectedViewModelChangedAnnouncementNameFor: aViewModelModel [
-	^ '{project}{prefix}Selected{name}{suffix}ViewModelChanged'
-		format: { 
-			#project -> aViewModelModel project.
-			#prefix -> aViewModelModel prefix capitalized.
-			#name -> aViewModelModel forOneModel name capitalized.
-			#suffix -> aViewModelModel suffix capitalized.
-		} asDictionary
-]
-
-{ #category : #'private - methods' }
-GtViewModelWithSelectionDerive >> selectionPropertyChangeNotifierMethodOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can have selection change notifier method' ].
-
-	^ self
-		selectionPropertyMethodOfType: #propertyChangeNotifier:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
+{ #category : #'api - accessors' }
+GtViewModelWithSelectionDerive >> propertyAppliedStatusName [
+	^ 'selected'
 ]
 
 { #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertyGetterNameOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can have selection tester method' ].
-
-	^ (self
-		selectionPropertyMethodOfType: #propertyGetter:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition) selector
-]
-
-{ #category : #private }
-GtViewModelWithSelectionDerive >> selectionPropertyMethodOfType: aMethodType inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition [
-	^ aViewModelModelWithCodeDefinition viewModelModel
-		propertyMethodFor: (self selectionPropertyNameFor: aViewModelModelWithCodeDefinition viewModelModel)
-		ofType: aMethodType
-		inViewModelBehavior: aViewModelModelWithCodeDefinition definition
-]
-
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertyNameFor: aViewModelModel [
+GtViewModelWithSelectionDerive >> propertyNameFor: aViewModelModel [
 	| aName |
 
 	aName := aViewModelModel isForMany
@@ -444,80 +352,9 @@ GtViewModelWithSelectionDerive >> selectionPropertyNameFor: aViewModelModel [
 	^ 'selected', aName capitalized ,'ViewModel'
 ]
 
-{ #category : #'private - methods' }
-GtViewModelWithSelectionDerive >> selectionPropertySetHookMethodOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can have selection set hook method' ].
-
-	^ self
-		selectionPropertyMethodOfType: #propertySetHook:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
-]
-
-{ #category : #'private - methods' }
-GtViewModelWithSelectionDerive >> selectionPropertySetterMethodOf: aViewModelModelWithCodeDefinition [
-
-	"Both for many and for one view models can be used to select an entity"
-	^ (self
-		selectionPropertyMethodOfType: #propertySetter:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition)
-]
-
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertySetterNameOf: aViewModelModelWithCodeDefinition [
-
-	"Both for many and for one view models can be used to select an entity"
-	^ (self selectionPropertySetterMethodOf: aViewModelModelWithCodeDefinition) selector
-]
-
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertyTesterNameOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can have selection tester method' ].
-
-	^ (self
-		selectionPropertyMethodOfType: #propertyTester:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition) selector
-]
-
-{ #category : #'private - methods' }
-GtViewModelWithSelectionDerive >> selectionPropertyUnsetHookMethodOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can have selection set hook method' ].
-
-	^ self
-		selectionPropertyMethodOfType: #propertyUnsetHook:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
-]
-
-{ #category : #'private - methods' }
-GtViewModelWithSelectionDerive >> selectionPropertyUnsetOthersMethodOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForOne ]
-		description: [ 'Only view model for one can have deselect others method' ].
-
-	^ self
-		selectionPropertyMethodOfType: #propertyUnsetOthers:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
-]
-
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertyUnsetOthersNameOf: aViewModelModelWithCodeDefinition [
-	^ (self selectionPropertyUnsetOthersMethodOf: aViewModelModelWithCodeDefinition) selector
-]
-
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertyUnsetterNameOf: aViewModelModelWithCodeDefinition [
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForMany ]
-		description: [ 'Only view model for many can have selection tester method' ].
-
-	^ (self
-		selectionPropertyMethodOfType: #propertyUnsetter:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition) selector
+{ #category : #'api - accessors' }
+GtViewModelWithSelectionDerive >> propertyUnappliedStatusName [
+	^ 'deselected'
 ]
 
 { #category : #'private - class names' }
