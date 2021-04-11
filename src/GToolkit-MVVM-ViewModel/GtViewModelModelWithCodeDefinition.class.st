@@ -30,6 +30,24 @@ GtViewModelModelWithCodeDefinition >> allViewModelModelDefinitions: anObject [
 	allViewModelModelDefinitions := anObject
 ]
 
+{ #category : #'private - methods' }
+GtViewModelModelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName [
+	"Find any method that is marked with a given pragma (in traits, instance side, etc.)"
+	<return: #GtPharoMethodDefinition>
+	
+	self
+		methodsWithPragmaNamed: aPragmaName
+		inViewModelDefinition: self definition
+		do: [ :aMethodDefinition | ^ aMethodDefinition ].
+		
+	KeyNotFound signalFor: aPragmaName in: self
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModelWithCodeDefinition >> childViewModelsName [
+	^ self viewModelModel childViewModelsName
+]
+
 { #category : #'api - accessing' }
 GtViewModelModelWithCodeDefinition >> children [
 	<return: #Collection of: #GtViewModelModelWithCodeDefinition>
@@ -87,6 +105,42 @@ GtViewModelModelWithCodeDefinition >> isForOne [
 	^ self viewModelModel isForOne
 ]
 
+{ #category : #'private - methods' }
+GtViewModelModelWithCodeDefinition >> methodsWithPragmaNamed: aPragmaName inBehaviorDefinition: aBehaviorDefinition do: aFoundBlock [
+	"Given a behavior definition and a pragma name find all methods that has such pragma"
+
+	aBehaviorDefinition methods do: [ :eachMethod |
+		| anAst |
+		anAst := GtPharoParser
+			parseWithErrors: eachMethod sourceCode
+			startingAt: GtPharoParser startingStateForMethod.
+
+		anAst pragmas
+			detect: [ :eachPragmaNode | eachPragmaNode selector = aPragmaName ]
+			ifFound: [ :aPragmaNode | aFoundBlock value: eachMethod ] ]
+]
+
+{ #category : #'private - methods' }
+GtViewModelModelWithCodeDefinition >> methodsWithPragmaNamed: aPragmaName inViewModelDefinition: aViewModelBehaviorDefinition do: aFoundBlock [
+	"Given a behavior definition and a pragma name find all methods that has such pragma"
+
+	aViewModelBehaviorDefinition instanceSideDefinition traits do: [ :eachTrait |
+		self
+			methodsWithPragmaNamed: aPragmaName
+			inBehaviorDefinition: eachTrait
+			do: aFoundBlock ].
+		
+	self
+		methodsWithPragmaNamed: aPragmaName
+		inBehaviorDefinition: aViewModelBehaviorDefinition instanceSideDefinition
+		do: aFoundBlock
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModelWithCodeDefinition >> modelGetterSelector [
+	^ self viewModelModel modelGetterSelector
+]
+
 { #category : #'api - accessing' }
 GtViewModelModelWithCodeDefinition >> name [
 	^ self viewModelModel name
@@ -99,9 +153,19 @@ GtViewModelModelWithCodeDefinition >> parent [
 	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self viewModelModel parent
 ]
 
+{ #category : #'api - methods' }
+GtViewModelModelWithCodeDefinition >> parentViewModelGetterMethod [		
+	^ self anyMethodWithPragmaNamed: #parentViewModelGetter
+]
+
 { #category : #'api - accessing' }
 GtViewModelModelWithCodeDefinition >> parentViewModelSelectorName [
 	^ self viewModelModel parentViewModelSelectorName
+]
+
+{ #category : #'api - methods' }
+GtViewModelModelWithCodeDefinition >> parentViewModelTesterMethod [		
+	^ self anyMethodWithPragmaNamed: #parentViewModelTester
 ]
 
 { #category : #accessing }

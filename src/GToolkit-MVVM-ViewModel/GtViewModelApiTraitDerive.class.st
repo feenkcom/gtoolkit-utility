@@ -26,7 +26,7 @@ GtViewModelApiTraitDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewM
 { #category : #'private - generation' }
 GtViewModelApiTraitDerive >> generateViewModelApiTraitFor: aViewModelModel [
 	^ GtWithViewModelTraitGenerator new
-		modelName: aViewModelModel prefix uncapitalized, aViewModelModel name capitalized, aViewModelModel suffix capitalized;
+		modelName: (aViewModelModel prefix uncapitalized, aViewModelModel name capitalized, aViewModelModel suffix capitalized) uncapitalized;
 		projectPrefix: aViewModelModel project;
 		packageName: aViewModelModel package;
 		generateBehaviorDefinition

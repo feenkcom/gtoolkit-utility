@@ -15,13 +15,13 @@ Class {
 
 { #category : #private }
 GtViewModelModel >> childViewModelsNameFor: aChildViewModel [
-	^ '{prefix}{name}{suffix}ViewModel{ending}'
+	^ ('{prefix}{name}{suffix}ViewModel{ending}'
 		format: { 
 			#prefix -> self prefix uncapitalized.
 			#name -> aChildViewModel name capitalized.
 			#suffix -> self suffix capitalized.
 			#ending -> (aChildViewModel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
-		} asDictionary
+		} asDictionary) uncapitalized
 ]
 
 { #category : #accessing }
@@ -215,6 +215,24 @@ GtViewModelModel >> modelSetterSelector [
 				at: anApiTraitName asSymbol
 				ifPresent: [ :aTrait |
 					(Pragma allNamed: #modelSetter in: aTrait)
+						ifEmpty: [ aFallbackSelector ]
+						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
+				ifAbsent: [ aFallbackSelector ] ]
+		ifNil: [ aFallbackSelector ]
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> modelTesterSelector [
+	| aFallbackSelector |
+
+	aFallbackSelector := ('has', self name capitalized, 'Model') asSymbol.
+
+	^ modelApi
+		ifNotNil: [ :anApiTraitName |
+			self class environment
+				at: anApiTraitName asSymbol
+				ifPresent: [ :aTrait |
+					(Pragma allNamed: #modelTester in: aTrait)
 						ifEmpty: [ aFallbackSelector ]
 						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
 				ifAbsent: [ aFallbackSelector ] ]

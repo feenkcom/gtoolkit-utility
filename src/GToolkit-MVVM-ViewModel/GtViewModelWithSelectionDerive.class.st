@@ -86,7 +86,10 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 
 	aMethodDefinition := self
 		selectionPropertyUnsetOthersMethodOf: aViewModelModelWithCodeDefinition.
-
+	
+	aMethodDefinition
+		ifNil: [ ^ self ].
+	
 	methodSourceCode := String streamContents: [ :aStream |
 		aStream
 			nextPutAll: aMethodDefinition sourceCode; cr.
@@ -122,6 +125,9 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 		selectionPropertyMethodOfType: #propertyTestOthers:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition.
 
+	aMethodDefinition
+		ifNil: [ ^ self ].
+		
 	methodSourceCode := String streamContents: [ :aStream |
 		| theChildrenViewModelModelsWithCodeDefinition |
 		
@@ -174,7 +180,7 @@ GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor:
 			#__parent_property_setter__ -> (self selectionPropertySetterNameOf: aViewModelModelWithCodeDefinition parent).
 			#__Status_announcement__ -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
 			#__Status_not_announcement__ -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
-			#__Property_name__ -> (self selectionPropertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel)
+			#__property_name__ -> (self selectionPropertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel)
 		};
 		generateBehaviorDefinition
 ]
@@ -251,15 +257,19 @@ GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelMo
 
 		aViewModelModelWithCodeDefinition hasParent
 			ifTrue: [
-				aStream
-					tab;
-					nextPutAll: 'self';
-					space;
-					nextPutAll: aViewModelModelWithCodeDefinition parentViewModelSelectorName;
-					space;
-					nextPutAll: (self selectionPropertySetterNameOf: aViewModelModelWithCodeDefinition parent);
-					nextPut: $.;
-					cr ].
+				| aSetterMethod |
+				
+				aSetterMethod := self selectionPropertySetterMethodOf: aViewModelModelWithCodeDefinition parent.
+				aSetterMethod ifNotNil: [
+					aStream
+						tab;
+						nextPutAll: 'self';
+						space;
+						nextPutAll: aViewModelModelWithCodeDefinition parentViewModelSelectorName;
+						space;
+						nextPutAll: aSetterMethod selector;
+						nextPut: $.;
+						cr ] ].
 
 		aStream
 			tab; nextPutAll: aArgumentName; space; nextPutAll: (self selectedNotifierNameOf: aViewModelModelWithCodeDefinition forOneModel) ].
@@ -310,6 +320,15 @@ GtViewModelWithSelectionDerive >> generateViewModelDeselectedAnnouncementFor: aV
 	aDefinition name: (self viewModelDeselectedAnnouncementNameFor: aViewModelModel).
 	aDefinition superclass name: #Announcement.
 	aDefinition category package name: aViewModelModel package.
+	aDefinition slots addSlotNamed: aViewModelModel name, 'ViewModel'.
+	aDefinition methods
+		addMethod: ('{name}ViewModel
+	^ {name}ViewModel' format: { #name -> aViewModelModel name } asDictionary)
+		protocol: 'accessing'.
+	aDefinition methods
+		addMethod: ('{name}ViewModel: anObject
+	{name}ViewModel := anObject' format: { #name -> aViewModelModel name } asDictionary)
+		protocol: 'accessing'.
 
 	^ aDefinition
 ]
@@ -326,6 +345,15 @@ GtViewModelWithSelectionDerive >> generateViewModelSelectedAnnouncementFor: aVie
 	aDefinition name: (self viewModelSelectedAnnouncementNameFor: aViewModelModel).
 	aDefinition superclass name: #Announcement.
 	aDefinition category package name: aViewModelModel package.
+	aDefinition slots addSlotNamed: aViewModelModel name, 'ViewModel'.
+	aDefinition methods
+		addMethod: ('{name}ViewModel
+	^ {name}ViewModel' format: { #name -> aViewModelModel name } asDictionary)
+		protocol: 'accessing'.
+	aDefinition methods
+		addMethod: ('{name}ViewModel: anObject
+	{name}ViewModel := anObject' format: { #name -> aViewModelModel name } asDictionary)
+		protocol: 'accessing'.
 
 	^ aDefinition
 ]
@@ -427,13 +455,20 @@ GtViewModelWithSelectionDerive >> selectionPropertySetHookMethodOf: aViewModelMo
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
 ]
 
-{ #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> selectionPropertySetterNameOf: aViewModelModelWithCodeDefinition [
+{ #category : #'private - methods' }
+GtViewModelWithSelectionDerive >> selectionPropertySetterMethodOf: aViewModelModelWithCodeDefinition [
 
 	"Both for many and for one view models can be used to select an entity"
 	^ (self
 		selectionPropertyMethodOfType: #propertySetter:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition) selector
+		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition)
+]
+
+{ #category : #'private - accessors' }
+GtViewModelWithSelectionDerive >> selectionPropertySetterNameOf: aViewModelModelWithCodeDefinition [
+
+	"Both for many and for one view models can be used to select an entity"
+	^ (self selectionPropertySetterMethodOf: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - accessors' }

@@ -28,5 +28,5 @@ TGtViewModelChildrenForManyAccessorTemplate >> create__Child_view_models__ [
 		| eachViewModel |
 		eachViewModel := __Child_view_model_class__ new.
 		eachViewModel __child_parent_view_model_setter__ self.
-		eachViewModel __child_model_setter__ eachModel ]
+		eachViewModel __child_model_setter__ eachModel ] as: Array
 ]

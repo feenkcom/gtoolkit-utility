@@ -43,10 +43,10 @@ TGtModelTraitGenerator >> generator [
 		packageName: self packageName;
 		templateTrait: self templateTrait;
 		templateMap: {
-			#__MODEL_NAME__ -> self modelName.
+			#__MODEL_NAME__ -> self modelName uncapitalized.
 			#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
-			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName).
-			#__TRAIT_NAME__ -> self traitName asSymbol.
+			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName) uncapitalized.
+			#__TRAIT_NAME__ -> self traitName capitalized asSymbol.
 			#__GENERATOR_SOURCE_CODE__ -> self storeString }
 ]
 
@@ -84,7 +84,7 @@ TGtModelTraitGenerator >> projectPrefix: anObject [
 TGtModelTraitGenerator >> storeOn: aStream [
 	aStream
 		nextPutAll: self class name; space; nextPutAll: 'new'; cr;
-		tab; nextPutAll: 'modelName'; space; print: self modelName; nextPut: $;; cr;
+		tab; nextPutAll: 'modelName:'; space; print: self modelName; nextPut: $;; cr;
 		tab; nextPutAll: 'projectPrefix:'; space; print: self projectPrefix; nextPut: $;; cr;
 		tab; nextPutAll: 'packageName:'; space; print: self packageName; nextPut: $;; cr;
 		tab; nextPutAll: 'generate'

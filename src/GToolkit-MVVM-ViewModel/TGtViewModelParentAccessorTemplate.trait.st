@@ -12,6 +12,7 @@ TGtViewModelParentAccessorTemplate >> __view_model__ [
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model."
 	<return: #__View_model_class__>
+	<parentViewModelGetter>
 
 	self
 		assert: [ __view_model__ notNil ]
@@ -37,6 +38,7 @@ TGtViewModelParentAccessorTemplate >> __view_model__: a__View_model_class__ [
 TGtViewModelParentAccessorTemplate >> has__View_model__ [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
+	<parentViewModelTester>
 
 	^ __view_model__ notNil
 ]

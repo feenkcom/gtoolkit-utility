@@ -11,7 +11,7 @@ Class {
 { #category : #'api - __property__' }
 TGtViewModelPropertyForChildTemplate >> __set____Object__ [
 	"Just __set__ a __object__ without changing children"
-	<propertySetter: #__Property_name__>
+	<propertySetter: #__property_name__>
 
 	self __parent_object_getter__ __parent_property_setter__ self
 ]
@@ -27,14 +27,14 @@ TGtViewModelPropertyForChildTemplate >> __set____Object__WithoutOtherEntities [
 { #category : #'api - __property__' }
 TGtViewModelPropertyForChildTemplate >> __unset__OtherEntities [
 	"__Unset__ any __status__ child"
-	<propertyUnsetOthers: #__Property_name__>
+	<propertyUnsetOthers: #__property_name__>
 ]
 
 { #category : #'api - __property__' }
 TGtViewModelPropertyForChildTemplate >> hasOther__Status__Entities [
 	"Return true if there are other __status__ entities that are the children"
 	<return: #Boolean>
-	<propertyTestOthers: #__Property_name__>
+	<propertyTestOthers: #__property_name__>
 
 	^ false
 ]
@@ -58,14 +58,14 @@ TGtViewModelPropertyForChildTemplate >> is__Status____Object__ [
 
 { #category : #'api - __property__' }
 TGtViewModelPropertyForChildTemplate >> notify__Object____Status__ [
-	<propertySetNotifier: #__Property_name__>
+	<propertySetNotifier: #__property_name__>
 
-	self announce: __Status_announcement__ new
+	self announce: (__Status_announcement__ new __object__ViewModel: self)
 ]
 
 { #category : #'api - __property__' }
 TGtViewModelPropertyForChildTemplate >> notify__Object____Status_not__ [
-	<propertyUnsetNotifier: #__Property_name__>
+	<propertyUnsetNotifier: #__property_name__>
 
-	self announce: __Status_not_announcement__ new
+	self announce: (__Status_not_announcement__ new __object__ViewModel: self)
 ]

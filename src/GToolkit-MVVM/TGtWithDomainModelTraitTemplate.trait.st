@@ -47,6 +47,7 @@ TGtWithDomainModelTraitTemplate >> __MODEL_NAME__Model: a__MODEL_NAME_CAPITALIZE
 TGtWithDomainModelTraitTemplate >> has__MODEL_NAME_CAPITALIZED__ [
 	"Return a true if __MODEL_NAME__ model is assigned to the receiver, false otherwise"
 	<return: #Boolean>
+	<modelTester>
 
 	^ __MODEL_NAME__Model notNil
 ]
