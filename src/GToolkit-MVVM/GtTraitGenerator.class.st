@@ -87,8 +87,6 @@ GtTraitGenerator >> generateBehaviorDefinition [
 		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) asSymbol.
 		generatedTrait slots addSlotNamed: eachSlotName ].
 
-	"generatedTrait comment: (GtGeneratorUtilities formatString: self templateTrait comment mapping: templateMap)."
-
 	generatedTrait withMethodsFromTrait: self templateTrait.
 	generatedTrait methods do: [ :eachMethodDefinition |
 		| methodSource methodProtocol |
@@ -98,6 +96,14 @@ GtTraitGenerator >> generateBehaviorDefinition [
 		
 		eachMethodDefinition protocol: methodProtocol.
 		eachMethodDefinition sourceCode: methodSource ].
+	
+	self templateTrait hasComment
+		ifTrue: [
+			| aComment |
+			aComment := (GtGeneratorUtilities
+				formatString: self templateTrait comment
+				mapping: aTemplateMap).	
+		generatedTrait comment content: aComment ].
 	
 	^ generatedTrait
 ]

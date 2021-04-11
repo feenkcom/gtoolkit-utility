@@ -80,7 +80,7 @@ GtClassGenerator >> generate [
 
 { #category : #generation }
 GtClassGenerator >> generateBehaviorDefinition [
-	| aTemplateMap generatedClass aComment aClassName |
+	| aTemplateMap generatedClass aClassName |
 	<return: #RGBehavior>
 	
 	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
@@ -114,10 +114,14 @@ GtClassGenerator >> generateBehaviorDefinition [
 		
 		eachMethodDefinition protocol: methodProtocol.
 		eachMethodDefinition sourceCode: methodSource ].
-
-	"aComment := RGComment parent: generatedClass.
-	aComment content: (GtGeneratorUtilities formatString: self templateClass comment mapping: templateMap).	
-	generatedClass comment: aComment."
+	
+	self templateClass hasComment
+		ifTrue: [
+			| aComment |
+			aComment := (GtGeneratorUtilities
+				formatString: self templateClass comment
+				mapping: aTemplateMap).	
+		generatedClass comment content: aComment ].
 	
 	^ generatedClass
 ]
