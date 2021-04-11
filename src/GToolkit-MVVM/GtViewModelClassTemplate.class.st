@@ -20,7 +20,13 @@ GtViewModelClassTemplate >> unsubscribe: anObject [
 ]
 
 { #category : #'api - announcer' }
-GtViewModelClassTemplate >> when: anAnnouncementClass send: aSelector to: anObject [
+GtViewModelClassTemplate >> when: anAnnouncementClass do: aBlock [
 	(announcer ifNil: [ announcer := Announcer new ])
+		when: anAnnouncementClass do: aBlock
+]
+
+{ #category : #'api - announcer' }
+GtViewModelClassTemplate >> when: anAnnouncementClass send: aSelector to: anObject [
+	(announcer ifNil: [ announcer := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject
 ]

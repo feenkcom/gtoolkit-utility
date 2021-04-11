@@ -39,24 +39,26 @@ GtTraitGenerator >> environment: anEnvironment [
 
 { #category : #generation }
 GtTraitGenerator >> generate [
-	| generatedTrait templateSlots |
+	| aTemplateMap generatedTrait templateSlots |
 	<return: #Trait>
 	
+	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
+	
 	templateSlots := self templateTrait slots collect: [ :eachSlot |
-		eachSlot copy name: (GtGeneratorUtilities formatString: eachSlot name mapping: templateMap) ].
+		eachSlot copy name: (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) ].
 	
 	generatedTrait := Trait named: self traitName
 		uses: {}
 		slots: templateSlots
 		package: self packageName.
 		
-	generatedTrait comment: (GtGeneratorUtilities formatString: self templateTrait comment mapping: templateMap).
+	generatedTrait comment: (GtGeneratorUtilities formatString: self templateTrait comment mapping: aTemplateMap).
 
 	self templateTrait localMethods do: [ :eachTemplateMethod |
 		| methodSource methodProtocol |
 		
-		methodSource := GtGeneratorUtilities formatString: eachTemplateMethod sourceCode mapping: templateMap.
-		methodProtocol := GtGeneratorUtilities formatString: eachTemplateMethod protocol mapping: templateMap.
+		methodSource := GtGeneratorUtilities formatString: eachTemplateMethod sourceCode mapping: aTemplateMap.
+		methodProtocol := GtGeneratorUtilities formatString: eachTemplateMethod protocol mapping: aTemplateMap.
 		generatedTrait compile: methodSource classified: methodProtocol ].
 	
 	^ generatedTrait
@@ -64,8 +66,10 @@ GtTraitGenerator >> generate [
 
 { #category : #generation }
 GtTraitGenerator >> generateBehaviorDefinition [
-	| generatedTrait |
+	| aTemplateMap generatedTrait |
 	<return: #Trait>
+	
+	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
 	
 	generatedTrait := GtBehaviorDefinition fromBehavior: self templateTrait.
 	generatedTrait name: self traitName.
@@ -80,7 +84,7 @@ GtTraitGenerator >> generateBehaviorDefinition [
 	generatedTrait slots removeAllSlots.
 	self templateTrait slots do: [ :eachSlot |
 		| eachSlotName |
-		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: templateMap) asSymbol.
+		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) asSymbol.
 		generatedTrait slots addSlotNamed: eachSlotName ].
 
 	"generatedTrait comment: (GtGeneratorUtilities formatString: self templateTrait comment mapping: templateMap)."
@@ -89,8 +93,8 @@ GtTraitGenerator >> generateBehaviorDefinition [
 	generatedTrait methods do: [ :eachMethodDefinition |
 		| methodSource methodProtocol |
 		
-		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: templateMap.
-		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: templateMap.
+		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: aTemplateMap.
+		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: aTemplateMap.
 		
 		eachMethodDefinition protocol: methodProtocol.
 		eachMethodDefinition sourceCode: methodSource ].

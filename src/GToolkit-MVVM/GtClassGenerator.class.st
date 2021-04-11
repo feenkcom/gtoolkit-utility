@@ -51,11 +51,13 @@ GtClassGenerator >> environment: anEnvironment [
 
 { #category : #generation }
 GtClassGenerator >> generate [
-	| generatedClass templateSlots |
+	| aTemplateMap generatedClass templateSlots |
 	<return: #Class>
 	
+	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
+	
 	templateSlots := self templateClass slots collect: [ :eachSlot |
-		eachSlot copy name: (GtGeneratorUtilities formatString: eachSlot name mapping: templateMap) ].
+		eachSlot copy name: (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) ].
 	
 	generatedClass := Object
 		subclass: self className
@@ -64,13 +66,13 @@ GtClassGenerator >> generate [
 		classVariables: ''
 		package: self packageName.
 
-	generatedClass comment: (GtGeneratorUtilities formatString: self templateClass comment mapping: templateMap).
+	generatedClass comment: (GtGeneratorUtilities formatString: self templateClass comment mapping: aTemplateMap).
 
 	self templateClass localMethods do: [ :eachTemplateMethod |
 		| methodSource methodProtocol |
 		
-		methodSource := GtGeneratorUtilities formatString: eachTemplateMethod sourceCode mapping: templateMap.
-		methodProtocol := GtGeneratorUtilities formatString: eachTemplateMethod protocol mapping: templateMap.
+		methodSource := GtGeneratorUtilities formatString: eachTemplateMethod sourceCode mapping: aTemplateMap.
+		methodProtocol := GtGeneratorUtilities formatString: eachTemplateMethod protocol mapping: aTemplateMap.
 		generatedClass compile: methodSource classified: methodProtocol ].
 	
 	^ generatedClass
@@ -78,8 +80,10 @@ GtClassGenerator >> generate [
 
 { #category : #generation }
 GtClassGenerator >> generateBehaviorDefinition [
-	| generatedClass aComment aClassName |
+	| aTemplateMap generatedClass aComment aClassName |
 	<return: #RGBehavior>
+	
+	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
 
 	aClassName := self className asSymbol.
 
@@ -98,15 +102,15 @@ GtClassGenerator >> generateBehaviorDefinition [
 	generatedClass instanceSideDefinition slots removeAllSlots.
 	self templateClass slots do: [ :eachSlot |
 		| eachSlotName |
-		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: templateMap) asSymbol.
+		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) asSymbol.
 		generatedClass instanceSideDefinition slots addSlotNamed: eachSlotName ].
 	
 	generatedClass withMethodsFromClass: self templateClass.
 	generatedClass instanceSideDefinition methods do: [ :eachMethodDefinition |
 		| methodSource methodProtocol |
 		
-		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: templateMap.
-		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: templateMap.
+		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: aTemplateMap.
+		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: aTemplateMap.
 		
 		eachMethodDefinition protocol: methodProtocol.
 		eachMethodDefinition sourceCode: methodSource ].
