@@ -18,6 +18,13 @@ GtViewModelSnippet class >> typeName [
 	^ 'viewmodel'
 ]
 
+{ #category : #accessing }
+GtViewModelSnippet class >> xdocSnippetMappingFor: aNeoJSONMapper [
+	aNeoJSONMapper 
+		for: self do: [ :mapping | 
+			(mapping mapAccessor: #sourceCode to: #source_code) ]
+]
+
 { #category : #visitor }
 GtViewModelSnippet >> accept: aVisitor [
 	^ aVisitor visitViewModdelSnippet: self
