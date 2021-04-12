@@ -153,6 +153,8 @@ GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor:
 		className: 'VirtualClass';
 		packageName: 'VirualPackage';
 		templateMap: { 
+			#__View_model_class__ -> aViewModelModelWithCodeDefinition viewModelModel viewModelClassName.
+			#__Parent_view_model_class__ -> aViewModelModelWithCodeDefinition viewModelModel parent viewModelClassName.
 			#__property__ -> 'selection'.
 			#__Status__ -> 'Selected'.
 			#__status__ -> 'selected'.
@@ -275,6 +277,7 @@ GtViewModelWithSelectionDerive >> generateViewModelDeselectedAnnouncementFor: aV
 	aDefinition name: (self viewModelDeselectedAnnouncementNameFor: aViewModelModel).
 	aDefinition superclass name: #Announcement.
 	aDefinition category package name: aViewModelModel package.
+	aDefinition category tag name: aViewModelModel fullTagForAnnouncements.
 	aDefinition slots addSlotNamed: aViewModelModel name, 'ViewModel'.
 	aDefinition methods
 		addMethod: ('{name}ViewModel
@@ -300,6 +303,7 @@ GtViewModelWithSelectionDerive >> generateViewModelSelectedAnnouncementFor: aVie
 	aDefinition name: (self viewModelSelectedAnnouncementNameFor: aViewModelModel).
 	aDefinition superclass name: #Announcement.
 	aDefinition category package name: aViewModelModel package.
+	aDefinition category tag name: aViewModelModel fullTagForAnnouncements.
 	aDefinition slots addSlotNamed: aViewModelModel name, 'ViewModel'.
 	aDefinition methods
 		addMethod: ('{name}ViewModel
@@ -333,6 +337,7 @@ GtViewModelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewMo
 		propertyComparator: #=;
 		projectPrefix: (aViewModelModel project, aViewModelModel prefix capitalized);
 		packageName: aViewModelModel package;
+		tagName: aViewModelModel fullTagForTraits;
 		generateBehaviorDefinition
 ]
 

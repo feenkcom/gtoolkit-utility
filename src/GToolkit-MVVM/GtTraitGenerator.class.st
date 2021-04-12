@@ -22,7 +22,8 @@ Class {
 		'templateTrait',
 		'templateMap',
 		'traitName',
-		'packageName'
+		'packageName',
+		'tagName'
 	],
 	#category : #'GToolkit-MVVM-Support'
 }
@@ -39,7 +40,7 @@ GtTraitGenerator >> environment: anEnvironment [
 
 { #category : #generation }
 GtTraitGenerator >> generate [
-	| aTemplateMap generatedTrait templateSlots |
+	| aTemplateMap aPackageName generatedTrait templateSlots |
 	<return: #Trait>
 	
 	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
@@ -47,10 +48,14 @@ GtTraitGenerator >> generate [
 	templateSlots := self templateTrait slots collect: [ :eachSlot |
 		eachSlot copy name: (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) ].
 	
+	aPackageName := self packageName, (self tagName
+		ifEmpty: [ '' ]
+		ifNotEmpty: [ :aTagName | '-', aTagName ]).
+	
 	generatedTrait := Trait named: self traitName
 		uses: {}
 		slots: templateSlots
-		package: self packageName.
+		package: aPackageName.
 		
 	generatedTrait comment: (GtGeneratorUtilities formatString: self templateTrait comment mapping: aTemplateMap).
 
@@ -74,7 +79,7 @@ GtTraitGenerator >> generateBehaviorDefinition [
 	generatedTrait := GtBehaviorDefinition fromBehavior: self templateTrait.
 	generatedTrait name: self traitName.
 	generatedTrait category package name: self packageName.
-	generatedTrait category tag name: ''.
+	generatedTrait category tag name: self tagName.
 	
 	self environment
 		ifNotNil: [ :anEnvironment |
@@ -108,6 +113,13 @@ GtTraitGenerator >> generateBehaviorDefinition [
 	^ generatedTrait
 ]
 
+{ #category : #initialization }
+GtTraitGenerator >> initialize [
+	super initialize.
+	
+	tagName := ''
+]
+
 { #category : #accessing }
 GtTraitGenerator >> packageName [
 	^ packageName
@@ -116,6 +128,16 @@ GtTraitGenerator >> packageName [
 { #category : #accessing }
 GtTraitGenerator >> packageName: anObject [
 	packageName := anObject
+]
+
+{ #category : #accessing }
+GtTraitGenerator >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+GtTraitGenerator >> tagName: anObject [
+	tagName := anObject ifNil: [ '' ]
 ]
 
 { #category : #accessing }

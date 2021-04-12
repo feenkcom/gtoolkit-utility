@@ -34,6 +34,28 @@ GtViewModelModel >> definition: anObject [
 	definition := anObject
 ]
 
+{ #category : #'api - package tags' }
+GtViewModelModel >> fullTagForAnnouncements [
+	^ self fullTagWith: 'Events'
+]
+
+{ #category : #'api - package tags' }
+GtViewModelModel >> fullTagForTraits [
+	^ self fullTagWith: 'Support'
+]
+
+{ #category : #'api - package tags' }
+GtViewModelModel >> fullTagForViewModel [
+	^ self fullTagWith: 'View Models'
+]
+
+{ #category : #'api - package tags' }
+GtViewModelModel >> fullTagWith: aSubTag [
+	^ self tag
+		ifEmpty: [ aSubTag ]
+		ifNotEmpty: [ :aTag | aTag , ' - ', aSubTag ]
+]
+
 { #category : #'api - generation' }
 GtViewModelModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 	^ self subclassResponsibility
@@ -69,9 +91,10 @@ GtViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefin
 		traitName: #Virtial;
 		packageName: 'MyPackage';
 		templateMap: { 
+			#__View_model_class__ -> self viewModelClassName.
 			#__view_model__ -> self parentViewModelSelectorName uncapitalized.
 			#__View_model__ -> self parentViewModelSelectorName capitalized.
-			#__View_model_class__ -> self parent viewModelClassName capitalized
+			#__Parent_view_model_class__ -> self parent viewModelClassName capitalized
 		};
 		generateBehaviorDefinition.
 
@@ -143,7 +166,10 @@ GtViewModelModel >> mergeBehaviorDefinition: aBehaviorDefinition into: aViewMode
 	aBehaviorDefinition methods do: [ :eachMethod |
 		aViewModelDefinition instanceSideDefinition methods
 			addMethod: eachMethod sourceCode
-			protocol: eachMethod protocol ]
+			protocol: eachMethod protocol ].
+		
+	aViewModelDefinition comment
+		content: aViewModelDefinition comment content, String cr, aBehaviorDefinition comment content
 ]
 
 { #category : #accessing }
@@ -371,6 +397,11 @@ GtViewModelModel >> settings: anObject [
 { #category : #'api - accessing' }
 GtViewModelModel >> suffix [
 	^ settings at: #suffix ifAbsent: [ '' ]
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> tag [
+	^ settings at: #tag ifAbsent: [ '' ]
 ]
 
 { #category : #'api - accessing' }

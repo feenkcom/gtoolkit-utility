@@ -1,3 +1,7 @@
+"
+!! Accessing child view models
+A view model built for a domain model that represents a collection of some entities creates a view model (${class:__Child_view_model_class__}$) for each domain entity. To do so it accesses the children of the ${method:__View_model_class_name__>>#__model__}$ by sending it ==__children__== message. Users can access the child view models via ${method:__View_model_class_name__>>#__child_view_models__}$. In addition to the parent -> child view model navigation, each child view model knows its parent view model via ${method:__Child_view_model_class__>>#__child_parent_view_model_setter__}$
+"
 Class {
 	#name : #TGtViewModelChildrenForManyAccessorTemplate,
 	#superclass : #Object,

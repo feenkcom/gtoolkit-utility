@@ -36,6 +36,7 @@ GtViewModelForOneModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 		viewModelName: self viewModelClassName;
 		projectPrefix: self project;
 		packageName: self package;
+		tagName: self fullTagForViewModel;
 		generateBehaviorDefinition.
 	
 	self generateDomainModelAccessorsFor: aDefinition.
@@ -59,6 +60,7 @@ GtViewModelForOneModel >> generateChildViewModelsAccessorFor: aViewModelDefiniti
 			className: #VirtialClass;
 			packageName: 'MyPackage';
 			templateMap: { 
+				#__Parent_view_model_class__ -> self viewModelClassName.
 				#__child_view_models__ -> (self childViewModelsNameFor: eachChildModel) uncapitalized.
 				#__Child_view_models__ -> (self childViewModelsNameFor: eachChildModel) capitalized.
 				#__model__ -> self modelGetterSelector uncapitalized.

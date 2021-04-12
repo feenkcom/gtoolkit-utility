@@ -5,6 +5,7 @@ Trait {
 		'modelName',
 		'projectPrefix',
 		'packageName',
+		'tagName',
 		'traits'
 	],
 	#category : #'GToolkit-MVVM-Support'
@@ -49,6 +50,7 @@ TGtModelClassGenerator >> generator [
 		environment: self environment;
 		className: self className;
 		packageName: self packageName;
+		tagName: self tagName;
 		templateClass: self templateClass;
 		traits: self traits;
 		templateMap: {
@@ -85,6 +87,16 @@ TGtModelClassGenerator >> projectPrefix [
 { #category : #accessing }
 TGtModelClassGenerator >> projectPrefix: anObject [
 	projectPrefix := anObject
+]
+
+{ #category : #accessing }
+TGtModelClassGenerator >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+TGtModelClassGenerator >> tagName: anObject [
+	tagName := anObject
 ]
 
 { #category : #accessing }
