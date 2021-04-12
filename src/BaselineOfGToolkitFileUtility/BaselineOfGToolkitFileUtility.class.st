@@ -10,9 +10,9 @@ BaselineOfGToolkitFileUtility >> baseline: spec [
 	spec for: #'common' do: [
 		spec 
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.31/src' ];
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.32/src' ];
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.31/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.32/src' ].
 		spec 
 			package: 'GToolkit-Utility-URL';
 			package: 'GToolkit-Utility-System' with: [
