@@ -36,6 +36,11 @@ TGtViewModelProgramNodeVisitor >> visitGlobalPropertyValue: aGlobalPropertyValue
 ]
 
 { #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitHierarchies: aHierarchies [
+	^ self visitProgram: aHierarchies
+]
+
+{ #category : #generated }
 TGtViewModelProgramNodeVisitor >> visitHierarchy: aHierarchy [
 	^ self visitProgram: aHierarchy
 ]
