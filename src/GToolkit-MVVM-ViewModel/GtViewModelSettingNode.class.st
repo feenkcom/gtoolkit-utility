@@ -25,8 +25,8 @@ GtViewModelSettingNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #accessing }
-GtViewModelSettingNode >> literalString [
-	^ self value source
+GtViewModelSettingNode >> literalValue [
+	^ self value literalValue
 ]
 
 { #category : #generated }
