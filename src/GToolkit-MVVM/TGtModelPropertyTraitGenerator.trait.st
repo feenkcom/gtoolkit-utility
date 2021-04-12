@@ -8,7 +8,8 @@ Trait {
 		'propertyType',
 		'propertyComparator',
 		'projectPrefix',
-		'packageName'
+		'packageName',
+		'tagName'
 	],
 	#category : #'GToolkit-MVVM-Support'
 }
@@ -45,6 +46,7 @@ TGtModelPropertyTraitGenerator >> generator [
 		environment: self environment;
 		traitName: self traitName;
 		packageName: self packageName;
+		tagName: self tagName;
 		templateTrait: self templateTrait;
 		templateMap: {
 			#__PROPERTY_NAME__ -> self propertyName asSymbol.
@@ -144,7 +146,18 @@ TGtModelPropertyTraitGenerator >> storeOn: aStream [
 		tab; nextPutAll: 'propertyComparator:'; space; print: self propertyComparator; nextPut: $;; cr;
 		tab; nextPutAll: 'projectPrefix:'; space; print: self projectPrefix; nextPut: $;; cr;
 		tab; nextPutAll: 'packageName:'; space; print: self packageName; nextPut: $;; cr;
+		tab; nextPutAll: 'tagName:'; space; print: (self tagName ifNil: [ '' ]); nextPut: $;; cr;
 		tab; nextPutAll: 'generate'
+]
+
+{ #category : #accessing }
+TGtModelPropertyTraitGenerator >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+TGtModelPropertyTraitGenerator >> tagName: anObject [
+	tagName := anObject
 ]
 
 { #category : #accessing }

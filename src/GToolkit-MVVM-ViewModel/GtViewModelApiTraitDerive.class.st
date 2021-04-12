@@ -29,5 +29,6 @@ GtViewModelApiTraitDerive >> generateViewModelApiTraitFor: aViewModelModel [
 		modelName: (aViewModelModel prefix uncapitalized, aViewModelModel name capitalized, aViewModelModel suffix capitalized) uncapitalized;
 		projectPrefix: aViewModelModel project;
 		packageName: aViewModelModel package;
+		tagName: aViewModelModel fullTagForTraits;
 		generateBehaviorDefinition
 ]

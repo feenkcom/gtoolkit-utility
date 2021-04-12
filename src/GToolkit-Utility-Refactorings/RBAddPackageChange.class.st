@@ -10,6 +10,9 @@ RBAddPackageChange >> asUndoOperation [
 ]
 
 { #category : #private }
-RBAddPackageChange >> primitiveExecute [
-	RPackageOrganizer default createPackageNamed: packageName
+RBAddPackageChange >> primitiveExecute [	
+	(RPackage organizer includesPackageNamed: packageName)
+		ifTrue: [ ^ self ].
+
+	RPackage organizer createPackageNamed: packageName
 ]

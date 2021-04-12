@@ -17,6 +17,7 @@ GtViewModelWithPropertyDirective >> generatePropertyChangedAnnouncementFor: aVie
 	aDefinition name: (self propertyChangedAnnouncementClassNameFor: aViewModelModel).
 	aDefinition superclass name: #Announcement.
 	aDefinition category package name: aViewModelModel package.
+	aDefinition category tag name: aViewModelModel fullTagForAnnouncements.
 	
 	^ aDefinition
 ]

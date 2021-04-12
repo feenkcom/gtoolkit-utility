@@ -4,7 +4,8 @@ Trait {
 		'environment',
 		'modelName',
 		'projectPrefix',
-		'packageName'
+		'packageName',
+		'tagName'
 	],
 	#category : #'GToolkit-MVVM-Support'
 }
@@ -41,6 +42,7 @@ TGtModelTraitGenerator >> generator [
 		environment: self environment;
 		traitName: self traitName;
 		packageName: self packageName;
+		tagName: self tagName;
 		templateTrait: self templateTrait;
 		templateMap: {
 			#__MODEL_NAME__ -> self modelName uncapitalized.
@@ -87,7 +89,18 @@ TGtModelTraitGenerator >> storeOn: aStream [
 		tab; nextPutAll: 'modelName:'; space; print: self modelName; nextPut: $;; cr;
 		tab; nextPutAll: 'projectPrefix:'; space; print: self projectPrefix; nextPut: $;; cr;
 		tab; nextPutAll: 'packageName:'; space; print: self packageName; nextPut: $;; cr;
+		tab; nextPutAll: 'tagName:'; space; print: (self tagName ifNil: [ '' ]); nextPut: $;; cr;
 		tab; nextPutAll: 'generate'
+]
+
+{ #category : #accessing }
+TGtModelTraitGenerator >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+TGtModelTraitGenerator >> tagName: anObject [
+	tagName := anObject
 ]
 
 { #category : #accessing }

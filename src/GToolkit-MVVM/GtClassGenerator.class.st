@@ -24,7 +24,8 @@ Class {
 		'traits',
 		'templateMap',
 		'className',
-		'packageName'
+		'packageName',
+		'tagName'
 	],
 	#category : #'GToolkit-MVVM-Support'
 }
@@ -51,7 +52,7 @@ GtClassGenerator >> environment: anEnvironment [
 
 { #category : #generation }
 GtClassGenerator >> generate [
-	| aTemplateMap generatedClass templateSlots |
+	| aTemplateMap aPackageName generatedClass templateSlots |
 	<return: #Class>
 	
 	aTemplateMap := templateMap, { #__timestamp__ -> DateAndTime now printString printString }.
@@ -59,12 +60,16 @@ GtClassGenerator >> generate [
 	templateSlots := self templateClass slots collect: [ :eachSlot |
 		eachSlot copy name: (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) ].
 	
+	aPackageName := self packageName, (self tagName
+		ifEmpty: [ '' ]
+		ifNotEmpty: [ :aTagName | '-', aTagName ]).
+	
 	generatedClass := Object
 		subclass: self className
 		uses: self traits
 		slots: templateSlots
 		classVariables: ''
-		package: self packageName.
+		package: aPackageName.
 
 	generatedClass comment: (GtGeneratorUtilities formatString: self templateClass comment mapping: aTemplateMap).
 
@@ -90,7 +95,7 @@ GtClassGenerator >> generateBehaviorDefinition [
 	generatedClass := GtBehaviorDefinition fromBehavior: self templateClass.
 	generatedClass name: aClassName.	
 	generatedClass instanceSideDefinition category package name: self packageName.
-	generatedClass instanceSideDefinition category tag name: ''.
+	generatedClass instanceSideDefinition category tag name: self tagName.
 	
 	self environment
 		ifNotNil: [ :anEnvironment |
@@ -130,7 +135,8 @@ GtClassGenerator >> generateBehaviorDefinition [
 GtClassGenerator >> initialize [
 	super initialize.
 	
-	traits := #()
+	traits := #().
+	tagName := ''
 ]
 
 { #category : #accessing }
@@ -141,6 +147,16 @@ GtClassGenerator >> packageName [
 { #category : #accessing }
 GtClassGenerator >> packageName: anObject [
 	packageName := anObject
+]
+
+{ #category : #accessing }
+GtClassGenerator >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+GtClassGenerator >> tagName: anObject [
+	tagName := anObject ifNil: [ '' ]
 ]
 
 { #category : #accessing }

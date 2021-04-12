@@ -1,3 +1,8 @@
+"
+!! Accessing a view model for ==__children__== domain model
+${class:__Parent_view_model_class__}$ is a view model for a ==__model__== domain model which in turn contains ==__children__== domain model. To accomodate that child domain model, a corresponding ${class:__Child_view_model_class__}$ is created and assigned as the child view model of ${class:__Parent_view_model_class__}$.
+That child view model is instantiated lazily by ${method:__Parent_view_model_class__>>#create__Child_view_models__}$ and can be accessed with the help of ${method:__Parent_view_model_class__>>#__child_view_models__}$.
+"
 Class {
 	#name : #TGtViewModelChildrenForOneAccessorTemplate,
 	#superclass : #Object,
