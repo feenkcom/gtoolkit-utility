@@ -7,7 +7,7 @@ Class {
 { #category : #'generated-initialization' }
 GtViewModelScanner class >> initializeKeywordMap [
 	keywordMap := Dictionary new.
-	#(#(3 'and' 12) #(3 'items' 15))
+	#(#(3 'and' 13) #(3 'items' 16))
 		do: [ :each | 
 			(keywordMap at: each first ifAbsentPut: [ Dictionary new ])
 				at: (each at: 2)
@@ -17,17 +17,17 @@ GtViewModelScanner class >> initializeKeywordMap [
 
 { #category : #generated }
 GtViewModelScanner >> andId [
-	^ 12
+	^ 13
 ]
 
 { #category : #generated }
 GtViewModelScanner >> emptySymbolTokenId [
-	^ 42
+	^ 44
 ]
 
 { #category : #generated }
 GtViewModelScanner >> errorTokenId [
-	^ 43
+	^ 45
 ]
 
 { #category : #generated }
@@ -124,6 +124,18 @@ GtViewModelScanner >> scan5 [
 
 { #category : #generated }
 GtViewModelScanner >> scan6 [
+	[ self step.
+	currentCharacter == $'
+		ifTrue: [ self recordMatch: #(12).
+			self step.
+			currentCharacter == $'
+				ifTrue: [ ^ self scan6 ].
+			^ self reportLastMatch ].
+	true ] whileTrue
+]
+
+{ #category : #generated }
+GtViewModelScanner >> scan7 [
 	self step.
 	currentCharacter == $>
 		ifTrue: [ ^ self recordAndReportMatch: #(4) ].
@@ -139,6 +151,8 @@ GtViewModelScanner >> scanForToken [
 		ifTrue: [ self step.
 			currentCharacter == $#
 				ifTrue: [ ^ self scan1 ].
+			currentCharacter == $'
+				ifTrue: [ ^ self scan6 ].
 			currentCharacter == $(
 				ifTrue: [ ^ self recordAndReportMatch: #(7) ].
 			currentCharacter == $)
@@ -150,13 +164,13 @@ GtViewModelScanner >> scanForToken [
 			currentCharacter == $:
 				ifTrue: [ ^ self recordAndReportMatch: #(9) ].
 			currentCharacter == $<
-				ifTrue: [ ^ self recordAndReportMatch: #(13) ].
-			currentCharacter == $=
-				ifTrue: [ ^ self scan6 ].
-			currentCharacter == $>
 				ifTrue: [ ^ self recordAndReportMatch: #(14) ].
+			currentCharacter == $=
+				ifTrue: [ ^ self scan7 ].
+			currentCharacter == $>
+				ifTrue: [ ^ self recordAndReportMatch: #(15) ].
 			currentCharacter == $@
-				ifTrue: [ ^ self recordAndReportMatch: #(16) ].
+				ifTrue: [ ^ self recordAndReportMatch: #(17) ].
 			currentCharacter == ${
 				ifTrue: [ ^ self recordAndReportMatch: #(1) ].
 			currentCharacter == $}
@@ -177,6 +191,8 @@ GtViewModelScanner >> scanForTokenX1 [
 	self step.
 	currentCharacter == $#
 		ifTrue: [ ^ self scan1 ].
+	currentCharacter == $'
+		ifTrue: [ ^ self scan6 ].
 	currentCharacter == $(
 		ifTrue: [ ^ self recordAndReportMatch: #(7) ].
 	currentCharacter == $)
@@ -186,7 +202,7 @@ GtViewModelScanner >> scanForTokenX1 [
 	currentCharacter == $.
 		ifTrue: [ ^ self recordAndReportMatch: #(8) ].
 	currentCharacter == $=
-		ifTrue: [ ^ self scan6 ].
+		ifTrue: [ ^ self scan7 ].
 	(currentCharacter isSeparator
 		or: [ currentCharacter == Character null
 				or: [ currentCharacter == Character pageUp ] ])

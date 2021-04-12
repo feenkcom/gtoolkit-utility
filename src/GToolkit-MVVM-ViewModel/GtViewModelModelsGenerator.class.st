@@ -186,11 +186,11 @@ GtViewModelModelsGenerator >> visitSetting: aSetting [
 	aSetting nameString = 'derive'
 		ifTrue: [
 			GtViewModelDerive
-				deriveNamed: aSetting literalString
+				deriveNamed: aSetting literalValue
 				ifFound: [ :aDeriveClass | derives add: aDeriveClass new ].
 			^ self ].
 	
 	settings
 		at: aSetting nameString asSymbol
-		put: aSetting literalString
+		put: aSetting literalValue
 ]

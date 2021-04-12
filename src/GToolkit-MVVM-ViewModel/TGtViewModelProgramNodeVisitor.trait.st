@@ -116,6 +116,11 @@ TGtViewModelProgramNodeVisitor >> visitSimpleLevel: aSimpleLevel [
 ]
 
 { #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitStringPropertyValue: aStringPropertyValue [
+	^ self visitPropertyValue: aStringPropertyValue
+]
+
+{ #category : #generated }
 TGtViewModelProgramNodeVisitor >> visitSymbolPropertyValue: aSymbolPropertyValue [
 	^ self visitPropertyValue: aSymbolPropertyValue
 ]
