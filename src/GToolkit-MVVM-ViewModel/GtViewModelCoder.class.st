@@ -54,9 +54,9 @@ GtViewModelCoder >> forSource: aString [
 GtViewModelCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 	
-	addOns addStyler: GtNavigationViewModelsStyler new.
-	addOns addStyler: GtNavigationViewModelsBrowseStyler new.
-	addOns addStyler: GtNavigationViewModelsExpanderStyler new.
+	addOns addStyler: GtViewModelStyler new.
+	addOns addStyler: GtViewModelBrowseStyler new.
+	addOns addStyler: GtViewModelExpanderStyler new.
 
 	addOns
 		addMainAction: 'Inspect' translated
