@@ -43,6 +43,20 @@ GtViewModelModelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName [
 	KeyNotFound signalFor: aPragmaName in: self
 ]
 
+{ #category : #'private - methods' }
+GtViewModelModelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName andValue: aPragmaValue [
+	"Find any method that is marked with a given pragma (in traits, instance side, etc.) and its value"
+	<return: #GtPharoMethodDefinition>
+	
+	self
+		methodsWithPragmaNamed: aPragmaName
+		andValue: aPragmaValue
+		inViewModelDefinition: self definition
+		do: [ :aMethodDefinition | ^ aMethodDefinition ].
+		
+	KeyNotFound signalFor: aPragmaName in: self
+]
+
 { #category : #'api - accessing' }
 GtViewModelModelWithCodeDefinition >> childViewModelsName [
 	^ self viewModelModel childViewModelsName
@@ -84,8 +98,8 @@ GtViewModelModelWithCodeDefinition >> forOneModel [
 ]
 
 { #category : #testing }
-GtViewModelModelWithCodeDefinition >> hasParent [
-	^ self viewModelModel hasParent
+GtViewModelModelWithCodeDefinition >> hasParents [
+	^ self viewModelModel hasParents
 ]
 
 { #category : #initialization }
@@ -103,6 +117,42 @@ GtViewModelModelWithCodeDefinition >> isForMany [
 { #category : #testing }
 GtViewModelModelWithCodeDefinition >> isForOne [
 	^ self viewModelModel isForOne
+]
+
+{ #category : #'private - methods' }
+GtViewModelModelWithCodeDefinition >> methodsWithPragmaNamed: aPragmaName andValue: aPragmaValue inBehaviorDefinition: aBehaviorDefinition do: aFoundBlock [
+	"Given a behavior definition and a pragma name find all methods that has such pragma"
+
+	aBehaviorDefinition methods do: [ :eachMethod |
+		| anAst |
+		anAst := GtPharoParser
+			parseWithErrors: eachMethod sourceCode
+			startingAt: GtPharoParser startingStateForMethod.
+
+		anAst pragmas
+			detect: [ :eachPragmaNode | eachPragmaNode selector = aPragmaName ]
+			ifFound: [ :aPragmaNode |
+				aPragmaNode values
+					detect: [ :eachPragmaValueNode | eachPragmaValueNode literalValue = aPragmaValue ]
+					ifFound: [ aFoundBlock value: eachMethod ] ] ]
+]
+
+{ #category : #'private - methods' }
+GtViewModelModelWithCodeDefinition >> methodsWithPragmaNamed: aPragmaName andValue: aPragmaValue inViewModelDefinition: aViewModelBehaviorDefinition do: aFoundBlock [
+	"Given a behavior definition and a pragma name find all methods that has such pragma"
+
+	aViewModelBehaviorDefinition instanceSideDefinition traits do: [ :eachTrait |
+		self
+			methodsWithPragmaNamed: aPragmaName
+			andValue: aPragmaValue
+			inBehaviorDefinition: eachTrait
+			do: aFoundBlock ].
+		
+	self
+		methodsWithPragmaNamed: aPragmaName
+		andValue: aPragmaValue
+		inBehaviorDefinition: aViewModelBehaviorDefinition instanceSideDefinition
+		do: aFoundBlock
 ]
 
 { #category : #'private - methods' }
@@ -150,22 +200,56 @@ GtViewModelModelWithCodeDefinition >> name [
 GtViewModelModelWithCodeDefinition >> parent [
 	<return: #GtViewModelModelWithCodeDefinition>
 
+	self
+		assert: [ self isForOne ]
+		description: [ 'Only model for one can have a single parent' ].
+
 	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self viewModelModel parent
 ]
 
 { #category : #'api - methods' }
-GtViewModelModelWithCodeDefinition >> parentViewModelGetterMethod [		
-	^ self anyMethodWithPragmaNamed: #parentViewModelGetter
+GtViewModelModelWithCodeDefinition >> parentViewModelGetterMethodFor: aParentViewModelModel [
+	^ self
+		anyMethodWithPragmaNamed: #parentViewModelGetter:
+		andValue: aParentViewModelModel name
+]
+
+{ #category : #'api - selectors' }
+GtViewModelModelWithCodeDefinition >> parentViewModelGetterSelectorFor: aParentViewModelModel [
+	<return: #Symbol>
+
+	^ (self parentViewModelGetterMethodFor: aParentViewModelModel) selector
 ]
 
 { #category : #'api - accessing' }
 GtViewModelModelWithCodeDefinition >> parentViewModelSelectorName [
+	self
+		assert: [ self isForOne ]
+		description: [ 'Only model for one can have a single parent' ].
+
 	^ self viewModelModel parentViewModelSelectorName
 ]
 
 { #category : #'api - methods' }
-GtViewModelModelWithCodeDefinition >> parentViewModelTesterMethod [		
-	^ self anyMethodWithPragmaNamed: #parentViewModelTester
+GtViewModelModelWithCodeDefinition >> parentViewModelSetterMethodFor: aParentViewModelModel [
+	^ self
+		anyMethodWithPragmaNamed: #parentViewModelSetter:
+		andValue: aParentViewModelModel name
+]
+
+{ #category : #'api - methods' }
+GtViewModelModelWithCodeDefinition >> parentViewModelTesterMethodFor: aParentViewModelModel [
+	^ self
+		anyMethodWithPragmaNamed: #parentViewModelTester:
+		andValue: aParentViewModelModel name
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModelWithCodeDefinition >> parents [
+	<return: #Collection of: #GtViewModelModelWithCodeDefinition>
+	
+	^ self viewModelModel parents collect: [ :eachParentViewModelModel |
+		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachParentViewModelModel ]
 ]
 
 { #category : #accessing }

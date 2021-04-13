@@ -2,10 +2,19 @@ Class {
 	#name : #GtViewModelForManyModel,
 	#superclass : #GtViewModelModel,
 	#instVars : [
-		'forOneModel'
+		'forOneModel',
+		'parents'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Model'
 }
+
+{ #category : #accessing }
+GtViewModelForManyModel >> addParent: aGtViewModelModel [
+	(parents includes: aGtViewModelModel)
+		ifTrue: [ ^ self ].
+
+	parents add: aGtViewModelModel
+]
 
 { #category : #'api - accessing' }
 GtViewModelForManyModel >> childViewModelsName [
@@ -73,11 +82,25 @@ GtViewModelForManyModel >> generateChildViewModelsAccessorFor: aViewModelDefinit
 		into: aViewModelDefinition
 ]
 
+{ #category : #'api - generation' }
+GtViewModelForManyModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
+	self parents do: [ :eachParentViewModelModel |
+		self
+			generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition
+			parentViewModelModel: eachParentViewModelModel ]
+]
+
+{ #category : #testing }
+GtViewModelForManyModel >> hasParents [
+	^ self parents notEmpty
+]
+
 { #category : #initialize }
 GtViewModelForManyModel >> initialize [
 	super initialize.
-	
-	model := #OrderedCollection
+
+	model := #OrderedCollection.
+	parents := OrderedCollection new
 ]
 
 { #category : #'api - accessing' }
@@ -85,4 +108,14 @@ GtViewModelForManyModel >> itemsAccessorSelector [
 	^ properties
 		at: #items
 		ifAbsent: [ #yourself ]
+]
+
+{ #category : #accessing }
+GtViewModelForManyModel >> parents [
+	^ parents
+]
+
+{ #category : #accessing }
+GtViewModelForManyModel >> parents: anObject [
+	parents := anObject asOrderedCollection
 ]

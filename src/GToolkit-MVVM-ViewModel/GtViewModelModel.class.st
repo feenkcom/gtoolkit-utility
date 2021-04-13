@@ -80,21 +80,19 @@ GtViewModelModel >> generateDomainModelAccessorsFor: aViewModelDefinition [
 ]
 
 { #category : #'api - generation' }
-GtViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
+GtViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition parentViewModelModel: aParentViewModelModel [
 	| aTemplateDefinition |
-
-	self hasParent
-		ifFalse: [ ^ self ].
 
 	aTemplateDefinition := GtTraitGenerator new
 		templateTrait: TGtViewModelParentAccessorTemplate;
 		traitName: #Virtial;
 		packageName: 'MyPackage';
 		templateMap: { 
+			#__parent_name__ -> aParentViewModelModel name.
 			#__View_model_class__ -> self viewModelClassName.
-			#__view_model__ -> self parentViewModelSelectorName uncapitalized.
-			#__View_model__ -> self parentViewModelSelectorName capitalized.
-			#__Parent_view_model_class__ -> self parent viewModelClassName capitalized
+			#__view_model__ -> (self parentViewModelSelectorNameFor: aParentViewModelModel) uncapitalized.
+			#__View_model__ -> (self parentViewModelSelectorNameFor: aParentViewModelModel) capitalized.
+			#__Parent_view_model_class__ -> aParentViewModelModel viewModelClassName capitalized
 		};
 		generateBehaviorDefinition.
 
@@ -132,8 +130,8 @@ GtViewModelModel >> gtTreeFor: aView [
 ]
 
 { #category : #testing }
-GtViewModelModel >> hasParent [
-	^ parent notNil
+GtViewModelModel >> hasParents [
+	^ self subclassResponsibility
 ]
 
 { #category : #initialization }
@@ -280,23 +278,14 @@ GtViewModelModel >> package [
 	^ settings at: #package ifAbsent: [ '' ]
 ]
 
-{ #category : #accessing }
-GtViewModelModel >> parent [
-	^ parent
-]
-
-{ #category : #accessing }
-GtViewModelModel >> parent: anObject [
-	parent := anObject
+{ #category : #'api - accessing' }
+GtViewModelModel >> parentViewModelSelectorNameFor: aParentViewModelModel [
+	^ ('parent', self prefix capitalized, aParentViewModelModel name capitalized, self suffix capitalized, 'ViewModel') asSymbol
 ]
 
 { #category : #'api - accessing' }
-GtViewModelModel >> parentViewModelSelectorName [
-	self
-		assert: [ self hasParent ]
-		description: [ 'Can not create parent selector if there is no parent' ].
-
-	^ ('parent', self prefix capitalized, self parent name capitalized, self suffix capitalized, 'ViewModel') asSymbol
+GtViewModelModel >> parents [
+	^ self subclassResponsibility
 ]
 
 { #category : #'api - accessing' }

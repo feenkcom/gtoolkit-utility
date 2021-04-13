@@ -62,7 +62,7 @@ GtViewModelWithSelectionDerive >> applyOnViewModelModelsWithCodeDefinitions: aGt
 
 { #category : #'private - generate' }
 GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewModelModelWithCodeDefinition [
-	| aViewModelModel aMethodDefinition methodSourceCode |
+	| aViewModelModel aMethodDefinition methodSourceCode theChildrenForMany |
 
 	self
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
@@ -70,7 +70,9 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 
 	aViewModelModel := aViewModelModelWithCodeDefinition viewModelModel.
 	
-	aViewModelModel children
+	theChildrenForMany := aViewModelModelWithCodeDefinition children select: #isForMany.
+	
+	theChildrenForMany
 		ifEmpty: [ ^ self ].
 
 	aMethodDefinition := self
@@ -83,7 +85,7 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 		aStream
 			nextPutAll: aMethodDefinition sourceCode; cr.
 		
-		aViewModelModelWithCodeDefinition children do: [ :eachChildViewModelModelWithCodeDefinition |
+		theChildrenForMany do: [ :eachChildViewModelModelWithCodeDefinition |
 			aStream
 				cr;
 				tab;
@@ -99,7 +101,7 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 
 { #category : #'private - generate' }
 GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aViewModelModelWithCodeDefinition [
-	| aViewModelModel aMethodDefinition methodSourceCode |
+	| aViewModelModel theChildrenForMany aMethodDefinition methodSourceCode |
 
 	self
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
@@ -107,7 +109,8 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 
 	aViewModelModel := aViewModelModelWithCodeDefinition viewModelModel.
 	
-	aViewModelModel children
+	theChildrenForMany := aViewModelModelWithCodeDefinition children select: #isForMany.
+	theChildrenForMany
 		ifEmpty: [ ^ self ].
 
 	aMethodDefinition := self
@@ -117,16 +120,12 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 	aMethodDefinition
 		ifNil: [ ^ self ].
 		
-	methodSourceCode := String streamContents: [ :aStream |
-		| theChildrenViewModelModelsWithCodeDefinition |
-		
-		theChildrenViewModelModelsWithCodeDefinition := aViewModelModelWithCodeDefinition children.
-		
+	methodSourceCode := String streamContents: [ :aStream |		
 		aStream
 			nextPutAll: (aMethodDefinition sourceCode copyReplaceAll: '^ false' with: '').
 		
 		aStream nextPutAll: '^ '.
-		theChildrenViewModelModelsWithCodeDefinition doWithIndex: [ :eachChildViewModelModelWithCodeDefinition :eachIndex |
+		theChildrenForMany doWithIndex: [ :eachChildViewModelModelWithCodeDefinition :eachIndex |
 			eachIndex > 1
 				ifTrue: [
 					aStream
@@ -141,7 +140,7 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 				space;
 				nextPutAll: (self propertyTesterSelectorOf: eachChildViewModelModelWithCodeDefinition) ].
 		
-		((theChildrenViewModelModelsWithCodeDefinition size - 1) max: 0) timesRepeat: [ aStream space; nextPut: $] ] ].
+		((theChildrenForMany size - 1) max: 0) timesRepeat: [ aStream space; nextPut: $] ] ].
 
 	aMethodDefinition sourceCode: methodSourceCode
 ]
@@ -211,22 +210,21 @@ GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelMo
 		aStream
 			nextPutAll: aMethodDefinition sourceCode; cr;
 			cr.
+		
+		aViewModelModelWithCodeDefinition parents do: [ :eachParentViewModelModelWithDefinition |
+			| aSetterMethod |
 
-		aViewModelModelWithCodeDefinition hasParent
-			ifTrue: [
-				| aSetterMethod |
-				
-				aSetterMethod := self propertySetterMethodOf: aViewModelModelWithCodeDefinition parent.
-				aSetterMethod ifNotNil: [
-					aStream
-						tab;
-						nextPutAll: 'self';
-						space;
-						nextPutAll: aViewModelModelWithCodeDefinition parentViewModelSelectorName;
-						space;
-						nextPutAll: aSetterMethod selector;
-						nextPut: $.;
-						cr ] ].
+			aSetterMethod := self propertySetterMethodOf: eachParentViewModelModelWithDefinition.
+			aSetterMethod ifNotNil: [
+				aStream nextPutAll: (
+'	self {parentTester}
+		ifTrue: [ self {parentGetter} {propertySetter} ].'
+			format: { 
+				#parentTester -> (aViewModelModelWithCodeDefinition parentViewModelTesterMethodFor: eachParentViewModelModelWithDefinition) selector.
+				#parentGetter -> (aViewModelModelWithCodeDefinition parentViewModelGetterMethodFor: eachParentViewModelModelWithDefinition) selector.
+				#propertySetter -> aSetterMethod selector
+			} asDictionary).
+				aStream cr ] ].
 
 		aStream
 			tab; nextPutAll: aArgumentName; space; nextPutAll: (self propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ].

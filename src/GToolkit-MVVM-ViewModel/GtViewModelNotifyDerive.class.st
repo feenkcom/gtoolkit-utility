@@ -19,7 +19,7 @@ GtViewModelNotifyDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewMod
 GtViewModelNotifyDerive >> generateViewModelAnnounceMethodFor: aViewModelModelWithCodeDefinition [
 	| anAnnounceMethod aMethodSourceCode |
 
-	aViewModelModelWithCodeDefinition hasParent
+	aViewModelModelWithCodeDefinition hasParents
 		ifFalse: [ ^ self ].
 
 	anAnnounceMethod := nil.
@@ -32,16 +32,18 @@ GtViewModelNotifyDerive >> generateViewModelAnnounceMethodFor: aViewModelModelWi
 	
 	aMethodSourceCode := String streamContents: [ :aStream |
 		aStream
-			nextPutAll: anAnnounceMethod sourceCode; nextPut: $.; cr;
-			nextPutAll: ('
-	"Dispatch an event to the parent view model if it is assigned"
+			nextPutAll: anAnnounceMethod sourceCode; nextPut: $.; cr; cr;
+			tab; nextPutAll: '"Dispatch an event to the parent view model if it is assigned"'.
+			
+		aViewModelModelWithCodeDefinition parents do: [ :eachParentViewModelModelWithDefinition |
+			aStream nextPutAll: ('
 	self {parentTester}
-		ifTrue: [ self {parentGetter} announce: {announcement} ]'
+		ifTrue: [ self {parentGetter} announce: {announcement} ].'
 			format: { 
-				#parentTester -> aViewModelModelWithCodeDefinition parentViewModelTesterMethod selector.
-				#parentGetter -> aViewModelModelWithCodeDefinition parentViewModelGetterMethod selector.
+				#parentTester -> (aViewModelModelWithCodeDefinition parentViewModelTesterMethodFor: eachParentViewModelModelWithDefinition) selector.
+				#parentGetter -> (aViewModelModelWithCodeDefinition parentViewModelGetterMethodFor: eachParentViewModelModelWithDefinition) selector.
 				#announcement -> anAnnounceMethod arguments first
-			} asDictionary) ].
-		
+			} asDictionary) ] ].
+
 	anAnnounceMethod sourceCode: aMethodSourceCode
 ]
