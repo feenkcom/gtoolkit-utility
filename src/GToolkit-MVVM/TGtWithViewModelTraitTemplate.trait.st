@@ -19,6 +19,7 @@ TGtWithViewModelTraitTemplate >> __MODEL_NAME__ViewModel [
 { #category : #'api - __MODEL_NAME_TEXT__ view model' }
 TGtWithViewModelTraitTemplate >> __MODEL_NAME__ViewModel: a__MODEL_NAME_CAPITALIZED__ViewModel [
 	"Set a not-null __MODEL_NAME__ view model assigned to the receiver element"
+	<viewModelSetter>
 	self
 		assert: [ a__MODEL_NAME_CAPITALIZED__ViewModel notNil ]
 		description: [ '__MODEL_NAME__ view model must not be nil' ].

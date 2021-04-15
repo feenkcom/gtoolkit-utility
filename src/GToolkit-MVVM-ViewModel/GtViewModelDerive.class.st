@@ -24,6 +24,11 @@ GtViewModelDerive >> = anObject [
 ]
 
 { #category : #'api - generation' }
+GtViewModelDerive >> applyOnViewModelModelWithCodeDefinition: aGtViewModelModelWithCodeDefinition [
+	self applyOnViewModelModelsWithCodeDefinitions: (GtViewModelModelsWithCodeDefinitions new definitions: { aGtViewModelModelWithCodeDefinition })
+]
+
+{ #category : #'api - generation' }
 GtViewModelDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	self subclassResponsibility
 ]

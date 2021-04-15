@@ -22,12 +22,12 @@ GtViewModelScanner >> andId [
 
 { #category : #generated }
 GtViewModelScanner >> emptySymbolTokenId [
-	^ 45
+	^ 48
 ]
 
 { #category : #generated }
 GtViewModelScanner >> errorTokenId [
-	^ 46
+	^ 49
 ]
 
 { #category : #generated }

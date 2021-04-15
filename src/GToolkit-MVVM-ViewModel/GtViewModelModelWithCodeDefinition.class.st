@@ -30,6 +30,11 @@ GtViewModelModelWithCodeDefinition >> allViewModelModelDefinitions: anObject [
 	allViewModelModelDefinitions := anObject
 ]
 
+{ #category : #testing }
+GtViewModelModelWithCodeDefinition >> alreadyHasViewModel [
+	^ self viewModelModel alreadyHasViewModel
+]
+
 { #category : #'private - methods' }
 GtViewModelModelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName [
 	"Find any method that is marked with a given pragma (in traits, instance side, etc.)"
@@ -78,6 +83,16 @@ GtViewModelModelWithCodeDefinition >> definition [
 { #category : #accessing }
 GtViewModelModelWithCodeDefinition >> definition: anObject [
 	definition := anObject
+]
+
+{ #category : #accessing }
+GtViewModelModelWithCodeDefinition >> derives [
+	^ self viewModelModel derives
+]
+
+{ #category : #'api - methods' }
+GtViewModelModelWithCodeDefinition >> elementViewModelSetterMethodDo: aFoundBlock ifNone: ifNoneBlock [
+	self extraDefinitions do: [ :each | ]
 ]
 
 { #category : #accessing }

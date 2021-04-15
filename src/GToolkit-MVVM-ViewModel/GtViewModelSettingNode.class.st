@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'_at',
 		'name',
-		'value'
+		'value',
+		'properties'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Ast'
 }
@@ -46,7 +47,21 @@ GtViewModelSettingNode >> nameString [
 
 { #category : #generated }
 GtViewModelSettingNode >> nodeVariables [
-	^ #(#value)
+	^ #(#value #properties)
+]
+
+{ #category : #generated }
+GtViewModelSettingNode >> properties [
+	^ properties
+]
+
+{ #category : #generated }
+GtViewModelSettingNode >> properties: aGtViewModelSettingPropertiesListNode [
+	self properties notNil
+		ifTrue: [ self properties parent: nil ].
+	properties := aGtViewModelSettingPropertiesListNode.
+	self properties notNil
+		ifTrue: [ self properties parent: self ]
 ]
 
 { #category : #generated }

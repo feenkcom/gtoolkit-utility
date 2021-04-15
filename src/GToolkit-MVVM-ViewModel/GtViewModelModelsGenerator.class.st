@@ -17,6 +17,23 @@ Class {
 }
 
 { #category : #private }
+GtViewModelModelsGenerator >> createDeriveFrom: aDeriveSetting thenDo: aBlock [
+	GtViewModelDerive
+		deriveNamed: aDeriveSetting literalValue
+		ifFound: [ :aDeriveClass |
+			| aDerive |
+			
+			aDerive := aDeriveClass new.
+			aDeriveSetting properties ifNotNil: [ :aDerivePropertiesNode |
+				aDerivePropertiesNode properties do: [ :eachDeriveProperty |
+					aDerive
+						perform: eachDeriveProperty nameString asSymbol asMutator
+						with: eachDeriveProperty literalValue ] ].
+				
+			aBlock value: aDerive ].
+]
+
+{ #category : #private }
 GtViewModelModelsGenerator >> ensureViewModelForManyExists: aNameString [
 	^ self
 		viewModelNamed: aNameString
@@ -118,6 +135,22 @@ GtViewModelModelsGenerator >> viewModelNamed: aFullName ifFound: aBlock [
 ]
 
 { #category : #generated }
+GtViewModelModelsGenerator >> visitGlobalSetting: aGlobalSetting [
+	self visitSetting: aGlobalSetting.
+	
+	aGlobalSetting nameString = 'derive'
+		ifTrue: [
+			self
+				createDeriveFrom: aGlobalSetting
+				thenDo: [ :aDerive | derives add: aDerive ].
+			^ self ].
+	
+	settings
+		at: aGlobalSetting nameString asSymbol
+		put: aGlobalSetting literalValue
+]
+
+{ #category : #generated }
 GtViewModelModelsGenerator >> visitLevelForMany: aLevelForMany [
 	| aParentModel aChildModel |
 
@@ -130,6 +163,16 @@ GtViewModelModelsGenerator >> visitLevelForMany: aLevelForMany [
 { #category : #generated }
 GtViewModelModelsGenerator >> visitLevelForOne: aLevelForOne [
 	self ensureViewModelForOneExists: aLevelForOne fullNameString
+]
+
+{ #category : #generated }
+GtViewModelModelsGenerator >> visitLocalSetting: aLocalSetting [
+	self viewModelForProperty: aLocalSetting ifFound: [ :aViewModelModel |
+		aLocalSetting nameString = 'derive'
+			ifTrue: [
+				self createDeriveFrom: aLocalSetting thenDo: [ :aDerive |
+					aViewModelModel addDerive: aDerive ].
+				^ self ] ].
 ]
 
 { #category : #generated }
@@ -166,31 +209,9 @@ GtViewModelModelsGenerator >> visitNestedLevel: aNestedLevel [
 ]
 
 { #category : #generated }
-GtViewModelModelsGenerator >> visitProperties: aProperties [
-	| theProperties |
-	self visitProgram: aProperties.
-	
-	theProperties := (aProperties properties collect: [ :eachProperty |
-		eachProperty nameString -> eachProperty literalValue
-	]) asDictionary.
-
+GtViewModelModelsGenerator >> visitProperty: aProperty [
 	self
-		viewModelForProperty: aProperties
+		viewModelForProperty: aProperty
 		ifFound: [ :aViewModelModel |
-			aViewModelModel properties: theProperties ]
-]
-
-{ #category : #generated }
-GtViewModelModelsGenerator >> visitSetting: aSetting [
-
-	aSetting nameString = 'derive'
-		ifTrue: [
-			GtViewModelDerive
-				deriveNamed: aSetting literalValue
-				ifFound: [ :aDeriveClass | derives add: aDeriveClass new ].
-			^ self ].
-	
-	settings
-		at: aSetting nameString asSymbol
-		put: aSetting literalValue
+			aViewModelModel propertyNamed: aProperty nameString put: aProperty literalValue ]
 ]

@@ -44,7 +44,7 @@ GtViewModelFullDefinitionNode >> hierarchies: aGtViewModelHierarchiesNode [
 
 { #category : #generated }
 GtViewModelFullDefinitionNode >> nodeVariables [
-	^ #(#hierarchies #settings #definitions)
+	^ #(#definitions #settings #hierarchies)
 ]
 
 { #category : #generated }

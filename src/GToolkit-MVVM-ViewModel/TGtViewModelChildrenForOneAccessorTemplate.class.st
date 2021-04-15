@@ -24,6 +24,41 @@ TGtViewModelChildrenForOneAccessorTemplate >> __child_view_models__ [
 	^  __child_view_models__ ifNil: [ __child_view_models__ := self create__Child_view_models__ ]
 ]
 
+{ #category : #'api - accessing' }
+TGtViewModelChildrenForOneAccessorTemplate >> childViewModelsTemplate [
+	<gtMethodTemplate>
+	
+	^ GtPharoTemplateMethod new
+		sourceCode: '{{childViewModel}}
+	"Return a composite view model (${class:{{childViewModelClass}}}$) created for a collection of children from the domain model.
+	Note: The view model is lazily instantiated."
+	<return: #{{childViewModelClass}}>
+
+	^ {{childViewModel}} ifNil: [ {{childViewModel}} := self {{''create'', childViewModel capitalized}} ]';
+		protocol: 'api - accessing';
+		storageMethod: thisContext method
+]
+
+{ #category : #'private - instance creation' }
+TGtViewModelChildrenForOneAccessorTemplate >> createChildViewModelsTemplate [
+	<gtMethodTemplate>
+	
+	^ GtPharoTemplateMethod new
+		sourceCode: '{{''create'', childViewModel capitalized}}
+	"Create a composite view model for a collection of children and return the result"
+	<return: #{{childViewModelClass}}>
+	| childrenViewModel |
+
+	childrenViewModel := {{childViewModelClass}} new.
+	{{childParentViewModelSetter
+		ifNotNil: [ :aSelector | ''childrenViewModel {{aSelector}}: self.'' ]
+		ifNil: [ '''' ]}}
+	childrenViewModel {{childModelSetter}}: self {{modelGetter}} {{childModelGetter}}.
+	^ childrenViewModel';
+		protocol: 'private - instance creation';
+		storageMethod: thisContext method
+]
+
 { #category : #'private - instance creation' }
 TGtViewModelChildrenForOneAccessorTemplate >> create__Child_view_models__ [
 	"Create a composite view model for a collection of children and return the result"

@@ -35,26 +35,6 @@ GtViewModelForOneModel >> children: anObject [
 ]
 
 { #category : #'api - generation' }
-GtViewModelForOneModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
-	| aDefinition |
-
-	aDefinition := GtViewModelGenerator new
-		environment: aPharoEnvironment;
-		modelName: self modelNameForViewModel;
-		viewModelName: self viewModelClassName;
-		projectPrefix: self project;
-		packageName: self package;
-		tagName: self fullTagForViewModel;
-		generateBehaviorDefinition.
-	
-	self generateDomainModelAccessorsFor: aDefinition.
-	self generateChildViewModelsAccessorFor: aDefinition.
-	self generateParentViewModelAccessorsFor: aDefinition.
-	
-	^ aDefinition
-]
-
-{ #category : #'api - generation' }
 GtViewModelForOneModel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
 	children do: [ :eachChildModel |
 		| theChildrenAccessorsDefinition theChildrenAccessor |

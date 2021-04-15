@@ -41,12 +41,22 @@ GtViewModelModels >> generateCodeDefinitions [
 		viewModelModels: self.
 
 	viewModelCodeDefinitions definitions: (self models collect: [ :eachViewModelModel |
+		| aDefinition |
+		aDefinition := eachViewModelModel alreadyHasViewModel
+			ifTrue: [ GtBehaviorDefinition fromBehavior: eachViewModelModel existingViewModelClass in: anEnvironment ]
+			ifFalse: [ eachViewModelModel generateBehaviorDefinitionIn: anEnvironment ].
+
 		GtViewModelModelWithCodeDefinition new
 			allViewModelModelDefinitions: viewModelCodeDefinitions;
 			viewModelModel: eachViewModelModel;
-			definition: (eachViewModelModel generateBehaviorDefinitionIn: anEnvironment) ]).
+			definition: aDefinition ]).
 
 	derives do: [ :eachDerive | eachDerive applyOnViewModelModelsWithCodeDefinitions: viewModelCodeDefinitions ].
+	viewModelCodeDefinitions definitions
+		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasViewModel not ]
+		thenDo: [ :eachViewModelModelWithDefinition |
+			eachViewModelModelWithDefinition derives do: [ :eachDerive |
+				eachDerive applyOnViewModelModelWithCodeDefinition: eachViewModelModelWithDefinition ] ].
 
 	^ viewModelCodeDefinitions
 ]

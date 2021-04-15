@@ -21,7 +21,7 @@ GtViewModelModelsWithCodeDefinitions >> definitions: anObject [
 { #category : #enumerating }
 GtViewModelModelsWithCodeDefinitions >> extraAndViewModelCodeDefinitionsDo: aBlock [
 	self definitions do: [ :eachViewModelCodeDefinition | eachViewModelCodeDefinition extraDefinitions do: aBlock ].
-	self definitions do: [ :eachViewModelCodeDefinition | aBlock value: eachViewModelCodeDefinition definition ]
+	self viewModelModelsWithNewCodeDefinitionDo: [ :eachViewModelCodeDefinition | aBlock value: eachViewModelCodeDefinition definition ]
 ]
 
 { #category : #'api - generation' }
@@ -77,4 +77,13 @@ GtViewModelModelsWithCodeDefinitions >> viewModelModelsWithCodeDefinitionDo: aBl
 	"Evaluate a given block with each ${class:GtViewModelModelWithCodeDefinition}$"
 
 	self definitions do: aBlock
+]
+
+{ #category : #enumerating }
+GtViewModelModelsWithCodeDefinitions >> viewModelModelsWithNewCodeDefinitionDo: aBlock [
+	"Evaluate a given block with each ${class:GtViewModelModelWithCodeDefinition}$"
+
+	self definitions
+		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasViewModel not ]
+		thenDo: aBlock
 ]

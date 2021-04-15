@@ -8,10 +8,21 @@ Class {
 		'settings',
 		'properties',
 		'parent',
-		'definition'
+		'definition',
+		'derives'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Model'
 }
+
+{ #category : #'api - derives' }
+GtViewModelModel >> addDerive: aDerive [
+	derives add: aDerive
+]
+
+{ #category : #testing }
+GtViewModelModel >> alreadyHasViewModel [
+	^ self properties includesKey: #viewModel
+]
 
 { #category : #private }
 GtViewModelModel >> childViewModelsNameFor: aChildViewModel [
@@ -32,6 +43,21 @@ GtViewModelModel >> definition [
 { #category : #accessing }
 GtViewModelModel >> definition: anObject [
 	definition := anObject
+]
+
+{ #category : #'api - derives' }
+GtViewModelModel >> derives [
+	^ derives
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> existingViewModelClass [
+	^ self class environment at: self existingViewModelName
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> existingViewModelName [
+	^ (self properties at: #viewModel) asSymbol
 ]
 
 { #category : #'api - package tags' }
@@ -58,7 +84,27 @@ GtViewModelModel >> fullTagWith: aSubTag [
 
 { #category : #'api - generation' }
 GtViewModelModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
-	^ self subclassResponsibility
+	| aDefinition |
+
+	aDefinition := GtViewModelGenerator new
+		environment: aPharoEnvironment;
+		modelName: self modelNameForViewModel;
+		viewModelName: self viewModelClassName;
+		projectPrefix: self project;
+		packageName: self package;
+		tagName: self fullTagForViewModel;
+		generateBehaviorDefinition.
+
+	self generateDomainModelAccessorsFor: aDefinition.
+	self generateChildViewModelsAccessorFor: aDefinition.
+	self generateParentViewModelAccessorsFor: aDefinition.
+
+	^ aDefinition
+]
+
+{ #category : #'api - generation' }
+GtViewModelModel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
+	self subclassResponsibility
 ]
 
 { #category : #'api - generation' }
@@ -77,6 +123,11 @@ GtViewModelModel >> generateDomainModelAccessorsFor: aViewModelDefinition [
 				generateBehaviorDefinition.
 			
 			self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aViewModelDefinition ]
+]
+
+{ #category : #'api - generation' }
+GtViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
+	self subclassResponsibility
 ]
 
 { #category : #'api - generation' }
@@ -139,7 +190,8 @@ GtViewModelModel >> initialize [
 	super initialize.
 
 	settings := Dictionary new.
-	properties := Dictionary new
+	properties := Dictionary new.
+	derives := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -374,6 +426,11 @@ GtViewModelModel >> propertyMethodFor: aPropertyName ofType: aMethodType inViewM
 ]
 
 { #category : #accessing }
+GtViewModelModel >> propertyNamed: aPropertyName put: aPropertyValue [
+	self properties at: aPropertyName asSymbol put: aPropertyValue
+]
+
+{ #category : #accessing }
 GtViewModelModel >> settings [
 	^ settings
 ]
@@ -396,9 +453,8 @@ GtViewModelModel >> tag [
 { #category : #'api - accessing' }
 GtViewModelModel >> viewModelClassName [
 	properties
-		at: #name
+		at: #viewModel
 		ifPresent: [ :aViewModelName | ^ aViewModelName ].
-
 
 	^ String streamContents: [ :aStream |
 		aStream

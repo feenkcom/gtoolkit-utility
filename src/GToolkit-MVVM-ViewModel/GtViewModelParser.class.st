@@ -7,15 +7,14 @@ Class {
 { #category : #generated }
 GtViewModelParser class >> ambiguousTransitions [
 ^#(
-#[ 0 34 0 97] 
-#[ 0 34 0 97 0 106] 
-#[ 0 34 0 106]
+#[ 0 38 0 42 0 113] 
+#[ 0 38 0 42]
 	).
 ]
 
 { #category : #'generated-accessing' }
 GtViewModelParser class >> cacheId [
-	^'2021-04-12T14:50:12.966671+02:00'
+	^'2021-04-14T20:46:14.774244+02:00'
 ]
 
 { #category : #generated }
@@ -30,7 +29,8 @@ GtViewModelParser class >> definitionComment [
 %hierarchy Hierarchy (HierarchyError);
 %start Hierarchy FullDefinition;
 %id <and><follows>;
-%hierarchy Property (GenericProperty ItemsProperty);
+%hierarchy Property (GenericProperty ItemsProperty SettingProperty);
+%hierarchy Setting (LocalSetting GlobalSetting);
 
 
 default <leftBrace>
@@ -84,11 +84,14 @@ default <lt>
 default <gt>
 	: \>
 	;
-default literalArray <itemsToken>
+<itemsToken>
 	: items
 	;
 <at>
 	: \@
+	;
+<derive>
+	: derive
 	;
 LevelForOne
 	: <name> 'name' {{}}
@@ -134,8 +137,8 @@ Property
 	| GenericProperty
 	;
 PropertiesList
-	: Property 'property'
-	| PropertiesList<comma>Property'property'
+	: (Property 'property' | LocalSetting 'property')
+	| PropertiesList<comma>(Property'property'| LocalSetting 'property')
 	;
 Properties
 	: PropertiesList <comma>? {{}}
@@ -152,7 +155,8 @@ Definitions
 	: DefinitionList<period>? {{}}
 	;
 FullDefinition
-	: Settings 'settings'? Hierarchies 'hierarchies' {{}}
+	: Settings 'settings'? Definitions'definitions' {{}}
+	| Settings 'settings'? Hierarchies 'hierarchies'? {{}}
 	| Settings 'settings'? Hierarchies'hierarchies'<period>Definitions'definitions' {{}}
 	;
 PropertyName
@@ -168,12 +172,9 @@ ItemsProperty
 	: <itemsToken>'name'<colon>SymbolPropertyValue 'value' {{}}
 	| <name> 'name' <leftParen><name>'suffix'<rightParen> <colon>SymbolPropertyValue 'value' {{}}
 	;
-Setting
-	: <at>'at'<name>'name' PropertyValue'value' {{}}
-	;
 Settings
-	: Setting 'setting' {{}}
-	| Settings Setting 'setting' {{}}
+	: GlobalSetting 'setting' {{}}
+	| Settings  GlobalSetting 'setting' {{}}
 	;
 StringPropertyValue
 	: <string> 'value' {{}}
@@ -181,61 +182,86 @@ StringPropertyValue
 Hierarchies
 	: Hierarchy 'hierarchy' {{}}
 	| Hierarchies <period> Hierarchy 'hierarchy' {{}}
+	;
+LocalSetting
+	: <at>'at'<name>'name' PropertyValue'value' (<leftParen>SettingPropertiesList'properties' <rightParen>)? {{}}
+	;
+GlobalSetting
+	: <at>'at'<name>'name' PropertyValue'value' (<leftParen>SettingPropertiesList'properties' <rightParen>)? {{}}
+	;
+SettingPropertiesList
+	: SettingProperty 'property' {{}}
+	| SettingPropertiesList<comma>(SettingProperty'property') {{}}
+	;
+SettingProperty
+	: PropertyName'name'<colon>PropertyValue 'value' {{}}
 	;"
 ]
 
 { #category : #generated }
 GtViewModelParser class >> reduceTable [
 ^#(
-	#(20 1 #reduceActionForLevelForOne1: 1262593 false ) 
-	#(25 1 #liftFirstValue: 1753092 false ) 
-	#(22 1 #liftFirstValue: 1378305 false ) 
-	#(22 1 #liftFirstValue: 1378306 false ) 
-	#(25 1 #liftFirstValue: 1753089 false ) 
-	#(25 1 #liftFirstValue: 1753090 false ) 
-	#(25 1 #liftFirstValue: 1753091 false ) 
-	#(26 1 #reduceActionForHierarchy1: 1836033 false ) 
-	#(44 1 #reduceActionForHierarchies1: 3289089 false ) 
-	#(42 1 #reduceActionForSettings1: 3165185 false ) 
-	#(36 1 #reduceActionForFullDefinition1: 2600961 false ) 
-	#(26 2 #reduceActionForHierarchy1: 1836034 false ) 
-	#(42 2 #reduceActionForSettings2: 3165186 false ) 
-	#(36 2 #reduceActionForFullDefinition2: 2600962 false ) 
-	#(24 3 #reduceActionForNestedLevel2: 1501186 false ) 
-	#(24 3 #reduceActionForNestedLevel2: 1501187 false ) 
-	#(24 3 #reduceActionForNestedLevel2: 1501185 false ) 
-	#(23 3 #reduceActionForCompositeLevel1: 1425409 false ) 
-	#(39 1 #reduceActionForGlobalPropertyValue1: 2878465 false ) 
-	#(28 1 #reduceActionForSymbolPropertyValue1: 1968129 false ) 
-	#(43 1 #reduceActionForStringPropertyValue1: 3239937 false ) 
-	#(41 3 #reduceActionForSetting1: 3102721 false ) 
-	#(27 1 #liftFirstValue: 1880065 false ) 
-	#(27 1 #liftFirstValue: 1880067 false ) 
-	#(27 1 #liftFirstValue: 1880066 false ) 
-	#(33 1 #reduceActionForDefinition1: 2304001 false ) 
-	#(44 3 #reduceActionForHierarchies2: 3289090 false ) 
-	#(34 1 #reduceActionForDefinitionList1: 2457601 false ) 
-	#(35 1 #reduceActionForDefinitions1: 2552833 false ) 
-	#(36 3 #reduceActionForFullDefinition3: 2600963 false ) 
-	#(21 4 #reduceActionForLevelForMany1: 1300481 false ) 
-	#(36 4 #reduceActionForFullDefinition4: 2600964 false ) 
-	#(33 2 #reduceActionForDefinition2: 2304002 false ) 
-	#(35 2 #reduceActionForDefinitions1: 2552834 false ) 
-	#(37 1 #reduceActionForPropertyName1: 2763777 false ) 
-	#(31 1 #reduceActionForDefinitionList1: 2170881 false ) 
-	#(32 1 #reduceActionForProperties1: 2256897 false ) 
-	#(30 1 #liftFirstValue: 2121730 false ) 
-	#(30 1 #liftFirstValue: 2121729 false ) 
-	#(34 3 #reduceActionForDefinitionList2: 2457602 false ) 
-	#(32 2 #reduceActionForProperties1: 2256898 false ) 
-	#(33 4 #reduceActionForDefinition3: 2304003 false ) 
-	#(29 3 #reduceActionForModelAnnotation1: 2017281 false ) 
-	#(40 3 #reduceActionForItemsProperty1: 2925569 false ) 
-	#(31 3 #reduceActionForDefinitionList2: 2170882 false ) 
-	#(38 3 #reduceActionForGenericProperty1: 2802689 false ) 
-	#(33 5 #reduceActionForDefinition4: 2304004 false ) 
-	#(29 6 #reduceActionForModelAnnotation2: 2017282 false ) 
-	#(40 6 #reduceActionForItemsProperty2: 2925570 false )
+	#(36 0 #reduceActionForFullDefinition3: 2724867 false ) 
+	#(20 1 #reduceActionForLevelForOne1: 1330177 false ) 
+	#(25 1 #liftFirstValue: 1820676 false ) 
+	#(22 1 #liftFirstValue: 1445889 false ) 
+	#(22 1 #liftFirstValue: 1445890 false ) 
+	#(25 1 #liftFirstValue: 1820673 false ) 
+	#(25 1 #liftFirstValue: 1820674 false ) 
+	#(25 1 #liftFirstValue: 1820675 false ) 
+	#(26 1 #reduceActionForHierarchy1: 1903617 false ) 
+	#(33 1 #reduceActionForDefinition1: 2427905 false ) 
+	#(43 1 #reduceActionForHierarchies1: 3420161 false ) 
+	#(34 1 #reduceActionForDefinitionList1: 2581505 false ) 
+	#(35 1 #reduceActionForDefinitions1: 2676737 false ) 
+	#(36 1 #reduceActionForFullDefinition1: 2724865 false ) 
+	#(36 1 #reduceActionForFullDefinition5: 2724869 false ) 
+	#(36 1 #reduceActionForFullDefinition4: 2724868 false ) 
+	#(41 1 #reduceActionForSettings1: 3282945 false ) 
+	#(26 2 #reduceActionForHierarchy1: 1903618 false ) 
+	#(33 2 #reduceActionForDefinition2: 2427906 false ) 
+	#(35 2 #reduceActionForDefinitions1: 2676738 false ) 
+	#(36 2 #reduceActionForFullDefinition2: 2724866 false ) 
+	#(36 2 #reduceActionForFullDefinition6: 2724870 false ) 
+	#(41 2 #reduceActionForSettings2: 3282946 false ) 
+	#(24 3 #reduceActionForNestedLevel2: 1568770 false ) 
+	#(24 3 #reduceActionForNestedLevel2: 1568771 false ) 
+	#(24 3 #reduceActionForNestedLevel2: 1568769 false ) 
+	#(23 3 #reduceActionForCompositeLevel1: 1492993 false ) 
+	#(39 1 #reduceActionForGlobalPropertyValue1: 3058689 false ) 
+	#(28 1 #reduceActionForSymbolPropertyValue1: 2035713 false ) 
+	#(42 1 #reduceActionForStringPropertyValue1: 3371009 false ) 
+	#(45 3 #reduceActionForGlobalSetting1: 3648513 false ) 
+	#(27 1 #liftFirstValue: 1947649 false ) 
+	#(27 1 #liftFirstValue: 1947651 false ) 
+	#(27 1 #liftFirstValue: 1947650 false ) 
+	#(37 1 #reduceActionForPropertyName1: 2944001 false ) 
+	#(31 1 #reduceActionForDefinitionList1: 2238465 false ) 
+	#(32 1 #reduceActionForProperties1: 2380801 false ) 
+	#(30 1 #liftFirstValue: 2189314 false ) 
+	#(30 1 #liftFirstValue: 2189313 false ) 
+	#(31 1 #reduceActionForDefinitionList1: 2238466 false ) 
+	#(34 3 #reduceActionForDefinitionList2: 2581506 false ) 
+	#(43 3 #reduceActionForHierarchies2: 3420162 false ) 
+	#(36 3 #reduceActionForFullDefinition7: 2724871 false ) 
+	#(21 4 #reduceActionForLevelForMany1: 1368065 false ) 
+	#(32 2 #reduceActionForProperties1: 2380802 false ) 
+	#(33 4 #reduceActionForDefinition3: 2427907 false ) 
+	#(29 3 #reduceActionForModelAnnotation1: 2084865 false ) 
+	#(36 4 #reduceActionForFullDefinition8: 2724872 false ) 
+	#(46 1 #reduceActionForSettingPropertiesList1: 3779585 false ) 
+	#(40 3 #reduceActionForItemsProperty1: 3105793 false ) 
+	#(44 3 #reduceActionForLocalSetting1: 3518465 false ) 
+	#(31 3 #reduceActionForDefinitionList2: 2238467 false ) 
+	#(31 3 #reduceActionForDefinitionList2: 2238468 false ) 
+	#(38 3 #reduceActionForGenericProperty1: 2982913 false ) 
+	#(33 5 #reduceActionForDefinition4: 2427908 false ) 
+	#(45 6 #reduceActionForGlobalSetting2: 3648514 false ) 
+	#(47 3 #reduceActionForSettingProperty1: 3906561 false ) 
+	#(46 3 #reduceActionForSettingPropertiesList2: 3779586 false ) 
+	#(29 6 #reduceActionForModelAnnotation2: 2084866 false ) 
+	#(40 6 #reduceActionForItemsProperty2: 3105794 false ) 
+	#(44 6 #reduceActionForLocalSetting2: 3518466 false )
 	).
 ]
 
@@ -261,12 +287,12 @@ GtViewModelParser class >> startingStateForLevelForOne [
 
 { #category : #generated }
 GtViewModelParser class >> symbolNames [
-	^ #('<leftBrace>' '<rightBrace>' '<name>' '<follows>' '<whitespace>' '<rightParen>' '<leftParen>' '<period>' '<colon>' '<comma>' '<symbol>' '<string>' '<and>' '<lt>' '<gt>' '<itemsToken>' '<at>' 'B e g i n' 'NestedBranchingLevel' 'LevelForOne' 'LevelForMany' 'SimpleLevel' 'CompositeLevel' 'NestedLevel' 'Level' 'Hierarchy' 'PropertyValue' 'SymbolPropertyValue' 'ModelAnnotation' 'Property' 'PropertiesList' 'Properties' 'Definition' 'DefinitionList' 'Definitions' 'FullDefinition' 'PropertyName' 'GenericProperty' 'GlobalPropertyValue' 'ItemsProperty' 'Setting' 'Settings' 'StringPropertyValue' 'Hierarchies' 'E O F' 'error')
+	^ #('<leftBrace>' '<rightBrace>' '<name>' '<follows>' '<whitespace>' '<rightParen>' '<leftParen>' '<period>' '<colon>' '<comma>' '<symbol>' '<string>' '<and>' '<lt>' '<gt>' '<itemsToken>' '<at>' 'B e g i n' 'NestedBranchingLevel' 'LevelForOne' 'LevelForMany' 'SimpleLevel' 'CompositeLevel' 'NestedLevel' 'Level' 'Hierarchy' 'PropertyValue' 'SymbolPropertyValue' 'ModelAnnotation' 'Property' 'PropertiesList' 'Properties' 'Definition' 'DefinitionList' 'Definitions' 'FullDefinition' 'PropertyName' 'GenericProperty' 'GlobalPropertyValue' 'ItemsProperty' 'Settings' 'StringPropertyValue' 'Hierarchies' 'LocalSetting' 'GlobalSetting' 'SettingPropertiesList' 'SettingProperty' 'E O F' 'error')
 ]
 
 { #category : #generated }
 GtViewModelParser class >> symbolTypes [
-	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #GtViewModelLevelForOneNode #Object #GtViewModelLevelForOneNode #GtViewModelLevelForManyNode #GtViewModelSimpleLevelNode #GtViewModelCompositeLevelNode #GtViewModelNestedLevelNode #GtViewModelLevelNode #GtViewModelHierarchyNode #GtViewModelPropertyValueNode #GtViewModelSymbolPropertyValueNode #GtViewModelModelAnnotationNode #GtViewModelPropertyNode #OrderedCollection #GtViewModelPropertiesNode #GtViewModelDefinitionNode #OrderedCollection #GtViewModelDefinitionsNode #GtViewModelFullDefinitionNode #GtViewModelPropertyNameNode #GtViewModelGenericPropertyNode #GtViewModelGlobalPropertyValueNode #GtViewModelItemsPropertyNode #GtViewModelSettingNode #GtViewModelSettingsNode #GtViewModelStringPropertyValueNode #GtViewModelHierarchiesNode #SmaCCToken #SmaCCErrorNode)
+	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #GtViewModelLevelForOneNode #Object #GtViewModelLevelForOneNode #GtViewModelLevelForManyNode #GtViewModelSimpleLevelNode #GtViewModelCompositeLevelNode #GtViewModelNestedLevelNode #GtViewModelLevelNode #GtViewModelHierarchyNode #GtViewModelPropertyValueNode #GtViewModelSymbolPropertyValueNode #GtViewModelModelAnnotationNode #GtViewModelPropertyNode #OrderedCollection #GtViewModelPropertiesNode #GtViewModelDefinitionNode #OrderedCollection #GtViewModelDefinitionsNode #GtViewModelFullDefinitionNode #GtViewModelPropertyNameNode #GtViewModelGenericPropertyNode #GtViewModelGlobalPropertyValueNode #GtViewModelItemsPropertyNode #GtViewModelSettingsNode #GtViewModelStringPropertyValueNode #GtViewModelHierarchiesNode #GtViewModelLocalSettingNode #GtViewModelGlobalSettingNode #GtViewModelSettingPropertiesListNode #GtViewModelSettingPropertyNode #SmaCCToken #SmaCCErrorNode)
 ]
 
 { #category : #generated }
@@ -274,87 +300,107 @@ GtViewModelParser class >> transitionTable [
 ^#(
 #[1 0 17 0 3 0 21 0 20] 
 #[1 0 25 0 3 0 53 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 53 0 23 0 53 0 24 0 53 0 25 0 57 0 26] 
-#[1 0 25 0 3 0 61 0 17 0 53 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 53 0 23 0 53 0 24 0 53 0 25 0 65 0 26 0 69 0 36 0 73 0 41 0 77 0 42 0 81 0 44] 
-#[0 0 6 0 45] 
-#[0 0 0 0 45] 
-#[1 0 6 0 1 0 6 0 4 0 85 0 7 0 6 0 8 0 6 0 13 0 6 0 14 0 6 0 45] 
-#[0 0 10 0 1 0 8 0 14 0 45] 
-#[0 0 14 0 1 0 4 0 8 0 13 0 14 0 45] 
-#[0 0 18 0 1 0 4 0 8 0 13 0 14 0 45] 
-#[1 0 22 0 1 0 89 0 4 0 22 0 8 0 93 0 13 0 22 0 14 0 22 0 45] 
-#[0 0 26 0 1 0 8 0 14 0 45] 
-#[0 0 30 0 1 0 8 0 14 0 45] 
-#[1 0 7 0 8 0 34 0 45] 
-#[0 0 0 0 45] 
-#[0 0 101 0 3] 
-#[0 0 38 0 8 0 45] 
-#[0 0 0 0 45] 
-#[0 0 42 0 3 0 8 0 17 0 45] 
-#[1 0 25 0 3 0 61 0 17 0 53 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 53 0 23 0 53 0 24 0 53 0 25 0 65 0 26 0 105 0 41 0 109 0 44] 
-#[1 0 113 0 8 0 46 0 45] 
+#[1 0 25 0 3 0 61 0 17 0 65 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 65 0 23 0 65 0 24 0 65 0 25 0 69 0 26 0 73 0 33 0 77 0 34 0 81 0 35 0 85 0 36 0 89 0 41 0 93 0 43 0 97 0 45 0 6 0 48] 
+#[0 0 10 0 48] 
+#[0 0 0 0 48] 
+#[1 0 10 0 1 0 10 0 4 0 101 0 7 0 10 0 8 0 10 0 13 0 10 0 14 0 10 0 48] 
+#[0 0 14 0 1 0 8 0 14 0 48] 
+#[0 0 18 0 1 0 4 0 8 0 13 0 14 0 48] 
+#[0 0 22 0 1 0 4 0 8 0 13 0 14 0 48] 
+#[1 0 26 0 1 0 105 0 4 0 26 0 8 0 109 0 13 0 26 0 14 0 26 0 48] 
+#[0 0 30 0 1 0 8 0 14 0 48] 
+#[0 0 34 0 1 0 8 0 14 0 48] 
+#[1 0 113 0 8 0 38 0 48] 
+#[0 0 0 0 48] 
 #[0 0 117 0 3] 
-#[1 0 25 0 3 0 121 0 20 0 121 0 21 0 121 0 22 0 125 0 23 0 129 0 24] 
-#[1 0 25 0 3 0 133 0 20 0 133 0 21 0 133 0 22] 
-#[0 0 50 0 8 0 45] 
-#[1 0 137 0 3 0 141 0 11 0 145 0 12 0 149 0 27 0 149 0 28 0 149 0 39 0 149 0 43] 
-#[0 0 54 0 3 0 8 0 17 0 45] 
-#[1 0 165 0 8 0 58 0 45] 
-#[1 0 25 0 3 0 169 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 169 0 23 0 169 0 24 0 169 0 25 0 173 0 26 0 177 0 33 0 181 0 34 0 185 0 35] 
-#[0 0 189 0 6] 
-#[1 0 62 0 1 0 89 0 4 0 62 0 8 0 93 0 13 0 62 0 14 0 62 0 45] 
-#[0 0 66 0 1 0 8 0 14 0 45] 
-#[0 0 70 0 1 0 8 0 14 0 45] 
-#[0 0 74 0 1 0 8 0 14 0 45] 
-#[0 0 78 0 2 0 3 0 8 0 10 0 17 0 45] 
-#[0 0 82 0 2 0 3 0 8 0 10 0 17 0 45] 
-#[0 0 86 0 2 0 3 0 8 0 10 0 17 0 45] 
-#[0 0 90 0 3 0 8 0 17 0 45] 
-#[0 0 94 0 2 0 3 0 8 0 10 0 17 0 45] 
-#[0 0 98 0 2 0 3 0 8 0 10 0 17 0 45] 
-#[0 0 102 0 2 0 3 0 8 0 10 0 17 0 45] 
-#[1 0 25 0 3 0 169 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 169 0 23 0 169 0 24 0 169 0 25 0 173 0 26 0 177 0 33 0 181 0 34 0 193 0 35] 
-#[1 0 197 0 1 0 11 0 8 0 201 0 14 0 205 0 29 0 15 0 45] 
-#[0 0 110 0 8 0 45] 
-#[0 0 114 0 8 0 45] 
-#[1 0 209 0 8 0 118 0 45] 
-#[0 0 122 0 45] 
-#[0 0 126 0 1 0 4 0 8 0 13 0 14 0 45] 
-#[0 0 130 0 45] 
-#[1 0 213 0 3 0 217 0 16 0 221 0 30 0 225 0 31 0 229 0 32 0 233 0 37 0 221 0 38 0 221 0 40] 
-#[0 0 245 0 3] 
-#[1 0 249 0 1 0 134 0 8 0 134 0 45] 
-#[1 0 25 0 3 0 253 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 253 0 23 0 253 0 24 0 253 0 25 1 1 0 33 0 138 0 45] 
-#[1 1 5 0 7 0 142 0 9] 
-#[0 1 9 0 9] 
+#[1 0 121 0 1 0 7 0 8 0 125 0 14 0 129 0 29 0 11 0 48] 
+#[0 0 46 0 8 0 48] 
+#[0 0 50 0 8 0 48] 
+#[1 0 133 0 8 0 54 0 48] 
+#[0 0 58 0 48] 
+#[0 0 0 0 48] 
+#[1 0 25 0 3 0 61 0 17 0 65 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 65 0 23 0 65 0 24 0 65 0 25 0 69 0 26 0 73 0 33 0 77 0 34 0 137 0 35 0 141 0 43 0 145 0 45 0 62 0 48] 
+#[1 0 149 0 8 0 66 0 48] 
+#[0 0 70 0 1 0 3 0 8 0 14 0 17 0 48] 
+#[0 0 153 0 3] 
+#[1 0 25 0 3 0 157 0 20 0 157 0 21 0 157 0 22 0 161 0 23 0 165 0 24] 
+#[1 0 25 0 3 0 169 0 20 0 169 0 21 0 169 0 22] 
+#[0 0 74 0 8 0 48] 
+#[1 0 173 0 3 0 177 0 11 0 181 0 12 0 185 0 27 0 185 0 28 0 185 0 39 0 185 0 42] 
+#[1 0 201 0 3 0 205 0 16 0 209 0 17 0 213 0 30 0 217 0 31 0 221 0 32 0 225 0 37 0 213 0 38 0 213 0 40 0 237 0 44] 
+#[0 0 241 0 3] 
+#[1 0 245 0 1 0 78 0 8 0 78 0 48] 
+#[1 0 25 0 3 0 249 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 249 0 23 0 249 0 24 0 249 0 25 0 253 0 33 0 82 0 48] 
+#[0 0 86 0 48] 
+#[1 1 1 0 8 0 90 0 48] 
+#[0 0 94 0 1 0 3 0 8 0 14 0 17 0 48] 
+#[1 0 25 0 3 0 65 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 65 0 23 0 65 0 24 0 65 0 25 1 5 0 26 0 73 0 33 0 77 0 34 1 9 0 35] 
+#[0 1 13 0 6] 
+#[1 0 98 0 1 0 105 0 4 0 98 0 8 0 109 0 13 0 98 0 14 0 98 0 48] 
+#[0 0 102 0 1 0 8 0 14 0 48] 
+#[0 0 106 0 1 0 8 0 14 0 48] 
+#[0 0 110 0 1 0 8 0 14 0 48] 
+#[0 0 114 0 1 0 2 0 3 0 6 0 7 0 8 0 10 0 14 0 17 0 48] 
+#[0 0 118 0 1 0 2 0 3 0 6 0 7 0 8 0 10 0 14 0 17 0 48] 
+#[0 0 122 0 1 0 2 0 3 0 6 0 7 0 8 0 10 0 14 0 17 0 48] 
+#[1 0 126 0 1 0 126 0 3 1 17 0 7 0 126 0 8 0 126 0 14 0 126 0 17 0 126 0 48] 
+#[0 0 130 0 1 0 2 0 3 0 6 0 7 0 8 0 10 0 14 0 17 0 48] 
+#[0 0 134 0 1 0 2 0 3 0 6 0 7 0 8 0 10 0 14 0 17 0 48] 
+#[0 0 138 0 1 0 2 0 3 0 6 0 7 0 8 0 10 0 14 0 17 0 48] 
+#[1 1 21 0 7 0 142 0 9] 
+#[0 1 25 0 9] 
+#[0 1 29 0 3] 
 #[0 0 146 0 2 0 10] 
-#[1 0 150 0 2 1 13 0 10] 
-#[0 1 17 0 2] 
-#[0 1 21 0 9] 
+#[1 0 150 0 2 1 33 0 10] 
+#[0 1 37 0 2] 
+#[0 1 41 0 9] 
 #[0 0 154 0 2 0 10] 
 #[0 0 158 0 2 0 10] 
-#[1 1 25 0 9 1 29 0 15] 
-#[1 0 213 0 3 0 217 0 16 0 221 0 30 0 225 0 31 1 33 0 32 0 233 0 37 0 221 0 38 0 221 0 40] 
-#[1 0 197 0 1 0 106 0 8 0 201 0 14 0 205 0 29 0 106 0 45] 
-#[0 0 162 0 8 0 45] 
-#[0 1 37 0 3] 
-#[1 0 141 0 11 1 41 0 28] 
-#[1 0 166 0 2 0 213 0 3 0 217 0 16 1 45 0 30 0 233 0 37 1 45 0 38 1 45 0 40] 
-#[0 0 170 0 8 0 45] 
-#[1 0 137 0 3 0 141 0 11 0 145 0 12 1 49 0 27 1 49 0 28 1 49 0 39 1 49 0 43] 
-#[0 1 53 0 9] 
-#[0 0 174 0 1 0 8 0 45] 
-#[0 1 57 0 2] 
-#[0 1 61 0 6] 
-#[0 0 178 0 2 0 10] 
-#[0 0 182 0 2 0 10] 
-#[0 0 186 0 2 0 10] 
-#[0 1 65 0 3] 
-#[0 0 190 0 8 0 45] 
-#[0 1 69 0 9] 
-#[0 1 73 0 15] 
-#[1 0 141 0 11 1 77 0 28] 
-#[0 0 194 0 1 0 8 0 45] 
-#[0 0 198 0 2 0 10]
+#[0 0 162 0 2 0 10] 
+#[1 1 45 0 9 1 49 0 15] 
+#[1 0 201 0 3 0 205 0 16 0 209 0 17 0 213 0 30 0 217 0 31 1 53 0 32 0 225 0 37 0 213 0 38 0 213 0 40 0 237 0 44] 
+#[1 0 121 0 1 0 42 0 8 0 125 0 14 0 129 0 29 0 42 0 48] 
+#[0 0 166 0 8 0 48] 
+#[1 0 25 0 3 0 65 0 19 0 41 0 20 0 41 0 21 0 41 0 22 0 65 0 23 0 65 0 24 0 65 0 25 1 5 0 26 0 73 0 33 0 77 0 34 1 57 0 35] 
+#[0 0 170 0 8 0 48] 
+#[0 0 174 0 48] 
+#[0 0 178 0 1 0 4 0 8 0 13 0 14 0 48] 
+#[1 1 61 0 3 1 65 0 37 1 69 0 46 1 73 0 47] 
+#[0 1 77 0 3] 
+#[1 0 177 0 11 1 81 0 28] 
+#[1 0 173 0 3 0 177 0 11 0 181 0 12 1 85 0 27 1 85 0 28 1 85 0 39 1 85 0 42] 
+#[1 0 182 0 2 0 201 0 3 0 205 0 16 0 209 0 17 1 89 0 30 0 225 0 37 1 89 0 38 1 89 0 40 1 93 0 44] 
+#[0 0 186 0 8 0 48] 
+#[1 0 173 0 3 0 177 0 11 0 181 0 12 1 97 0 27 1 97 0 28 1 97 0 39 1 97 0 42] 
+#[0 1 101 0 9] 
+#[0 0 190 0 1 0 8 0 48] 
+#[0 1 105 0 2] 
+#[0 0 194 0 48] 
+#[0 0 142 0 9] 
+#[0 1 109 0 9] 
+#[1 1 113 0 6 1 117 0 10] 
+#[0 0 198 0 6 0 10] 
+#[0 1 121 0 6] 
+#[0 0 202 0 2 0 10] 
+#[1 0 206 0 2 1 125 0 7 0 206 0 10] 
+#[0 0 210 0 2 0 10] 
+#[0 0 214 0 2 0 10] 
+#[0 0 218 0 2 0 10] 
+#[0 1 129 0 3] 
+#[0 0 222 0 8 0 48] 
+#[1 0 173 0 3 0 177 0 11 0 181 0 12 1 133 0 27 1 133 0 28 1 133 0 39 1 133 0 42] 
+#[0 0 226 0 1 0 3 0 8 0 14 0 17 0 48] 
+#[1 1 61 0 3 1 65 0 37 1 137 0 47] 
+#[0 1 141 0 9] 
+#[1 1 61 0 3 1 65 0 37 1 145 0 46 1 73 0 47] 
+#[0 1 149 0 15] 
+#[0 0 230 0 6 0 10] 
+#[0 0 234 0 6 0 10] 
+#[1 0 177 0 11 1 153 0 28] 
+#[1 1 157 0 6 1 117 0 10] 
+#[0 0 238 0 1 0 8 0 48] 
+#[0 0 242 0 2 0 10] 
+#[0 0 246 0 2 0 10]
 	).
 ]
 
@@ -432,7 +478,7 @@ GtViewModelParser >> reduceActionForDefinitions1: nodes [
 GtViewModelParser >> reduceActionForFullDefinition1: nodes [
 	| result |
 	result := GtViewModelFullDefinitionNode new.
-	result hierarchies: (nodes at: 1).
+	result definitions: (nodes at: 1).
 	^ result
 ]
 
@@ -441,12 +487,44 @@ GtViewModelParser >> reduceActionForFullDefinition2: nodes [
 	| result |
 	result := GtViewModelFullDefinitionNode new.
 	result settings: (nodes at: 1).
-	result hierarchies: (nodes at: 2).
+	result definitions: (nodes at: 2).
 	^ result
 ]
 
 { #category : #'generated-reduction actions' }
 GtViewModelParser >> reduceActionForFullDefinition3: nodes [
+	| result |
+	result := GtViewModelFullDefinitionNode new.
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForFullDefinition4: nodes [
+	| result |
+	result := GtViewModelFullDefinitionNode new.
+	result hierarchies: (nodes at: 1).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForFullDefinition5: nodes [
+	| result |
+	result := GtViewModelFullDefinitionNode new.
+	result settings: (nodes at: 1).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForFullDefinition6: nodes [
+	| result |
+	result := GtViewModelFullDefinitionNode new.
+	result settings: (nodes at: 1).
+	result hierarchies: (nodes at: 2).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForFullDefinition7: nodes [
 	| result |
 	result := GtViewModelFullDefinitionNode new.
 	result hierarchies: (nodes at: 1).
@@ -455,7 +533,7 @@ GtViewModelParser >> reduceActionForFullDefinition3: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtViewModelParser >> reduceActionForFullDefinition4: nodes [
+GtViewModelParser >> reduceActionForFullDefinition8: nodes [
 	| result |
 	result := GtViewModelFullDefinitionNode new.
 	result settings: (nodes at: 1).
@@ -478,6 +556,27 @@ GtViewModelParser >> reduceActionForGlobalPropertyValue1: nodes [
 	| result |
 	result := GtViewModelGlobalPropertyValueNode new.
 	result value: (nodes at: 1).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForGlobalSetting1: nodes [
+	| result |
+	result := GtViewModelGlobalSettingNode new.
+	result _at: (nodes at: 1).
+	result name: (nodes at: 2).
+	result value: (nodes at: 3).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForGlobalSetting2: nodes [
+	| result |
+	result := GtViewModelGlobalSettingNode new.
+	result _at: (nodes at: 1).
+	result name: (nodes at: 2).
+	result value: (nodes at: 3).
+	result properties: (nodes at: 5).
 	^ result
 ]
 
@@ -542,6 +641,27 @@ GtViewModelParser >> reduceActionForLevelForOne1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForLocalSetting1: nodes [
+	| result |
+	result := GtViewModelLocalSettingNode new.
+	result _at: (nodes at: 1).
+	result name: (nodes at: 2).
+	result value: (nodes at: 3).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForLocalSetting2: nodes [
+	| result |
+	result := GtViewModelLocalSettingNode new.
+	result _at: (nodes at: 1).
+	result name: (nodes at: 2).
+	result value: (nodes at: 3).
+	result properties: (nodes at: 5).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
 GtViewModelParser >> reduceActionForModelAnnotation1: nodes [
 	| result |
 	result := GtViewModelModelAnnotationNode new.
@@ -585,11 +705,26 @@ GtViewModelParser >> reduceActionForPropertyName1: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-GtViewModelParser >> reduceActionForSetting1: nodes [
+GtViewModelParser >> reduceActionForSettingPropertiesList1: nodes [
 	| result |
-	result := GtViewModelSettingNode new.
-	result _at: (nodes at: 1).
-	result name: (nodes at: 2).
+	result := GtViewModelSettingPropertiesListNode new.
+	result addNode: (nodes at: 1) to: result properties.
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForSettingPropertiesList2: nodes [
+	| result |
+	result := nodes at: 1.
+	result addNode: (nodes at: 3) to: result properties.
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+GtViewModelParser >> reduceActionForSettingProperty1: nodes [
+	| result |
+	result := GtViewModelSettingPropertyNode new.
+	result name: (nodes at: 1).
 	result value: (nodes at: 3).
 	^ result
 ]
