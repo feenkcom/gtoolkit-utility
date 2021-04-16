@@ -281,9 +281,14 @@ GtViewModelModel >> modelNameForViewModel [
 
 { #category : #'api - accessing' }
 GtViewModelModel >> modelSetterSelector [
+	^ self modelSetterSelectorName asSymbol asMutator
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> modelSetterSelectorName [
 	| aFallbackSelector |
 
-	aFallbackSelector := (self name, 'Model:') asSymbol.
+	aFallbackSelector := (self name, 'Model') asSymbol.
 
 	^ modelApi
 		ifNotNil: [ :anApiTraitName |
@@ -292,7 +297,7 @@ GtViewModelModel >> modelSetterSelector [
 				ifPresent: [ :aTrait |
 					(Pragma allNamed: #modelSetter in: aTrait)
 						ifEmpty: [ aFallbackSelector ]
-						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
+						ifNotEmpty: [ :thePragmas | thePragmas first method selector copyReplaceAll: ':' with: '' ] ]
 				ifAbsent: [ aFallbackSelector ] ]
 		ifNil: [ aFallbackSelector ]
 ]

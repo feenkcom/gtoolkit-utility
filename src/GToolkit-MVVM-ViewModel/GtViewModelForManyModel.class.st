@@ -41,19 +41,18 @@ GtViewModelForManyModel >> forOneModel: anObject [
 GtViewModelForManyModel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
 	| aDefinition |
 
-	aDefinition := GtClassGenerator new
+	aDefinition := GtClassFromTemplateGenerator new
 		templateClass: TGtViewModelChildrenForManyAccessorTemplate;
 		className: #VirtialClass;
 		packageName: 'MyPackage';
 		templateMap: { 
-			#__View_model_class_name__ -> self viewModelClassName.
-			#__child_view_models__ -> self childViewModelsName uncapitalized.
-			#__Child_view_models__ -> self childViewModelsName capitalized.
-			#__model__ -> self modelGetterSelector uncapitalized.
-			#__children__ -> self itemsAccessorSelector uncapitalized.
-			#__Child_view_model_class__ -> self forOneModel viewModelClassName capitalized.
-			#__child_parent_view_model_setter__ -> self forOneModel parentViewModelSelectorName uncapitalized asSymbol asMutator.
-			#__child_model_setter__ -> self forOneModel modelSetterSelector uncapitalized
+			#modelGetter -> self modelGetterSelector uncapitalized.
+			#viewModelClass -> self viewModelClassName.
+			#childViewModels -> self childViewModelsName uncapitalized.
+			#chilViewModelsClass -> self forOneModel viewModelClassName capitalized.
+			#childModelsGetter -> self itemsAccessorSelector uncapitalized.
+			#childModelSetter -> self forOneModel modelSetterSelectorName uncapitalized.
+			#childParentViewModelSetter -> self forOneModel parentViewModelSelectorName uncapitalized.
 		};
 		generateBehaviorDefinition.
 

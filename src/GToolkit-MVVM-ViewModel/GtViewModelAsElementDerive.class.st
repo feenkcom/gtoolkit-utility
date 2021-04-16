@@ -16,10 +16,14 @@ GtViewModelAsElementDerive class >> label [
 GtViewModelAsElementDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		| eachNameMethodSourceCode |
+
 		
-		GtPharoTemplateMethodCoder new
-			forCompiledMethod: self class >> #asElementTemplate;
+
+		eachNameMethodSourceCode := GtPharoTemplateMethodCoder new
+			forMethod: self class >> #asElementTemplate;
 			mappings: { #elementClass -> BlElement . #viewModelSetter -> eachViewModelModelWithCodeDefinition }.
+
+		
 
 		"eachNameMethodSourceCode := self
 			generateViewModelNameMethodFor: eachViewModelModelWithCodeDefinition viewModelModel.
@@ -32,9 +36,14 @@ GtViewModelAsElementDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtView
 { #category : #accessing }
 GtViewModelAsElementDerive >> asElementTemplate [
 	<gtMethodTemplate>
-"asElement
+	<generatedFrom: #'GtPharoTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtPharoTemplateMethod new
+		sourceCode: 'asElement
 	^ {{elementClass}} new
-		{{viewModelSetter}}: self"
+		{{viewModelSetter}}: self';
+		protocol: 'api - converting';
+		storageMethod: thisContext method
 ]
 
 { #category : #accessing }

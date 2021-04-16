@@ -33,14 +33,22 @@ GtPharoBehaviorTemplateMethodsCoder >> addMethodsForClass: aClass [
 ]
 
 { #category : #actions }
-GtPharoBehaviorTemplateMethodsCoder >> addNewCoder [
+GtPharoBehaviorTemplateMethodsCoder >> addNewCoderSelector: aSelector protocol: aProtocol [
 	| aCoder |
 	aCoder := GtPharoTemplateMethodCoder new
-		forTemplateBehavior: self newMethodClass
-		selector: #newTemplateMethod.
+		forTemplateMethod: (GtPharoTemplateMethod new
+			storageBehavior: self newMethodClass
+				selector: aSelector asSymbol;
+			storageProtocol: aProtocol;
+			sourceCode: 'template').
 	aCoder coders: self.
 	self addFirstCoder: aCoder.
 	^ aCoder
+]
+
+{ #category : #converting }
+GtPharoBehaviorTemplateMethodsCoder >> asCoderUIModel [
+	^ GtPharoTemplateMethodsCoderViewModel new coder: self
 ]
 
 { #category : #accessing }

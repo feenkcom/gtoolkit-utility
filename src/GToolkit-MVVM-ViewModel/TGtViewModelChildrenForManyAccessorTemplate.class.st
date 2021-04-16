@@ -14,23 +14,50 @@ Class {
 	#category : #'GToolkit-MVVM-ViewModel-Templates'
 }
 
-{ #category : #'api - accessing' }
-TGtViewModelChildrenForManyAccessorTemplate >> __child_view_models__ [
-	"Return a collection of view models (${class:__Child_view_model_class__}$) created for each child from the domain model.
+{ #category : #templates }
+TGtViewModelChildrenForManyAccessorTemplate >> childViewModelsTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtPharoTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtPharoTemplateMethod new
+		sourceCode: '{{childViewModels}}
+	"Return a collection of view models (${class:{{childViewModelsClass}}}$) created for each child from the domain model.
 	Note: The view models are lazily instantiated."
-	<return: #Collection of: #__Child_view_model_class__>
+	<return: #Collection of: #{{childViewModelsClass}}>
 
-	^  __child_view_models__ ifNil: [ __child_view_models__ := self create__Child_view_models__ ]
+	^  {{childViewModels}} ifNil: [ {{childViewModels}} := self {{''create'', childViewModels capitalized}} ]';
+		storageMethod: thisContext method
 ]
 
-{ #category : #'private - instance creation' }
-TGtViewModelChildrenForManyAccessorTemplate >> create__Child_view_models__ [
-	"For each child from the domain modal create a view model and return a resulting collection"
-	<return: #Collection of: #__Child_view_model_class__>
+{ #category : #templates }
+TGtViewModelChildrenForManyAccessorTemplate >> createChildViewModelsTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtPharoTemplateMethod class>>#storageMethodTemplate'>
 	
-	^ self __model__ __children__ collect: [ :eachModel |
+	^ GtPharoTemplateMethod new
+		sourceCode: '{{''create'', childViewModels capitalized}}
+	"For each child from the domain model create a view model and return a resulting collection"
+	<return: #Collection of: #{{childViewModelsClass}}>
+
+	^ self {{modelGetter}} {{childModelsGetter}} collect: [ :eachModel |
 		| eachViewModel |
-		eachViewModel := __Child_view_model_class__ new.
-		eachViewModel __child_parent_view_model_setter__ self.
-		eachViewModel __child_model_setter__ eachModel ] as: Array
+		eachViewModel := {{childViewModelsClass}} new.
+		{{childParentViewModelSetter
+			ifNotNil: [ :aSelector | ''eachViewModel {{aSelector}}: self.'' ]
+			ifNil: [ '''' ]}}
+		eachViewModel {{childModelSetter}}: eachModel ] as: Array';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtViewModelChildrenForManyAccessorTemplate >> traitTemplate [
+	<gtBehaviorTemplate>
+	
+	^ GtPharoTemplateTrait new
+		instanceSide:
+'Trait named: #{{name}}
+	 uses: {}
+	 slots: { #__view_model__ }
+	 package: ''{{package}}''';
+		storageMethod: self
 ]

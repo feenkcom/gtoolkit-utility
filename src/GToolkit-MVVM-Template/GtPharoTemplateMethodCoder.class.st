@@ -51,6 +51,7 @@ GtPharoTemplateMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: 
 		forCompiledMethod: GtPharoTemplateMethod class >> #storageMethodTemplate;
 		mappings: {
 			#storageSelector -> templateMethod storageSelector asString.
+			#storageProtocol -> templateMethod storageProtocol.
 			#sourceCode -> self currentSourceString.
 			#protocol -> templateMethod protocol
 		};
@@ -61,7 +62,7 @@ GtPharoTemplateMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: 
 		evaluatedInterval: (1 to: aSourceString size);
 		evaluatedSourceString: aSourceString.
 
-	^ templateMethod protocol
+	^ templateMethod storageProtocol
 		ifNil: [
 			RBAddMethodChange
 				compile: aSourceString
@@ -75,28 +76,30 @@ GtPharoTemplateMethodCoder >> createCompileMethodChangeIn: aBehavior inContext: 
 				for: aGtPharoSourceCoderEvaluationContext ]
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 GtPharoTemplateMethodCoder >> forCompiledMethod: aCompiledMethod [
-	templateMethod := aCompiledMethod methodClass isClassSide
+	| aTemplateMethod |
+	aTemplateMethod := aCompiledMethod methodClass isClassSide
 		ifTrue: [ aCompiledMethod methodClass withArgs: { } executeMethod: aCompiledMethod ]
-		ifFalse: [ aCompiledMethod methodClass new withArgs: { } executeMethod: aCompiledMethod ].
-	self sourceCode: (GtCoderExplicitSourceCode new source: templateMethod sourceCode)
+		ifFalse: [
+			aCompiledMethod methodClass isTrait
+				ifTrue: [ Object new withArgs: { } executeMethod: aCompiledMethod ]
+				ifFalse: [ aCompiledMethod methodClass new withArgs: { } executeMethod: aCompiledMethod ] ].
+
+	self forTemplateMethod: aTemplateMethod
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtPharoTemplateMethodCoder >> forMethod: aCompiledMethod [
 	self forCompiledMethod: aCompiledMethod
 ]
 
-{ #category : #initialize }
-GtPharoTemplateMethodCoder >> forSource: aString [
-	templateMethod := GtPharoTemplateMethod new
-		sourceCode: aString.
-
-	self sourceCode: (GtCoderExplicitSourceCode new source: aString)
+{ #category : #initialization }
+GtPharoTemplateMethodCoder >> forSource: aString [	
+	self forTemplateMethod: (GtPharoTemplateMethod new sourceCode: aString)
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 GtPharoTemplateMethodCoder >> forTemplateBehavior: aBehavior selector: aTemplateSelector [
 	| aTemplateString |
 
@@ -105,9 +108,15 @@ GtPharoTemplateMethodCoder >> forTemplateBehavior: aBehavior selector: aTemplate
 		ifPresent: [ :aCompiledMethod | ^ self forCompiledMethod: aCompiledMethod ]
 		ifAbsent: [ 'method' ].
 
-	templateMethod := GtPharoTemplateMethod new
+	self forTemplateMethod: (GtPharoTemplateMethod new
 		sourceCode: aTemplateString;
-		storageBehavior: aBehavior selector: aTemplateSelector
+		storageBehavior: aBehavior selector: aTemplateSelector)
+]
+
+{ #category : #initialization }
+GtPharoTemplateMethodCoder >> forTemplateMethod: aGtPharoTemplateMethod [
+	templateMethod := aGtPharoTemplateMethod.
+	self sourceCode: (GtCoderExplicitSourceCode new source: templateMethod sourceCode)
 ]
 
 { #category : #'private - actions' }
@@ -127,7 +136,7 @@ GtPharoTemplateMethodCoder >> handleCompilerErrorsDuring: aBlock [
 GtPharoTemplateMethodCoder >> highlighter: anObject [
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 GtPharoTemplateMethodCoder >> initialize [
 	super initialize.
 
@@ -185,11 +194,31 @@ GtPharoTemplateMethodCoder >> initializeAddOns: addOns [
 		action: [ :aCoderUIModel :anEvent | self notifyObjectSpawn: aCoderUIModel ].
 ]
 
+{ #category : #testing }
+GtPharoTemplateMethodCoder >> isForClass [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoTemplateMethodCoder >> isForMethod [
+	^ true
+]
+
 { #category : #accessing }
 GtPharoTemplateMethodCoder >> isForMethod: aCompiledMethod [
 	templateMethod storageBehavior realBehaviorDo: [ :aBehavior |
 		^ aBehavior = aCompiledMethod methodClass
 			and: [ templateMethod storageSelector = aCompiledMethod selector ] ].
+	^ false
+]
+
+{ #category : #testing }
+GtPharoTemplateMethodCoder >> isForPackage [
+	^ false
+]
+
+{ #category : #testing }
+GtPharoTemplateMethodCoder >> isForPackageTag [
 	^ false
 ]
 
@@ -205,10 +234,65 @@ GtPharoTemplateMethodCoder >> mappings: aCollectionOfAssociations [
 
 { #category : #'private - actions' }
 GtPharoTemplateMethodCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
-	^ GtPharoTemplateTranslator new
+	| aTranslatedMethodCode aTranslatedAst |
+	
+	aTranslatedMethodCode := GtPharoTemplateTranslator new
 		evaluationContext: aGtPharoSourceCoderEvaluationContext;
 		bindings: bindings;
-		processString: aSourceString
+		processString: aSourceString.
+
+	aTranslatedAst := GtPharoParser
+		parseWithErrors: aTranslatedMethodCode
+		startingAt: GtPharoParser startingStateForMethod.
+	
+	templateMethod storageBehavior behaviorNameDo: [ :aBehaviorName |
+		templateMethod storageSelector ifNotNil: [ :aSelector |
+			| aGeneratedPragmaIndex |
+
+			aGeneratedPragmaIndex := aTranslatedAst body pragmas
+				ifEmpty: [
+					"if stopPosition is zero mean thee is no body"
+					aTranslatedAst body stopPosition > 0
+						ifTrue: [ aTranslatedAst body startPosition ]
+						ifFalse: [
+							(aTranslatedAst comments notNil and: [ aTranslatedAst comments notEmpty ])
+								ifTrue: [ aTranslatedAst comments last second ]
+								ifFalse: [ aTranslatedAst stopPosition ] ] ]
+				ifNotEmpty: [ :thePragmas | thePragmas last stopPosition ].
+
+			aTranslatedMethodCode := String streamContents: [ :aStream |
+				aStream nextPutAll: (aTranslatedMethodCode
+					copyFrom: 1
+					to: aGeneratedPragmaIndex).
+				aStream cr; tab.
+				aStream
+					nextPutAll: '<generatedFrom: #';
+					nextPut: $';
+					nextPutAll: aBehaviorName;
+					nextPutAll: '>>#';
+					nextPutAll: aSelector;
+					nextPut: $';
+					nextPut: $>.
+
+				aStream nextPutAll: (aTranslatedMethodCode
+					copyFrom: aGeneratedPragmaIndex + 1
+					to: aTranslatedMethodCode size) ]
+		].
+	].
+
+	^ aTranslatedMethodCode
+]
+
+{ #category : #'api - accessing' }
+GtPharoTemplateMethodCoder >> protocol [
+	"Return a generated method protocol name, the returned protocol is never nil.
+	The default value is `generated`"
+	<return: #String>
+
+	^ GtPharoTemplateTranslator new
+		evaluationContext: self evaluationContext;
+		bindings: bindings;
+		processString: (templateMethod protocol ifNil: [ 'generated' ])
 ]
 
 { #category : #'api - actions' }
@@ -222,9 +306,16 @@ GtPharoTemplateMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationContex
 	^ true
 ]
 
+{ #category : #accessing }
+GtPharoTemplateMethodCoder >> theClass [
+	^ templateMethod storageBehavior
+		realBehaviorDo: [ :aBehavior | aBehavior ]
+		ifAbsent: [ UndefinedObject ]
+]
+
 { #category : #'api - actions' }
 GtPharoTemplateMethodCoder >> translate [
 	<return: #String>
-
+	
 	^ self doItAll value
 ]

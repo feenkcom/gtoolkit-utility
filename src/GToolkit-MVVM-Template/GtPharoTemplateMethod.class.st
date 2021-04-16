@@ -1,11 +1,9 @@
 Class {
 	#name : #GtPharoTemplateMethod,
-	#superclass : #Object,
+	#superclass : #GtPharoTemplateArtefact,
 	#instVars : [
 		'sourceCode',
-		'protocol',
-		'storageBehavior',
-		'storageSelector'
+		'protocol'
 	],
 	#category : #'GToolkit-MVVM-Template-Coder'
 }
@@ -13,6 +11,7 @@ Class {
 { #category : #template }
 GtPharoTemplateMethod class >> storageMethodTemplate [
 	<gtMethodTemplate>
+	<generatedFrom: #'GtPharoTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtPharoTemplateMethod new
 		sourceCode: '{{storageSelector}}
@@ -33,9 +32,7 @@ GtPharoTemplateMethod >> initialize [
 	super initialize.
 	
 	sourceCode := 'method'.
-	protocol := nil.
-	storageSelector := nil.
-	storageBehavior := GtPharoCoderBehavior unspecified
+	protocol := nil
 ]
 
 { #category : #accessing }
@@ -56,26 +53,4 @@ GtPharoTemplateMethod >> sourceCode [
 { #category : #accessing }
 GtPharoTemplateMethod >> sourceCode: anObject [
 	sourceCode := anObject
-]
-
-{ #category : #accessing }
-GtPharoTemplateMethod >> storageBehavior [
-	^ storageBehavior
-]
-
-{ #category : #initialize }
-GtPharoTemplateMethod >> storageBehavior: aBehavior selector: aSelector [
-	storageBehavior := GtPharoCoderBehavior explicit: aBehavior.
-	storageSelector := aSelector
-]
-
-{ #category : #initialize }
-GtPharoTemplateMethod >> storageMethod: aCompiledMethod [
-	storageSelector := aCompiledMethod selector.
-	storageBehavior := GtPharoCoderBehavior explicit: aCompiledMethod methodClass
-]
-
-{ #category : #accessing }
-GtPharoTemplateMethod >> storageSelector [
-	^ storageSelector
 ]

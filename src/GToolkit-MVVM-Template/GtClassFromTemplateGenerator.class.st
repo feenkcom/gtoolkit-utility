@@ -10,7 +10,7 @@ Class {
 		'packageName',
 		'tagName'
 	],
-	#category : #'GToolkit-MVVM-Support'
+	#category : #'GToolkit-MVVM-Template-Generator'
 }
 
 { #category : #accessing }
@@ -92,17 +92,18 @@ GtClassFromTemplateGenerator >> generateBehaviorDefinition [
 		| eachSlotName |
 		eachSlotName := (GtGeneratorUtilities formatString: eachSlot name mapping: aTemplateMap) asSymbol.
 		generatedClass instanceSideDefinition slots addSlotNamed: eachSlotName ].
-	
-	generatedClass withMethodsFromClass: self templateClass.
-	generatedClass instanceSideDefinition methods do: [ :eachMethodDefinition |
-		| methodSource methodProtocol |
-		
-		methodSource := GtGeneratorUtilities formatString: eachMethodDefinition sourceCode mapping: aTemplateMap.
-		methodProtocol := GtGeneratorUtilities formatString: eachMethodDefinition protocol mapping: aTemplateMap.
-		
-		eachMethodDefinition protocol: methodProtocol.
-		eachMethodDefinition sourceCode: methodSource ].
-	
+
+	self templateClass methods
+		select: [ :eachCompiledMethod | eachCompiledMethod hasPragmaNamed: #gtMethodTemplate ]
+		thenDo: [ :eachCompiledMethod |
+			| aTemplateCoder |
+			aTemplateCoder := GtPharoTemplateMethodCoder new forMethod: eachCompiledMethod.
+			aTemplateCoder mappings: aTemplateMap associations.
+
+			generatedClass instanceSideDefinition methods
+				addMethod: aTemplateCoder translate
+				protocol: aTemplateCoder protocol ].
+
 	self templateClass hasComment
 		ifTrue: [
 			| aComment |

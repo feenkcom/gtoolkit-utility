@@ -68,8 +68,19 @@ GtPharoTemplateTranslator >> evaluationResultToString: anObject [
 { #category : #initialization }
 GtPharoTemplateTranslator >> initialize [
 	super initialize.
-	
-	evaluationContext := GtPharoSourceCoderEvaluationContext new
+
+	evaluationContext := GtPharoSourceCoderEvaluationContext new.
+	self bindings: GtSnippetBindings new
+]
+
+{ #category : #accessing }
+GtPharoTemplateTranslator >> map: aVariableName to: anObject [
+	self bindings at: aVariableName put: anObject
+]
+
+{ #category : #accessing }
+GtPharoTemplateTranslator >> mappings: aCollectionOfAssociations [
+	aCollectionOfAssociations do: [ :each | self map: each key to: each value ]
 ]
 
 { #category : #'private - replacement' }
@@ -78,8 +89,7 @@ GtPharoTemplateTranslator >> processString: aSourceCode [
 
 	theTemplates := GtPharoTemplateOnlyParser parse: aSourceCode.
 	theResultingSourceCode := self accept: theTemplates.
-	
-	"self halt."
+
 	aSnippetCoder := GtPharoSnippetCoder forSource: theResultingSourceCode.
 	aTemplateResult := aSnippetCoder doItInContext: self evaluationContext.
 
