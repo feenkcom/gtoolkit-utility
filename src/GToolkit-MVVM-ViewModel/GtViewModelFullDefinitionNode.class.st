@@ -2,7 +2,7 @@ Class {
 	#name : #GtViewModelFullDefinitionNode,
 	#superclass : #GtViewModelProgramNode,
 	#instVars : [
-		'hierarchy',
+		'hierarchies',
 		'settings',
 		'definitions'
 	],
@@ -29,22 +29,22 @@ GtViewModelFullDefinitionNode >> definitions: aGtViewModelDefinitionsNode [
 ]
 
 { #category : #generated }
-GtViewModelFullDefinitionNode >> hierarchy [
-	^ hierarchy
+GtViewModelFullDefinitionNode >> hierarchies [
+	^ hierarchies
 ]
 
 { #category : #generated }
-GtViewModelFullDefinitionNode >> hierarchy: aGtViewModelHierarchyNode [
-	self hierarchy notNil
-		ifTrue: [ self hierarchy parent: nil ].
-	hierarchy := aGtViewModelHierarchyNode.
-	self hierarchy notNil
-		ifTrue: [ self hierarchy parent: self ]
+GtViewModelFullDefinitionNode >> hierarchies: aGtViewModelHierarchiesNode [
+	self hierarchies notNil
+		ifTrue: [ self hierarchies parent: nil ].
+	hierarchies := aGtViewModelHierarchiesNode.
+	self hierarchies notNil
+		ifTrue: [ self hierarchies parent: self ]
 ]
 
 { #category : #generated }
 GtViewModelFullDefinitionNode >> nodeVariables [
-	^ #(#hierarchy #settings #definitions)
+	^ #(#definitions #settings #hierarchies)
 ]
 
 { #category : #generated }

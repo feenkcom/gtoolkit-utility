@@ -36,6 +36,16 @@ TGtViewModelProgramNodeVisitor >> visitGlobalPropertyValue: aGlobalPropertyValue
 ]
 
 { #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitGlobalSetting: aGlobalSetting [
+	^ self visitSetting: aGlobalSetting
+]
+
+{ #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitHierarchies: aHierarchies [
+	^ self visitProgram: aHierarchies
+]
+
+{ #category : #generated }
 TGtViewModelProgramNodeVisitor >> visitHierarchy: aHierarchy [
 	^ self visitProgram: aHierarchy
 ]
@@ -63,6 +73,11 @@ TGtViewModelProgramNodeVisitor >> visitLevelForMany: aLevelForMany [
 { #category : #generated }
 TGtViewModelProgramNodeVisitor >> visitLevelForOne: aLevelForOne [
 	^ self visitSimpleLevel: aLevelForOne
+]
+
+{ #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitLocalSetting: aLocalSetting [
+	^ self visitSetting: aLocalSetting
 ]
 
 { #category : #generated }
@@ -103,6 +118,16 @@ TGtViewModelProgramNodeVisitor >> visitPropertyValue: aPropertyValue [
 { #category : #generated }
 TGtViewModelProgramNodeVisitor >> visitSetting: aSetting [
 	^ self visitProgram: aSetting
+]
+
+{ #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitSettingPropertiesList: aSettingPropertiesList [
+	^ self visitProgram: aSettingPropertiesList
+]
+
+{ #category : #generated }
+TGtViewModelProgramNodeVisitor >> visitSettingProperty: aSettingProperty [
+	^ self visitProperty: aSettingProperty
 ]
 
 { #category : #generated }

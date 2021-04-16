@@ -20,7 +20,7 @@ TGtViewModelParentAccessorTemplate >> __view_model__ [
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model."
 	<return: #__Parent_view_model_class__>
-	<parentViewModelGetter>
+	<parentViewModelGetter: #__parent_name__>
 
 	self
 		assert: [ __view_model__ notNil ]
@@ -34,6 +34,7 @@ TGtViewModelParentAccessorTemplate >> __view_model__: a__Parent_view_model_class
 	"Assign a parent view model (${class:__Parent_view_model_class__}$) which is used to access various state properties,
 	for example parent view model is responsible for knowing a selected child view model.
 	In order for the child to know if it is selected, that child should know the parent view model"
+	<parentViewModelSetter: #__parent_name__>
 
 	self
 		assert: [ a__Parent_view_model_class__ notNil ]
@@ -46,7 +47,7 @@ TGtViewModelParentAccessorTemplate >> __view_model__: a__Parent_view_model_class
 TGtViewModelParentAccessorTemplate >> has__View_model__ [
 	"Return true if the parent view model is attached"
 	<return: #Boolean>
-	<parentViewModelTester>
+	<parentViewModelTester: #__parent_name__>
 
 	^ __view_model__ notNil
 ]

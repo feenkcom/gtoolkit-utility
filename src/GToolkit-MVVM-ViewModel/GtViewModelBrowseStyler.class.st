@@ -66,3 +66,13 @@ GtViewModelBrowseStyler >> visitModelAnnotation: aModelAnnotation [
 		styleGlobalNamed: aModelAnnotation apiNameString asSymbol
 		token: aModelAnnotation api
 ]
+
+{ #category : #generated }
+GtViewModelBrowseStyler >> visitSetting: aSetting [
+	aSetting nameString = 'derive'
+		ifFalse: [ ^ self ].
+		
+	GtViewModelDerive
+		deriveNamed: aSetting literalValue
+		ifFound: [ :aDeriveClass | self styleGlobalNamed: aDeriveClass name token: aSetting value ]
+]

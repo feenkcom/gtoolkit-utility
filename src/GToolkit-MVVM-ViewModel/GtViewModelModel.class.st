@@ -8,10 +8,21 @@ Class {
 		'settings',
 		'properties',
 		'parent',
-		'definition'
+		'definition',
+		'derives'
 	],
 	#category : #'GToolkit-MVVM-ViewModel-Model'
 }
+
+{ #category : #'api - derives' }
+GtViewModelModel >> addDerive: aDerive [
+	derives add: aDerive
+]
+
+{ #category : #testing }
+GtViewModelModel >> alreadyHasViewModel [
+	^ self properties includesKey: #viewModel
+]
 
 { #category : #private }
 GtViewModelModel >> childViewModelsNameFor: aChildViewModel [
@@ -32,6 +43,21 @@ GtViewModelModel >> definition [
 { #category : #accessing }
 GtViewModelModel >> definition: anObject [
 	definition := anObject
+]
+
+{ #category : #'api - derives' }
+GtViewModelModel >> derives [
+	^ derives
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> existingViewModelClass [
+	^ self class environment at: self existingViewModelName
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> existingViewModelName [
+	^ (self properties at: #viewModel) asSymbol
 ]
 
 { #category : #'api - package tags' }
@@ -58,7 +84,27 @@ GtViewModelModel >> fullTagWith: aSubTag [
 
 { #category : #'api - generation' }
 GtViewModelModel >> generateBehaviorDefinitionIn: aPharoEnvironment [
-	^ self subclassResponsibility
+	| aDefinition |
+
+	aDefinition := GtViewModelGenerator new
+		environment: aPharoEnvironment;
+		modelName: self modelNameForViewModel;
+		viewModelName: self viewModelClassName;
+		projectPrefix: self project;
+		packageName: self package;
+		tagName: self fullTagForViewModel;
+		generateBehaviorDefinition.
+
+	self generateDomainModelAccessorsFor: aDefinition.
+	self generateChildViewModelsAccessorFor: aDefinition.
+	self generateParentViewModelAccessorsFor: aDefinition.
+
+	^ aDefinition
+]
+
+{ #category : #'api - generation' }
+GtViewModelModel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
+	self subclassResponsibility
 ]
 
 { #category : #'api - generation' }
@@ -81,20 +127,23 @@ GtViewModelModel >> generateDomainModelAccessorsFor: aViewModelDefinition [
 
 { #category : #'api - generation' }
 GtViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
-	| aTemplateDefinition |
+	self subclassResponsibility
+]
 
-	self hasParent
-		ifFalse: [ ^ self ].
+{ #category : #'api - generation' }
+GtViewModelModel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition parentViewModelModel: aParentViewModelModel [
+	| aTemplateDefinition |
 
 	aTemplateDefinition := GtTraitGenerator new
 		templateTrait: TGtViewModelParentAccessorTemplate;
 		traitName: #Virtial;
 		packageName: 'MyPackage';
 		templateMap: { 
+			#__parent_name__ -> aParentViewModelModel name.
 			#__View_model_class__ -> self viewModelClassName.
-			#__view_model__ -> self parentViewModelSelectorName uncapitalized.
-			#__View_model__ -> self parentViewModelSelectorName capitalized.
-			#__Parent_view_model_class__ -> self parent viewModelClassName capitalized
+			#__view_model__ -> (self parentViewModelSelectorNameFor: aParentViewModelModel) uncapitalized.
+			#__View_model__ -> (self parentViewModelSelectorNameFor: aParentViewModelModel) capitalized.
+			#__Parent_view_model_class__ -> aParentViewModelModel viewModelClassName capitalized
 		};
 		generateBehaviorDefinition.
 
@@ -132,8 +181,8 @@ GtViewModelModel >> gtTreeFor: aView [
 ]
 
 { #category : #testing }
-GtViewModelModel >> hasParent [
-	^ parent notNil
+GtViewModelModel >> hasParents [
+	^ self subclassResponsibility
 ]
 
 { #category : #initialization }
@@ -141,7 +190,8 @@ GtViewModelModel >> initialize [
 	super initialize.
 
 	settings := Dictionary new.
-	properties := Dictionary new
+	properties := Dictionary new.
+	derives := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -231,9 +281,14 @@ GtViewModelModel >> modelNameForViewModel [
 
 { #category : #'api - accessing' }
 GtViewModelModel >> modelSetterSelector [
+	^ self modelSetterSelectorName asSymbol asMutator
+]
+
+{ #category : #'api - accessing' }
+GtViewModelModel >> modelSetterSelectorName [
 	| aFallbackSelector |
 
-	aFallbackSelector := (self name, 'Model:') asSymbol.
+	aFallbackSelector := (self name, 'Model') asSymbol.
 
 	^ modelApi
 		ifNotNil: [ :anApiTraitName |
@@ -242,7 +297,7 @@ GtViewModelModel >> modelSetterSelector [
 				ifPresent: [ :aTrait |
 					(Pragma allNamed: #modelSetter in: aTrait)
 						ifEmpty: [ aFallbackSelector ]
-						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
+						ifNotEmpty: [ :thePragmas | thePragmas first method selector copyReplaceAll: ':' with: '' ] ]
 				ifAbsent: [ aFallbackSelector ] ]
 		ifNil: [ aFallbackSelector ]
 ]
@@ -280,23 +335,14 @@ GtViewModelModel >> package [
 	^ settings at: #package ifAbsent: [ '' ]
 ]
 
-{ #category : #accessing }
-GtViewModelModel >> parent [
-	^ parent
-]
-
-{ #category : #accessing }
-GtViewModelModel >> parent: anObject [
-	parent := anObject
+{ #category : #'api - accessing' }
+GtViewModelModel >> parentViewModelSelectorNameFor: aParentViewModelModel [
+	^ ('parent', self prefix capitalized, aParentViewModelModel name capitalized, self suffix capitalized, 'ViewModel') asSymbol
 ]
 
 { #category : #'api - accessing' }
-GtViewModelModel >> parentViewModelSelectorName [
-	self
-		assert: [ self hasParent ]
-		description: [ 'Can not create parent selector if there is no parent' ].
-
-	^ ('parent', self prefix capitalized, self parent name capitalized, self suffix capitalized, 'ViewModel') asSymbol
+GtViewModelModel >> parents [
+	^ self subclassResponsibility
 ]
 
 { #category : #'api - accessing' }
@@ -385,6 +431,11 @@ GtViewModelModel >> propertyMethodFor: aPropertyName ofType: aMethodType inViewM
 ]
 
 { #category : #accessing }
+GtViewModelModel >> propertyNamed: aPropertyName put: aPropertyValue [
+	self properties at: aPropertyName asSymbol put: aPropertyValue
+]
+
+{ #category : #accessing }
 GtViewModelModel >> settings [
 	^ settings
 ]
@@ -407,9 +458,8 @@ GtViewModelModel >> tag [
 { #category : #'api - accessing' }
 GtViewModelModel >> viewModelClassName [
 	properties
-		at: #name
+		at: #viewModel
 		ifPresent: [ :aViewModelName | ^ aViewModelName ].
-
 
 	^ String streamContents: [ :aStream |
 		aStream
