@@ -26,7 +26,7 @@ GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions:
 				eachViewModelModelWithCodeDefinition definition instanceSideDefinition traits addTrait: aSelectionTraitDefinition.
 				
 				aSelectedViewModelChangedAnnouncement := self
-					generatePropertyChangedAnnouncementFor: eachViewModelModelWithCodeDefinition viewModelModel.
+					generatePropertyChangedAnnouncementFor: eachViewModelModelWithCodeDefinition metamodel.
 				
 				eachViewModelModelWithCodeDefinition addExtraDefinitions: {
 					aSelectionTraitDefinition.
@@ -35,8 +35,8 @@ GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions:
 		eachViewModelModelWithCodeDefinition isForOne
 			ifTrue: [
 				eachViewModelModelWithCodeDefinition addExtraDefinitions: { 
-					self generateViewModelSelectedAnnouncementFor: eachViewModelModelWithCodeDefinition viewModelModel.
-					self generateViewModelDeselectedAnnouncementFor: eachViewModelModelWithCodeDefinition viewModelModel.
+					self generateViewModelSelectedAnnouncementFor: eachViewModelModelWithCodeDefinition metamodel.
+					self generateViewModelDeselectedAnnouncementFor: eachViewModelModelWithCodeDefinition metamodel.
 				} ] ].
 
 	"second pass to glue children with parents"
@@ -68,7 +68,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFo
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
 		description: [ 'Only view model for one can implement child specific selection methods' ].
 
-	aViewModelModel := aViewModelModelWithCodeDefinition viewModelModel.
+	aViewModelModel := aViewModelModelWithCodeDefinition metamodel.
 	
 	theChildrenForMany := aViewModelModelWithCodeDefinition children select: #isForMany.
 	
@@ -91,7 +91,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFo
 				tab;
 					nextPutAll: 'self';
 					space;
-					nextPutAll: (aViewModelModel childViewModelsNameFor: eachChildViewModelModelWithCodeDefinition viewModelModel) uncapitalized;
+					nextPutAll: (aViewModelModel generateChildObjectGetterSelectorFor: eachChildViewModelModelWithCodeDefinition metamodel) uncapitalized;
 					space;
 					nextPutAll: (self propertyUnsetterSelectorOf: eachChildViewModelModelWithCodeDefinition);
 					nextPut: $. ] ].
@@ -107,7 +107,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateHasOtherSelectedEntitiesMetho
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
 		description: [ 'Only view model for one can implement child specific selection methods' ].
 
-	aViewModelModel := aViewModelModelWithCodeDefinition viewModelModel.
+	aViewModelModel := aViewModelModelWithCodeDefinition metamodel.
 	
 	theChildrenForMany := aViewModelModelWithCodeDefinition children select: #isForMany.
 	theChildrenForMany
@@ -136,7 +136,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateHasOtherSelectedEntitiesMetho
 			aStream
 				nextPutAll: 'self';
 				space;
-				nextPutAll: (aViewModelModel childViewModelsNameFor: eachChildViewModelModelWithCodeDefinition viewModelModel) uncapitalized;
+				nextPutAll: (aViewModelModel generateChildObjectGetterSelectorFor: eachChildViewModelModelWithCodeDefinition metamodel) uncapitalized;
 				space;
 				nextPutAll: (self propertyTesterSelectorOf: eachChildViewModelModelWithCodeDefinition) ].
 		
@@ -150,8 +150,8 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsDefin
 	^ GtRobocoderTraitGenerator new
 		templateTrait: TGtRobocoderMetamodelParentAccessorTemplate;
 		mappings: { 
-			#__View_model_class__ -> aViewModelModelWithCodeDefinition viewModelModel viewModelClassName.
-			#__Parent_view_model_class__ -> aViewModelModelWithCodeDefinition viewModelModel parent viewModelClassName.
+			#__View_model_class__ -> aViewModelModelWithCodeDefinition metamodel objectClassName.
+			#__Parent_view_model_class__ -> aViewModelModelWithCodeDefinition metamodel parent objectClassName.
 			#protocol -> 'selection'.
 			
 			#statusAdjective -> 'selected'.
@@ -159,14 +159,14 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsDefin
 			#setVerb -> 'select'.
 			#unsetVerb -> 'deselect'.
 			#objectName -> aViewModelModelWithCodeDefinition name.
-			#propertyName -> (self propertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel).
+			#propertyName -> (self propertyNameFor: aViewModelModelWithCodeDefinition parent metamodel).
 			#parentObjectGetter -> aViewModelModelWithCodeDefinition parentViewModelSelectorName.
 			#parentPropertyGetter -> (self propertyGetterSelectorOf: aViewModelModelWithCodeDefinition parent).
 			#parentPropertySetter -> (self propertySetterSelectorOf: aViewModelModelWithCodeDefinition parent).
 			#parentPropertyTester -> (self propertyTesterSelectorOf: aViewModelModelWithCodeDefinition parent).
 			
-			#statusAnnouncementClass -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
-			#negativeStatusAnnouncementClass -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
+			#statusAnnouncementClass -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition metamodel).
+			#negativeStatusAnnouncementClass -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition metamodel).
 		};
 		generate
 ]
@@ -175,7 +175,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsDefin
 GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsFor: aViewModelModeWithCodeDefinition [
 	| aViewModelModel aSelectableDefinition |
 
-	aViewModelModel := aViewModelModeWithCodeDefinition viewModelModel.
+	aViewModelModel := aViewModelModeWithCodeDefinition metamodel.
 
 	aViewModelModel hasParent
 		ifFalse: [ ^ self ].
@@ -185,7 +185,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsFor: 
 
 	aSelectableDefinition := self generateSelectableChildAccessorsDefinitionFor: aViewModelModeWithCodeDefinition.
 
-	aViewModelModeWithCodeDefinition viewModelModel
+	aViewModelModeWithCodeDefinition metamodel
 		mergeBehaviorDefinition: aSelectableDefinition instanceSideDefinition
 		into: aViewModelModeWithCodeDefinition definition
 ]
@@ -319,7 +319,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateWithSelectedViewModelTraitFor
 		assert: [ aViewModelModelWithCodeDefinition isForMany ]
 		description: [ 'Only view model for many can implement selection trait' ].
 	
-	aViewModelModel := aViewModelModelWithCodeDefinition viewModelModel.
+	aViewModelModel := aViewModelModelWithCodeDefinition metamodel.
 	aCodeDefinition := aViewModelModelWithCodeDefinition definition.	
 
 	^ GtRobocoderWithPropertyTraitGenerator new
@@ -327,7 +327,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateWithSelectedViewModelTraitFor
 		propertyName: (self propertyNameFor: aViewModelModel);
 		propertySetter: 'select', aViewModelModel forOneModel name capitalized ,'ViewModel';
 		propertyUnsetter: 'deselect', aViewModelModel forOneModel name capitalized ,'ViewModel';
-		propertyType: aViewModelModel forOneModel viewModelClassName;
+		propertyType: aViewModelModel forOneModel objectClassName;
 		propertyComparator: #=;
 		projectPrefix: (aViewModelModel project, aViewModelModel prefix capitalized);
 		packageName: aViewModelModel package;

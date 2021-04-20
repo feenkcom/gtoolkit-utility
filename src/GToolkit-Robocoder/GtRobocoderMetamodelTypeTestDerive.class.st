@@ -16,8 +16,8 @@ GtRobocoderMetamodelTypeTestDerive >> applyOnMetamodelsWithCodeDefinitions: aGtV
 			| eachTypeTesterSourceCode |
 	
 			eachTypeTesterSourceCode := self
-				generateViewModelTypeTesterFor: thisViewModelModelWithCodeDefinition viewModelModel
-				and: anotherViewModelModelWithCodeDefinition viewModelModel.
+				generateViewModelTypeTesterFor: thisViewModelModelWithCodeDefinition metamodel
+				and: anotherViewModelModelWithCodeDefinition metamodel.
 
 			thisViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 				addMethod: eachTypeTesterSourceCode

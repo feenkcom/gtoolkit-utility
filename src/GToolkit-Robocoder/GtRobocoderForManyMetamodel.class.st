@@ -18,7 +18,7 @@ GtRobocoderForManyMetamodel >> addParent: aGtViewModelModel [
 
 { #category : #'api - accessing' }
 GtRobocoderForManyMetamodel >> childViewModelsName [
-	^ self childViewModelsNameFor: self forOneModel
+	^ self generateChildObjectGetterSelectorFor: self forOneModel
 ]
 
 { #category : #accessing }
@@ -45,10 +45,10 @@ GtRobocoderForManyMetamodel >> generateChildViewModelsAccessorFor: aViewModelDef
 		templateTrait: TGtRobocoderMetamodelChildrenForManyTemplate;
 		mappings: { 
 			#modelGetter -> self modelGetterSelector uncapitalized.
-			#viewModelClass -> self viewModelClassName.
+			#viewModelClass -> self objectClassName.
 			
 			#childObjects -> self childViewModelsName uncapitalized.
-			#childObjectsClass -> self forOneModel viewModelClassName capitalized.
+			#childObjectsClass -> self forOneModel objectClassName capitalized.
 			
 			#childModelsGetter -> self itemsAccessorSelector uncapitalized.
 			#childModelSetter -> self forOneModel modelSetterSelectorName uncapitalized.

@@ -1,6 +1,8 @@
 Class {
 	#name : #GtRobocoderMetamodel,
 	#superclass : #Object,
+	#traits : 'TGtRobocoderMetamodelSettings',
+	#classTraits : 'TGtRobocoderMetamodelSettings classTrait',
 	#instVars : [
 		'name',
 		'model',
@@ -8,7 +10,6 @@ Class {
 		'settings',
 		'properties',
 		'parent',
-		'definition',
 		'derives'
 	],
 	#category : #'GToolkit-Robocoder-Metamodel'
@@ -20,29 +21,8 @@ GtRobocoderMetamodel >> addDerive: aDerive [
 ]
 
 { #category : #testing }
-GtRobocoderMetamodel >> alreadyHasViewModel [
-	^ self properties includesKey: #viewModel
-]
-
-{ #category : #private }
-GtRobocoderMetamodel >> childViewModelsNameFor: aChildViewModel [
-	^ ('{prefix}{name}{suffix}ViewModel{ending}'
-		format: { 
-			#prefix -> self prefix uncapitalized.
-			#name -> aChildViewModel name capitalized.
-			#suffix -> self suffix capitalized.
-			#ending -> (aChildViewModel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
-		} asDictionary) uncapitalized
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodel >> definition [
-	^ definition
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodel >> definition: anObject [
-	definition := anObject
+GtRobocoderMetamodel >> alreadyHasClass [
+	^ self properties includesKey: #class
 ]
 
 { #category : #'api - derives' }
@@ -87,7 +67,7 @@ GtRobocoderMetamodel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 	| aDefinition |
 
 	aDefinition := GtFullClassDefinition forNew.
-	aDefinition name: self viewModelClassName.
+	aDefinition name: self objectClassName.
 	aDefinition instanceSideDefinition category package name: self package.
 	aDefinition instanceSideDefinition category tag name: self fullTagForViewModel.
 	aDefinition classSideDefinition category package name: self package.
@@ -98,6 +78,20 @@ GtRobocoderMetamodel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 	self generateParentViewModelAccessorsFor: aDefinition.
 
 	^ aDefinition
+]
+
+{ #category : #private }
+GtRobocoderMetamodel >> generateChildObjectGetterSelectorFor: aChildMetamodel [
+	"Generate a selector for a method that should be used to access a child object of the given child metamodel"
+	<return: #String>
+
+	^ ('{project}{name}{suffix}{ending}'
+		format: { 
+			#project -> aChildMetamodel project uncapitalized.
+			#name -> aChildMetamodel name capitalized.
+			#suffix -> aChildMetamodel suffix capitalized.
+			#ending -> (aChildMetamodel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
+		} asDictionary) uncapitalized
 ]
 
 { #category : #'api - generation' }
@@ -125,6 +119,11 @@ GtRobocoderMetamodel >> generateDomainModelAccessorsFor: aViewModelDefinition [
 			self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aViewModelDefinition ]
 ]
 
+{ #category : #private }
+GtRobocoderMetamodel >> generateParentObjectGetterSelectorFor: aParentViewModelModel [
+	^ 'parent', self project capitalized, aParentViewModelModel name capitalized, self suffix capitalized
+]
+
 { #category : #'api - generation' }
 GtRobocoderMetamodel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
 	self subclassResponsibility
@@ -138,10 +137,10 @@ GtRobocoderMetamodel >> generateParentViewModelAccessorsFor: aViewModelBehaviorD
 		templateTrait: TGtRobocoderMetamodelParentAccessorTemplate;
 		mappings: { 
 			"A class of the object to which the api should be added (used for documentation generation)"
-			#objectClass -> self viewModelClassName.
+			#objectClass -> self objectClassName.
 			#parentObjectName -> aParentViewModelModel name.
-			#parentObject -> (self parentViewModelSelectorNameFor: aParentViewModelModel) uncapitalized.
-			#parentObjectClass -> aParentViewModelModel viewModelClassName capitalized
+			#parentObject -> (self generateParentObjectGetterSelectorFor: aParentViewModelModel) uncapitalized.
+			#parentObjectClass -> aParentViewModelModel objectClassName capitalized
 		};
 		generate.
 
@@ -155,12 +154,19 @@ GtRobocoderMetamodel >> gtInfoFor: aView [
 	<gtView>
 
 	^ (({
-		'View model class name' -> self viewModelClassName.
-		'Model getter' -> self modelGetterSelector printString.
-		'Model setter' -> self modelSetterSelector printString.
-		'Parent view model name' -> (self hasParent
-			ifTrue: [ self parentViewModelSelectorName printString ] 
-			ifFalse: [ '-----' ]).
+		'Name' -> (self name ifEmpty: [ 'not set' asRopedText italic ]).
+		'Prefix' -> (self prefix ifEmpty: [ 'not set' asRopedText italic ]).
+		'Project' -> (self project ifEmpty: [ 'not set' asRopedText italic ]).
+		'Suffix' -> (self suffix ifEmpty: [ 'not set' asRopedText italic ]).
+		'Class name' -> (self objectClassName ifEmpty: [ 'not set' asRopedText italic ]).
+		'Package' -> (self hasSpecifiedPackage
+			ifTrue: [ self package ]
+			ifFalse: [ ('not set (using default: {1})' format: { self defaultPackage printString }) asRopedText italic ]).
+		'Tag' -> (self hasSpecifiedTag
+			ifTrue: [ self tag ]
+			ifFalse: [ 'not set' asRopedText italic ]).
+		"'Model getter' -> self modelGetterSelector printString.
+		'Model setter' -> self modelSetterSelector printString."
 	 } asOrderedDictionary, properties, settings) gtItemsFor: aView)
 			title: 'Info';
 			priority: 2
@@ -320,7 +326,10 @@ GtRobocoderMetamodel >> modelTesterSelector [
 
 { #category : #accessing }
 GtRobocoderMetamodel >> name [
-	^ name
+	"Return the name of the metamodel. If it is not set return emty string"
+	<return: #String>
+	
+	^ name ifNil: [ '' ]
 ]
 
 { #category : #accessing }
@@ -328,24 +337,26 @@ GtRobocoderMetamodel >> name: anObject [
 	name := anObject
 ]
 
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> package [
-	^ settings at: #package ifAbsent: [ '' ]
-]
+{ #category : #'api - names' }
+GtRobocoderMetamodel >> objectClassName [
+	"Create the name of the generated (or existing) class for this metamodel"
+	<return: #String>
 
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> parentViewModelSelectorNameFor: aParentViewModelModel [
-	^ ('parent', self prefix capitalized, aParentViewModelModel name capitalized, self suffix capitalized, 'ViewModel') asSymbol
+	properties
+		at: #class
+		ifPresent: [ :aanObjectClassName | ^ aanObjectClassName ].
+
+	^ String streamContents: [ :aStream |
+		aStream
+			nextPutAll: self prefix capitalized;
+			nextPutAll: self project capitalized;
+			nextPutAll: self name capitalized;
+			nextPutAll: self suffix capitalized ]
 ]
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodel >> parents [
 	^ self subclassResponsibility
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> prefix [
-	^ settings at: #prefix ifAbsent: [ '' ]
 ]
 
 { #category : #printing }
@@ -362,11 +373,6 @@ GtRobocoderMetamodel >> printOn: aStream [
 	aStream
 		nextPutAll: ' name: ';
 		print: name
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> project [
-	^ settings at: #project ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
@@ -441,29 +447,4 @@ GtRobocoderMetamodel >> settings [
 { #category : #accessing }
 GtRobocoderMetamodel >> settings: anObject [
 	settings := anObject
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> suffix [
-	^ settings at: #suffix ifAbsent: [ '' ]
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> tag [
-	^ settings at: #tag ifAbsent: [ '' ]
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> viewModelClassName [
-	properties
-		at: #viewModel
-		ifPresent: [ :aViewModelName | ^ aViewModelName ].
-
-	^ String streamContents: [ :aStream |
-		aStream
-			nextPutAll: self project;
-			nextPutAll: self prefix capitalized;
-			nextPutAll: self name capitalized;
-			nextPutAll: self suffix capitalized;
-			nextPutAll: 'ViewModel' ]
 ]

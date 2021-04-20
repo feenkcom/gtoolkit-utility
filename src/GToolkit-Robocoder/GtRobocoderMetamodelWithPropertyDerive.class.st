@@ -30,7 +30,7 @@ GtRobocoderMetamodelWithPropertyDerive >> generatePropertyChangedNotifierMethodF
 		propertyChangeNotifierMethodOf: aViewModelModelWithCodeDefinition.
 			
 	methodSourceCode := aMethodDefinition sourceCode, String cr, String cr, String tab, 
-		'self announce: ', (self propertyChangedAnnouncementClassNameFor: aViewModelModelWithCodeDefinition viewModelModel),' new'.
+		'self announce: ', (self propertyChangedAnnouncementClassNameFor: aViewModelModelWithCodeDefinition metamodel),' new'.
 
 	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 		addMethod: methodSourceCode
@@ -73,8 +73,8 @@ GtRobocoderMetamodelWithPropertyDerive >> propertyGetterSelectorOf: aViewModelMo
 
 { #category : #'private - methods' }
 GtRobocoderMetamodelWithPropertyDerive >> propertyMethodOfType: aMethodType inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition [
-	^ aViewModelModelWithCodeDefinition viewModelModel
-		propertyMethodFor: (self propertyNameFor: aViewModelModelWithCodeDefinition viewModelModel)
+	^ aViewModelModelWithCodeDefinition metamodel
+		propertyMethodFor: (self propertyNameFor: aViewModelModelWithCodeDefinition metamodel)
 		ofType: aMethodType
 		inViewModelBehavior: aViewModelModelWithCodeDefinition definition
 ]

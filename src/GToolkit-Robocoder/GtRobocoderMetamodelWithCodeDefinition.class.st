@@ -31,8 +31,8 @@ GtRobocoderMetamodelWithCodeDefinition >> allViewModelModelDefinitions: anObject
 ]
 
 { #category : #testing }
-GtRobocoderMetamodelWithCodeDefinition >> alreadyHasViewModel [
-	^ self viewModelModel alreadyHasViewModel
+GtRobocoderMetamodelWithCodeDefinition >> alreadyHasClass [
+	^ self metamodel alreadyHasClass
 ]
 
 { #category : #'private - methods' }
@@ -64,14 +64,14 @@ GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName 
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> childViewModelsName [
-	^ self viewModelModel childViewModelsName
+	^ self metamodel childViewModelsName
 ]
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> children [
 	<return: #Collection of: #GtRobocoderMetamodelWithCodeDefinition>
 
-	^ self viewModelModel children collect: [ :eachChildViewModel |
+	^ self metamodel children collect: [ :eachChildViewModel |
 		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachChildViewModel ]
 ]
 
@@ -87,7 +87,7 @@ GtRobocoderMetamodelWithCodeDefinition >> definition: anObject [
 
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition >> derives [
-	^ self viewModelModel derives
+	^ self metamodel derives
 ]
 
 { #category : #'api - methods' }
@@ -109,12 +109,12 @@ GtRobocoderMetamodelWithCodeDefinition >> extraDefinitions: anObject [
 GtRobocoderMetamodelWithCodeDefinition >> forOneModel [
 	<return: #GtRobocoderMetamodelWithCodeDefinition>
 
-	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self viewModelModel forOneModel
+	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self metamodel forOneModel
 ]
 
 { #category : #testing }
 GtRobocoderMetamodelWithCodeDefinition >> hasParents [
-	^ self viewModelModel hasParents
+	^ self metamodel hasParents
 ]
 
 { #category : #initialization }
@@ -126,12 +126,24 @@ GtRobocoderMetamodelWithCodeDefinition >> initialize [
 
 { #category : #testing }
 GtRobocoderMetamodelWithCodeDefinition >> isForMany [
-	^ self viewModelModel isForMany
+	^ self metamodel isForMany
 ]
 
 { #category : #testing }
 GtRobocoderMetamodelWithCodeDefinition >> isForOne [
-	^ self viewModelModel isForOne
+	^ self metamodel isForOne
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelWithCodeDefinition >> metamodel [
+	<return: #GtRobocoderMetamodel>
+
+	^ viewModelModel
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelWithCodeDefinition >> metamodel: aGtRobocoderMetamodel [
+	viewModelModel := aGtRobocoderMetamodel
 ]
 
 { #category : #'private - methods' }
@@ -203,12 +215,12 @@ GtRobocoderMetamodelWithCodeDefinition >> methodsWithPragmaNamed: aPragmaName in
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> modelGetterSelector [
-	^ self viewModelModel modelGetterSelector
+	^ self metamodel modelGetterSelector
 ]
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> name [
-	^ self viewModelModel name
+	^ self metamodel name
 ]
 
 { #category : #'api - accessing' }
@@ -219,7 +231,7 @@ GtRobocoderMetamodelWithCodeDefinition >> parent [
 		assert: [ self isForOne ]
 		description: [ 'Only model for one can have a single parent' ].
 
-	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self viewModelModel parent
+	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self metamodel parent
 ]
 
 { #category : #'api - methods' }
@@ -242,7 +254,7 @@ GtRobocoderMetamodelWithCodeDefinition >> parentViewModelSelectorName [
 		assert: [ self isForOne ]
 		description: [ 'Only model for one can have a single parent' ].
 
-	^ self viewModelModel parentViewModelSelectorName
+	^ self metamodel parentViewModelSelectorName
 ]
 
 { #category : #'api - methods' }
@@ -263,18 +275,6 @@ GtRobocoderMetamodelWithCodeDefinition >> parentViewModelTesterMethodFor: aParen
 GtRobocoderMetamodelWithCodeDefinition >> parents [
 	<return: #Collection of: #GtRobocoderMetamodelWithCodeDefinition>
 	
-	^ self viewModelModel parents collect: [ :eachParentViewModelModel |
+	^ self metamodel parents collect: [ :eachParentViewModelModel |
 		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachParentViewModelModel ]
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodelWithCodeDefinition >> viewModelModel [
-	<return: #GtRobocoderMetamodel>
-
-	^ viewModelModel
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodelWithCodeDefinition >> viewModelModel: anObject [
-	viewModelModel := anObject
 ]

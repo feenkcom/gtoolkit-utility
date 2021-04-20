@@ -130,6 +130,15 @@ GtRobocoderMetamodelSnippet >> initialize [
 	coder := GtRobocoderMetamodelCoder new.
 	super initialize.
 
+	coder  forSource:
+'@prefix Gt
+@project MyProject
+@package ''NewPackage''
+@tag ''Tag''
+@suffix ViewModel
+
+'.
+
 	shouldSpawn := false.
 	
 	coderViewModel := coder asCoderViewModel.

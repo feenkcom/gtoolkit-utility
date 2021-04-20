@@ -19,7 +19,7 @@ GtRobocoderMetamodelApiTraitDerive >> applyOnMetamodelsWithCodeDefinitions: aGtV
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		| anApiTraitDefinition |
 		
-		anApiTraitDefinition := self generateMetamodelApiTraitFor: eachViewModelModelWithCodeDefinition viewModelModel.
+		anApiTraitDefinition := self generateMetamodelApiTraitFor: eachViewModelModelWithCodeDefinition metamodel.
 		eachViewModelModelWithCodeDefinition addExtraDefinition: anApiTraitDefinition ]
 ]
 

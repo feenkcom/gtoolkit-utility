@@ -59,7 +59,7 @@ GtRobocoderMetamodelsWithCodeDefinitions >> gtModelsFor: aView [
 { #category : #accessing }
 GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModelWithCodeDefinitionFor: aViewModelModel [
 	^ self definitions
-		detect: [ :eachViewModelModelWithCodeDefinition | eachViewModelModelWithCodeDefinition viewModelModel = aViewModelModel ]
+		detect: [ :eachViewModelModelWithCodeDefinition | eachViewModelModelWithCodeDefinition metamodel = aViewModelModel ]
 ]
 
 { #category : #accessing }
@@ -84,6 +84,6 @@ GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModelsWithNewCodeDefinition
 	"Evaluate a given block with each ${class:GtViewModelModelWithCodeDefinition}$"
 
 	self definitions
-		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasViewModel not ]
+		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
 		thenDo: aBlock
 ]

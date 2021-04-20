@@ -15,7 +15,7 @@ GtRobocoderMetamodelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewM
 		| eachNameMethodSourceCode |
 
 		eachNameMethodSourceCode := self
-			generateViewModelNameMethodFor: eachViewModelModelWithCodeDefinition viewModelModel.
+			generateViewModelNameMethodFor: eachViewModelModelWithCodeDefinition metamodel.
 
 		eachViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 			addMethod: eachNameMethodSourceCode

@@ -15,7 +15,7 @@ GtRobocoderMetamodelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions:
 		eachViewModelModelWithCodeDefinition isForMany
 			ifTrue: [ self generatePhlowListViewForManyMethodFor: eachViewModelModelWithCodeDefinition ]
 			ifFalse: [
-				eachViewModelModelWithCodeDefinition viewModelModel children
+				eachViewModelModelWithCodeDefinition metamodel children
 					do: [ :eachChildViewModelModel |
 						self
 							generatePhlowListViewForOneMethodFor: eachViewModelModelWithCodeDefinition
@@ -56,7 +56,7 @@ aMethodSource :=
 		items: [ self {child} {grandchildren}]'
 			format: {
 				#Name -> aChildViewModelModel name capitalized.
-				#child -> (aViewModelModelWithCodeDefinition viewModelModel childViewModelsNameFor: aChildViewModelModel).
+				#child -> (aViewModelModelWithCodeDefinition metamodel generateChildObjectGetterSelectorFor: aChildViewModelModel).
 				#grandchildren -> aChildViewModelModel childViewModelsName
 			} asDictionary.
 			

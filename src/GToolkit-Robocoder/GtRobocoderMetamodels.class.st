@@ -42,18 +42,18 @@ GtRobocoderMetamodels >> generateCodeDefinitions [
 
 	viewModelCodeDefinitions definitions: (self models collect: [ :eachViewModelModel |
 		| aDefinition |
-		aDefinition := eachViewModelModel alreadyHasViewModel
+		aDefinition := eachViewModelModel alreadyHasClass
 			ifTrue: [ GtBehaviorDefinition fromBehavior: eachViewModelModel existingViewModelClass in: anEnvironment ]
 			ifFalse: [ eachViewModelModel generateBehaviorDefinitionIn: anEnvironment ].
 
 		GtRobocoderMetamodelWithCodeDefinition new
 			allViewModelModelDefinitions: viewModelCodeDefinitions;
-			viewModelModel: eachViewModelModel;
+			metamodel: eachViewModelModel;
 			definition: aDefinition ]).
 
 	derives do: [ :eachDerive | eachDerive applyOnMetamodelsWithCodeDefinitions: viewModelCodeDefinitions ].
 	viewModelCodeDefinitions definitions
-		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasViewModel not ]
+		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
 		thenDo: [ :eachViewModelModelWithDefinition |
 			eachViewModelModelWithDefinition derives do: [ :eachDerive |
 				eachDerive applyOnViewModelModelWithCodeDefinition: eachViewModelModelWithDefinition ] ].

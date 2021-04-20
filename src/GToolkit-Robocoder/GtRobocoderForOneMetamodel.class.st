@@ -21,7 +21,7 @@ GtRobocoderForOneMetamodel >> addChild: aGtNavigationViewModelModel [
 
 { #category : #'api - accessing' }
 GtRobocoderForOneMetamodel >> childViewModelsName [
-	^ self childViewModelsNameFor: self
+	^ self generateChildObjectGetterSelectorFor: self
 ]
 
 { #category : #accessing }
@@ -38,7 +38,7 @@ GtRobocoderForOneMetamodel >> children: anObject [
 GtRobocoderForOneMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
 	children do: [ :eachChildModel |
 		| theChildrenAccessorsDefinition theChildrenAccessor |
-		
+
 		theChildrenAccessor := properties
 			at: eachChildModel name
 			ifAbsent: [ eachChildModel name ].
@@ -46,12 +46,12 @@ GtRobocoderForOneMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefi
 		theChildrenAccessorsDefinition := GtRobocoderTraitGenerator new
 			templateTrait: TGtRobocoderMetamodelChildrenForOneTemplate;
 			mappings: { 
-				#__Parent_view_model_class__ -> self viewModelClassName.
-				#childObject -> (self childViewModelsNameFor: eachChildModel) uncapitalized.
+				#__Parent_view_model_class__ -> self objectClassName.
+				#childObject -> (self generateChildObjectGetterSelectorFor: eachChildModel) uncapitalized.
 				#modelGetter -> self modelGetterSelector uncapitalized.
 				#childGetter -> theChildrenAccessor uncapitalized.
-				#childViewModelClass -> eachChildModel viewModelClassName capitalized.
-				#childParentObjectSetter -> (eachChildModel parentViewModelSelectorNameFor: self) uncapitalized.
+				#childViewModelClass -> eachChildModel objectClassName capitalized.
+				#childParentObjectSetter -> (eachChildModel generateParentObjectGetterSelectorFor: self) uncapitalized.
 				#childSetter -> eachChildModel modelSetterSelector uncapitalized
 			};
 			generate.
@@ -117,7 +117,7 @@ GtRobocoderForOneMetamodel >> parentViewModelSelectorName [
 		assert: [ self hasParent ]
 		description: [ 'Can not create parent selector if there is no parent' ].
 
-	^ self parentViewModelSelectorNameFor: self parent
+	^ self generateParentObjectGetterSelectorFor: self parent
 ]
 
 { #category : #'api - accessing' }
