@@ -149,7 +149,7 @@ GtRobocoderTemplateMethodCoder >> initialize [
 GtRobocoderTemplateMethodCoder >> initializeAddOns: addOns [
 	super initializeAddOns: addOns.
 
-	addOns addStyler: GtPharoTemplateStyler new.
+	addOns addStyler: GtRobocoderTemplateMethodStyler new.
 	addOns addStyler: GtPharoDeprecationStyler new.
 	addOns addStyler: GtPharoMethodExpanderStyler new.
 
