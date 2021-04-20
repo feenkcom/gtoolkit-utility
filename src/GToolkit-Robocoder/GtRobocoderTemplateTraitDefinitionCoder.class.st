@@ -10,6 +10,36 @@ Class {
 	#category : #'GToolkit-Robocoder-Coder - Behavior template'
 }
 
+{ #category : #private }
+GtRobocoderTemplateTraitDefinitionCoder class >> translateTraitDefinition: aTraitDefinition bindings: theBindings [
+	| aDefinition |
+	
+	aDefinition := aTraitDefinition copy.
+	aDefinition name: (GtRobocoderTemplateTranslator new
+		bindings: theBindings;
+		translate: aDefinition name).
+	
+	aDefinition category package name: (GtRobocoderTemplateTranslator new
+		bindings: theBindings;
+		translate: aDefinition category package name).
+	
+	aDefinition category tag name: (GtRobocoderTemplateTranslator new
+		bindings: theBindings;
+		translate: aDefinition category tag name).
+		
+	aDefinition comment content: (GtRobocoderTemplateTranslator new
+		bindings: theBindings;
+		translate: aDefinition comment content).
+		
+	aDefinition slots do: [ :eachSlot | eachSlot name: (GtRobocoderTemplateTranslator new
+		bindings: theBindings;
+		translate: eachSlot name) ].
+	
+	aDefinition traits definitions: (aDefinition traits collect: [ :eachTraitDefinition | self translateTraitDefinition: eachTraitDefinition bindings: theBindings ]).
+	
+	^ aDefinition
+]
+
 { #category : #converting }
 GtRobocoderTemplateTraitDefinitionCoder >> asCoderUIModel [
 	^ GtRobocoderTemplateTraitDefinitionCoderViewModel new templateTraitBehaviorCoderModel: self
@@ -121,35 +151,5 @@ GtRobocoderTemplateTraitDefinitionCoder >> save [
 
 { #category : #'api - actions' }
 GtRobocoderTemplateTraitDefinitionCoder >> translate [
-	^ self translateTraitDefinition: self definition copy
-]
-
-{ #category : #private }
-GtRobocoderTemplateTraitDefinitionCoder >> translateTraitDefinition: aTraitDefinition [
-	| aDefinition |
-	
-	aDefinition := aTraitDefinition copy.
-	aDefinition name: (GtRobocoderTemplateTranslator new
-		bindings: bindings;
-		translate: aDefinition name).
-	
-	aDefinition category package name: (GtRobocoderTemplateTranslator new
-		bindings: bindings;
-		translate: aDefinition category package name).
-	
-	aDefinition category tag name: (GtRobocoderTemplateTranslator new
-		bindings: bindings;
-		translate: aDefinition category tag name).
-		
-	aDefinition comment content: (GtRobocoderTemplateTranslator new
-		bindings: bindings;
-		translate: aDefinition comment content).
-		
-	aDefinition slots do: [ :eachSlot | eachSlot name: (GtRobocoderTemplateTranslator new
-		bindings: bindings;
-		translate: eachSlot name) ].
-	
-	aDefinition traits definitions: (aDefinition traits collect: [ :eachTraitDefinition | self translateTraitDefinition: eachTraitDefinition ]).
-	
-	^ aDefinition
+	^ self class translateTraitDefinition: self definition bindings: bindings
 ]

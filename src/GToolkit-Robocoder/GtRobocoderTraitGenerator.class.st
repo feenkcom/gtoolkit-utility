@@ -3,7 +3,7 @@
 
 Usage example:
 [[[
-(GtTraitGenerator new
+(GtRobocoderTraitGenerator new
 	templateTrait: TMyTemplateTrait;
 	mappings: {
 		#key -> 'value'
@@ -17,7 +17,6 @@ Class {
 	#instVars : [
 		'environment',
 		'templateTrait',
-		'traitName',
 		'mappings'
 	],
 	#category : #'GToolkit-Robocoder-Generators'

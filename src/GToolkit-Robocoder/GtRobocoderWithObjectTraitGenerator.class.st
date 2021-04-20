@@ -1,22 +1,53 @@
 "
-! View Trait generator
+! With object trait generator
 
-Usage example:
+Usage example to generate an api trait for a view model:
 [[[
 GtRobocoderWithObjectTraitGenerator new
 	modelName: 'testViewModel';
 	projectPrefix: 'Pr';
 	packageName: 'GToolkit-MVVM-Test';
-	generate	
+	generate
+]]]
+
+Usage example to generate an api trait for a domain model:
+[[[
+GtRobocoderWithObjectTraitGenerator new
+	modelName: 'testModel';
+	projectPrefix: 'Pr';
+	packageName: 'GToolkit-MVVM-Test';
+	generate
 ]]]
 "
 Class {
 	#name : #GtRobocoderWithObjectTraitGenerator,
 	#superclass : #Object,
-	#traits : 'TGtModelTraitGenerator',
-	#classTraits : 'TGtModelTraitGenerator classTrait',
+	#instVars : [
+		'environment',
+		'objectName',
+		'projectPrefix',
+		'packageName',
+		'tagName'
+	],
 	#category : #'GToolkit-Robocoder-Generators'
 }
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> environment [
+	^ environment
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> environment: anObject [
+	environment := anObject
+]
+
+{ #category : #translating }
+GtRobocoderWithObjectTraitGenerator >> generate [
+	<return: #GtTraitDefinition>
+
+	^ self generator generate
+]
 
 { #category : #translating }
 GtRobocoderWithObjectTraitGenerator >> generator [
@@ -24,32 +55,66 @@ GtRobocoderWithObjectTraitGenerator >> generator [
 
 	^ GtRobocoderTraitGenerator new
 		environment: self environment;
-		traitName: self traitName;
-		packageName: self packageName;
-		tagName: self tagName;
 		templateTrait: self templateTrait;
-		templateMap: {
-			#__MODEL_NAME__ -> self modelName uncapitalized.
-			#__MODEL_NAME_CAPITALIZED__-> self modelName capitalized.
-			#__MODEL_NAME_TEXT__ -> (GtGeneratorUtilities camelCaseToSentence: self modelName) uncapitalized.
-			#__TRAIT_NAME__ -> self traitName capitalized asSymbol.
-			#__GENERATOR_SOURCE_CODE__ -> self storeString }
+		mappings: {
+			#objectName -> self objectName uncapitalized.
+			#prefix -> self projectPrefix.
+			#package -> self packageName.
+			#tag -> self tagName }
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> objectName [
+	^ objectName
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> objectName: anObject [
+	objectName := anObject
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> packageName [
+	^ packageName
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> packageName: anObject [
+	packageName := anObject
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> projectPrefix [
+	^ projectPrefix
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> projectPrefix: anObject [
+	projectPrefix := anObject
+]
+
+{ #category : #printing }
+GtRobocoderWithObjectTraitGenerator >> storeOn: aStream [
+	aStream
+		nextPutAll: self class name; space; nextPutAll: 'new'; cr;
+		tab; nextPutAll: 'objectName:'; space; print: self objectName; nextPut: $;; cr;
+		tab; nextPutAll: 'projectPrefix:'; space; print: self projectPrefix; nextPut: $;; cr;
+		tab; nextPutAll: 'packageName:'; space; print: self packageName; nextPut: $;; cr;
+		tab; nextPutAll: 'tagName:'; space; print: (self tagName ifNil: [ '' ]); nextPut: $;; cr;
+		tab; nextPutAll: 'generate'
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> tagName [
+	^ tagName
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> tagName: anObject [
+	tagName := anObject
 ]
 
 { #category : #accessing }
 GtRobocoderWithObjectTraitGenerator >> templateTrait [
 	^ TGtRobocoderWithObjectTraitTemplate
-]
-
-{ #category : #private }
-GtRobocoderWithObjectTraitGenerator >> traitName [
-	<return: #Symbol>
-
-	^ Symbol streamContents: [ :aStream |
-		aStream
-			nextPut: $T;
-			nextPutAll: self projectPrefix;
-			nextPutAll: 'With';
-			nextPutAll: self modelName capitalized;
-			nextPutAll: 'ViewModel' ]
 ]

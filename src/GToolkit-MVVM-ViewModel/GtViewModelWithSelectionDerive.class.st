@@ -322,7 +322,7 @@ GtViewModelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewMo
 	aViewModelModel := aViewModelModelWithCodeDefinition viewModelModel.
 	aCodeDefinition := aViewModelModelWithCodeDefinition definition.	
 
-	^ GtWithPropertyTraitGenerator new
+	^ GtRobocoderWithPropertyTraitGenerator new
 		environment: aCodeDefinition environment;
 		propertyName: (self propertyNameFor: aViewModelModel);
 		propertySetter: 'select', aViewModelModel forOneModel name capitalized ,'ViewModel';

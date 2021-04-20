@@ -86,14 +86,12 @@ GtRobocoderMetamodel >> fullTagWith: aSubTag [
 GtRobocoderMetamodel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 	| aDefinition |
 
-	aDefinition := GtViewModelGenerator new
-		environment: aPharoEnvironment;
-		modelName: self modelNameForViewModel;
-		viewModelName: self viewModelClassName;
-		projectPrefix: self project;
-		packageName: self package;
-		tagName: self fullTagForViewModel;
-		generateBehaviorDefinition.
+	aDefinition := GtFullClassDefinition forNew.
+	aDefinition name: self viewModelClassName.
+	aDefinition instanceSideDefinition category package name: self package.
+	aDefinition instanceSideDefinition category tag name: self fullTagForViewModel.
+	aDefinition classSideDefinition category package name: self package.
+	aDefinition classSideDefinition category tag name: self fullTagForViewModel.
 
 	self generateDomainModelAccessorsFor: aDefinition.
 	self generateChildViewModelsAccessorFor: aDefinition.
@@ -116,12 +114,14 @@ GtRobocoderMetamodel >> generateDomainModelAccessorsFor: aViewModelDefinition [
 			aViewModelDefinition instanceSideDefinition traits addTrait: aDomainModelTraitDefinition ]
 		ifNil: [
 			| aDomainModelTraitDefinition |
-			aDomainModelTraitDefinition := GtWithDomainModelTraitGenerator new
-				modelName: self name;
+			
+			aDomainModelTraitDefinition := GtRobocoderWithObjectTraitGenerator new
+				objectName: self name, self suffix capitalized;
 				projectPrefix: self project, self prefix capitalized;
 				packageName: self package;
-				generateBehaviorDefinition.
-			
+				tagName: self fullTagForTraits;
+				generate.
+
 			self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aViewModelDefinition ]
 ]
 
