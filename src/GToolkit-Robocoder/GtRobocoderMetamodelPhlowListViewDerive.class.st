@@ -1,16 +1,16 @@
 Class {
-	#name : #GtViewModelPhlowListViewDerive,
+	#name : #GtRobocoderMetamodelPhlowListViewDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #accessing }
-GtViewModelPhlowListViewDerive class >> label [
+GtRobocoderMetamodelPhlowListViewDerive class >> label [
 	^ 'phlowList'
 ]
 
 { #category : #'api - generation' }
-GtViewModelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
 		eachViewModelModelWithCodeDefinition isForMany
 			ifTrue: [ self generatePhlowListViewForManyMethodFor: eachViewModelModelWithCodeDefinition ]
@@ -23,7 +23,7 @@ GtViewModelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewM
 ]
 
 { #category : #'private - generation' }
-GtViewModelPhlowListViewDerive >> generatePhlowListViewForManyMethodFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelPhlowListViewDerive >> generatePhlowListViewForManyMethodFor: aViewModelModelWithCodeDefinition [
 	| aMethodSource |
 aMethodSource :=
 'gt{Name}ListViewFor: aView
@@ -44,7 +44,7 @@ aMethodSource :=
 ]
 
 { #category : #'private - generation' }
-GtViewModelPhlowListViewDerive >> generatePhlowListViewForOneMethodFor: aViewModelModelWithCodeDefinition childViewModelModel: aChildViewModelModel [
+GtRobocoderMetamodelPhlowListViewDerive >> generatePhlowListViewForOneMethodFor: aViewModelModelWithCodeDefinition childViewModelModel: aChildViewModelModel [
 	| aMethodSource |
 aMethodSource :=
 'gt{Name}ListViewFor: aView

@@ -1,16 +1,16 @@
 Class {
-	#name : #GtViewModelNameDerive,
+	#name : #GtRobocoderMetamodelNameDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #accessing }
-GtViewModelNameDerive class >> label [
+GtRobocoderMetamodelNameDerive class >> label [
 	^ 'name'
 ]
 
 { #category : #'api - generation' }
-GtViewModelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		| eachNameMethodSourceCode |
 
@@ -23,7 +23,7 @@ GtViewModelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModel
 ]
 
 { #category : #'private - generation' }
-GtViewModelNameDerive >> generateViewModelNameMethodFor: aViewModelModel [
+GtRobocoderMetamodelNameDerive >> generateViewModelNameMethodFor: aViewModelModel [
 	^ 'viewModelName
 	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
 	Note: The symbolic name of the view model is the exact name that was used

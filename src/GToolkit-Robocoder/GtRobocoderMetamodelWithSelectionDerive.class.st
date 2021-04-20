@@ -1,16 +1,16 @@
 Class {
-	#name : #GtViewModelWithSelectionDerive,
-	#superclass : #GtViewModelWithChoicePropertyFromManyDirective,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#name : #GtRobocoderMetamodelWithSelectionDerive,
+	#superclass : #GtRobocoderMetamodelWithChoicePropertyFromManyDerive,
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #accessing }
-GtViewModelWithSelectionDerive class >> label [
+GtRobocoderMetamodelWithSelectionDerive class >> label [
 	^ 'selection'
 ]
 
 { #category : #'api - generation' }
-GtViewModelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	"The generation of the selection behavior requires three passes:
 	 - first we generate the template code which is independent for each view model
 	 - once the basic code skeleton is generated we glue children to their parents during the second pass
@@ -61,7 +61,7 @@ GtViewModelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewM
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewModelModelWithCodeDefinition [
 	| aViewModelModel aMethodDefinition methodSourceCode theChildrenForMany |
 
 	self
@@ -100,7 +100,7 @@ GtViewModelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewM
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aViewModelModelWithCodeDefinition [
 	| aViewModelModel theChildrenForMany aMethodDefinition methodSourceCode |
 
 	self
@@ -146,7 +146,7 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor: aViewModelModelWithCodeDefinition [
 	^ GtRobocoderTraitGenerator new
 		templateTrait: TGtRobocoderMetamodelParentAccessorTemplate;
 		mappings: { 
@@ -172,7 +172,7 @@ GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor:
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsFor: aViewModelModeWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsFor: aViewModelModeWithCodeDefinition [
 	| aViewModelModel aSelectableDefinition |
 
 	aViewModelModel := aViewModelModeWithCodeDefinition viewModelModel.
@@ -191,7 +191,7 @@ GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsFor: aViewMode
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelModelWithCodeDefinition [
 	| aMethodDefinition methodSourceCode aArgumentName |
 
 	self
@@ -231,7 +231,7 @@ GtViewModelWithSelectionDerive >> generateSelectionSetHookMethodTo: aViewModelMo
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: aViewModelModelWithCodeDefinition [
 	| aMethodDefinition methodSourceCode aArgumentName |
 
 	self
@@ -260,7 +260,7 @@ GtViewModelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: aViewModel
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateViewModelDeselectedAnnouncementFor: aViewModelModel [
+GtRobocoderMetamodelWithSelectionDerive >> generateViewModelDeselectedAnnouncementFor: aViewModelModel [
 	| aDefinition |
 	
 	self
@@ -286,7 +286,7 @@ GtViewModelWithSelectionDerive >> generateViewModelDeselectedAnnouncementFor: aV
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateViewModelSelectedAnnouncementFor: aViewModelModel [
+GtRobocoderMetamodelWithSelectionDerive >> generateViewModelSelectedAnnouncementFor: aViewModelModel [
 	| aDefinition |
 	
 	self
@@ -312,7 +312,7 @@ GtViewModelWithSelectionDerive >> generateViewModelSelectedAnnouncementFor: aVie
 ]
 
 { #category : #'private - generate' }
-GtViewModelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewModelModelWithCodeDefinition [
 	| aViewModelModel aCodeDefinition |
 
 	self
@@ -336,12 +336,12 @@ GtViewModelWithSelectionDerive >> generateWithSelectedViewModelTraitFor: aViewMo
 ]
 
 { #category : #'api - accessors' }
-GtViewModelWithSelectionDerive >> propertyAppliedStatusName [
+GtRobocoderMetamodelWithSelectionDerive >> propertyAppliedStatusName [
 	^ 'selected'
 ]
 
 { #category : #'private - accessors' }
-GtViewModelWithSelectionDerive >> propertyNameFor: aViewModelModel [
+GtRobocoderMetamodelWithSelectionDerive >> propertyNameFor: aViewModelModel [
 	| aName |
 
 	aName := aViewModelModel isForMany
@@ -352,12 +352,12 @@ GtViewModelWithSelectionDerive >> propertyNameFor: aViewModelModel [
 ]
 
 { #category : #'api - accessors' }
-GtViewModelWithSelectionDerive >> propertyUnappliedStatusName [
+GtRobocoderMetamodelWithSelectionDerive >> propertyUnappliedStatusName [
 	^ 'deselected'
 ]
 
 { #category : #'private - class names' }
-GtViewModelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFor: aViewModelModel [
+GtRobocoderMetamodelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFor: aViewModelModel [
 	^ '{project}{prefix}{name}{suffix}ViewModelDeselected'
 		format: { 
 			#project -> aViewModelModel project.
@@ -368,7 +368,7 @@ GtViewModelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFor: aViewM
 ]
 
 { #category : #'private - class names' }
-GtViewModelWithSelectionDerive >> viewModelSelectedAnnouncementNameFor: aViewModelModel [
+GtRobocoderMetamodelWithSelectionDerive >> viewModelSelectedAnnouncementNameFor: aViewModelModel [
 	^ '{project}{prefix}{name}{suffix}ViewModelSelected'
 		format: { 
 			#project -> aViewModelModel project.

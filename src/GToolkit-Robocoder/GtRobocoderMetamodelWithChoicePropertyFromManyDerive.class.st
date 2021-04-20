@@ -1,16 +1,16 @@
 Class {
-	#name : #GtViewModelWithChoicePropertyFromManyDirective,
-	#superclass : #GtViewModelWithPropertyDirective,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#name : #GtRobocoderMetamodelWithChoicePropertyFromManyDerive,
+	#superclass : #GtRobocoderMetamodelWithPropertyDerive,
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #testing }
-GtViewModelWithChoicePropertyFromManyDirective class >> isAbstract [
-	^ self = GtViewModelWithChoicePropertyFromManyDirective
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive class >> isAbstract [
+	^ self = GtRobocoderMetamodelWithChoicePropertyFromManyDerive
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithChoicePropertyFromManyDirective >> propertySetNotifierMethodOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertySetNotifierMethodOfOne: aViewModelModelWithCodeDefinition [
 	self
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
 		description: [ 'Only view model for one can have this method' ].
@@ -21,14 +21,14 @@ GtViewModelWithChoicePropertyFromManyDirective >> propertySetNotifierMethodOfOne
 ]
 
 { #category : #'private - selectors' }
-GtViewModelWithChoicePropertyFromManyDirective >> propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertySetNotifierMethodOfOne: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithChoicePropertyFromManyDirective >> propertyUnsetNotifierMethodOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetNotifierMethodOfOne: aViewModelModelWithCodeDefinition [
 	self
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
 		description: [ 'Only view model for one can have this method' ].
@@ -39,14 +39,14 @@ GtViewModelWithChoicePropertyFromManyDirective >> propertyUnsetNotifierMethodOfO
 ]
 
 { #category : #'private - selectors' }
-GtViewModelWithChoicePropertyFromManyDirective >> propertyUnsetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertyUnsetNotifierMethodOfOne: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithChoicePropertyFromManyDirective >> propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition [
 	self
 		assert: [ aViewModelModelWithCodeDefinition isForOne ]
 		description: [ 'Only view model for one can have this method' ].
@@ -57,7 +57,7 @@ GtViewModelWithChoicePropertyFromManyDirective >> propertyUnsetOthersMethodOfOne
 ]
 
 { #category : #'private - selectors' }
-GtViewModelWithChoicePropertyFromManyDirective >> propertyUnsetOthersSelectorOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetOthersSelectorOfOne: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition) selector

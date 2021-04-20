@@ -1,22 +1,22 @@
 Class {
-	#name : #GtViewModelPrintDerive,
+	#name : #GtRobocoderMetamodelPrintDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #accessing }
-GtViewModelPrintDerive class >> label [
+GtRobocoderMetamodelPrintDerive class >> label [
 	^ 'print'
 ]
 
 { #category : #'api - generation' }
-GtViewModelPrintDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelPrintDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
 		self generatePrintOnMethodFor: eachViewModelModelWithCodeDefinition ]
 ]
 
 { #category : #'private - generation' }
-GtViewModelPrintDerive >> generatePrintOnMethodFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelPrintDerive >> generatePrintOnMethodFor: aViewModelModelWithCodeDefinition [
 	| aMethodSource |
 aMethodSource :=
 'printOn: aStream

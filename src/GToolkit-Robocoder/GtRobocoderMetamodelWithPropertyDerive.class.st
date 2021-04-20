@@ -1,16 +1,16 @@
 Class {
-	#name : #GtViewModelWithPropertyDirective,
+	#name : #GtRobocoderMetamodelWithPropertyDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #testing }
-GtViewModelWithPropertyDirective class >> isAbstract [
-	^ self = GtViewModelWithPropertyDirective
+GtRobocoderMetamodelWithPropertyDerive class >> isAbstract [
+	^ self = GtRobocoderMetamodelWithPropertyDerive
 ]
 
 { #category : #'private - generation' }
-GtViewModelWithPropertyDirective >> generatePropertyChangedAnnouncementFor: aViewModelModel [
+GtRobocoderMetamodelWithPropertyDerive >> generatePropertyChangedAnnouncementFor: aViewModelModel [
 	| aDefinition |
 	
 	aDefinition := GtClassDefinition forNew.
@@ -23,7 +23,7 @@ GtViewModelWithPropertyDirective >> generatePropertyChangedAnnouncementFor: aVie
 ]
 
 { #category : #'private - generation' }
-GtViewModelWithPropertyDirective >> generatePropertyChangedNotifierMethodFor: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> generatePropertyChangedNotifierMethodFor: aViewModelModelWithCodeDefinition [
 	| aMethodDefinition methodSourceCode |
 
 	aMethodDefinition := self
@@ -38,14 +38,14 @@ GtViewModelWithPropertyDirective >> generatePropertyChangedNotifierMethodFor: aV
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertyChangeNotifierMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyChangeNotifierMethodOf: aViewModelModelWithCodeDefinition [
 	^ self
 		propertyMethodOfType: #propertyChangeNotifier:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
 ]
 
 { #category : #'private - class names' }
-GtViewModelWithPropertyDirective >> propertyChangedAnnouncementClassNameFor: aViewModelModel [
+GtRobocoderMetamodelWithPropertyDerive >> propertyChangedAnnouncementClassNameFor: aViewModelModel [
 	<return: #Symbol>
 
 	^ ('{project}{prefix}{suffix}{propertyName}Changed'
@@ -58,21 +58,21 @@ GtViewModelWithPropertyDirective >> propertyChangedAnnouncementClassNameFor: aVi
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertyGetterMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyGetterMethodOf: aViewModelModelWithCodeDefinition [
 	^ (self
 		propertyMethodOfType: #propertyGetter:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition)
 ]
 
 { #category : #'private - selectors' }
-GtViewModelWithPropertyDirective >> propertyGetterSelectorOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyGetterSelectorOf: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertyGetterMethodOf: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertyMethodOfType: aMethodType inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyMethodOfType: aMethodType inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition [
 	^ aViewModelModelWithCodeDefinition viewModelModel
 		propertyMethodFor: (self propertyNameFor: aViewModelModelWithCodeDefinition viewModelModel)
 		ofType: aMethodType
@@ -80,61 +80,61 @@ GtViewModelWithPropertyDirective >> propertyMethodOfType: aMethodType inViewMode
 ]
 
 { #category : #'private - accessing' }
-GtViewModelWithPropertyDirective >> propertyNameFor: aViewModelModel [
+GtRobocoderMetamodelWithPropertyDerive >> propertyNameFor: aViewModelModel [
 	^ self subclassResponsibility
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertySetHookMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertySetHookMethodOf: aViewModelModelWithCodeDefinition [
 	^ self
 		propertyMethodOfType: #propertySetHook:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertySetterMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertySetterMethodOf: aViewModelModelWithCodeDefinition [
 	^ (self
 		propertyMethodOfType: #propertySetter:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition)
 ]
 
 { #category : #'private - selectors' }
-GtViewModelWithPropertyDirective >> propertySetterSelectorOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertySetterSelectorOf: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertySetterMethodOf: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertyTesterMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyTesterMethodOf: aViewModelModelWithCodeDefinition [
 	^ (self
 		propertyMethodOfType: #propertyTester:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition)
 ]
 
 { #category : #'private - selectors' }
-GtViewModelWithPropertyDirective >> propertyTesterSelectorOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyTesterSelectorOf: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertyTesterMethodOf: aViewModelModelWithCodeDefinition) selector
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertyUnsetHookMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyUnsetHookMethodOf: aViewModelModelWithCodeDefinition [
 	^ self
 		propertyMethodOfType: #propertyUnsetHook:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
 ]
 
 { #category : #'private - methods' }
-GtViewModelWithPropertyDirective >> propertyUnsetterMethodOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyUnsetterMethodOf: aViewModelModelWithCodeDefinition [
 	^ (self
 		propertyMethodOfType: #propertyUnsetter:
 		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition)
 ]
 
 { #category : #'private - accessors' }
-GtViewModelWithPropertyDirective >> propertyUnsetterSelectorOf: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithPropertyDerive >> propertyUnsetterSelectorOf: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
 	^ (self propertyUnsetterMethodOf: aViewModelModelWithCodeDefinition) selector

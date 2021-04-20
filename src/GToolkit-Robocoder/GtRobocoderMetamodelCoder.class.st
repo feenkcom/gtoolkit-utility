@@ -86,7 +86,7 @@ GtRobocoderMetamodelCoder >> primitiveDebug: aSourceString inContext: aGtSourceC
 
 { #category : #'private - actions' }
 GtRobocoderMetamodelCoder >> primitiveEvaluate: aSourceString inContext: aGtSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
-	^ (GtViewModelModelsGenerator new
+	^ (GtRobocoderMetamodelGenerator new
 		sourceCode: aSourceString;
 		generate) generateCodeDefinitions
 ]

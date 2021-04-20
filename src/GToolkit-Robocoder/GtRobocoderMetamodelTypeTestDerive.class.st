@@ -1,16 +1,16 @@
 Class {
-	#name : #GtViewModelTypeTestDerive,
+	#name : #GtRobocoderMetamodelTypeTestDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #accessing }
-GtViewModelTypeTestDerive class >> label [
+GtRobocoderMetamodelTypeTestDerive class >> label [
 	^ 'typeTest'
 ]
 
 { #category : #'api - generation' }
-GtViewModelTypeTestDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelTypeTestDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :thisViewModelModelWithCodeDefinition |
 		aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :anotherViewModelModelWithCodeDefinition |
 			| eachTypeTesterSourceCode |
@@ -25,7 +25,7 @@ GtViewModelTypeTestDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelM
 ]
 
 { #category : #'private - generation' }
-GtViewModelTypeTestDerive >> generateViewModelTypeTesterFor: aViewModelModel and: anotherViewModelModel [
+GtRobocoderMetamodelTypeTestDerive >> generateViewModelTypeTesterFor: aViewModelModel and: anotherViewModelModel [
 	^ 'is{prefix}{name}{suffix}ViewModel
 	"Return true if this is a view model of {name}, false otherwise"
 	<return: #Boolean>

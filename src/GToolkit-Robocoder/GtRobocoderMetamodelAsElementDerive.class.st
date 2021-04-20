@@ -1,19 +1,19 @@
 Class {
-	#name : #GtViewModelAsElementDerive,
+	#name : #GtRobocoderMetamodelAsElementDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
 	#instVars : [
 		'name'
 	],
-	#category : #'GToolkit-MVVM-ViewModel-Derives'
+	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
 
 { #category : #accessing }
-GtViewModelAsElementDerive class >> label [
+GtRobocoderMetamodelAsElementDerive class >> label [
 	^ 'asElement'
 ]
 
 { #category : #'api - generation' }
-GtViewModelAsElementDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelAsElementDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		| eachNameMethodSourceCode |
 
@@ -34,7 +34,7 @@ GtViewModelAsElementDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModel
 ]
 
 { #category : #accessing }
-GtViewModelAsElementDerive >> asElementTemplate [
+GtRobocoderMetamodelAsElementDerive >> asElementTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtPharoTemplateMethod class>>#storageMethodTemplate'>
 	
@@ -47,11 +47,11 @@ GtViewModelAsElementDerive >> asElementTemplate [
 ]
 
 { #category : #accessing }
-GtViewModelAsElementDerive >> name [
+GtRobocoderMetamodelAsElementDerive >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtViewModelAsElementDerive >> name: anObject [
+GtRobocoderMetamodelAsElementDerive >> name: anObject [
 	name := anObject
 ]
