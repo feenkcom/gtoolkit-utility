@@ -5,8 +5,8 @@ Given a view models declaration source code it parses (using ${class:GtViewModel
 Class {
 	#name : #GtViewModelModelsGenerator,
 	#superclass : #Object,
-	#traits : 'TGtViewModelProgramNodeVisitor',
-	#classTraits : 'TGtViewModelProgramNodeVisitor classTrait',
+	#traits : 'TGtRobocoderMetamodelProgramNodeVisitor',
+	#classTraits : 'TGtRobocoderMetamodelProgramNodeVisitor classTrait',
 	#instVars : [
 		'sourceCode',
 		'viewModels',
@@ -18,7 +18,7 @@ Class {
 
 { #category : #private }
 GtViewModelModelsGenerator >> createDeriveFrom: aDeriveSetting thenDo: aBlock [
-	GtViewModelDerive
+	GtRobocoderMetamodelDerive
 		deriveNamed: aDeriveSetting literalValue
 		ifFound: [ :aDeriveClass |
 			| aDerive |
@@ -40,7 +40,7 @@ GtViewModelModelsGenerator >> ensureViewModelForManyExists: aNameString [
 		ifAbsent: [
 			| aNewViewModel |
 			
-			aNewViewModel := GtViewModelForManyModel new
+			aNewViewModel := GtRobocoderForManyMetamodel new
 				name: aNameString.
 				
 			viewModels add: aNewViewModel.
@@ -54,7 +54,7 @@ GtViewModelModelsGenerator >> ensureViewModelForOneExists: aNameString [
 		ifAbsent: [
 			| aNewViewModel |
 			
-			aNewViewModel := GtViewModelForOneModel new
+			aNewViewModel := GtRobocoderForOneMetamodel new
 				name: aNameString.
 				
 			viewModels add: aNewViewModel.
@@ -63,12 +63,12 @@ GtViewModelModelsGenerator >> ensureViewModelForOneExists: aNameString [
 
 { #category : #translating }
 GtViewModelModelsGenerator >> generate [
-	<return: #GtViewModelModels>
+	<return: #GtRobocoderMetamodels>
 	| anAst |
 
-	anAst := GtViewModelParser
+	anAst := GtRobocoderMetamodelParser
 		parse: self sourceCode
-		startingAt: GtViewModelParser startingStateForFullDefinition.
+		startingAt: GtRobocoderMetamodelParser startingStateForFullDefinition.
 
 	viewModels := OrderedCollection new.
 	settings := Dictionary new.
@@ -78,7 +78,7 @@ GtViewModelModelsGenerator >> generate [
 
 	viewModels do: [ :eachModel | eachModel settings: settings ].
 
-	^ GtViewModelModels new
+	^ GtRobocoderMetamodels new
 		ast: anAst;
 		models: viewModels asArray;
 		settings: settings;
@@ -118,7 +118,7 @@ GtViewModelModelsGenerator >> sourceCode: aSting [
 GtViewModelModelsGenerator >> viewModelForProperty: aPropertyNode ifFound: aBlock [
 	| aName |
 
-	aName := ((aPropertyNode parentOfType: GtViewModelDefinitionNode)
+	aName := ((aPropertyNode parentOfType: GtRobocoderMetamodelDefinitionNode)
 		ifNil: [ ^ self ]) fullNameString.
 
 	^ self viewModelNamed: aName ifFound: aBlock

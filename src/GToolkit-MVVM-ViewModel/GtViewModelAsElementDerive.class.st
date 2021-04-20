@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelAsElementDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#instVars : [
 		'name'
 	],
@@ -13,13 +13,13 @@ GtViewModelAsElementDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelAsElementDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelAsElementDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		| eachNameMethodSourceCode |
 
 		
 
-		eachNameMethodSourceCode := GtPharoTemplateMethodCoder new
+		eachNameMethodSourceCode := GtRobocoderTemplateMethodCoder new
 			forMethod: self class >> #asElementTemplate;
 			mappings: { #elementClass -> BlElement . #viewModelSetter -> eachViewModelModelWithCodeDefinition }.
 
@@ -38,7 +38,7 @@ GtViewModelAsElementDerive >> asElementTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtPharoTemplateMethod class>>#storageMethodTemplate'>
 	
-	^ GtPharoTemplateMethod new
+	^ GtRobocoderTemplateMethod new
 		sourceCode: 'asElement
 	^ {{elementClass}} new
 		{{viewModelSetter}}: self';

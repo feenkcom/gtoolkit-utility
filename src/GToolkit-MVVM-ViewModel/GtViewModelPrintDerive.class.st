@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelPrintDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 
@@ -10,7 +10,7 @@ GtViewModelPrintDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelPrintDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelPrintDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
 		self generatePrintOnMethodFor: eachViewModelModelWithCodeDefinition ]
 ]

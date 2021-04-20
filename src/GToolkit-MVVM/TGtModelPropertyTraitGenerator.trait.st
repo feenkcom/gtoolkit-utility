@@ -42,7 +42,7 @@ TGtModelPropertyTraitGenerator >> generateBehaviorDefinition [
 TGtModelPropertyTraitGenerator >> generator [
 	<return: #Trait>
 
-	^ GtTraitGenerator new
+	^ GtRobocoderTraitGenerator new
 		environment: self environment;
 		traitName: self traitName;
 		packageName: self packageName;

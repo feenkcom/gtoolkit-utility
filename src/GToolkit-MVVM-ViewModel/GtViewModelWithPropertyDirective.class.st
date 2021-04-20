@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelWithPropertyDirective,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 

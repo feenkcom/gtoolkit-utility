@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelNameDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 
@@ -10,7 +10,7 @@ GtViewModelNameDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelNameDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		| eachNameMethodSourceCode |
 

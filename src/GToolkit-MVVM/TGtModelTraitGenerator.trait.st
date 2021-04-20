@@ -38,7 +38,7 @@ TGtModelTraitGenerator >> generateBehaviorDefinition [
 TGtModelTraitGenerator >> generator [
 	<return: #Trait>
 
-	^ GtTraitGenerator new
+	^ GtRobocoderTraitGenerator new
 		environment: self environment;
 		traitName: self traitName;
 		packageName: self packageName;

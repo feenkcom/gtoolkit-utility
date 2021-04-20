@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelPhlowListViewDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 
@@ -10,7 +10,7 @@ GtViewModelPhlowListViewDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelPhlowListViewDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
 		eachViewModelModelWithCodeDefinition isForMany
 			ifTrue: [ self generatePhlowListViewForManyMethodFor: eachViewModelModelWithCodeDefinition ]

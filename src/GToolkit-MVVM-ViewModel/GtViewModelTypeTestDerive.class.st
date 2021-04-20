@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelTypeTestDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 
@@ -10,7 +10,7 @@ GtViewModelTypeTestDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelTypeTestDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelTypeTestDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :thisViewModelModelWithCodeDefinition |
 		aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :anotherViewModelModelWithCodeDefinition |
 			| eachTypeTesterSourceCode |

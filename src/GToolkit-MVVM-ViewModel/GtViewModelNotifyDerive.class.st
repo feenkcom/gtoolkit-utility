@@ -1,6 +1,6 @@
 Class {
 	#name : #GtViewModelNotifyDerive,
-	#superclass : #GtViewModelDerive,
+	#superclass : #GtRobocoderMetamodelDerive,
 	#category : #'GToolkit-MVVM-ViewModel-Derives'
 }
 
@@ -10,7 +10,7 @@ GtViewModelNotifyDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelNotifyDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelNotifyDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
 		self generateViewModelAnnounceMethodFor: eachViewModelModelWithCodeDefinition ]
 ]

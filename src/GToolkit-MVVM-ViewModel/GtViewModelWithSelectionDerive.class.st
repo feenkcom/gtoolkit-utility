@@ -10,7 +10,7 @@ GtViewModelWithSelectionDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtViewModelWithSelectionDerive >> applyOnViewModelModelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtViewModelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
 	"The generation of the selection behavior requires three passes:
 	 - first we generate the template code which is independent for each view model
 	 - once the basic code skeleton is generated we glue children to their parents during the second pass
@@ -147,32 +147,28 @@ GtViewModelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aVi
 
 { #category : #'private - generate' }
 GtViewModelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor: aViewModelModelWithCodeDefinition [
-	^ GtClassGenerator new
-		templateClass: TGtViewModelPropertyForChildTemplate;
-		className: 'VirtualClass';
-		packageName: 'VirualPackage';
-		templateMap: { 
+	^ GtRobocoderTraitGenerator new
+		templateTrait: TGtRobocoderMetamodelParentAccessorTemplate;
+		mappings: { 
 			#__View_model_class__ -> aViewModelModelWithCodeDefinition viewModelModel viewModelClassName.
 			#__Parent_view_model_class__ -> aViewModelModelWithCodeDefinition viewModelModel parent viewModelClassName.
-			#__property__ -> 'selection'.
-			#__Status__ -> 'Selected'.
-			#__status__ -> 'selected'.
-			#__Status_not__ -> 'Deselected'.
-			#__Set__ -> 'Select'.
-			#__set__ -> 'select'.
-			#__Unset__ -> 'deselect'.
-			#__unset__ -> 'deselect'.
-			#__object__ -> aViewModelModelWithCodeDefinition name.
-			#__Object__ -> aViewModelModelWithCodeDefinition name capitalized.
-			#__has_parent_property__ -> (self propertyTesterSelectorOf: aViewModelModelWithCodeDefinition parent).
-			#__parent_object_getter__ -> aViewModelModelWithCodeDefinition parentViewModelSelectorName.
-			#__parent_property_getter__ -> (self propertyGetterSelectorOf: aViewModelModelWithCodeDefinition parent).
-			#__parent_property_setter__ -> (self propertySetterSelectorOf: aViewModelModelWithCodeDefinition parent).
-			#__Status_announcement__ -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
-			#__Status_not_announcement__ -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
-			#__property_name__ -> (self propertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel)
+			#protocol -> 'selection'.
+			
+			#statusAdjective -> 'selected'.
+			#negativeStatusAdjective -> 'deselected'.
+			#setVerb -> 'select'.
+			#unsetVerb -> 'deselect'.
+			#objectName -> aViewModelModelWithCodeDefinition name.
+			#propertyName -> (self propertyNameFor: aViewModelModelWithCodeDefinition parent viewModelModel).
+			#parentObjectGetter -> aViewModelModelWithCodeDefinition parentViewModelSelectorName.
+			#parentPropertyGetter -> (self propertyGetterSelectorOf: aViewModelModelWithCodeDefinition parent).
+			#parentPropertySetter -> (self propertySetterSelectorOf: aViewModelModelWithCodeDefinition parent).
+			#parentPropertyTester -> (self propertyTesterSelectorOf: aViewModelModelWithCodeDefinition parent).
+			
+			#statusAnnouncementClass -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
+			#negativeStatusAnnouncementClass -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition viewModelModel).
 		};
-		generateBehaviorDefinition
+		generate
 ]
 
 { #category : #'private - generate' }
