@@ -10,57 +10,88 @@ GtRobocoderMetamodelPhlowListViewDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
-		eachViewModelModelWithCodeDefinition isForMany
-			ifTrue: [ self generatePhlowListViewForManyMethodFor: eachViewModelModelWithCodeDefinition ]
-			ifFalse: [
-				eachViewModelModelWithCodeDefinition metamodel children
-					do: [ :eachChildViewModelModel |
-						self
-							generatePhlowListViewForOneMethodFor: eachViewModelModelWithCodeDefinition
-							childViewModelModel: eachChildViewModelModel] ] ]
+GtRobocoderMetamodelPhlowListViewDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |		
+		eachMetamodelWithCodeDefinition isForMany
+			ifTrue: [ self generatePhlowListViewForManyMethodFor: eachMetamodelWithCodeDefinition ]
+			ifFalse: [ self generatePhlowListViewForOneMethodFor: eachMetamodelWithCodeDefinition ] ]
 ]
 
 { #category : #'private - generation' }
-GtRobocoderMetamodelPhlowListViewDerive >> generatePhlowListViewForManyMethodFor: aViewModelModelWithCodeDefinition [
-	| aMethodSource |
-aMethodSource :=
-'gt{Name}ListViewFor: aView
-	<gtView>
-	
-	^ aView list
-		priority: 5;
-		title: ''{Name}'';
-		items: [ self {children} ]'
-			format: {
-				#Name -> aViewModelModelWithCodeDefinition name capitalized.
-				#children -> aViewModelModelWithCodeDefinition childViewModelsName
-			} asDictionary.
-			
-	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
-		addMethod: aMethodSource
-		protocol: 'gt-extentions'
+GtRobocoderMetamodelPhlowListViewDerive >> generatePhlowListViewForManyMethodFor: aMetamodelWithCodeDefinition [	
+	aMetamodelWithCodeDefinition children do: [ :eachChildMetamodelWithCodeDefinition |
+		(GtRobocoderMetamodelChildrenDerive
+			childObjectGetterSelectorIn: aMetamodelWithCodeDefinition
+			childMetamodel: eachChildMetamodelWithCodeDefinition)
+				ifNotNil: [ :theChildrenSelector |
+					| aMethodSource |
+					aMethodSource := GtRobocoderTemplateMethodCoder new
+						forMethod: self class >> #listForManyTemplate;
+						mappings: {
+							#name -> eachChildMetamodelWithCodeDefinition name.
+							#children -> theChildrenSelector };
+						translate.
+
+					aMetamodelWithCodeDefinition definition instanceSideDefinition methods
+						addMethod: aMethodSource
+						protocol: 'gt-extentions' ] ]
 ]
 
 { #category : #'private - generation' }
-GtRobocoderMetamodelPhlowListViewDerive >> generatePhlowListViewForOneMethodFor: aViewModelModelWithCodeDefinition childViewModelModel: aChildViewModelModel [
-	| aMethodSource |
-aMethodSource :=
-'gt{Name}ListViewFor: aView
-	<gtView>
+GtRobocoderMetamodelPhlowListViewDerive >> generatePhlowListViewForOneMethodFor: aMetamodelWithCodeDefinition [
+	aMetamodelWithCodeDefinition children
+		select: [ :eachChildMetamodelWithCodeDefinition | eachChildMetamodelWithCodeDefinition isForMany ]
+		thenDo: [ :eachChildMetamodelWithCodeDefinition |
+		(GtRobocoderMetamodelChildrenDerive
+			childObjectGetterSelectorIn: aMetamodelWithCodeDefinition
+			childMetamodel: eachChildMetamodelWithCodeDefinition)
+				ifNotNil: [ :theChildSelector |					
+					(GtRobocoderMetamodelChildrenDerive
+						childObjectGetterSelectorIn: eachChildMetamodelWithCodeDefinition
+						childMetamodel: eachChildMetamodelWithCodeDefinition forOneModel)
+							ifNotNil: [ :theGrandchildrenSelector |
+								| aMethodSource |
+								aMethodSource := GtRobocoderTemplateMethodCoder new
+									forMethod: self class >> #listForOneTemplate;
+									mappings: {
+										#name -> eachChildMetamodelWithCodeDefinition name.
+										#child -> theChildSelector.
+										#grandchildren -> theGrandchildrenSelector };
+									translate.
+
+								aMetamodelWithCodeDefinition definition instanceSideDefinition methods
+									addMethod: aMethodSource
+									protocol: 'gt-extentions' ] ] ]
+]
+
+{ #category : #templates }
+GtRobocoderMetamodelPhlowListViewDerive >> listForManyTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'gt{{name capitalized}}ListViewFor: aView
+	<gtView>
+
 	^ aView list
 		priority: 5;
-		title: ''{Name}'';
-		items: [ self {child} {grandchildren}]'
-			format: {
-				#Name -> aChildViewModelModel name capitalized.
-				#child -> (aViewModelModelWithCodeDefinition metamodel generateChildObjectGetterSelectorFor: aChildViewModelModel).
-				#grandchildren -> aChildViewModelModel childViewModelsName
-			} asDictionary.
-			
-	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
-		addMethod: aMethodSource
-		protocol: 'gt-extentions'
+		title: ''{{name capitalized}}'';
+		items: [ self {{children}} ]';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+GtRobocoderMetamodelPhlowListViewDerive >> listForOneTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'gt{{name capitalized}}ListViewFor: aView
+	<gtView>
+
+	^ aView list
+		priority: 5;
+		title: ''{{name capitalized}}'';
+		items: [ self {{child}} {{grandchildren}} ]';
+		storageMethod: thisContext method
 ]

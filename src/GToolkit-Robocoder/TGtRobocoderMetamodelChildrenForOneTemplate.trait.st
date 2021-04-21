@@ -18,6 +18,7 @@ TGtRobocoderMetamodelChildrenForOneTemplate >> childObjectsTemplate [
 	"Return a composite object (${class:{{childViewModelClass}}}$) created for a collection of children from the domain model.
 	Note: The object is lazily instantiated."
 	<return: #{{childObjectClass}}>
+	<childObjectGetter: #{{childName}}>
 
 	^ {{childObject}} ifNil: [ {{childObject}} := self create{{childObject capitalized}} ]';
 		protocol: 'api - accessing';
@@ -37,9 +38,11 @@ TGtRobocoderMetamodelChildrenForOneTemplate >> createChildObjectsTemplate [
 
 	childObject := {{childObjectClass}} new.
 	{{childParentObjectSetter
-		ifNotNil: [ :aSelector | ''childObject {{aSelector}}: self.'' ]
+		ifNotNil: [ :aSelector | ''childObject {{aSelector gtAsReader}}: self.'' ]
 		ifNil: [ '''' ]}}
-	childObject {{childSetter}}: self {{modelGetter}} {{childGetter}}.
+	{{childModelSetter
+		ifNotNil: [ :aSelector | ''childObject {{aSelector gtAsReader}}: self {{modelGetter ifNil: [ ''''yourself'''' ]}} {{childGetter}}.'' ]
+		ifNil: [ '''' ]}}
 	^ childObject';
 		protocol: 'private - instance creation';
 		storageMethod: thisContext method

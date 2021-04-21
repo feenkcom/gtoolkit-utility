@@ -10,23 +10,29 @@ GtRobocoderMetamodelPrintDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelPrintDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
-		self generatePrintOnMethodFor: eachViewModelModelWithCodeDefinition ]
+GtRobocoderMetamodelPrintDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |		
+		| eachNameMethodSourceCode |
+		
+		eachNameMethodSourceCode := GtRobocoderTemplateMethodCoder new
+			forMethod: self class >> #printOnTemplate;
+			mappings: { #modelGetter -> (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: eachMetamodelWithCodeDefinition) };
+			translate.
+
+		eachMetamodelWithCodeDefinition definition instanceSideDefinition methods
+			addMethod: eachNameMethodSourceCode
+			protocol: 'printing' ]
 ]
 
-{ #category : #'private - generation' }
-GtRobocoderMetamodelPrintDerive >> generatePrintOnMethodFor: aViewModelModelWithCodeDefinition [
-	| aMethodSource |
-aMethodSource :=
-'printOn: aStream
-	aStream
-		print: self {modelGetter}'
-			format: {
-				#modelGetter -> aViewModelModelWithCodeDefinition modelGetterSelector
-			} asDictionary.
-
-	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
-		addMethod: aMethodSource
-		protocol: 'printing'
+{ #category : #templates }
+GtRobocoderMetamodelPrintDerive >> printOnTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'printOn: aStream
+	{{modelGetter
+		ifNil: [ ''super printOn: aStream'' ]
+		ifNotNil: [ ''aStream print: self {{modelGetter}}'' ]}}';
+		storageMethod: thisContext method
 ]

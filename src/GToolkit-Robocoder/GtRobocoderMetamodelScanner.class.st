@@ -7,7 +7,7 @@ Class {
 { #category : #'generated-initialization' }
 GtRobocoderMetamodelScanner class >> initializeKeywordMap [
 	keywordMap := Dictionary new.
-	#(#(3 'and' 13) #(3 'items' 16))
+	#(#(3 'and' 13) #(3 'false' 19) #(3 'items' 16) #(3 'true' 18))
 		do: [ :each | 
 			(keywordMap at: each first ifAbsentPut: [ Dictionary new ])
 				at: (each at: 2)
@@ -22,12 +22,12 @@ GtRobocoderMetamodelScanner >> andId [
 
 { #category : #generated }
 GtRobocoderMetamodelScanner >> emptySymbolTokenId [
-	^ 48
+	^ 51
 ]
 
 { #category : #generated }
 GtRobocoderMetamodelScanner >> errorTokenId [
-	^ 49
+	^ 52
 ]
 
 { #category : #generated }

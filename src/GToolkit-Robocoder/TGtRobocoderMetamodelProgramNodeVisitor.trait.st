@@ -6,6 +6,11 @@ Trait {
 }
 
 { #category : #generated }
+TGtRobocoderMetamodelProgramNodeVisitor >> visitBooleanPropertyValue: aBooleanPropertyValue [
+	^ self visitPropertyValue: aBooleanPropertyValue
+]
+
+{ #category : #generated }
 TGtRobocoderMetamodelProgramNodeVisitor >> visitCompositeLevel: aCompositeLevel [
 	^ self visitLevel: aCompositeLevel
 ]

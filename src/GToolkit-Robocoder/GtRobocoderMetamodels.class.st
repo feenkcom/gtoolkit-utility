@@ -33,32 +33,30 @@ GtRobocoderMetamodels >> derives: anObject [
 { #category : #'api - generation' }
 GtRobocoderMetamodels >> generateCodeDefinitions [
 	<return: #GtRobocoderMetamodelsWithCodeDefinitions>
-	| anEnvironment viewModelCodeDefinitions |
+	| anEnvironment aGtRobocoderMetamodelsWithCodeDefinitions counter |
 
 	anEnvironment := GtPharoVirtualEnvironment new.
 
-	viewModelCodeDefinitions := GtRobocoderMetamodelsWithCodeDefinitions new
+	aGtRobocoderMetamodelsWithCodeDefinitions := GtRobocoderMetamodelsWithCodeDefinitions new
 		viewModelModels: self.
 
-	viewModelCodeDefinitions definitions: (self models collect: [ :eachViewModelModel |
+	aGtRobocoderMetamodelsWithCodeDefinitions definitions: (self models collect: [ :eachViewModelModel |
 		| aDefinition |
 		aDefinition := eachViewModelModel alreadyHasClass
 			ifTrue: [ GtBehaviorDefinition fromBehavior: eachViewModelModel existingViewModelClass in: anEnvironment ]
-			ifFalse: [ eachViewModelModel generateBehaviorDefinitionIn: anEnvironment ].
+			ifFalse: [ eachViewModelModel generateBehavior ].
+
+		anEnvironment registerBehavior: aDefinition.
 
 		GtRobocoderMetamodelWithCodeDefinition new
-			allViewModelModelDefinitions: viewModelCodeDefinitions;
+			allViewModelModelDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions;
 			metamodel: eachViewModelModel;
 			definition: aDefinition ]).
+	
+	counter := 0.
+	[ (self processDerivesOf: aGtRobocoderMetamodelsWithCodeDefinitions) and: [ counter < 10 ] ] whileTrue: [ counter := counter + 1 ].
 
-	derives do: [ :eachDerive | eachDerive applyOnMetamodelsWithCodeDefinitions: viewModelCodeDefinitions ].
-	viewModelCodeDefinitions definitions
-		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
-		thenDo: [ :eachViewModelModelWithDefinition |
-			eachViewModelModelWithDefinition derives do: [ :eachDerive |
-				eachDerive applyOnViewModelModelWithCodeDefinition: eachViewModelModelWithDefinition ] ].
-
-	^ viewModelCodeDefinitions
+	^ aGtRobocoderMetamodelsWithCodeDefinitions
 ]
 
 { #category : #initialization }
@@ -78,6 +76,30 @@ GtRobocoderMetamodels >> models [
 { #category : #accessing }
 GtRobocoderMetamodels >> models: anObject [
 	models := anObject
+]
+
+{ #category : #'api - generation' }
+GtRobocoderMetamodels >> processDerivesOf: aGtRobocoderMetamodelsWithCodeDefinitions [
+	"Return true if the definition changed"
+	<return: #Boolean>
+	| thePreviousMetamodelsWithDefinitions |
+
+	thePreviousMetamodelsWithDefinitions := aGtRobocoderMetamodelsWithCodeDefinitions copy.
+
+	aGtRobocoderMetamodelsWithCodeDefinitions definitions
+		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
+		thenDo: [ :eachViewModelModelWithDefinition |
+			eachViewModelModelWithDefinition derives do: [ :eachDerive |
+				eachDerive applyOnViewModelModelWithCodeDefinition: eachViewModelModelWithDefinition ] ].
+
+	derives do: [ :eachDerive | eachDerive applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions ].
+	
+	aGtRobocoderMetamodelsWithCodeDefinitions definitions
+		with: thePreviousMetamodelsWithDefinitions definitions
+		do: [ :aCurrentMetamodelWithDefinition :thePreviousMetamodelWithDefinition |
+			(aCurrentMetamodelWithDefinition definition differenceWith: thePreviousMetamodelWithDefinition definition)
+				hasDifference ifTrue: [ ^ true ] ].
+	^ false
 ]
 
 { #category : #accessing }

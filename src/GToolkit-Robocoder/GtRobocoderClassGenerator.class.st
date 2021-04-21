@@ -60,7 +60,7 @@ GtRobocoderClassGenerator >> generate [
 			mappings: mappings;
 			forMethod: eachTemplateMethod.
 
-		generatedClass methods
+		generatedClass instanceSideDefinition methods
 			addMethod: aTemplateMethodCoder translate
 			protocol: aTemplateMethodCoder protocol ].
 	

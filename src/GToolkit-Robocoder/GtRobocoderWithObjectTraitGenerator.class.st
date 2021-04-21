@@ -27,7 +27,8 @@ Class {
 		'objectName',
 		'projectPrefix',
 		'packageName',
-		'tagName'
+		'tagName',
+		'objectId'
 	],
 	#category : #'GToolkit-Robocoder-Generators'
 }
@@ -50,6 +51,11 @@ GtRobocoderWithObjectTraitGenerator >> generate [
 ]
 
 { #category : #translating }
+GtRobocoderWithObjectTraitGenerator >> generateChanges [
+	^ self generator generateChanges
+]
+
+{ #category : #translating }
 GtRobocoderWithObjectTraitGenerator >> generator [
 	<return: #Trait>
 
@@ -58,9 +64,20 @@ GtRobocoderWithObjectTraitGenerator >> generator [
 		templateTrait: self templateTrait;
 		mappings: {
 			#objectName -> self objectName uncapitalized.
+			#objectId -> self objectId uncapitalized.
 			#prefix -> self projectPrefix.
 			#package -> self packageName.
 			#tag -> self tagName }
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> objectId [
+	^ objectId ifNil: [ self objectName ]
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> objectId: anObject [
+	objectId := anObject
 ]
 
 { #category : #accessing }
@@ -98,6 +115,7 @@ GtRobocoderWithObjectTraitGenerator >> storeOn: aStream [
 	aStream
 		nextPutAll: self class name; space; nextPutAll: 'new'; cr;
 		tab; nextPutAll: 'objectName:'; space; print: self objectName; nextPut: $;; cr;
+		tab; nextPutAll: 'objectId:'; space; print: self objectId; nextPut: $;; cr;
 		tab; nextPutAll: 'projectPrefix:'; space; print: self projectPrefix; nextPut: $;; cr;
 		tab; nextPutAll: 'packageName:'; space; print: self packageName; nextPut: $;; cr;
 		tab; nextPutAll: 'tagName:'; space; print: (self tagName ifNil: [ '' ]); nextPut: $;; cr;

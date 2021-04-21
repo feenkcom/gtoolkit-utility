@@ -5,6 +5,31 @@ Class {
 }
 
 { #category : #examples }
+GtRobocoderForOneMetamodelExamples >> metamodelWithName [
+	<gtExample>
+	| aMetamodel |
+
+	aMetamodel := self newMetamodel.
+	aMetamodel name: 'something'.
+
+	self assert: aMetamodel name equals: 'something'.
+	self assert: aMetamodel objectClassName equals: 'Something'.
+
+	^ aMetamodel
+]
+
+{ #category : #examples }
+GtRobocoderForOneMetamodelExamples >> metamodelWithNameGenerate [
+	<gtExample>
+	| aMetamodel aFullClassDefinition |
+
+	aMetamodel := self metamodelWithName.
+	aFullClassDefinition := aMetamodel generateBehavior.
+
+	^ aFullClassDefinition
+]
+
+{ #category : #examples }
 GtRobocoderForOneMetamodelExamples >> newMetamodel [
 	<gtExample>
 	| aMetamodel |

@@ -17,6 +17,7 @@ TGtRobocoderMetamodelChildrenForManyTemplate >> childObjectsTemplate [
 	"Return a collection of objects (${class:{{childObjectsClass}}}$) created for each child from the domain model.
 	Note: The children are lazily instantiated."
 	<return: #Collection of: #{{childObjectsClass}}>
+	<childObjectGetter: #{{childName}}>
 
 	^  {{childObjects}} ifNil: [ {{childObjects}} := self create{{childObjects capitalized}} ]';
 		protocol: 'api - accessing';
@@ -33,14 +34,34 @@ TGtRobocoderMetamodelChildrenForManyTemplate >> createChildObjectsTemplate [
 	"For each child from the domain model create an object and return a resulting collection"
 	<return: #Collection of: #{{childObjectsClass}}>
 
-	^ self {{modelGetter}} {{childModelsGetter}} collect: [ :eachModel |
+	^ self {{modelGetter ifNil: [ ''yourself'' ]}} {{childModelsGetter}} collect: [ :eachModel |
 		| eachChild |
 		eachChild := {{childObjectsClass}} new.
 		{{childParentObjectSetter
-			ifNotNil: [ :aSelector | ''eachChild {{aSelector}}: self.'' ]
+			ifNotNil: [ :aSelector | ''eachChild {{aSelector gtAsReader}}: self.'' ]
 			ifNil: [ '''' ]}}
-		eachChild {{childModelSetter}}: eachModel ] as: Array';
+		{{childModelSetter
+			ifNotNil: [ :aSelector | ''eachChild {{aSelector gtAsReader}}: eachModel.'' ]
+			ifNil: [ '''' ]}}
+		eachChild ] as: OrderedCollection';
 		protocol: 'private - instance creation';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelChildrenForManyTemplate >> includesObjectTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'includes{{childObject capitalized}}: a{{childObject capitalized}}
+	"Check and return true if a given child object exists among my children, false otherwise.
+	The comparison happens by identity"
+	<return: #Boolean>
+	<childObjectFinder: #{{childName}}>
+
+	^ self {{childObjects}} anySatisfy: [ :each{{childObject capitalized}} |
+		each{{childObject capitalized}} == a{{childObject capitalized}} ]';
 		storageMethod: thisContext method
 ]
 

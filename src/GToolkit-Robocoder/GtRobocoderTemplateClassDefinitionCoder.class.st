@@ -94,7 +94,7 @@ GtRobocoderTemplateClassDefinitionCoder class >> translateMetaclassDefinition: a
 
 { #category : #converting }
 GtRobocoderTemplateClassDefinitionCoder >> asCoderUIModel [
-	^ GtRobocoderTemplateTraitDefinitionCoderViewModel new templateTraitBehaviorCoderModel: self
+	^ GtRobocoderTemplateClassDefinitionCoderViewModel new templateClassBehaviorCoderModel: self
 ]
 
 { #category : #private }
@@ -155,7 +155,7 @@ GtRobocoderTemplateClassDefinitionCoder >> forTemplateBehavior: aBehavior select
 		ifPresent: [ :aCompiledMethod | ^ self forMethod: aCompiledMethod ].
 
 	self forTemplateClass: (GtRobocoderTemplateClass new
-		definition: GtTraitDefinition forNew;
+		definition: self newFullClassDefinition;
 		storageBehavior: aBehavior selector: aTemplateSelector)
 ]
 
@@ -179,6 +179,16 @@ GtRobocoderTemplateClassDefinitionCoder >> map: aVariableName to: anObject [
 { #category : #'api - accessing' }
 GtRobocoderTemplateClassDefinitionCoder >> mappings: aCollectionOfAssociations [
 	aCollectionOfAssociations do: [ :each | self map: each key to: each value ]
+]
+
+{ #category : #initialization }
+GtRobocoderTemplateClassDefinitionCoder >> newFullClassDefinition [
+	| aDefinition |
+	
+	aDefinition := GtFullClassDefinition forNew.
+	aDefinition instanceSideDefinition superclass: (GtClassTemplateSuperclassDefinition new name: #Object).
+	
+	^ aDefinition
 ]
 
 { #category : #'api - actions' }

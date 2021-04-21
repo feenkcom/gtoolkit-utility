@@ -29,6 +29,11 @@ GtRobocoderTemplateTranslator >> bindings: theBindings [
 ]
 
 { #category : #translate }
+GtRobocoderTemplateTranslator >> evaluateBlock: aBlockClosure [
+	^ self evaluationResultToString: aBlockClosure value
+]
+
+{ #category : #translate }
 GtRobocoderTemplateTranslator >> evaluateExpression: aSourceString [
 	| aSnippetCoder aTemplateResult |
 	
@@ -66,6 +71,18 @@ GtRobocoderTemplateTranslator >> evaluationResultToString: anObject [
 	^ aResult
 ]
 
+{ #category : #'private - replacement' }
+GtRobocoderTemplateTranslator >> generateCode: aSourceCode [
+	| theTemplates theResultingSourceCode |
+	aSourceCode
+		ifEmpty: [ ^ aSourceCode ].
+
+	theTemplates := GtRobocoderTemplateParser parse: aSourceCode.
+	theResultingSourceCode := self accept: theTemplates.
+	
+	^ theResultingSourceCode
+]
+
 { #category : #initialization }
 GtRobocoderTemplateTranslator >> initialize [
 	super initialize.
@@ -86,14 +103,13 @@ GtRobocoderTemplateTranslator >> mappings: aCollectionOfAssociations [
 
 { #category : #'private - replacement' }
 GtRobocoderTemplateTranslator >> processString: aSourceCode [
-	| theTemplates theResultingSourceCode aSnippetCoder aTemplateResult |
+	| theResultingSourceCode aSnippetCoder aTemplateResult |
 	
 	aSourceCode
 		ifEmpty: [ ^ aSourceCode ].
 
-	theTemplates := GtRobocoderTemplateParser parse: aSourceCode.
-	theResultingSourceCode := self accept: theTemplates.
-
+	theResultingSourceCode := self generateCode: aSourceCode.
+	
 	aSnippetCoder := GtPharoSnippetCoder forSource: theResultingSourceCode.
 	aTemplateResult := aSnippetCoder doItInContext: self evaluationContext.
 
@@ -107,8 +123,30 @@ GtRobocoderTemplateTranslator >> processString: aSourceCode [
 GtRobocoderTemplateTranslator >> runtimeContext: aContext [
 	self evaluationContext runtimeContext: aContext.
 
-	aContext tempNames do: [ :eachTempName |
-		self bindings at: eachTempName put: (aContext tempNamed: eachTempName) ]
+	"aContext tempNames do: [ :eachTempName |
+		self bindings at: eachTempName put: (aContext tempNamed: eachTempName) ]"
+]
+
+{ #category : #'private - replacement' }
+GtRobocoderTemplateTranslator >> sourceForEmbeddedNestedTemplateSource: aString [
+	^ String streamContents: [ :aStream |
+		aStream
+			nextPut: $(;
+			nextPutAll: self class name;
+			space;
+			nextPutAll: 'new';
+			space;
+			nextPutAll: 'bindings: __external_bindings__;';
+			space;
+			nextPutAll: #runtimeContext:;
+			space;
+			nextPutAll: 'thisContext';
+			nextPut: $;;
+			space;
+			nextPutAll: #evaluateExpression:;
+			space;
+			nextPutAll: aString;
+			nextPut: $) ]
 ]
 
 { #category : #'private - replacement' }
@@ -142,16 +180,13 @@ GtRobocoderTemplateTranslator >> sourceForEmbeddedTemplateSource: aString [
 			space;
 			nextPutAll: 'new';
 			space;
-			nextPutAll: 'bindings: __external_bindings__;';
+			nextPutAll: #evaluateBlock:;
 			space;
-			nextPutAll: #runtimeContext:;
-			space;
-			nextPutAll: 'thisContext';
-			nextPut: $;;
-			space;
-			nextPutAll: #evaluateExpression:;
+			nextPut: $[;
 			space;
 			nextPutAll: aString;
+			space;
+			nextPut: $];
 			nextPut: $) ]
 ]
 
@@ -178,7 +213,9 @@ GtRobocoderTemplateTranslator >> visitPlain: aPlain [
 
 { #category : #generated }
 GtRobocoderTemplateTranslator >> visitString: aString [
-	^ (self sourceForEmbeddedString: aString source) printString
+	^ aString literalValue
+		ifEmpty: [ ^ '' printString ]
+		ifNotEmpty: [ :aStringValue | (self generateCode: aStringValue) ]
 ]
 
 { #category : #generated }
@@ -194,10 +231,27 @@ GtRobocoderTemplateTranslator >> visitTemplate: aTemplate [
 		isRootTemplate
 			ifFalse: [ aStream nextPut: $( ].
 		aStream
-			nextPutAll: (self sourceForEmbeddedTemplateSource: (self accept: aTemplate content)).
+			nextPutAll: (isRootTemplate
+				ifTrue: [ self sourceForEmbeddedTemplateSource: (self accept: aTemplate content) ]
+				ifFalse: [ self sourceForEmbeddedNestedTemplateSource: (self accept: aTemplate content) ]).
 		isRootTemplate
 			ifFalse: [
 				aStream
+					space;
 					nextPutAll: 'copyReplaceAll: '''''''' with: ''''''''''''';
 					nextPut: $) ] ]
+]
+
+{ #category : #generated }
+GtRobocoderTemplateTranslator >> visitTemplateCode: aTemplateCode [
+	^ String streamContents: [ :aStream |
+		aStream nextPutAll: aTemplateCode source asString ]
+]
+
+{ #category : #generated }
+GtRobocoderTemplateTranslator >> visitTemplateContent: aTemplateContent [
+	^ String streamContents: [ :aStream |
+		aTemplateContent templateParts
+			collect: [ :eachPart | self accept: eachPart ]
+			thenDo: [ :eachPartString | aStream nextPutAll: eachPartString ] ]
 ]

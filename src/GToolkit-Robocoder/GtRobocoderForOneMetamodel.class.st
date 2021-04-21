@@ -61,16 +61,6 @@ GtRobocoderForOneMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefi
 			into: aViewModelDefinition ]
 ]
 
-{ #category : #'api - generation' }
-GtRobocoderForOneMetamodel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
-	self hasParent
-		ifFalse: [ ^ self ].
-
-	self
-		generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition
-		parentViewModelModel: self parent
-]
-
 { #category : #testing }
 GtRobocoderForOneMetamodel >> hasChild: aChild [
 	(children includes: aChild)

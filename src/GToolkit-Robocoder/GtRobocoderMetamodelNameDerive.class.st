@@ -10,27 +10,32 @@ GtRobocoderMetamodelNameDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
+GtRobocoderMetamodelNameDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |
 		| eachNameMethodSourceCode |
+		
+		eachNameMethodSourceCode := GtRobocoderTemplateMethodCoder new
+			forMethod: self class >> #objectNameTemplate;
+			mappings: { #name -> eachMetamodelWithCodeDefinition name asSymbol printString. };
+			translate.
 
-		eachNameMethodSourceCode := self
-			generateViewModelNameMethodFor: eachViewModelModelWithCodeDefinition metamodel.
-
-		eachViewModelModelWithCodeDefinition definition instanceSideDefinition methods
+		eachMetamodelWithCodeDefinition definition instanceSideDefinition methods
 			addMethod: eachNameMethodSourceCode
 			protocol: 'api - accessing' ]
 ]
 
-{ #category : #'private - generation' }
-GtRobocoderMetamodelNameDerive >> generateViewModelNameMethodFor: aViewModelModel [
-	^ 'viewModelName
-	"Return a symbolic name of this view model which helps to create (view model -> element class) mappings.
-	Note: The symbolic name of the view model is the exact name that was used
-	in the view model declaration from which this view model was generated"
+{ #category : #templates }
+GtRobocoderMetamodelNameDerive >> objectNameTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'objectName
+	"Return a symbolic name of the receiver which helps to create various type based mappings.
+	Note: The symbolic name of the object is the exact name that was used
+	in the metamodel declaration from which this class was generated"
 	<return: #Symbol>
 
-	^ {name}' format: {
-			#name -> aViewModelModel name asSymbol printString.
-		} asDictionary
+	^ {{name}}';
+		storageMethod: thisContext method
 ]

@@ -67,7 +67,13 @@ GtRobocoderMetamodelCoder >> initializeAddOns: addOns [
 				event: anEvent;
 				execute ]
 		id: GtSourceCoderDoItAndGoActionId.
-
+	
+	addOns
+		addMainAction: 'Profile' translated
+		icon: BrGlamorousVectorIcons performance
+		action: [ :aCoderUIModel :anEvent | self notifyObjectSpawn: (self profileWithMessageTally) ]
+		id: GtSourceCoderProfileActionId.
+	
 	addOns
 		addMainAction: 'Inspect UI Model' translated
 		icon: BrGlamorousVectorIcons inspect
@@ -89,4 +95,9 @@ GtRobocoderMetamodelCoder >> primitiveEvaluate: aSourceString inContext: aGtSour
 	^ (GtRobocoderMetamodelGenerator new
 		sourceCode: aSourceString;
 		generate) generateCodeDefinitions
+]
+
+{ #category : #'api - actions' }
+GtRobocoderMetamodelCoder >> profileWithMessageTally [
+	^ MessageTally on: [ self doItAll ]
 ]

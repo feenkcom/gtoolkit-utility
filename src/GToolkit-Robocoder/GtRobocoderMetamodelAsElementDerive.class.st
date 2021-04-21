@@ -13,15 +13,15 @@ GtRobocoderMetamodelAsElementDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelAsElementDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
+GtRobocoderMetamodelAsElementDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |
 		| eachNameMethodSourceCode |
 
 		
 
 		eachNameMethodSourceCode := GtRobocoderTemplateMethodCoder new
 			forMethod: self class >> #asElementTemplate;
-			mappings: { #elementClass -> BlElement . #viewModelSetter -> eachViewModelModelWithCodeDefinition }.
+			mappings: { #elementClass -> BlElement . #viewModelSetter -> eachMetamodelWithCodeDefinition }.
 
 		
 

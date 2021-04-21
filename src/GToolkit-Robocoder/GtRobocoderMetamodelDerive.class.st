@@ -24,7 +24,7 @@ GtRobocoderMetamodelDerive >> = anObject [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
 	self subclassResponsibility
 ]
 

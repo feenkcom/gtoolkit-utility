@@ -12,6 +12,8 @@ Class {
 
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition >> addExtraDefinition: aGtCodeDefinition [
+	extraDefinitions removeAllSuchThat: [ :eachExtraDefinition |
+		eachExtraDefinition name = aGtCodeDefinition name ]. 
 	extraDefinitions add: aGtCodeDefinition
 ]
 
@@ -62,6 +64,33 @@ GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName 
 	KeyNotFound signalFor: aPragmaName in: self
 ]
 
+{ #category : #'private - methods' }
+GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamedOrNil: aPragmaName [
+	"Find any method that is marked with a given pragma (in traits, instance side, etc.)"
+	<return: #GtPharoMethodDefinition or: nil>
+	
+	self
+		methodsWithPragmaNamed: aPragmaName
+		inViewModelDefinition: self definition
+		do: [ :aMethodDefinition | ^ aMethodDefinition ].
+		
+	^ nil
+]
+
+{ #category : #'private - methods' }
+GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamedOrNil: aPragmaName andValue: aPragmaValue [
+	"Find any method that is marked with a given pragma (in traits, instance side, etc.) and its value"
+	<return: #GtPharoMethodDefinition>
+	
+	self
+		methodsWithPragmaNamed: aPragmaName
+		andValue: aPragmaValue
+		inViewModelDefinition: self definition
+		do: [ :aMethodDefinition | ^ aMethodDefinition ].
+		
+	^ nil
+]
+
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> childViewModelsName [
 	^ self metamodel childViewModelsName
@@ -71,8 +100,8 @@ GtRobocoderMetamodelWithCodeDefinition >> childViewModelsName [
 GtRobocoderMetamodelWithCodeDefinition >> children [
 	<return: #Collection of: #GtRobocoderMetamodelWithCodeDefinition>
 
-	^ self metamodel children collect: [ :eachChildViewModel |
-		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachChildViewModel ]
+	^ self metamodel children collect: [ :eachChildMetamodelWithDefinition |
+		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachChildMetamodelWithDefinition ]
 ]
 
 { #category : #accessing }
@@ -93,6 +122,13 @@ GtRobocoderMetamodelWithCodeDefinition >> derives [
 { #category : #'api - methods' }
 GtRobocoderMetamodelWithCodeDefinition >> elementViewModelSetterMethodDo: aFoundBlock ifNone: ifNoneBlock [
 	self extraDefinitions do: [ :each | ]
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> environment [
+	<return: #GtPharoEnvironment>
+
+	^ self definition environment
 ]
 
 { #category : #accessing }
@@ -132,6 +168,20 @@ GtRobocoderMetamodelWithCodeDefinition >> isForMany [
 { #category : #testing }
 GtRobocoderMetamodelWithCodeDefinition >> isForOne [
 	^ self metamodel isForOne
+]
+
+{ #category : #'api - modification' }
+GtRobocoderMetamodelWithCodeDefinition >> mergeBehaviorDefinition: aBehaviorDefinition [
+	self metamodel
+		mergeBehaviorDefinition: aBehaviorDefinition
+		into: self definition
+]
+
+{ #category : #'api - modification' }
+GtRobocoderMetamodelWithCodeDefinition >> mergeFullClassDefinition: aFullClassDefinition [
+	self metamodel
+		mergeFullClassDefinition: aFullClassDefinition
+		into: self definition
 ]
 
 { #category : #accessing }
@@ -224,6 +274,11 @@ GtRobocoderMetamodelWithCodeDefinition >> name [
 ]
 
 { #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> package [
+	^ self metamodel package
+]
+
+{ #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> parent [
 	<return: #GtRobocoderMetamodelWithCodeDefinition>
 
@@ -260,7 +315,7 @@ GtRobocoderMetamodelWithCodeDefinition >> parentViewModelSelectorName [
 { #category : #'api - methods' }
 GtRobocoderMetamodelWithCodeDefinition >> parentViewModelSetterMethodFor: aParentViewModelModel [
 	^ self
-		anyMethodWithPragmaNamed: #parentViewModelSetter:
+		anyMethodWithPragmaNamed: #parentObjectSetter:
 		andValue: aParentViewModelModel name
 ]
 
@@ -277,4 +332,34 @@ GtRobocoderMetamodelWithCodeDefinition >> parents [
 	
 	^ self metamodel parents collect: [ :eachParentViewModelModel |
 		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachParentViewModelModel ]
+]
+
+{ #category : #copying }
+GtRobocoderMetamodelWithCodeDefinition >> postCopy [
+	definition := definition copy
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> prefix [
+	^ self metamodel prefix
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> project [
+	^ self metamodel project
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> properties [
+	^ self metamodel properties
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> suffix [
+	^ self metamodel suffix
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> tag [
+	^ self metamodel tag
 ]

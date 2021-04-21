@@ -10,51 +10,51 @@ GtRobocoderMetamodelWithSelectionDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
+GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
 	"The generation of the selection behavior requires three passes:
 	 - first we generate the template code which is independent for each view model
 	 - once the basic code skeleton is generated we glue children to their parents during the second pass
 	 - finally, we implement a few placeholder methods in parent to glue them with children"
 	
 	"first pass to generae independent code"
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
-		eachViewModelModelWithCodeDefinition isForMany
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |		
+		eachMetamodelWithCodeDefinition isForMany
 			ifTrue: [
 				| aSelectionTraitDefinition aSelectedViewModelChangedAnnouncement |
 	
-				aSelectionTraitDefinition := self generateWithSelectedViewModelTraitFor: eachViewModelModelWithCodeDefinition.
-				eachViewModelModelWithCodeDefinition definition instanceSideDefinition traits addTrait: aSelectionTraitDefinition.
+				aSelectionTraitDefinition := self generateWithSelectedViewModelTraitFor: eachMetamodelWithCodeDefinition.
+				eachMetamodelWithCodeDefinition definition instanceSideDefinition traits addTrait: aSelectionTraitDefinition.
 				
 				aSelectedViewModelChangedAnnouncement := self
-					generatePropertyChangedAnnouncementFor: eachViewModelModelWithCodeDefinition metamodel.
+					generatePropertyChangedAnnouncementFor: eachMetamodelWithCodeDefinition metamodel.
 				
-				eachViewModelModelWithCodeDefinition addExtraDefinitions: {
+				eachMetamodelWithCodeDefinition addExtraDefinitions: {
 					aSelectionTraitDefinition.
 					aSelectedViewModelChangedAnnouncement
 				} ].
-		eachViewModelModelWithCodeDefinition isForOne
+		eachMetamodelWithCodeDefinition isForOne
 			ifTrue: [
-				eachViewModelModelWithCodeDefinition addExtraDefinitions: { 
-					self generateViewModelSelectedAnnouncementFor: eachViewModelModelWithCodeDefinition metamodel.
-					self generateViewModelDeselectedAnnouncementFor: eachViewModelModelWithCodeDefinition metamodel.
+				eachMetamodelWithCodeDefinition addExtraDefinitions: { 
+					self generateViewModelSelectedAnnouncementFor: eachMetamodelWithCodeDefinition metamodel.
+					self generateViewModelDeselectedAnnouncementFor: eachMetamodelWithCodeDefinition metamodel.
 				} ] ].
 
 	"second pass to glue children with parents"
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
-		eachViewModelModelWithCodeDefinition isForOne
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |		
+		eachMetamodelWithCodeDefinition isForOne
 			ifTrue: [
-				self generateSelectableChildAccessorsFor: eachViewModelModelWithCodeDefinition.
-				self generateDeselectOtherEntitiesMethodFor: eachViewModelModelWithCodeDefinition.
-				self generateHasOtherSelectedEntitiesMethodFor: eachViewModelModelWithCodeDefinition
+				self generateSelectableChildAccessorsFor: eachMetamodelWithCodeDefinition.
+				self generateDeselectOtherEntitiesMethodFor: eachMetamodelWithCodeDefinition.
+				self generateHasOtherSelectedEntitiesMethodFor: eachMetamodelWithCodeDefinition
 			] ].
 	
 	"third pass to glue parents with children"
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |		
-		eachViewModelModelWithCodeDefinition isForMany
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |		
+		eachMetamodelWithCodeDefinition isForMany
 			ifTrue: [
-				self generatePropertyChangedNotifierMethodFor: eachViewModelModelWithCodeDefinition.
-				self generateSelectionSetHookMethodTo: eachViewModelModelWithCodeDefinition.
-				self generateSelectionUnsetHookMethodTo: eachViewModelModelWithCodeDefinition
+				self generatePropertyChangedNotifierMethodFor: eachMetamodelWithCodeDefinition.
+				self generateSelectionSetHookMethodTo: eachMetamodelWithCodeDefinition.
+				self generateSelectionUnsetHookMethodTo: eachMetamodelWithCodeDefinition
 			] ].
 	
 

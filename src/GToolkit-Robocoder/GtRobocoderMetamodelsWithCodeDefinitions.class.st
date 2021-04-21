@@ -56,6 +56,18 @@ GtRobocoderMetamodelsWithCodeDefinitions >> gtModelsFor: aView [
 		items: [ self viewModelModels models ]
 ]
 
+{ #category : #enumerating }
+GtRobocoderMetamodelsWithCodeDefinitions >> metamodelsWithCodeDefinitionDo: aBlock [
+	"Evaluate a given block with each ${class:GtRobocoderMetamodelWithCodeDefinition}$"
+
+	self definitions do: aBlock
+]
+
+{ #category : #copying }
+GtRobocoderMetamodelsWithCodeDefinitions >> postCopy [
+	definitions := definitions collect: [ :eachDefinition | eachDefinition copy ]
+]
+
 { #category : #accessing }
 GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModelWithCodeDefinitionFor: aViewModelModel [
 	^ self definitions
@@ -70,13 +82,6 @@ GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModels [
 { #category : #accessing }
 GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModels: anObject [
 	viewModelModels := anObject
-]
-
-{ #category : #enumerating }
-GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModelsWithCodeDefinitionDo: aBlock [
-	"Evaluate a given block with each ${class:GtViewModelModelWithCodeDefinition}$"
-
-	self definitions do: aBlock
 ]
 
 { #category : #enumerating }

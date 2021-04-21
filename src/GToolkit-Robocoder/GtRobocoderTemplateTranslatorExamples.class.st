@@ -4,6 +4,76 @@ Class {
 	#category : #'GToolkit-Robocoder-Examples'
 }
 
+{ #category : #'examples - code generation' }
+GtRobocoderTemplateTranslatorExamples >> codeArrayCollectEmptyStrings [
+	<gtExample>
+	| aTemplate aTranslator aResult |
+	
+	aTemplate := '{{array collect: [ :eachChar | '''' ]}}'.
+	aTranslator := GtRobocoderTemplateTranslator new
+		map: #array to: #($A $l $e $x).
+
+	aResult := aTranslator generateCode: aTemplate.
+	self
+		assert: aResult
+		equals: ('({1} new evaluateBlock: [ array collect: [ :eachChar | '''' ] ])' format: { GtRobocoderTemplateTranslator }).
+
+	^ aResult
+]
+
+{ #category : #'examples - code generation' }
+GtRobocoderTemplateTranslatorExamples >> codeArrayCollectWithEmbeddedStrings [
+	<gtExample>
+	| aTemplate aTranslator aResult |
+	
+	aTemplate := '{{array collect: [ :eachChar | ''eachChar'' ]}}'.
+	aTranslator := GtRobocoderTemplateTranslator new
+		map: #array to: #($A $l $e $x).
+		
+	aResult := aTranslator generateCode: aTemplate.
+	self
+		assert: aResult
+		equals: ('({1} new evaluateBlock: [ array collect: [ :eachChar | ''eachChar'' ] ])' format: { GtRobocoderTemplateTranslator }).
+	
+	^ aResult
+]
+
+{ #category : #'examples - code generation' }
+GtRobocoderTemplateTranslatorExamples >> codeDoubleNestedTemplate [
+	<gtExample>
+	| aTemplate aTranslator aResult |
+	
+	aTemplate := '{{{{name}}}}'.
+	aTranslator := GtRobocoderTemplateTranslator new
+		map: #name to: 'someone';
+		map: #someone to: 'Alex'.
+		
+	aResult := aTranslator generateCode: aTemplate.
+	self
+		assert: aResult
+		equals: ('({1} new evaluateBlock: [ (({1} new bindings: __external_bindings__; runtimeContext: thisContext; evaluateExpression: name) copyReplaceAll: '''''''' with: '''''''''''') ])'
+			format: { GtRobocoderTemplateTranslator }).
+	
+	^ aResult
+]
+
+{ #category : #'examples - code generation' }
+GtRobocoderTemplateTranslatorExamples >> codeTemplateInEmbeddedString [
+	<gtExample>
+	| aTemplate aTranslator aResult |
+	
+	aTemplate := '{{''{{name}}''}}'.
+	aTranslator := GtRobocoderTemplateTranslator new
+		map: #name to: 'Alex'.
+		
+	aResult := aTranslator generateCode: aTemplate.
+	self
+		assert: aResult
+		equals: ('({1} new evaluateBlock: [ ({1} new evaluateBlock: [ name ]) ])' format: { GtRobocoderTemplateTranslator }).
+	
+	^ aResult
+]
+
 { #category : #examples }
 GtRobocoderTemplateTranslatorExamples >> translateArrayCollectAsStrings [
 	<gtExample>
@@ -90,6 +160,21 @@ GtRobocoderTemplateTranslatorExamples >> translateArrayCollectWithTemplateEmbedd
 
 	aResult := aTranslator translate: aTemplate.
 	self assert: aResult equals: 'A-Al-le-ex-x'.
+
+	^ aResult
+]
+
+{ #category : #examples }
+GtRobocoderTemplateTranslatorExamples >> translateArrayCollectWithTemplateEmbeddedInStringsWithinBlock [
+	<gtExample>
+	| aTemplate aTranslator aResult |
+	
+	aTemplate := '{{array collect: [ :eachChar | [ ''{{eachChar}}'' ] value ]}}'.
+	aTranslator := GtRobocoderTemplateTranslator new
+		map: #array to: #($A $l $e $x).
+
+	aResult := aTranslator translate: aTemplate.
+	self assert: aResult equals: 'Alex'.
 
 	^ aResult
 ]
@@ -257,5 +342,22 @@ GtRobocoderTemplateTranslatorExamples >> translateTemplateInStringWithText [
 	aResult := aTranslator translate: aTemplate.
 	self assert: aResult equals: 'My name ''is Alex'''.
 
+	^ aResult
+]
+
+{ #category : #examples }
+GtRobocoderTemplateTranslatorExamples >> translateTrippleNestedTemplate [
+	<gtExample>
+	| aTemplate aTranslator aResult |
+	
+	aTemplate := '{{{{{{name}}}}}}'.
+	aTranslator := GtRobocoderTemplateTranslator new
+		map: #name to: 'someone';
+		map: #someone to: 'user';
+		map: #user to: 'Alex'.
+		
+	aResult := aTranslator translate: aTemplate.
+	self assert: aResult equals: 'Alex'.
+	
 	^ aResult
 ]

@@ -27,7 +27,7 @@ TGtRobocoderWithObjectTraitTemplate >> hasObjectTemplate [
 		sourceCode: 'has{{objectName capitalized}}
 	"Return a true if {{modelName}} is assigned to the receiver, false otherwise"
 	<return: #Boolean>
-	<objectTester: #{{objectName}}>
+	<objectTester: #{{objectId}}>
 
 	^ {{objectName}} notNil';
 		protocol: 'api - {{objectName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
@@ -42,7 +42,7 @@ TGtRobocoderWithObjectTraitTemplate >> objectGetterTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: '{{objectName}}
 	"Return a not-null {{objectName}} assigned to the receiver"
-	<objectGetter: #{{objectName}}>
+	<objectGetter: #{{objectId}}>
 	self
 		assert: [ {{objectName}} notNil ]
 		description: [ ''{{objectName}} should be initialized'' ].
@@ -60,7 +60,7 @@ TGtRobocoderWithObjectTraitTemplate >> objectSetterTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: '{{objectName}}: a{{objectName capitalized}}
 	"Set a not-null {{objectName}} assigned to the receiver"
-	<objectSetter: #{{objectName}}>
+	<objectSetter: #{{objectId}}>
 	self
 		assert: [ a{{objectName capitalized}} notNil ]
 		description: [ ''{{objectName}} must not be nil'' ].
@@ -89,9 +89,7 @@ TGtRobocoderWithObjectTraitTemplate >> onObjectChangedTemplate [
 	Note: #on{{objectName capitalized}}Changed is sent before #subscribeTo{{objectName capitalized}}
 	which means that if you perform any operation that triggers an announcement it will be ignored because the receiver
 	didn''t get a chance to subscribe to any announcement. Override #onPost{{objectName capitalized}}Changed if you
-	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"
-
-	self explicitRequirement';
+	wish to perform an operation that requires an announcement, but keep in mind that this is not the most efficient way"';
 		protocol: 'api - {{objectName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]

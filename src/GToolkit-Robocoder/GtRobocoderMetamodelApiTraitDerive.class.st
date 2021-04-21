@@ -15,20 +15,21 @@ GtRobocoderMetamodelApiTraitDerive class >> label [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodelApiTraitDerive >> applyOnMetamodelsWithCodeDefinitions: aGtViewModelModelsWithCodeDefinitions [
-	aGtViewModelModelsWithCodeDefinitions viewModelModelsWithCodeDefinitionDo: [ :eachViewModelModelWithCodeDefinition |
+GtRobocoderMetamodelApiTraitDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions [
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |
 		| anApiTraitDefinition |
 		
-		anApiTraitDefinition := self generateMetamodelApiTraitFor: eachViewModelModelWithCodeDefinition metamodel.
-		eachViewModelModelWithCodeDefinition addExtraDefinition: anApiTraitDefinition ]
+		anApiTraitDefinition := self generateMetamodelApiTraitFor: eachMetamodelWithCodeDefinition metamodel.
+		eachMetamodelWithCodeDefinition addExtraDefinition: anApiTraitDefinition ]
 ]
 
 { #category : #'private - generation' }
-GtRobocoderMetamodelApiTraitDerive >> generateMetamodelApiTraitFor: aViewModelModel [
+GtRobocoderMetamodelApiTraitDerive >> generateMetamodelApiTraitFor: aRobocoderMetamodel [
 	^ GtRobocoderWithObjectTraitGenerator new
-		objectName: (aViewModelModel prefix uncapitalized, aViewModelModel name capitalized, aViewModelModel suffix capitalized) uncapitalized;
-		projectPrefix: aViewModelModel project;
-		packageName: aViewModelModel package;
-		tagName: aViewModelModel fullTagForTraits;
+		objectId: aRobocoderMetamodel name;
+		objectName: (aRobocoderMetamodel project uncapitalized, aRobocoderMetamodel name capitalized, aRobocoderMetamodel suffix capitalized) uncapitalized;
+		projectPrefix: aRobocoderMetamodel prefix, aRobocoderMetamodel project capitalized;
+		packageName: aRobocoderMetamodel package;
+		tagName: aRobocoderMetamodel fullTagForTraits;
 		generate
 ]

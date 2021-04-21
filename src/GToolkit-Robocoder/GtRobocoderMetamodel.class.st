@@ -63,7 +63,8 @@ GtRobocoderMetamodel >> fullTagWith: aSubTag [
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodel >> generateBehaviorDefinitionIn: aPharoEnvironment [
+GtRobocoderMetamodel >> generateBehavior [
+	<return: #GtFullClassDefinition>
 	| aDefinition |
 
 	aDefinition := GtFullClassDefinition forNew.
@@ -73,9 +74,7 @@ GtRobocoderMetamodel >> generateBehaviorDefinitionIn: aPharoEnvironment [
 	aDefinition classSideDefinition category package name: self package.
 	aDefinition classSideDefinition category tag name: self fullTagForViewModel.
 
-	self generateDomainModelAccessorsFor: aDefinition.
-	self generateChildViewModelsAccessorFor: aDefinition.
-	self generateParentViewModelAccessorsFor: aDefinition.
+	self generateModelAccessorFor: aDefinition.
 
 	^ aDefinition
 ]
@@ -85,11 +84,9 @@ GtRobocoderMetamodel >> generateChildObjectGetterSelectorFor: aChildMetamodel [
 	"Generate a selector for a method that should be used to access a child object of the given child metamodel"
 	<return: #String>
 
-	^ ('{project}{name}{suffix}{ending}'
+	^ ('{singular}{ending}'
 		format: { 
-			#project -> aChildMetamodel project uncapitalized.
-			#name -> aChildMetamodel name capitalized.
-			#suffix -> aChildMetamodel suffix capitalized.
+			#singular -> (self generateSingularChildObjectGetterSelectorFor: aChildMetamodel).
 			#ending -> (aChildMetamodel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
 		} asDictionary) uncapitalized
 ]
@@ -100,23 +97,20 @@ GtRobocoderMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefinition
 ]
 
 { #category : #'api - generation' }
-GtRobocoderMetamodel >> generateDomainModelAccessorsFor: aViewModelDefinition [
-	self modelApiTrait
-		ifNotNil: [ :aTrait |
-			| aDomainModelTraitDefinition |
-			aDomainModelTraitDefinition := GtTraitDefinition fromTrait: aTrait in: aViewModelDefinition environment.
-			aViewModelDefinition instanceSideDefinition traits addTrait: aDomainModelTraitDefinition ]
-		ifNil: [
-			| aDomainModelTraitDefinition |
-			
-			aDomainModelTraitDefinition := GtRobocoderWithObjectTraitGenerator new
-				objectName: self name, self suffix capitalized;
-				projectPrefix: self project, self prefix capitalized;
-				packageName: self package;
-				tagName: self fullTagForTraits;
-				generate.
+GtRobocoderMetamodel >> generateModelAccessorFor: aDefinition [
+	| aDomainModelTraitDefinition |
 
-			self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aViewModelDefinition ]
+	(self hasDeriveOfClass: GtRobocoderMetamodelModelDerive)
+		ifTrue: [ ^ self ].
+
+	aDomainModelTraitDefinition := GtRobocoderWithObjectTraitGenerator new
+		objectName: self name;
+		projectPrefix: self prefix, self project capitalized;
+		packageName: self package;
+		tagName: self fullTagForTraits;
+		generate.
+
+	self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aDefinition
 ]
 
 { #category : #private }
@@ -124,29 +118,17 @@ GtRobocoderMetamodel >> generateParentObjectGetterSelectorFor: aParentViewModelM
 	^ 'parent', self project capitalized, aParentViewModelModel name capitalized, self suffix capitalized
 ]
 
-{ #category : #'api - generation' }
-GtRobocoderMetamodel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
-	self subclassResponsibility
-]
+{ #category : #private }
+GtRobocoderMetamodel >> generateSingularChildObjectGetterSelectorFor: aChildMetamodel [
+	"Generate a selector for a method that should be used to access a child object of the given child metamodel"
+	<return: #String>
 
-{ #category : #'api - generation' }
-GtRobocoderMetamodel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition parentViewModelModel: aParentViewModelModel [
-	| aTemplateDefinition |
-
-	aTemplateDefinition := GtRobocoderTraitGenerator new
-		templateTrait: TGtRobocoderMetamodelParentAccessorTemplate;
-		mappings: { 
-			"A class of the object to which the api should be added (used for documentation generation)"
-			#objectClass -> self objectClassName.
-			#parentObjectName -> aParentViewModelModel name.
-			#parentObject -> (self generateParentObjectGetterSelectorFor: aParentViewModelModel) uncapitalized.
-			#parentObjectClass -> aParentViewModelModel objectClassName capitalized
-		};
-		generate.
-
-	self
-		mergeBehaviorDefinition: aTemplateDefinition
-		into: aViewModelBehaviorDefinition
+	^ ('{project}{name}{suffix}'
+		format: { 
+			#project -> aChildMetamodel project uncapitalized.
+			#name -> aChildMetamodel name capitalized.
+			#suffix -> aChildMetamodel suffix capitalized.
+		} asDictionary) uncapitalized
 ]
 
 { #category : #'gt-extension' }
@@ -184,6 +166,11 @@ GtRobocoderMetamodel >> gtTreeFor: aView [
 		expandAll
 ]
 
+{ #category : #'api - derives' }
+GtRobocoderMetamodel >> hasDeriveOfClass: aDeriveClass [
+	^ self derives anySatisfy: [ :eachDerive | eachDerive class = aDeriveClass ]
+]
+
 { #category : #testing }
 GtRobocoderMetamodel >> hasParents [
 	^ self subclassResponsibility
@@ -214,16 +201,24 @@ GtRobocoderMetamodel >> mergeBehaviorDefinition: aBehaviorDefinition into: aView
 	This is useful when we want to actually compile-in methods and slots from template behaviors."
 	
 	aBehaviorDefinition slots do: [ :eachSlot |
-		aViewModelDefinition instanceSideDefinition slots
-			addSlotNamed: eachSlot name ].
-		
+		(aViewModelDefinition instanceSideDefinition slots hasSlotNamed: eachSlot name)
+			ifFalse: [ aViewModelDefinition instanceSideDefinition slots addSlotNamed: eachSlot name ] ].
+
 	aBehaviorDefinition methods do: [ :eachMethod |
-		aViewModelDefinition instanceSideDefinition methods
-			addMethod: eachMethod sourceCode
-			protocol: eachMethod protocol ].
-		
+		aViewModelDefinition instanceSideDefinition methods addMethod: eachMethod ].
+
 	aViewModelDefinition comment
 		content: aViewModelDefinition comment content, String cr, aBehaviorDefinition comment content
+]
+
+{ #category : #private }
+GtRobocoderMetamodel >> mergeFullClassDefinition: aFullClassDefinition into: aViewModelDefinition [
+	"Merge the given full class definition into the view model definition.
+	This is useful when we want to actually compile-in methods and slots from template behaviors."
+	
+	self
+		mergeBehaviorDefinition: aFullClassDefinition instanceSideDefinition
+		into: aViewModelDefinition
 ]
 
 { #category : #accessing }
@@ -264,42 +259,32 @@ GtRobocoderMetamodel >> modelApiTrait [
 GtRobocoderMetamodel >> modelGetterSelector [
 	| aFallbackSelector |
 
-	aFallbackSelector := (self name, 'Model') asSymbol.
+	aFallbackSelector := self name asSymbol.
 
 	^ modelApi
 		ifNotNil: [ :anApiTraitName |
 			self class environment
 				at: anApiTraitName asSymbol
 				ifPresent: [ :aTrait |
-					(Pragma allNamed: #modelGetter in: aTrait)
+					(Pragma allNamed: #objectGetter: in: aTrait)
 						ifEmpty: [ aFallbackSelector ]
 						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
 				ifAbsent: [ aFallbackSelector ] ]
 		ifNil: [ aFallbackSelector ]
 ]
 
-{ #category : #accessing }
-GtRobocoderMetamodel >> modelNameForViewModel [
-	^ self model ifNil: [ self name ]
-]
-
 { #category : #'api - accessing' }
 GtRobocoderMetamodel >> modelSetterSelector [
-	^ self modelSetterSelectorName asSymbol asMutator
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> modelSetterSelectorName [
 	| aFallbackSelector |
 
-	aFallbackSelector := (self name, 'Model') asSymbol.
+	aFallbackSelector := self name asSymbol.
 
 	^ modelApi
 		ifNotNil: [ :anApiTraitName |
 			self class environment
 				at: anApiTraitName asSymbol
 				ifPresent: [ :aTrait |
-					(Pragma allNamed: #modelSetter in: aTrait)
+					(Pragma allNamed: #objectSetter: in: aTrait)
 						ifEmpty: [ aFallbackSelector ]
 						ifNotEmpty: [ :thePragmas | thePragmas first method selector copyReplaceAll: ':' with: '' ] ]
 				ifAbsent: [ aFallbackSelector ] ]
@@ -310,14 +295,14 @@ GtRobocoderMetamodel >> modelSetterSelectorName [
 GtRobocoderMetamodel >> modelTesterSelector [
 	| aFallbackSelector |
 
-	aFallbackSelector := ('has', self name capitalized, 'Model') asSymbol.
+	aFallbackSelector := ('has', self name capitalized) asSymbol.
 
 	^ modelApi
 		ifNotNil: [ :anApiTraitName |
 			self class environment
 				at: anApiTraitName asSymbol
 				ifPresent: [ :aTrait |
-					(Pragma allNamed: #modelTester in: aTrait)
+					(Pragma allNamed: #objectTester in: aTrait)
 						ifEmpty: [ aFallbackSelector ]
 						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
 				ifAbsent: [ aFallbackSelector ] ]

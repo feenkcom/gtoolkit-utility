@@ -37,38 +37,6 @@ GtRobocoderForManyMetamodel >> forOneModel: anObject [
 	forOneModel parent: self
 ]
 
-{ #category : #'api - generation' }
-GtRobocoderForManyMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
-	| aDefinition |
-
-	aDefinition := GtRobocoderTraitGenerator new
-		templateTrait: TGtRobocoderMetamodelChildrenForManyTemplate;
-		mappings: { 
-			#modelGetter -> self modelGetterSelector uncapitalized.
-			#viewModelClass -> self objectClassName.
-			
-			#childObjects -> self childViewModelsName uncapitalized.
-			#childObjectsClass -> self forOneModel objectClassName capitalized.
-			
-			#childModelsGetter -> self itemsAccessorSelector uncapitalized.
-			#childModelSetter -> self forOneModel modelSetterSelectorName uncapitalized.
-			#childParentObjectSetter -> self forOneModel parentViewModelSelectorName uncapitalized.
-		};
-		generate.
-
-	self
-		mergeBehaviorDefinition: aDefinition
-		into: aViewModelDefinition
-]
-
-{ #category : #'api - generation' }
-GtRobocoderForManyMetamodel >> generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition [
-	self parents do: [ :eachParentViewModelModel |
-		self
-			generateParentViewModelAccessorsFor: aViewModelBehaviorDefinition
-			parentViewModelModel: eachParentViewModelModel ]
-]
-
 { #category : #testing }
 GtRobocoderForManyMetamodel >> hasParents [
 	^ self parents notEmpty
