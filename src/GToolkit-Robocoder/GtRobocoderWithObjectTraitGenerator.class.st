@@ -28,7 +28,8 @@ Class {
 		'projectPrefix',
 		'packageName',
 		'tagName',
-		'objectId'
+		'objectId',
+		'pragmaName'
 	],
 	#category : #'GToolkit-Robocoder-Generators'
 }
@@ -65,6 +66,7 @@ GtRobocoderWithObjectTraitGenerator >> generator [
 		mappings: {
 			#objectName -> self objectName uncapitalized.
 			#objectId -> self objectId uncapitalized.
+			#pragmaName -> self pragmaName uncapitalized.
 			#prefix -> self projectPrefix.
 			#package -> self packageName.
 			#tag -> self tagName }
@@ -98,6 +100,16 @@ GtRobocoderWithObjectTraitGenerator >> packageName [
 { #category : #accessing }
 GtRobocoderWithObjectTraitGenerator >> packageName: anObject [
 	packageName := anObject
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> pragmaName [
+	^ pragmaName ifNil: [ 'object' ]
+]
+
+{ #category : #accessing }
+GtRobocoderWithObjectTraitGenerator >> pragmaName: aString [
+	pragmaName := aString
 ]
 
 { #category : #accessing }

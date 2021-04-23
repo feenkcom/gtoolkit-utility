@@ -3,7 +3,6 @@ Class {
 	#superclass : #GtRobocoderMetamodelProgramNode,
 	#instVars : [
 		'level',
-		'model',
 		'properties'
 	],
 	#category : #'GToolkit-Robocoder-Ast - Metamodel'
@@ -34,22 +33,8 @@ GtRobocoderMetamodelDefinitionNode >> level: aGtRobocoderMetamodelLevelNode [
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelDefinitionNode >> model [
-	^ model
-]
-
-{ #category : #generated }
-GtRobocoderMetamodelDefinitionNode >> model: aGtRobocoderMetamodelModelAnnotationNode [
-	self model notNil
-		ifTrue: [ self model parent: nil ].
-	model := aGtRobocoderMetamodelModelAnnotationNode.
-	self model notNil
-		ifTrue: [ self model parent: self ]
-]
-
-{ #category : #generated }
 GtRobocoderMetamodelDefinitionNode >> nodeVariables [
-	^ #(#level #model #properties)
+	^ #(#level #properties)
 ]
 
 { #category : #generated }

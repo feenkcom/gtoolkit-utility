@@ -1,30 +1,26 @@
 Trait {
-	#name : #TGtRobocoderMetamodelAdditionForManyTemplate,
+	#name : #TGtRobocoderMetamodelAdditionForManyWithDelegateTemplate,
 	#category : #'GToolkit-Robocoder-Templates'
 }
 
 { #category : #templates }
-TGtRobocoderMetamodelAdditionForManyTemplate >> addObjectTemplate [
+TGtRobocoderMetamodelAdditionForManyWithDelegateTemplate >> addDelegateTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: 'add{{objectName capitalized}}: a{{objectName capitalized}}
-	"Add a given object as a child to the receiver and notify subscribers about it.
-	Do nothing if an object is already one of my children."
-	<objectAdder: #{{childName}}>
+		sourceCode: '{{addSelector gtAsReader}}: a{{childName capitalized}}
+	"Request the model to add a given child object.
+	I do nothing and simply delegate the addition. If the operation will trigger
+	an announcement and I react to it, it will trigger an update"
 
-	(self {{objectFinder gtAsReader}}: a{{objectName capitalized}})
-		ifTrue: [ ^ self ].
-
-	self {{childrenGetter}} add: a{{objectName capitalized}}.
-	self on{{objectName capitalized}}Added: a{{objectName capitalized}}';
+	self {{modelGetter}} {{addSelector gtAsReader}}: a{{childName capitalized}}';
 		protocol: 'api - adding';
 		storageMethod: thisContext method
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelAdditionForManyTemplate >> traitTemplate [
+TGtRobocoderMetamodelAdditionForManyWithDelegateTemplate >> traitTemplate [
 	<gtTraitTemplate>
 	<generatedFrom: #'GtRobocoderTemplateTrait class>>#storageMethodTemplate'>
 	

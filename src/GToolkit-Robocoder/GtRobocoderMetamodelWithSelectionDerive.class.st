@@ -332,7 +332,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateWithSelectedViewModelTraitFor
 		projectPrefix: (aViewModelModel project, aViewModelModel prefix capitalized);
 		packageName: aViewModelModel package;
 		tagName: aViewModelModel fullTagForTraits;
-		generateBehaviorDefinition
+		generate
 ]
 
 { #category : #'api - accessors' }

@@ -40,7 +40,7 @@ GtRobocoderMetamodels >> generateCodeDefinitions [
 	aGtRobocoderMetamodelsWithCodeDefinitions := GtRobocoderMetamodelsWithCodeDefinitions new
 		viewModelModels: self.
 
-	aGtRobocoderMetamodelsWithCodeDefinitions definitions: (self models collect: [ :eachViewModelModel |
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition: (self models collect: [ :eachViewModelModel |
 		| aDefinition |
 		aDefinition := eachViewModelModel alreadyHasClass
 			ifTrue: [ GtBehaviorDefinition fromBehavior: eachViewModelModel existingViewModelClass in: anEnvironment ]
@@ -86,7 +86,7 @@ GtRobocoderMetamodels >> processDerivesOf: aGtRobocoderMetamodelsWithCodeDefinit
 
 	thePreviousMetamodelsWithDefinitions := aGtRobocoderMetamodelsWithCodeDefinitions copy.
 
-	aGtRobocoderMetamodelsWithCodeDefinitions definitions
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
 		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
 		thenDo: [ :eachViewModelModelWithDefinition |
 			eachViewModelModelWithDefinition derives do: [ :eachDerive |
@@ -94,8 +94,8 @@ GtRobocoderMetamodels >> processDerivesOf: aGtRobocoderMetamodelsWithCodeDefinit
 
 	derives do: [ :eachDerive | eachDerive applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions ].
 	
-	aGtRobocoderMetamodelsWithCodeDefinitions definitions
-		with: thePreviousMetamodelsWithDefinitions definitions
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
+		with: thePreviousMetamodelsWithDefinitions metamodelsWithCodeDefinition
 		do: [ :aCurrentMetamodelWithDefinition :thePreviousMetamodelWithDefinition |
 			(aCurrentMetamodelWithDefinition definition differenceWith: thePreviousMetamodelWithDefinition definition)
 				hasDifference ifTrue: [ ^ true ] ].

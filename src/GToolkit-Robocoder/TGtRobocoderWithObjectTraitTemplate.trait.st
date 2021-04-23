@@ -27,7 +27,7 @@ TGtRobocoderWithObjectTraitTemplate >> hasObjectTemplate [
 		sourceCode: 'has{{objectName capitalized}}
 	"Return a true if {{modelName}} is assigned to the receiver, false otherwise"
 	<return: #Boolean>
-	<objectTester: #{{objectId}}>
+	<{{pragmaName}}Tester: #{{objectId}}>
 
 	^ {{objectName}} notNil';
 		protocol: 'api - {{objectName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
@@ -42,7 +42,7 @@ TGtRobocoderWithObjectTraitTemplate >> objectGetterTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: '{{objectName}}
 	"Return a not-null {{objectName}} assigned to the receiver"
-	<objectGetter: #{{objectId}}>
+	<{{pragmaName}}Getter: #{{objectId}}>
 	self
 		assert: [ {{objectName}} notNil ]
 		description: [ ''{{objectName}} should be initialized'' ].
@@ -60,7 +60,7 @@ TGtRobocoderWithObjectTraitTemplate >> objectSetterTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: '{{objectName}}: a{{objectName capitalized}}
 	"Set a not-null {{objectName}} assigned to the receiver"
-	<objectSetter: #{{objectId}}>
+	<{{pragmaName}}Setter: #{{objectId}}>
 	self
 		assert: [ a{{objectName capitalized}} notNil ]
 		description: [ ''{{objectName}} must not be nil'' ].

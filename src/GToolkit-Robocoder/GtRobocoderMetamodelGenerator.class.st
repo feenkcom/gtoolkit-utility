@@ -16,6 +16,18 @@ Class {
 	#category : #'GToolkit-Robocoder-Coder - Metamodel'
 }
 
+{ #category : #generation }
+GtRobocoderMetamodelGenerator class >> generateDefinitionsFrom: aSourceCode [
+	^ (self generateFrom: aSourceCode) generateCodeDefinitions
+]
+
+{ #category : #generation }
+GtRobocoderMetamodelGenerator class >> generateFrom: aSourceCode [
+	^ self new
+		sourceCode: aSourceCode;
+		generate
+]
+
 { #category : #private }
 GtRobocoderMetamodelGenerator >> createDeriveFrom: aDeriveSetting thenDo: aBlock [
 	GtRobocoderMetamodelDerive
@@ -173,18 +185,6 @@ GtRobocoderMetamodelGenerator >> visitLocalSetting: aLocalSetting [
 				self createDeriveFrom: aLocalSetting thenDo: [ :aDerive |
 					aViewModelModel addDerive: aDerive ].
 				^ self ] ].
-]
-
-{ #category : #generated }
-GtRobocoderMetamodelGenerator >> visitModelAnnotation: aModelAnnotation [
-	| aViewModel |
-	
-	aViewModel := self
-		viewModelNamed: aModelAnnotation parent level fullNameString
-		ifAbsent: [ ^ self ].
-	
-	aViewModel model: aModelAnnotation nameString.
-	aViewModel modelApi: aModelAnnotation apiNameString
 ]
 
 { #category : #generated }

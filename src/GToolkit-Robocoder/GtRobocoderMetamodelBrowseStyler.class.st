@@ -52,22 +52,6 @@ GtRobocoderMetamodelBrowseStyler >> visitGlobalPropertyValue: aGlobalPropertyVal
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelBrowseStyler >> visitModelAnnotation: aModelAnnotation [
-	self visitProgram: aModelAnnotation.
-	
-	self
-		styleGlobalNamed: aModelAnnotation nameString asSymbol
-		token: aModelAnnotation name.
-		
-	aModelAnnotation api
-		ifNil: [ ^ self ].
-		
-	self
-		styleGlobalNamed: aModelAnnotation apiNameString asSymbol
-		token: aModelAnnotation api
-]
-
-{ #category : #generated }
 GtRobocoderMetamodelBrowseStyler >> visitSetting: aSetting [
 	aSetting nameString = 'derive'
 		ifFalse: [ ^ self ].

@@ -47,44 +47,6 @@ GtRobocoderMetamodelStyler >> visitLevelForMany: aLevelForMany [
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelStyler >> visitModelAnnotation: aModelAnnotation [
-	| aColor |
-	
-	self visitProgram: aModelAnnotation.
-	
-	aColor := self class environment
-		at: aModelAnnotation nameString asSymbol
-		ifPresent: [ :aGlobal |
-			aGlobal isBehavior
-				ifTrue: [ Color green muchDarker ]
-				ifFalse: [ Color red ] ]
-		ifAbsent: [ Color red ].
-	
-	self
-		attribute: (BlTextForegroundAttribute color: aColor)
-		from: aModelAnnotation name startPosition
-		to: aModelAnnotation name stopPosition.
-	
-	aModelAnnotation apiNameString
-		ifNil: [ ^ self ].
-	
-	aColor := self class environment
-		at: aModelAnnotation apiNameString asSymbol
-		ifPresent: [ :aGlobal |
-			aGlobal isBehavior
-				ifTrue: [ Color green muchDarker ]
-				ifFalse: [ Color red ] ]
-		ifAbsent: [ Color red ].
-	
-	self
-		attribute: (BlTextForegroundAttribute color: aColor)
-		from: aModelAnnotation api startPosition
-		to: aModelAnnotation api stopPosition.
-		
-	
-]
-
-{ #category : #generated }
 GtRobocoderMetamodelStyler >> visitNestedLevel: aNestedLevel [
 	self visitLevel: aNestedLevel.
 	

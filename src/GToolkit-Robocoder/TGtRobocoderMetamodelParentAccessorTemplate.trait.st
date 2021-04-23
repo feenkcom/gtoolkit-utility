@@ -66,7 +66,7 @@ TGtRobocoderMetamodelParentAccessorTemplate >> parentObjectTesterTemplate [
 	<parentObjectTester: #{{parentObjectName}}>
 
 	^ {{parentObject}} notNil';
-		protocol: 'api - accessing';
+		protocol: 'api - testing';
 		storageMethod: thisContext method
 ]
 

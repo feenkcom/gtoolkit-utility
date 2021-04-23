@@ -5,11 +5,8 @@ Class {
 	#classTraits : 'TGtRobocoderMetamodelSettings classTrait',
 	#instVars : [
 		'name',
-		'model',
-		'modelApi',
 		'settings',
 		'properties',
-		'parent',
 		'derives'
 	],
 	#category : #'GToolkit-Robocoder-Metamodel'
@@ -40,9 +37,27 @@ GtRobocoderMetamodel >> existingViewModelName [
 	^ (self properties at: #viewModel) asSymbol
 ]
 
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> fullName [
+	"Generate a full name of this metamodel, to be used in places where the name should be very descriptive"
+	<return: #String>
+
+	^ ('{project}{name}{suffix}'
+		format: { 
+			#project -> self project uncapitalized.
+			#name -> self name capitalized.
+			#suffix -> self suffix capitalized.
+		} asDictionary) uncapitalized
+]
+
 { #category : #'api - package tags' }
 GtRobocoderMetamodel >> fullTagForAnnouncements [
 	^ self fullTagWith: 'Events'
+]
+
+{ #category : #'api - package tags' }
+GtRobocoderMetamodel >> fullTagForObjectClass [
+	^ self fullTagWith: self objectTag
 ]
 
 { #category : #'api - package tags' }
@@ -51,15 +66,13 @@ GtRobocoderMetamodel >> fullTagForTraits [
 ]
 
 { #category : #'api - package tags' }
-GtRobocoderMetamodel >> fullTagForViewModel [
-	^ self fullTagWith: 'View Models'
-]
-
-{ #category : #'api - package tags' }
 GtRobocoderMetamodel >> fullTagWith: aSubTag [
 	^ self tag
 		ifEmpty: [ aSubTag ]
-		ifNotEmpty: [ :aTag | aTag , ' - ', aSubTag ]
+		ifNotEmpty: [ :aTag |
+			aSubTag
+				ifEmpty: [ aTag ]
+				ifNotEmpty: [ aTag , ' - ', aSubTag ] ]
 ]
 
 { #category : #'api - generation' }
@@ -70,11 +83,9 @@ GtRobocoderMetamodel >> generateBehavior [
 	aDefinition := GtFullClassDefinition forNew.
 	aDefinition name: self objectClassName.
 	aDefinition instanceSideDefinition category package name: self package.
-	aDefinition instanceSideDefinition category tag name: self fullTagForViewModel.
+	aDefinition instanceSideDefinition category tag name: self fullTagForObjectClass.
 	aDefinition classSideDefinition category package name: self package.
-	aDefinition classSideDefinition category tag name: self fullTagForViewModel.
-
-	self generateModelAccessorFor: aDefinition.
+	aDefinition classSideDefinition category tag name: self fullTagForObjectClass.
 
 	^ aDefinition
 ]
@@ -89,28 +100,6 @@ GtRobocoderMetamodel >> generateChildObjectGetterSelectorFor: aChildMetamodel [
 			#singular -> (self generateSingularChildObjectGetterSelectorFor: aChildMetamodel).
 			#ending -> (aChildMetamodel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
 		} asDictionary) uncapitalized
-]
-
-{ #category : #'api - generation' }
-GtRobocoderMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
-	self subclassResponsibility
-]
-
-{ #category : #'api - generation' }
-GtRobocoderMetamodel >> generateModelAccessorFor: aDefinition [
-	| aDomainModelTraitDefinition |
-
-	(self hasDeriveOfClass: GtRobocoderMetamodelModelDerive)
-		ifTrue: [ ^ self ].
-
-	aDomainModelTraitDefinition := GtRobocoderWithObjectTraitGenerator new
-		objectName: self name;
-		projectPrefix: self prefix, self project capitalized;
-		packageName: self package;
-		tagName: self fullTagForTraits;
-		generate.
-
-	self mergeBehaviorDefinition: aDomainModelTraitDefinition into: aDefinition
 ]
 
 { #category : #private }
@@ -222,94 +211,6 @@ GtRobocoderMetamodel >> mergeFullClassDefinition: aFullClassDefinition into: aVi
 ]
 
 { #category : #accessing }
-GtRobocoderMetamodel >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodel >> model: anObject [
-	model := anObject asSymbol
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodel >> modelApi [
-	^ modelApi
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodel >> modelApi: anObject [
-	modelApi := anObject
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodel >> modelApiTrait [
-	self modelApi
-		ifNil: [ ^ nil ].
-
-	^ self class environment
-		at: self modelApi asSymbol
-		ifPresent: [ :aGlobal |
-			aGlobal isTrait
-				ifTrue: [ aGlobal ]
-				ifFalse: [ nil ] ]
-		ifAbsent: [ nil ]
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> modelGetterSelector [
-	| aFallbackSelector |
-
-	aFallbackSelector := self name asSymbol.
-
-	^ modelApi
-		ifNotNil: [ :anApiTraitName |
-			self class environment
-				at: anApiTraitName asSymbol
-				ifPresent: [ :aTrait |
-					(Pragma allNamed: #objectGetter: in: aTrait)
-						ifEmpty: [ aFallbackSelector ]
-						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
-				ifAbsent: [ aFallbackSelector ] ]
-		ifNil: [ aFallbackSelector ]
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> modelSetterSelector [
-	| aFallbackSelector |
-
-	aFallbackSelector := self name asSymbol.
-
-	^ modelApi
-		ifNotNil: [ :anApiTraitName |
-			self class environment
-				at: anApiTraitName asSymbol
-				ifPresent: [ :aTrait |
-					(Pragma allNamed: #objectSetter: in: aTrait)
-						ifEmpty: [ aFallbackSelector ]
-						ifNotEmpty: [ :thePragmas | thePragmas first method selector copyReplaceAll: ':' with: '' ] ]
-				ifAbsent: [ aFallbackSelector ] ]
-		ifNil: [ aFallbackSelector ]
-]
-
-{ #category : #'api - accessing' }
-GtRobocoderMetamodel >> modelTesterSelector [
-	| aFallbackSelector |
-
-	aFallbackSelector := ('has', self name capitalized) asSymbol.
-
-	^ modelApi
-		ifNotNil: [ :anApiTraitName |
-			self class environment
-				at: anApiTraitName asSymbol
-				ifPresent: [ :aTrait |
-					(Pragma allNamed: #objectTester in: aTrait)
-						ifEmpty: [ aFallbackSelector ]
-						ifNotEmpty: [ :thePragmas | thePragmas first method selector ] ]
-				ifAbsent: [ aFallbackSelector ] ]
-		ifNil: [ aFallbackSelector ]
-]
-
-{ #category : #accessing }
 GtRobocoderMetamodel >> name [
 	"Return the name of the metamodel. If it is not set return emty string"
 	<return: #String>
@@ -329,7 +230,7 @@ GtRobocoderMetamodel >> objectClassName [
 
 	properties
 		at: #class
-		ifPresent: [ :aanObjectClassName | ^ aanObjectClassName ].
+		ifPresent: [ :anObjectClassName | ^ anObjectClassName ].
 
 	^ String streamContents: [ :aStream |
 		aStream
@@ -351,10 +252,7 @@ GtRobocoderMetamodel >> printOn: aStream [
 	self isForOne
 		ifTrue: [ aStream nextPutAll: 'ForOne' ]
 		ifFalse: [ aStream nextPutAll: 'ForMany' ].
-	
-	aStream
-		nextPutAll: ' model: ';
-		print: model.
+
 	aStream
 		nextPutAll: ' name: ';
 		print: name
