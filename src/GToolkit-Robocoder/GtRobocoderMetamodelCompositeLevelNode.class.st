@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtRobocoderMetamodelLevelNode,
 	#instVars : [
 		'items',
-		'and'
+		'ands'
 	],
 	#category : #'GToolkit-Robocoder-Ast - Metamodel'
 }
@@ -14,13 +14,13 @@ GtRobocoderMetamodelCompositeLevelNode >> acceptVisitor: aProgramVisitor [
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelCompositeLevelNode >> and [
-	^ and
+GtRobocoderMetamodelCompositeLevelNode >> ands [
+	^ ands
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelCompositeLevelNode >> and: aSmaCCToken [
-	and := aSmaCCToken
+GtRobocoderMetamodelCompositeLevelNode >> ands: anOrderedCollection [
+	ands := anOrderedCollection
 ]
 
 { #category : #generated }
@@ -28,10 +28,16 @@ GtRobocoderMetamodelCompositeLevelNode >> compositeNodeVariables [
 	^ #(#items)
 ]
 
+{ #category : #generated }
+GtRobocoderMetamodelCompositeLevelNode >> compositeTokenVariables [
+	^ #(#ands)
+]
+
 { #category : #'generated-initialize-release' }
 GtRobocoderMetamodelCompositeLevelNode >> initialize [
 	super initialize.
 	items := OrderedCollection new: 2.
+	ands := OrderedCollection new: 2.
 ]
 
 { #category : #testing }
@@ -49,9 +55,4 @@ GtRobocoderMetamodelCompositeLevelNode >> items: anOrderedCollection [
 	self setParents: self items to: nil.
 	items := anOrderedCollection.
 	self setParents: self items to: self
-]
-
-{ #category : #generated }
-GtRobocoderMetamodelCompositeLevelNode >> tokenVariables [
-	^ #(#and)
 ]

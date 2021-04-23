@@ -7,7 +7,7 @@ Class {
 { #category : #'generated-initialization' }
 GtRobocoderMetamodelScanner class >> initializeKeywordMap [
 	keywordMap := Dictionary new.
-	#(#(3 'and' 13) #(3 'false' 19) #(3 'items' 16) #(3 'true' 18))
+	#(#(3 'and' 13) #(3 'false' 17) #(3 'items' 14) #(3 'true' 16))
 		do: [ :each | 
 			(keywordMap at: each first ifAbsentPut: [ Dictionary new ])
 				at: (each at: 2)
@@ -22,12 +22,12 @@ GtRobocoderMetamodelScanner >> andId [
 
 { #category : #generated }
 GtRobocoderMetamodelScanner >> emptySymbolTokenId [
-	^ 51
+	^ 49
 ]
 
 { #category : #generated }
 GtRobocoderMetamodelScanner >> errorTokenId [
-	^ 52
+	^ 50
 ]
 
 { #category : #generated }
@@ -163,14 +163,10 @@ GtRobocoderMetamodelScanner >> scanForToken [
 				ifTrue: [ ^ self recordAndReportMatch: #(8) ].
 			currentCharacter == $:
 				ifTrue: [ ^ self recordAndReportMatch: #(9) ].
-			currentCharacter == $<
-				ifTrue: [ ^ self recordAndReportMatch: #(14) ].
 			currentCharacter == $=
 				ifTrue: [ ^ self scan7 ].
-			currentCharacter == $>
-				ifTrue: [ ^ self recordAndReportMatch: #(15) ].
 			currentCharacter == $@
-				ifTrue: [ ^ self recordAndReportMatch: #(17) ].
+				ifTrue: [ ^ self recordAndReportMatch: #(15) ].
 			currentCharacter == ${
 				ifTrue: [ ^ self recordAndReportMatch: #(1) ].
 			currentCharacter == $}

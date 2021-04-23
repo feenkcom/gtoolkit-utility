@@ -31,6 +31,7 @@ TGtRobocoderWithPropertyTraitTemplate >> notifyPropertyChangedTemplate [
 		sourceCode: 'notify{{propertyName capitalized}}Changed
 	"Override this notify method to announce changes to the property"
 	<propertyChangeNotifier: #{{propertyName}}>';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 
@@ -43,6 +44,7 @@ TGtRobocoderWithPropertyTraitTemplate >> onNewPropertySetHookTemplate [
 		sourceCode: 'onNew{{propertyName capitalized}}Set: aNew{{propertyName capitalized}}
 	"Is sent after a new value of the {{propertyName}} is assigned"
 	<propertySetHook: #{{propertyName}}>';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 
@@ -55,6 +57,7 @@ TGtRobocoderWithPropertyTraitTemplate >> onPreviousPropertyUnsetHookTemplate [
 		sourceCode: 'onPrevious{{propertyName capitalized}}Unset: aPrevious{{propertyName capitalized}}
 	"Is sent after a previous value of the {{propertyName}} is de-assigned"
 	<propertyUnsetHook: #{{propertyName}}>';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 
@@ -69,6 +72,7 @@ TGtRobocoderWithPropertyTraitTemplate >> propertyGetterTemplate [
 	<propertyGetter: #{{propertyName}}>
 
 	^ {{propertyName}}';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 
@@ -94,6 +98,7 @@ TGtRobocoderWithPropertyTraitTemplate >> propertySetterTemplate [
 	{{propertyName}} := aNew{{propertyName capitalized}}.
 	self onNew{{propertyName capitalized}}Set: aNew{{propertyName capitalized}}.
 	self notify{{propertyName capitalized}}Changed';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 
@@ -108,6 +113,7 @@ TGtRobocoderWithPropertyTraitTemplate >> propertyTesterTemplate [
 	<propertyTester: #{{propertyName}}>
 
 	^ {{propertyName}} notNil';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 
@@ -121,13 +127,14 @@ TGtRobocoderWithPropertyTraitTemplate >> propertyUnsetterTemplate [
 	<propertyUnsetter: #{{propertyName}}>
 	| aPrevious{{propertyName capitalized}} |
 
-	has{{propertyName capitalized}}
+	self has{{propertyName capitalized}}
 		ifFalse: [ ^ self ].
 
 	aPrevious{{propertyName capitalized}} := {{propertyName}}.
 	{{propertyName}} := nil.
 	self onPrevious{{propertyName capitalized}}Unset: aPrevious{{propertyName capitalized}}.
 	self notify{{propertyName capitalized}}Changed';
+		protocol: 'api - {{propertyName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
 

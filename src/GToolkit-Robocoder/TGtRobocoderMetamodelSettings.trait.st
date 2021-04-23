@@ -34,6 +34,14 @@ TGtRobocoderMetamodelSettings >> hasSpecifiedTag [
 ]
 
 { #category : #'api - accessing' }
+TGtRobocoderMetamodelSettings >> objectTag [
+	"Tag is something like a sub-package in a package. It is optional and may be empty"
+	<return: #String>
+
+	^ self settings at: #objectTag ifAbsent: [ '' ]
+]
+
+{ #category : #'api - accessing' }
 TGtRobocoderMetamodelSettings >> package [
 	"Return a package name in which the classes and trait generated for a metamodel should be located.
 	Package must never be empty"

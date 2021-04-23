@@ -3,24 +3,14 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'viewModelModels',
-		'definitions'
+		'metamodelsWithCodeDefinition'
 	],
 	#category : #'GToolkit-Robocoder-Metamodel'
 }
 
-{ #category : #accessing }
-GtRobocoderMetamodelsWithCodeDefinitions >> definitions [
-	^ definitions
-]
-
-{ #category : #accessing }
-GtRobocoderMetamodelsWithCodeDefinitions >> definitions: anObject [
-	definitions := anObject
-]
-
 { #category : #enumerating }
 GtRobocoderMetamodelsWithCodeDefinitions >> extraAndViewModelCodeDefinitionsDo: aBlock [
-	self definitions do: [ :eachViewModelCodeDefinition | eachViewModelCodeDefinition extraDefinitions do: aBlock ].
+	self metamodelsWithCodeDefinition do: [ :eachViewModelCodeDefinition | eachViewModelCodeDefinition extraDefinitions do: aBlock ].
 	self viewModelModelsWithNewCodeDefinitionDo: [ :eachViewModelCodeDefinition | aBlock value: eachViewModelCodeDefinition definition ]
 ]
 
@@ -56,21 +46,33 @@ GtRobocoderMetamodelsWithCodeDefinitions >> gtModelsFor: aView [
 		items: [ self viewModelModels models ]
 ]
 
+{ #category : #accessing }
+GtRobocoderMetamodelsWithCodeDefinitions >> metamodelsWithCodeDefinition [
+	<return: #Collection of: #GtRobocoderMetamodelWithCodeDefinition>
+
+	^ metamodelsWithCodeDefinition
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelsWithCodeDefinitions >> metamodelsWithCodeDefinition: anObject [
+	metamodelsWithCodeDefinition := anObject
+]
+
 { #category : #enumerating }
 GtRobocoderMetamodelsWithCodeDefinitions >> metamodelsWithCodeDefinitionDo: aBlock [
 	"Evaluate a given block with each ${class:GtRobocoderMetamodelWithCodeDefinition}$"
 
-	self definitions do: aBlock
+	self metamodelsWithCodeDefinition do: aBlock
 ]
 
 { #category : #copying }
 GtRobocoderMetamodelsWithCodeDefinitions >> postCopy [
-	definitions := definitions collect: [ :eachDefinition | eachDefinition copy ]
+	metamodelsWithCodeDefinition := metamodelsWithCodeDefinition collect: [ :eachDefinition | eachDefinition copy ]
 ]
 
 { #category : #accessing }
 GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModelWithCodeDefinitionFor: aViewModelModel [
-	^ self definitions
+	^ self metamodelsWithCodeDefinition
 		detect: [ :eachViewModelModelWithCodeDefinition | eachViewModelModelWithCodeDefinition metamodel = aViewModelModel ]
 ]
 
@@ -88,7 +90,7 @@ GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModels: anObject [
 GtRobocoderMetamodelsWithCodeDefinitions >> viewModelModelsWithNewCodeDefinitionDo: aBlock [
 	"Evaluate a given block with each ${class:GtViewModelModelWithCodeDefinition}$"
 
-	self definitions
+	self metamodelsWithCodeDefinition
 		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
 		thenDo: aBlock
 ]

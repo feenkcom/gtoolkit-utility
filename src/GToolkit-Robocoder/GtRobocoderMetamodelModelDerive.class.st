@@ -17,8 +17,12 @@ GtRobocoderMetamodelModelDerive class >> label [
 { #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelGetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
 	^ aGtRobocoderMetamodelWithCodeDefinition
-		anyMethodWithPragmaNamedOrNil: #objectGetter:
-		andValue: aGtRobocoderMetamodelWithCodeDefinition name
+		anyMethodWithPragmaNamedOrNil: self modelGetterPragma
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelModelDerive class >> modelGetterPragma [
+	^ (self pragmaName, #Getter:) asSymbol
 ]
 
 { #category : #'accessing - selectors' }
@@ -32,8 +36,12 @@ GtRobocoderMetamodelModelDerive class >> modelGetterSelectorIn: aGtRobocoderMeta
 { #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelSetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
 	^ aGtRobocoderMetamodelWithCodeDefinition
-		anyMethodWithPragmaNamedOrNil: #objectSetter:
-		andValue: aGtRobocoderMetamodelWithCodeDefinition name
+		anyMethodWithPragmaNamedOrNil: self modelSetterPragma
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelModelDerive class >> modelSetterPragma [
+	^ (self pragmaName, #Setter:) asSymbol
 ]
 
 { #category : #'accessing - selectors' }
@@ -42,6 +50,11 @@ GtRobocoderMetamodelModelDerive class >> modelSetterSelectorIn: aGtRobocoderMeta
 
 	^ (self modelSetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition)
 		ifNotNil: [ :aMethod | aMethod selector ]
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelModelDerive class >> pragmaName [
+	^ 'model'
 ]
 
 { #category : #accessing }
@@ -89,10 +102,11 @@ GtRobocoderMetamodelModelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobo
 			
 			aMetamodel := eachMetamodelWithCodeDefinition metamodel.
 			
-			aModelName := name ifNil: [ self modelNameFor: aMetamodel ].
+			aModelName := name ifNil: [ self fallbackModelNameFor: aMetamodel ].
 			
 			aDomainModelTraitDefinition := GtRobocoderWithObjectTraitGenerator new
 				objectName: aModelName;
+				pragmaName: self class pragmaName;
 				projectPrefix: aMetamodel prefix, aMetamodel project capitalized;
 				packageName: aMetamodel package;
 				tagName: aMetamodel fullTagForTraits;
@@ -102,8 +116,10 @@ GtRobocoderMetamodelModelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobo
 ]
 
 { #category : #private }
-GtRobocoderMetamodelModelDerive >> modelNameFor: aRobocoderMetamodel [
-	^ aRobocoderMetamodel name
+GtRobocoderMetamodelModelDerive >> fallbackModelNameFor: aRobocoderMetamodel [
+	"If name is not specified explicitly, use this one instead"
+
+	^ aRobocoderMetamodel name, 'Model'
 ]
 
 { #category : #accessing }

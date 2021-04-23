@@ -2,6 +2,7 @@ Class {
 	#name : #GtRobocoderForOneMetamodel,
 	#superclass : #GtRobocoderMetamodel,
 	#instVars : [
+		'parent',
 		'children'
 	],
 	#category : #'GToolkit-Robocoder-Metamodel'
@@ -32,33 +33,6 @@ GtRobocoderForOneMetamodel >> children [
 { #category : #accessing }
 GtRobocoderForOneMetamodel >> children: anObject [
 	children := anObject
-]
-
-{ #category : #'api - generation' }
-GtRobocoderForOneMetamodel >> generateChildViewModelsAccessorFor: aViewModelDefinition [
-	children do: [ :eachChildModel |
-		| theChildrenAccessorsDefinition theChildrenAccessor |
-
-		theChildrenAccessor := properties
-			at: eachChildModel name
-			ifAbsent: [ eachChildModel name ].
-
-		theChildrenAccessorsDefinition := GtRobocoderTraitGenerator new
-			templateTrait: TGtRobocoderMetamodelChildrenForOneTemplate;
-			mappings: { 
-				#__Parent_view_model_class__ -> self objectClassName.
-				#childObject -> (self generateChildObjectGetterSelectorFor: eachChildModel) uncapitalized.
-				#modelGetter -> self modelGetterSelector uncapitalized.
-				#childGetter -> theChildrenAccessor uncapitalized.
-				#childViewModelClass -> eachChildModel objectClassName capitalized.
-				#childParentObjectSetter -> (eachChildModel generateParentObjectGetterSelectorFor: self) uncapitalized.
-				#childSetter -> eachChildModel modelSetterSelector uncapitalized
-			};
-			generate.
-
-		self
-			mergeBehaviorDefinition: theChildrenAccessorsDefinition
-			into: aViewModelDefinition ]
 ]
 
 { #category : #testing }

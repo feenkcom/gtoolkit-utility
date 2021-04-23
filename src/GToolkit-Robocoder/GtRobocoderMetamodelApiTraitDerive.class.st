@@ -26,6 +26,7 @@ GtRobocoderMetamodelApiTraitDerive >> applyOnMetamodelsWithCodeDefinitions: aGtR
 { #category : #'private - generation' }
 GtRobocoderMetamodelApiTraitDerive >> generateMetamodelApiTraitFor: aRobocoderMetamodel [
 	^ GtRobocoderWithObjectTraitGenerator new
+		pragmaName: GtRobocoderMetamodelModelDerive pragmaName;
 		objectId: aRobocoderMetamodel name;
 		objectName: (aRobocoderMetamodel project uncapitalized, aRobocoderMetamodel name capitalized, aRobocoderMetamodel suffix capitalized) uncapitalized;
 		projectPrefix: aRobocoderMetamodel prefix, aRobocoderMetamodel project capitalized;

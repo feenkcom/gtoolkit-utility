@@ -48,6 +48,13 @@ GtRobocoderWithPropertyTraitGenerator >> generate [
 ]
 
 { #category : #translating }
+GtRobocoderWithPropertyTraitGenerator >> generateChanges [
+	<return: #Trait>
+
+	^ self generator generateChanges
+]
+
+{ #category : #translating }
 GtRobocoderWithPropertyTraitGenerator >> generator [
 	<return: #GtTraitDefinition>
 

@@ -46,7 +46,6 @@ GtRobocoderForManyMetamodel >> hasParents [
 GtRobocoderForManyMetamodel >> initialize [
 	super initialize.
 
-	model := #OrderedCollection.
 	parents := OrderedCollection new
 ]
 

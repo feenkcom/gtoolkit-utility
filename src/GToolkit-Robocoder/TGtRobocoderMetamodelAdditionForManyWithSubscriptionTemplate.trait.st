@@ -1,30 +1,29 @@
 Trait {
-	#name : #TGtRobocoderMetamodelAdditionForManyTemplate,
+	#name : #TGtRobocoderMetamodelAdditionForManyWithSubscriptionTemplate,
 	#category : #'GToolkit-Robocoder-Templates'
 }
 
 { #category : #templates }
-TGtRobocoderMetamodelAdditionForManyTemplate >> addObjectTemplate [
+TGtRobocoderMetamodelAdditionForManyWithSubscriptionTemplate >> onAddedEventHanderTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: 'add{{objectName capitalized}}: a{{objectName capitalized}}
-	"Add a given object as a child to the receiver and notify subscribers about it.
-	Do nothing if an object is already one of my children."
-	<objectAdder: #{{childName}}>
+		sourceCode: 'on{{childName capitalized}}Added: a{{childAnnouncementClass}}
+	"Is sent when a new {{childName capitalized}} is added to the model of the receiver due to
+	the handled ${class:{{childAnnouncementClass}}}$ announcement."
+	<modelEventHandler: #{{childName}}>
+	| aNewChildObject |
 
-	(self {{objectFinder gtAsReader}}: a{{objectName capitalized}})
-		ifTrue: [ ^ self ].
-
-	self {{childrenGetter}} add: a{{objectName capitalized}}.
-	self on{{objectName capitalized}}Added: a{{objectName capitalized}}';
-		protocol: 'api - adding';
+	aNewChildObject := self {{childObjectCreator gtAsReader}}: a{{childAnnouncementClass}} {{childAnnouncementGetter}}.
+	self {{childObjectGetter}} add: aNewChildObject.
+	self on{{objectName capitalized}}Added: aNewChildObject';
+		protocol: 'private - event handling';
 		storageMethod: thisContext method
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelAdditionForManyTemplate >> traitTemplate [
+TGtRobocoderMetamodelAdditionForManyWithSubscriptionTemplate >> traitTemplate [
 	<gtTraitTemplate>
 	<generatedFrom: #'GtRobocoderTemplateTrait class>>#storageMethodTemplate'>
 	

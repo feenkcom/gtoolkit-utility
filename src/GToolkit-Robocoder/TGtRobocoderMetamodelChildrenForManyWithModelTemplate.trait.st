@@ -3,12 +3,12 @@
 A view model built for a domain model that represents a collection of some entities creates a view model (${class:__Child_view_model_class__}$) for each domain entity. To do so it accesses the children of the ${method:__View_model_class_name__>>#__model__}$ by sending it ==__children__== message. Users can access the child view models via ${method:__View_model_class_name__>>#__child_view_models__}$. In addition to the parent -> child view model navigation, each child view model knows its parent view model via ${method:__Child_view_model_class__>>#__child_parent_view_model_setter__}$
 "
 Trait {
-	#name : #TGtRobocoderMetamodelChildrenForManyTemplate,
+	#name : #TGtRobocoderMetamodelChildrenForManyWithModelTemplate,
 	#category : #'GToolkit-Robocoder-Templates'
 }
 
 { #category : #templates }
-TGtRobocoderMetamodelChildrenForManyTemplate >> childObjectsTemplate [
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> childObjectsTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
@@ -25,7 +25,7 @@ TGtRobocoderMetamodelChildrenForManyTemplate >> childObjectsTemplate [
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelChildrenForManyTemplate >> createChildObjectsTemplate [
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> createChildObjectsTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
@@ -35,21 +35,36 @@ TGtRobocoderMetamodelChildrenForManyTemplate >> createChildObjectsTemplate [
 	<return: #Collection of: #{{childObjectsClass}}>
 
 	^ self {{modelGetter ifNil: [ ''yourself'' ]}} {{childModelsGetter}} collect: [ :eachModel |
-		| eachChild |
-		eachChild := {{childObjectsClass}} new.
-		{{childParentObjectSetter
-			ifNotNil: [ :aSelector | ''eachChild {{aSelector gtAsReader}}: self.'' ]
-			ifNil: [ '''' ]}}
-		{{childModelSetter
-			ifNotNil: [ :aSelector | ''eachChild {{aSelector gtAsReader}}: eachModel.'' ]
-			ifNil: [ '''' ]}}
-		eachChild ] as: OrderedCollection';
+		self create{{childObject capitalized}}For: eachModel ] as: OrderedCollection';
 		protocol: 'private - instance creation';
 		storageMethod: thisContext method
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelChildrenForManyTemplate >> includesObjectTemplate [
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> createChildTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'create{{childObject capitalized}}For: aChildModel
+	<return: #{{childObjectsClass}}>
+	<childObjectCreator: #{{childName}}>
+	| aNewChild |
+	
+	aNewChild := {{childObjectsClass}} new.
+	{{childParentObjectSetter
+		ifNotNil: [ :aSelector | ''aNewChild {{aSelector gtAsReader}}: self.'' ]
+		ifNil: [ '''' ]}}
+	{{childModelSetter
+		ifNotNil: [ :aSelector | ''aNewChild {{aSelector gtAsReader}}: aChildModel.'' ]
+		ifNil: [ '''' ]}}
+	^ aNewChild';
+		protocol: 'private - instance creation';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> includesObjectTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
@@ -62,11 +77,12 @@ TGtRobocoderMetamodelChildrenForManyTemplate >> includesObjectTemplate [
 
 	^ self {{childObjects}} anySatisfy: [ :each{{childObject capitalized}} |
 		each{{childObject capitalized}} == a{{childObject capitalized}} ]';
+		protocol: 'api - testing';
 		storageMethod: thisContext method
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelChildrenForManyTemplate >> traitTemplate [
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> traitTemplate [
 	<gtTraitTemplate>
 	<generatedFrom: #'GtRobocoderTemplateTrait class>>#storageMethodTemplate'>
 	

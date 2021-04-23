@@ -11,6 +11,7 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> notifyObjectRemovedTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'notify{{objectName capitalized}}Removed: a{{objectName capitalized}}
 	"Notifies that a given child object was removed from the receiver"';
+		protocol: 'private - notifying';
 		storageMethod: thisContext method
 ]
 
@@ -24,6 +25,7 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> objectRemovedHookTemplate [
 	"Is sent after a given child object was removed from the receiver"
 
 	self notify{{objectName capitalized}}Removed: a{{objectName capitalized}}.';
+		protocol: 'api - removing';
 		storageMethod: thisContext method
 ]
 
@@ -43,11 +45,12 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> removeObjectTemplate [
 
 	self {{childrenGetter}} remove: a{{objectName capitalized}}.
 	self on{{objectName capitalized}}Removed: a{{objectName capitalized}}';
+		protocol: 'api - removing';
 		storageMethod: thisContext method
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelRemovalForManyTemplate >> templateTrait [
+TGtRobocoderMetamodelRemovalForManyTemplate >> traitTemplate [
 	<gtTraitTemplate>
 	<generatedFrom: #'GtRobocoderTemplateTrait class>>#storageMethodTemplate'>
 	

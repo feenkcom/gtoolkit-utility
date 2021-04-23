@@ -62,10 +62,12 @@ GtRobocoderMetamodelParentDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRob
 
 { #category : #'private - generation' }
 GtRobocoderMetamodelParentDerive >> generateParentAccessorsFor: aMetamodelWithDefinition [
-	aMetamodelWithDefinition metamodel parents do: [ :eachParentMetamodel |
-		self
-			generateParentAccessorsFor: aMetamodelWithDefinition
-			parentMetamodel: eachParentMetamodel ]
+	aMetamodelWithDefinition metamodel parents
+		select: #notNil
+		thenDo: [ :eachParentMetamodel |
+			self
+				generateParentAccessorsFor: aMetamodelWithDefinition
+				parentMetamodel: eachParentMetamodel ]
 ]
 
 { #category : #'private - generation' }

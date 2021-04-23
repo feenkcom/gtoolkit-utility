@@ -30,7 +30,7 @@ GtRobocoderMetamodelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobocoder
 
 { #category : #'api - generation' }
 GtRobocoderMetamodelDerive >> applyOnViewModelModelWithCodeDefinition: aGtViewModelModelWithCodeDefinition [
-	self applyOnMetamodelsWithCodeDefinitions: (GtRobocoderMetamodelsWithCodeDefinitions new definitions: { aGtViewModelModelWithCodeDefinition })
+	self applyOnMetamodelsWithCodeDefinitions: (GtRobocoderMetamodelsWithCodeDefinitions new metamodelsWithCodeDefinition: { aGtViewModelModelWithCodeDefinition })
 ]
 
 { #category : #comparing }
