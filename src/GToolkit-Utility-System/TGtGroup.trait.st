@@ -32,6 +32,11 @@ TGtGroup >> do: aBlock [
 ]
 
 { #category : #accessing }
+TGtGroup >> first [
+	^ self items first
+]
+
+{ #category : #accessing }
 TGtGroup >> groupedBy: aBlock [
 	^ self items groupedBy: aBlock
 ]
@@ -44,6 +49,11 @@ TGtGroup >> isCollection [
 { #category : #accessing }
 TGtGroup >> items [
 	^ self explicitRequirement
+]
+
+{ #category : #accessing }
+TGtGroup >> last [
+	^ self items last
 ]
 
 { #category : #accessing }
