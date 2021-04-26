@@ -42,7 +42,7 @@ GtRobocoderTraitGenerator >> generate [
 		ifNone: [ self error: 'Was not able to find a method marked as #gtTraitTemplate' ].
 
 	theTraitMethods := self templateTrait methods select: [ :eachMethod | eachMethod hasPragmaNamed: #gtMethodTemplate ].
-
+	
 	generatedTrait := GtRobocoderTemplateTraitDefinitionCoder new
 		forMethod: aTraitHeaderMethod;
 		mappings: mappings;
@@ -59,11 +59,13 @@ GtRobocoderTraitGenerator >> generate [
 		aTemplateMethodCoder := GtRobocoderTemplateMethodCoder new
 			mappings: mappings;
 			forMethod: eachTemplateMethod.
+			
+		aTemplateMethodCoder shouldBeAddedToBehavior
+			ifTrue: [
+				generatedTrait methods
+					addMethod: aTemplateMethodCoder translate
+					protocol: aTemplateMethodCoder protocol ] ].
 
-		generatedTrait methods
-			addMethod: aTemplateMethodCoder translate
-			protocol: aTemplateMethodCoder protocol ].
-	
 	^ generatedTrait
 ]
 

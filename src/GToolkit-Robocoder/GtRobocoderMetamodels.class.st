@@ -95,6 +95,23 @@ GtRobocoderMetamodels >> processDerivesOf: aGtRobocoderMetamodelsWithCodeDefinit
 	derives do: [ :eachDerive | eachDerive applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions ].
 	
 	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
+		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
+		thenDo: [ :eachViewModelModelWithDefinition |
+			(GtRobocoderMetamodelModelDerive modelSubscriberMethodIn: eachViewModelModelWithDefinition)
+				ifNotNil: [ :aSubscriberMethod |
+					(aSubscriberMethod parent isForTrait and: [ eachViewModelModelWithDefinition subscriptions isNotEmpty ])
+						ifTrue: [
+							eachViewModelModelWithDefinition definition instanceSideDefinition methods
+								addMethod: aSubscriberMethod copy ] ].
+
+			(GtRobocoderMetamodelModelDerive modelSubscriberMethodIn: eachViewModelModelWithDefinition)
+				ifNotNil: [ :aSubscriberMethod |
+					eachViewModelModelWithDefinition subscriptions do: [ :eachSubscription |
+						aSubscriberMethod
+							addMethodPartSource: eachSubscription asSourceString
+							id: eachSubscription ] ] ].
+
+	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
 		with: thePreviousMetamodelsWithDefinitions metamodelsWithCodeDefinition
 		do: [ :aCurrentMetamodelWithDefinition :thePreviousMetamodelWithDefinition |
 			(aCurrentMetamodelWithDefinition definition differenceWith: thePreviousMetamodelWithDefinition definition)

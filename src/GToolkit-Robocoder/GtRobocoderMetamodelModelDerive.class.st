@@ -52,6 +52,44 @@ GtRobocoderMetamodelModelDerive class >> modelSetterSelectorIn: aGtRobocoderMeta
 		ifNotNil: [ :aMethod | aMethod selector ]
 ]
 
+{ #category : #'accessing - methods' }
+GtRobocoderMetamodelModelDerive class >> modelSubscriberMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
+	^ aGtRobocoderMetamodelWithCodeDefinition
+		anyMethodWithPragmaNamedOrNil: self modelSubscriberPragma
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelModelDerive class >> modelSubscriberPragma [
+	^ (self pragmaName, #Subscriber:) asSymbol
+]
+
+{ #category : #'accessing - selectors' }
+GtRobocoderMetamodelModelDerive class >> modelSubscriberSelectorIn: aGtRobocoderMetamodelWithCodeDefinition [
+	<return: #Symbol or: nil>
+
+	^ (self modelSubscriberMethodIn: aGtRobocoderMetamodelWithCodeDefinition)
+		ifNotNil: [ :aMethod | aMethod selector ]
+]
+
+{ #category : #'accessing - methods' }
+GtRobocoderMetamodelModelDerive class >> modelUnsubscriberMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
+	^ aGtRobocoderMetamodelWithCodeDefinition
+		anyMethodWithPragmaNamedOrNil: self modelUnsubscriberPragma
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelModelDerive class >> modelUnsubscriberPragma [
+	^ (self pragmaName, #Unsubscriber:) asSymbol
+]
+
+{ #category : #'accessing - selectors' }
+GtRobocoderMetamodelModelDerive class >> modelUnsubscriberSelectorIn: aGtRobocoderMetamodelWithCodeDefinition [
+	<return: #Symbol or: nil>
+
+	^ (self modelUnsubscriberMethodIn: aGtRobocoderMetamodelWithCodeDefinition)
+		ifNotNil: [ :aMethod | aMethod selector ]
+]
+
 { #category : #accessing }
 GtRobocoderMetamodelModelDerive class >> pragmaName [
 	^ 'model'

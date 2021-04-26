@@ -20,6 +20,21 @@ GtRobocoderMetamodelChildrenDerive class >> childObjectCreatorSelectorIn: aMetam
 ]
 
 { #category : #'accessing - methods' }
+GtRobocoderMetamodelChildrenDerive class >> childObjectDetectorMethodIn: aMetamodelWithDefinition childMetamodel: aChildMetamodel [
+	^ aMetamodelWithDefinition
+		anyMethodWithPragmaNamedOrNil: #childObjectDetector:
+		andValue: aChildMetamodel name
+]
+
+{ #category : #'accessing - selectors' }
+GtRobocoderMetamodelChildrenDerive class >> childObjectDetectorSelectorIn: aMetamodelWithDefinition childMetamodel: aChildMetamodel [
+	<return: #Symbol or: nil>
+
+	^ (self childObjectDetectorMethodIn: aMetamodelWithDefinition childMetamodel: aChildMetamodel)
+		ifNotNil: [ :aMethod | aMethod selector ]
+]
+
+{ #category : #'accessing - methods' }
 GtRobocoderMetamodelChildrenDerive class >> childObjectFinderMethodIn: aMetamodelWithDefinition childMetamodel: aChildMetamodel [
 	^ aMetamodelWithDefinition
 		anyMethodWithPragmaNamedOrNil: #childObjectFinder:
@@ -90,6 +105,10 @@ GtRobocoderMetamodelChildrenDerive >> generateChildrenAccessorForManyWithModel: 
 			"May or may not exist yet"
 			#modelGetter -> (GtRobocoderMetamodelModelDerive
 				modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition).
+
+			"May or may not exist yet"
+			#childModelGetter -> (GtRobocoderMetamodelModelDerive
+				modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
 
 			"May or may not exist yet"
 			#childModelSetter -> (GtRobocoderMetamodelModelDerive

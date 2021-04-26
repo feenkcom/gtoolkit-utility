@@ -38,14 +38,11 @@ GtRobocoderMetamodelAddDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRoboco
 	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |
 		eachMetamodelWithCodeDefinition isForMany
 			ifTrue: [
-				
 				"I announce addition only if we do not have a delegate or if subscription is specified"
 				(delegate isNil or: [ subscription notNil ])
 					ifTrue: [ self generateAnnouncementForMany: eachMetamodelWithCodeDefinition ].
-				
-				delegate
-					ifNil: [ self generateAdditionForMany: eachMetamodelWithCodeDefinition ]
-					ifNotNil: [ self generateAdditionDelegationForMany: eachMetamodelWithCodeDefinition ] ]
+
+				self generateAdditionForMany: eachMetamodelWithCodeDefinition ]
 			ifFalse: [  ] ]
 ]
 
@@ -60,92 +57,60 @@ GtRobocoderMetamodelAddDerive >> delegate: aSymbol [
 ]
 
 { #category : #'private - generation' }
-GtRobocoderMetamodelAddDerive >> generateAdditionDelegationForMany: aGtRobocoderMetamodelWithCodeDefinition [
-	| modelGetter anAnnouncementDefinition aChildAnnouncementDefinition childObjectCreator childObjectGetter |
-
-	modelGetter := (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition)
-		ifNil: [ ^ self ].
-
-	aGtRobocoderMetamodelWithCodeDefinition
-		mergeTemplateTrait: TGtRobocoderMetamodelAdditionForManyWithDelegateTemplate
-		mappings: { 
-			#addSelector -> delegate.
-			#modelGetter -> modelGetter.
-			#childName -> (aGtRobocoderMetamodelWithCodeDefinition project, aGtRobocoderMetamodelWithCodeDefinition forOneModel name capitalized) }.
-	
-	subscription ifNil: [ ^ self ].
+GtRobocoderMetamodelAddDerive >> generateAdditionForMany: aGtRobocoderMetamodelWithCodeDefinition [
+	| anAnnouncementDefinition aModelAnnouncementDefinition |
 
 	anAnnouncementDefinition := (self class announcementClassIn: aGtRobocoderMetamodelWithCodeDefinition)
 		ifNil: [ ^ self ].
 
-	childObjectCreator := (GtRobocoderMetamodelChildrenDerive
-		childObjectCreatorSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
-		childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel)
-			ifNil: [ ^ self ].
-			
-	childObjectGetter := (GtRobocoderMetamodelChildrenDerive
-		childObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
-		childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel)
-			ifNil: [ ^ self ].
+	subscription ifNotNil: [ :aClassName |
+		aModelAnnouncementDefinition := GtBehaviorDefinition fromBehavior: (self class environment at: subscription asSymbol).
+		aModelAnnouncementDefinition withMethodsFromClass: (self class environment at: subscription asSymbol) ].
 
-	aChildAnnouncementDefinition := GtBehaviorDefinition fromBehavior: (self class environment at: subscription asSymbol).
-	aChildAnnouncementDefinition withMethodsFromClass: (self class environment at: subscription asSymbol).
-	
 	aGtRobocoderMetamodelWithCodeDefinition
-		mergeTemplateTraits: TGtRobocoderMetamodelAdditionHookAndNotifyTemplate + TGtRobocoderMetamodelAdditionForManyWithSubscriptionTemplate
-		mappings: {
+		mergeTemplateTrait: TGtRobocoderMetamodelAdditionForManyTemplate
+		mappings: { 
+			#addDelegateSelector -> delegate.
+
 			#childName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel name.
-			#objectName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel fullName.
+			#childModelName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel shortName.
+			#childObjectName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel fullName.
+
+			#modelGetter -> (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition).
+
+			#childObjectFinder -> (GtRobocoderMetamodelChildrenDerive
+				childObjectFinderSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
+			#childObjectGetter -> (GtRobocoderMetamodelChildrenDerive
+				childObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
+			#childObjectCreator ->  (GtRobocoderMetamodelChildrenDerive
+				childObjectCreatorSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
+
 			#announce -> (aGtRobocoderMetamodelWithCodeDefinition anyMethodNamedSelectorOrNil: #announce:).
 			#announcementClass -> (self class announcementNameFor: aGtRobocoderMetamodelWithCodeDefinition).
 			#announcementSetter -> (GtRobocoderMetamodelWithCodeDefinition
 				anyMethodSelectorWithPragmaNamedOrNil: #objectSetter:
 				inFullClass: anAnnouncementDefinition).
-			#childObjectCreator -> childObjectCreator.
-			#childObjectGetter -> childObjectGetter.
-			#childAnnouncementClass -> aChildAnnouncementDefinition name.
+
+			#childAnnouncementClass -> subscription.
 			#childAnnouncementGetter -> (GtRobocoderMetamodelWithCodeDefinition
 				anyMethodSelectorWithPragmaNamedOrNil: #objectGetter:
-				inFullClass: aChildAnnouncementDefinition) }.
+				inFullClass: aModelAnnouncementDefinition) }.
 
-	aGtRobocoderMetamodelWithCodeDefinition
-		addSubscriptionWhen: aChildAnnouncementDefinition name
-		in: modelGetter
-		send: (GtRobocoderMetamodelWithCodeDefinition
-				anyMethodSelectorWithPragmaNamedOrNil: #modelEventHandler:
-				andValue: aGtRobocoderMetamodelWithCodeDefinition forOneModel name
-				inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition)
-]
-
-{ #category : #'private - generation' }
-GtRobocoderMetamodelAddDerive >> generateAdditionForMany: aGtRobocoderMetamodelWithCodeDefinition [
-	| childrenGetter childrenFinder anAnnouncementDefinition |
-
-	anAnnouncementDefinition := (self class announcementClassIn: aGtRobocoderMetamodelWithCodeDefinition)
+	aModelAnnouncementDefinition
 		ifNil: [ ^ self ].
 
-	childrenGetter := (GtRobocoderMetamodelChildrenDerive
-		childObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
-		childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel)
-			ifNil: [ ^ self ].
-
-	childrenFinder := (GtRobocoderMetamodelChildrenDerive
-		childObjectFinderSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
-		childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel)
-			ifNil: [ ^ self ].
-
-	aGtRobocoderMetamodelWithCodeDefinition
-		mergeTemplateTraits: TGtRobocoderMetamodelAdditionForManyTemplate + TGtRobocoderMetamodelAdditionHookAndNotifyTemplate
-		mappings: { 
-			#childName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel name.
-			#objectName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel fullName.
-			#objectFinder -> childrenFinder.
-			#childrenGetter -> childrenGetter.
-			#announce -> (aGtRobocoderMetamodelWithCodeDefinition anyMethodNamedSelectorOrNil: #announce:).
-			#announcementClass -> (self class announcementNameFor: aGtRobocoderMetamodelWithCodeDefinition).
-			#announcementSetter -> (GtRobocoderMetamodelWithCodeDefinition
-				anyMethodSelectorWithPragmaNamedOrNil: #objectSetter:
-				inFullClass: anAnnouncementDefinition) }
+	(GtRobocoderMetamodelWithCodeDefinition
+		anyMethodSelectorWithPragmaNamedOrNil: #modelEventHandler:event:
+		andValues: { aGtRobocoderMetamodelWithCodeDefinition forOneModel name . aModelAnnouncementDefinition name }
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition)
+			ifNotNil: [ :anEventHandler | 
+				aGtRobocoderMetamodelWithCodeDefinition
+					addSubscriptionWhen: aModelAnnouncementDefinition name
+					in: (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition)
+					send: anEventHandler ]
 ]
 
 { #category : #'private - generation' }
@@ -173,7 +138,8 @@ GtRobocoderMetamodelAddDerive >> generateAnnouncementForMany: aRobocoderMetamode
 GtRobocoderMetamodelAddDerive >> initialize [
 	super initialize.
 
-	delegate := nil
+	delegate := nil.
+	subscription := nil
 ]
 
 { #category : #accessing }
