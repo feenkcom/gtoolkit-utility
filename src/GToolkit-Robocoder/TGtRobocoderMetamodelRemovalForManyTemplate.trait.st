@@ -9,9 +9,14 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> notifyObjectRemovedTemplate [
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: 'notify{{objectName capitalized}}Removed: a{{objectName capitalized}}
-	"Notifies that a given child object was removed from the receiver"';
+		sourceCode: 'notify{{childObjectName capitalized}}Removed: a{{childObjectName capitalized}}
+	"Notifies that a given child object was removed from the receiver"
+	
+	{{announce ifNotNil: [ :aSelector |
+	''self {{aSelector gtAsReader}}: ({{announcementClass}} new
+		{{announcementSetter gtAsReader}}: a{{childObjectName capitalized}}) ''] }}';
 		protocol: 'private - notifying';
+		condition: '{ announce . announcementClass . announcementSetter } allSatisfy: #notNil';
 		storageMethod: thisContext method
 ]
 
@@ -21,11 +26,54 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> objectRemovedHookTemplate [
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: 'on{{objectName capitalized}}Removed: a{{objectName capitalized}}
+		sourceCode: 'on{{childObjectName capitalized}}Removed: a{{childObjectName capitalized}}
 	"Is sent after a given child object was removed from the receiver"
 
-	self notify{{objectName capitalized}}Removed: a{{objectName capitalized}}.';
-		protocol: 'api - removing';
+	self notify{{childObjectName capitalized}}Removed: a{{childObjectName capitalized}}.';
+		protocol: 'api - adding';
+		condition: '{ announce . announcementClass . announcementSetter } allSatisfy: #notNil';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelRemovalForManyTemplate >> onRemovedEventHanderTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'on{{childModelName capitalized}}Removed: a{{childAnnouncementClass}}
+	"Is sent when an existing {{childName capitalized}} is removed from the model of the receiver due to
+	the handled ${class:{{childAnnouncementClass}}}$ announcement."
+	<modelEventHandler: #{{childName}} event: #{{childAnnouncementClass}}>
+	| aChildObject |
+	
+	aChildObject := (self {{childObjectByModelDetector gtAsReader}}: a{{childAnnouncementClass}} {{childAnnouncementGetter}})
+		ifNil: [ ^ self ].
+
+	self {{childObjectGetter}}
+		remove: aChildObject
+		ifAbsent: [ ^ self ].
+
+	self on{{childObjectName capitalized}}Removed: aChildObject';
+		protocol: 'private - event handling';
+		condition: '{ childAnnouncementClass . childAnnouncementGetter . childObjectGetter . childObjectByModelDetector } allSatisfy: #notNil';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelRemovalForManyTemplate >> removeDelegateTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: '{{removeDelegateSelector gtAsReader}}: a{{childModelName capitalized}}
+	"Request the model to remove a given child object.
+	I do nothing and simply delegate the removal from the model. If the operation will trigger
+	an announcement and I react to it, it will lead to an update"
+
+	self {{modelGetter}} {{removeDelegateSelector gtAsReader}}: a{{childModelName capitalized}}';
+		protocol: 'api - adding';
+		condition: '{ removeDelegateSelector . modelGetter } allSatisfy: #notNil';
 		storageMethod: thisContext method
 ]
 
@@ -35,17 +83,20 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> removeObjectTemplate [
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: 'remove{{objectName capitalized}}: a{{objectName capitalized}}
-	"Removed a given child object from the receiver and notify subscribers about it.
-	Do nothing if an object is not one of my children."
+		sourceCode: 'remove{{childObjectName capitalized}}: a{{childObjectName capitalized}}
+	"Remove a given object as a child to the receiver and notify subscribers about it.
+	Do nothing if an object is already one of my children."
 	<objectAdder: #{{childName}}>
 
-	(self {{objectFinder gtAsReader}}: a{{objectName capitalized}})
+	(self {{childObjectFinder gtAsReader}}: a{{childObjectName capitalized}})
 		ifFalse: [ ^ self ].
 
-	self {{childrenGetter}} remove: a{{objectName capitalized}}.
-	self on{{objectName capitalized}}Removed: a{{objectName capitalized}}';
-		protocol: 'api - removing';
+	self {{childObjectGetter}}
+		remove: a{{childObjectName capitalized}}
+		ifAbsent: [ ^ self ].
+	self on{{childObjectName capitalized}}Removed: a{{childObjectName capitalized}}';
+		protocol: 'api - adding';
+		condition: 'removeDelegateSelector isNil and: [ { childObjectFinder . childObjectGetter } allSatisfy: #notNil ]';
 		storageMethod: thisContext method
 ]
 

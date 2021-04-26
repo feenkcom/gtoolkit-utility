@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtRobocoderTemplateArtefact,
 	#instVars : [
 		'sourceCode',
-		'protocol'
+		'protocol',
+		'condition'
 	],
 	#category : #'GToolkit-Robocoder-Model'
 }
@@ -21,10 +22,25 @@ GtRobocoderTemplateMethod class >> storageMethodTemplate [
 		sourceCode: {{sourceCode printString}};{{protocol
 			ifNil: [ '''' ]
 			ifNotNil: [ ''
-		protocol: {{protocol printString}};'' ]}}
+		protocol: {{protocol printString}};'' ]}}{{condition
+			ifNil: [ '''' ]
+			ifNotNil: [ ''
+		condition: {{condition printString}};'' ]}}
 		storageMethod: thisContext method';
 		protocol: 'template';
 		storageMethod: thisContext method
+]
+
+{ #category : #accessing }
+GtRobocoderTemplateMethod >> condition [
+	<return: #String>
+
+	^ condition
+]
+
+{ #category : #accessing }
+GtRobocoderTemplateMethod >> condition: aBlock [
+	condition := aBlock
 ]
 
 { #category : #initialize }

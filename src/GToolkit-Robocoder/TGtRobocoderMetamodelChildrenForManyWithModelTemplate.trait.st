@@ -64,6 +64,45 @@ TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> createChildTemplate [
 ]
 
 { #category : #templates }
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> findObjectIfFoundIfNoneTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'find{{childObject capitalized}}: a{{childName capitalized}} ifFound: aFoundBlock ifNone: aNoneBlock
+	"Find a child object based on the child model and evaluate aFoundBlock if such child was found,
+	aNoneBlock otherwise."
+	<return: #Object>
+
+	^ self {{childObjects}}
+		detect: [ :each{{childObject capitalized}} |
+			each{{childObject capitalized}} {{childModelGetter}} = a{{childName capitalized}} ]
+		ifFound: aFoundBlock
+		ifNone: aNoneBlock';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> findObjectTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'find{{childObject capitalized}}: a{{childName capitalized}}
+	"Find a child object based on the child model and return the child if it was found, nil otherwise.
+	aNoneBlock otherwise."
+	<return: #{{childObjectsClass}} or: nil>
+	<childObjectDetector: #{{childName}}>
+
+	^ self
+		find{{childObject capitalized}}: a{{childName capitalized}}
+		ifFound: [ :a{{childObject capitalized}} | a{{childObject capitalized}} ]
+		ifNone: [ nil ]';
+		protocol: 'api - testing';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
 TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> includesObjectTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>

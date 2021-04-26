@@ -331,3 +331,15 @@ GtRobocoderMetamodel >> settings [
 GtRobocoderMetamodel >> settings: anObject [
 	settings := anObject
 ]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> shortName [
+	"Generate a short name of this metamodel, to be used in places where the name should be not be very descriptive"
+	<return: #String>
+
+	^ ('{project}{name}'
+		format: { 
+			#project -> self project uncapitalized.
+			#name -> self name capitalized.
+		} asDictionary) uncapitalized
+]

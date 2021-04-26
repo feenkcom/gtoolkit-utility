@@ -2,10 +2,31 @@ Class {
 	#name : #GtRobocoderMetamodelRemoveDerive,
 	#superclass : #GtRobocoderMetamodelDerive,
 	#instVars : [
-		'delegate'
+		'delegate',
+		'subscription'
 	],
 	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
+
+{ #category : #'api - classes' }
+GtRobocoderMetamodelRemoveDerive class >> announcementClassIn: aGtRobocoderMetamodelWithCodeDefinition [
+	<return: #GtFullClassDefinition or: nil>
+
+	^ aGtRobocoderMetamodelWithCodeDefinition extraDefinitionNamed: (self announcementNameFor: aGtRobocoderMetamodelWithCodeDefinition)
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelRemoveDerive class >> announcementNameFor: aGtRobocoderMetamodelWithCodeDefinition [
+	^ '{prefix}{project}{name}{suffix}RemovedAnnouncement'
+		format: {
+			#prefix -> aGtRobocoderMetamodelWithCodeDefinition prefix capitalized.
+			#project -> aGtRobocoderMetamodelWithCodeDefinition project capitalized.
+			#name -> (aGtRobocoderMetamodelWithCodeDefinition isForMany
+				ifTrue: [ aGtRobocoderMetamodelWithCodeDefinition forOneModel name ]
+				ifFalse: [ aGtRobocoderMetamodelWithCodeDefinition name ]) capitalized.
+			#suffix -> aGtRobocoderMetamodelWithCodeDefinition suffix capitalized.
+		} asDictionary
+]
 
 { #category : #accessing }
 GtRobocoderMetamodelRemoveDerive class >> label [
@@ -17,9 +38,11 @@ GtRobocoderMetamodelRemoveDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRob
 	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |
 		eachMetamodelWithCodeDefinition isForMany
 			ifTrue: [
-				delegate
-					ifNil: [ self generateRemovalForMany: eachMetamodelWithCodeDefinition ]
-					ifNotNil: [ self generateRemovalDelegationForMany: eachMetamodelWithCodeDefinition ] ]
+				"I announce removal only if we do not have a delegate or if subscription is specified"
+				(delegate isNil or: [ subscription notNil ])
+					ifTrue: [ self generateAnnouncementForMany: eachMetamodelWithCodeDefinition ].
+
+				self generateRemovalForMany: eachMetamodelWithCodeDefinition ]
 			ifFalse: [  ] ]
 ]
 
@@ -34,74 +57,92 @@ GtRobocoderMetamodelRemoveDerive >> delegate: aSymbol [
 ]
 
 { #category : #'private - generation' }
-GtRobocoderMetamodelRemoveDerive >> generateRemovalDelegationForMany: aGtRobocoderMetamodelWithCodeDefinition [
-	| eachNameMethodSourceCode modelGetter |
-	
-	modelGetter := (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition)
-		ifNil: [ ^ self ].
-	
-	eachNameMethodSourceCode := GtRobocoderTemplateMethodCoder new
-		forMethod: self class >> #removeDelegateTemplate;
-		mappings: {
-			#removeSelector -> delegate.
-			#modelGetter -> modelGetter.
-			#childName -> (aGtRobocoderMetamodelWithCodeDefinition project, aGtRobocoderMetamodelWithCodeDefinition forOneModel name capitalized) };
-		translate.
+GtRobocoderMetamodelRemoveDerive >> generateAnnouncementForMany: aRobocoderMetamodelWithCodeDefinition [
+	| aDefinition |
 
-	aGtRobocoderMetamodelWithCodeDefinition definition instanceSideDefinition methods
-		addMethod: eachNameMethodSourceCode
-		protocol: 'api - removing'
+	aDefinition := GtRobocoderClassGenerator new
+		templateClass: GtRobocoderMetamodelAnnouncementTemplate;
+		mappings: { 
+			#announcementName -> (self class announcementNameFor: aRobocoderMetamodelWithCodeDefinition).
+			#superclass -> #Announcement.
+			#package -> aRobocoderMetamodelWithCodeDefinition package.
+			#tag -> aRobocoderMetamodelWithCodeDefinition metamodel fullTagForAnnouncements.
+			#objectName -> (aRobocoderMetamodelWithCodeDefinition metamodel generateSingularChildObjectGetterSelectorFor: aRobocoderMetamodelWithCodeDefinition forOneModel) uncapitalized.
+			#objectId -> aRobocoderMetamodelWithCodeDefinition forOneModel name.
+		};
+		generate.
+		
+	aRobocoderMetamodelWithCodeDefinition addExtraDefinition: aDefinition.
+	
+	^ aDefinition
 ]
 
 { #category : #'private - generation' }
 GtRobocoderMetamodelRemoveDerive >> generateRemovalForMany: aGtRobocoderMetamodelWithCodeDefinition [
-	| aMetamodel aDefinition childrenGetter childrenFinder |
-	
-	aMetamodel := aGtRobocoderMetamodelWithCodeDefinition metamodel.
-	
-	childrenGetter := (GtRobocoderMetamodelChildrenDerive
-		childObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
-		childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel)
-			ifNil: [ ^ self ].
-			
-	childrenFinder := (GtRobocoderMetamodelChildrenDerive
-		childObjectFinderSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
-		childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel)
-			ifNil: [ ^ self ].
-	
-	aDefinition := GtRobocoderTraitGenerator new
-		templateTrait: TGtRobocoderMetamodelRemovalForManyTemplate;
-		mappings: { 
-			#childName -> aMetamodel forOneModel name.
-			#objectName -> (aMetamodel generateSingularChildObjectGetterSelectorFor: aMetamodel forOneModel) uncapitalized.
-			#objectFinder -> childrenFinder.
-			#childrenGetter -> childrenGetter.
-		};
-		generate.
+	| anAnnouncementDefinition aModelAnnouncementDefinition |
 
-	aMetamodel
-		mergeBehaviorDefinition: aDefinition
-		into: aGtRobocoderMetamodelWithCodeDefinition definition
+	anAnnouncementDefinition := (self class announcementClassIn: aGtRobocoderMetamodelWithCodeDefinition)
+		ifNil: [ ^ self ].
+
+	subscription ifNotNil: [ :aClassName |
+		aModelAnnouncementDefinition := GtBehaviorDefinition fromBehavior: (self class environment at: subscription asSymbol).
+		aModelAnnouncementDefinition withMethodsFromClass: (self class environment at: subscription asSymbol) ].
+
+	aGtRobocoderMetamodelWithCodeDefinition
+		mergeTemplateTrait: TGtRobocoderMetamodelRemovalForManyTemplate
+		mappings: { 
+			#removeDelegateSelector -> delegate.
+
+			#childName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel name.
+			#childModelName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel shortName.
+			#childObjectName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel fullName.
+
+			#modelGetter -> (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition).
+
+			#childObjectFinder -> (GtRobocoderMetamodelChildrenDerive
+				childObjectFinderSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
+			#childObjectGetter -> (GtRobocoderMetamodelChildrenDerive
+				childObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
+			#childObjectByModelDetector ->  (GtRobocoderMetamodelChildrenDerive
+				childObjectDetectorSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				childMetamodel: aGtRobocoderMetamodelWithCodeDefinition forOneModel).
+
+			#announce -> (aGtRobocoderMetamodelWithCodeDefinition anyMethodNamedSelectorOrNil: #announce:).
+			#announcementClass -> (self class announcementNameFor: aGtRobocoderMetamodelWithCodeDefinition).
+			#announcementSetter -> (GtRobocoderMetamodelWithCodeDefinition
+				anyMethodSelectorWithPragmaNamedOrNil: #objectSetter:
+				inFullClass: anAnnouncementDefinition).
+
+			#childAnnouncementClass -> subscription.
+			#childAnnouncementGetter -> (GtRobocoderMetamodelWithCodeDefinition
+				anyMethodSelectorWithPragmaNamedOrNil: #objectGetter:
+				inFullClass: aModelAnnouncementDefinition) }.
+
+	aModelAnnouncementDefinition
+		ifNil: [ ^ self ].
+
+	(GtRobocoderMetamodelWithCodeDefinition
+		anyMethodSelectorWithPragmaNamedOrNil: #modelEventHandler:event:
+		andValues: { aGtRobocoderMetamodelWithCodeDefinition forOneModel name . aModelAnnouncementDefinition name }
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition)
+			ifNotNil: [ :anEventHandler | 
+				aGtRobocoderMetamodelWithCodeDefinition
+					addSubscriptionWhen: aModelAnnouncementDefinition name
+					in: (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition)
+					send: anEventHandler ]
 ]
 
 { #category : #initialization }
 GtRobocoderMetamodelRemoveDerive >> initialize [
 	super initialize.
 
-	delegate := nil
+	delegate := nil.
+	subscription := nil
 ]
 
-{ #category : #templates }
-GtRobocoderMetamodelRemoveDerive >> removeDelegateTemplate [
-	<gtMethodTemplate>
-	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
-	
-	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{removeSelector gtAsReader}}: a{{childName capitalized}}
-	"Request the model to remove a given child object.
-	I do nothing and simply delegate the removal. If the operation will trigger
-	an announcement and I react to it, it will trigger an update"
-
-	self {{modelGetter}} {{removeSelector gtAsReader}}: a{{childName capitalized}}';
-		storageMethod: thisContext method
+{ #category : #accessing }
+GtRobocoderMetamodelRemoveDerive >> subscribe: anAnnouncementName [
+	subscription := anAnnouncementName
 ]

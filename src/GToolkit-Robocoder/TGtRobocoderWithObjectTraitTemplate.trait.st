@@ -117,7 +117,8 @@ TGtRobocoderWithObjectTraitTemplate >> subscribeToObjectTemplate [
 		sourceCode: 'subscribeTo{{objectName capitalized}}
 	"Is sent after a new {{objectName}} is assigned to the receiver.
 	It is required to unsubscribe from the previously subscribed objects by implementing
-	#unsubscribeFrom{{objectName capitalized}} if the receiver subscribes to them"';
+	#unsubscribeFrom{{objectName capitalized}} if the receiver subscribes to them"
+	<{{pragmaName}}Subscriber: #{{objectId}}>';
 		protocol: 'api - {{objectName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]
@@ -140,7 +141,8 @@ TGtRobocoderWithObjectTraitTemplate >> unsubscribeFromObjectTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'unsubscribeFrom{{objectName capitalized}}
 	"Is sent before a new {{objectName}} is assigned to the receiver.
-	Objects that subscribe to {{objectName}} are required to implement this method."';
+	Objects that subscribe to {{objectName}} are required to implement this method."
+	<{{pragmaName}}Unsubscriber: #{{objectId}}>';
 		protocol: 'api - {{objectName gtPiecesCutWhereCamelCase collect: #asLowercase separatedBy: [ Character space ]}}';
 		storageMethod: thisContext method
 ]

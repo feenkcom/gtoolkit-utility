@@ -26,7 +26,6 @@ GtRobocoderTemplateMethodCoder >> compileInContext: aGtPharoSourceCoderEvaluatio
 		realBehaviorDo: [ :aBehavior |
 			| aChange |
 			aChange := self createCompileMethodChangeIn: aBehavior inContext: aGtPharoSourceCoderEvaluationContext.
-
 			(self
 				handleCompilerErrorsDuring: [ GtPharoCodeModifier current performRefactoryChange: aChange ])
 				ifFalse: [ ^ false ].
@@ -53,7 +52,8 @@ GtRobocoderTemplateMethodCoder >> createCompileMethodChangeIn: aBehavior inConte
 			#storageSelector -> templateMethod storageSelector asString.
 			#storageProtocol -> templateMethod storageProtocol.
 			#sourceCode -> self currentSourceString.
-			#protocol -> templateMethod protocol
+			#protocol -> templateMethod protocol.
+			#condition -> templateMethod condition.
 		};
 		translate.	
 
@@ -125,7 +125,7 @@ GtRobocoderTemplateMethodCoder >> handleCompilerErrorsDuring: aBlock [
 			aBlock value.
 			true ]
 		on: OCSemanticWarning
-		do: [ :ex | 
+		do: [ :ex |
 			self
 				notifyParseError: ex errorMessage
 				at: ex location.
@@ -313,6 +313,23 @@ GtRobocoderTemplateMethodCoder >> saveInContext: aGtPharoSourceCoderEvaluationCo
 		ifFalse: [ ^ false ].
 
 	^ true
+]
+
+{ #category : #testing }
+GtRobocoderTemplateMethodCoder >> shouldBeAddedToBehavior [
+	^ templateMethod condition
+		ifNil: [ true ]
+		ifNotNil: [ :aString |
+			| aSnippetCoder aTemplateResult |
+	
+			aSnippetCoder := GtPharoSnippetCoder forSource: aString.
+			aTemplateResult := aSnippetCoder doItInContext: (self evaluationContext bindingStrategy: (GtSnippetBindingStrategy new bindings: bindings)).
+
+			aTemplateResult isSuccess
+				ifFalse: [ self error: 'Failed to generate a template' ].
+			
+			"we should compare with boolean explictly, otherwise it will fail if the return value is not a boolean"
+			aTemplateResult value = true ]
 ]
 
 { #category : #accessing }
