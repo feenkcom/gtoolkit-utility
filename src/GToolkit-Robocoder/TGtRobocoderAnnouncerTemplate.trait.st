@@ -46,7 +46,7 @@ TGtRobocoderAnnouncerTemplate >> whenDoTemplate [
 	
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'when: anAnnouncementClass do: aBlock
-	({{announcer}} ifNil: [ {{announcer}} := Announcer new ])
+	^ ({{announcer}} ifNil: [ {{announcer}} := Announcer new ])
 		when: anAnnouncementClass do: aBlock';
 		protocol: 'api - announcer';
 		storageMethod: thisContext method
@@ -59,7 +59,7 @@ TGtRobocoderAnnouncerTemplate >> whenSendToTemplate [
 	
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'when: anAnnouncementClass send: aSelector to: anObject
-	({{announcer}} ifNil: [ {{announcer}} := Announcer new ]) weak
+	^ ({{announcer}} ifNil: [ {{announcer}} := Announcer new ]) weak
 		when: anAnnouncementClass send: aSelector to: anObject';
 		protocol: 'api - announcer';
 		storageMethod: thisContext method
