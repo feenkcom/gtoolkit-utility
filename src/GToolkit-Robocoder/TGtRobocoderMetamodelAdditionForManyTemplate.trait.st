@@ -33,7 +33,10 @@ TGtRobocoderMetamodelAdditionForManyTemplate >> addObjectTemplate [
 
 	(self {{childObjectFinder gtAsReader}}: a{{childObjectName capitalized}})
 		ifTrue: [ ^ self ].
-
+	
+	{{primitive
+		ifFalse: [ '''' ]
+		ifTrue: [ ''self primitiveAdd{{childObjectName capitalized}}: a{{childObjectName capitalized}}.'' ]}}
 	self {{childObjectGetter}} add: a{{childObjectName capitalized}}.
 	self on{{childObjectName capitalized}}Added: a{{childObjectName capitalized}}';
 		protocol: 'api - adding';
@@ -90,6 +93,20 @@ TGtRobocoderMetamodelAdditionForManyTemplate >> onAddedEventHanderTemplate [
 	self on{{childObjectName capitalized}}Added: aNewChildObject';
 		protocol: 'private - event handling';
 		condition: '{ childAnnouncementClass . childAnnouncementGetter . childObjectGetter . childObjectCreator } allSatisfy: #notNil';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelAdditionForManyTemplate >> primitiveAddTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'primitiveAdd{{childObjectName capitalized}}: a{{childObjectName capitalized}}
+	"Is sent right before adding a{{childObjectName capitalized}} as my child.
+	Override this method to implement primitive addition behavior such as for example adding a new folder, file or class"';
+		protocol: 'private - adding';
+		condition: 'primitive';
 		storageMethod: thisContext method
 ]
 

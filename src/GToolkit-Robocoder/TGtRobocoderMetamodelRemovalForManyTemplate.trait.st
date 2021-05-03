@@ -61,6 +61,20 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> onRemovedEventHanderTemplate [
 ]
 
 { #category : #templates }
+TGtRobocoderMetamodelRemovalForManyTemplate >> primitiveRemoveTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'primitiveRemove{{childObjectName capitalized}}: a{{childObjectName capitalized}}
+	"Is sent right before removing a{{childObjectName capitalized}} from my children.
+	Override this method to implement primitive removal behavior such as for example removing a folder, file or class"';
+		protocol: 'private - removing';
+		condition: 'primitive';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
 TGtRobocoderMetamodelRemovalForManyTemplate >> removeDelegateTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
@@ -90,7 +104,10 @@ TGtRobocoderMetamodelRemovalForManyTemplate >> removeObjectTemplate [
 
 	(self {{childObjectFinder gtAsReader}}: a{{childObjectName capitalized}})
 		ifFalse: [ ^ self ].
-
+	
+	{{primitive
+		ifFalse: [ '''' ]
+		ifTrue: [ ''self primitiveRemove{{childObjectName capitalized}}: a{{childObjectName capitalized}}.'' ]}}
 	self {{childObjectGetter}}
 		remove: a{{childObjectName capitalized}}
 		ifAbsent: [ ^ self ].

@@ -119,6 +119,16 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> setObjectWithoutOtherEntitiesTe
 ]
 
 { #category : #templates }
+TGtRobocoderMetamodelPropertyForChildTemplate >> traitTemplate [
+	<gtTraitTemplate>
+	<generatedFrom: #'GtRobocoderTemplateTrait class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateTrait new
+		definition: (GtTraitDefinition new category: (GtCategoryDefinition new package: (GtPackageDefinition new name: #''); tag: (GtTagDefinition new name: #'')); comment: (GtCommentDefinition new content: ''); methods: (GtPharoMethodsDefinition new definitions: #()); name: #TNameOfTrait; slots: (GtSlotsDefinition new definitions: #()); traits: (GtTraitsDefinition new definitions: #()));
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
 TGtRobocoderMetamodelPropertyForChildTemplate >> unsetObjectTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>

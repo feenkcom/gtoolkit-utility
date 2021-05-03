@@ -59,6 +59,42 @@ GtRobocoderMetamodels >> generateCodeDefinitions [
 	^ aGtRobocoderMetamodelsWithCodeDefinitions
 ]
 
+{ #category : #'api - generation' }
+GtRobocoderMetamodels >> generateSubscribeToFor: eachViewModelModelWithDefinition [
+	(GtRobocoderMetamodelModelDerive
+		modelSubscriberMethodIn: eachViewModelModelWithDefinition)
+		ifNotNil: [ :aSubscriberMethod | 
+			(aSubscriberMethod parent isForTrait
+				and: [ eachViewModelModelWithDefinition subscriptions isNotEmpty ])
+					ifTrue: [ eachViewModelModelWithDefinition definition instanceSideDefinition methods addMethod: aSubscriberMethod copy ] ].
+
+	(GtRobocoderMetamodelModelDerive modelSubscriberMethodIn: eachViewModelModelWithDefinition)
+		ifNotNil: [ :aSubscriberMethod | 
+			eachViewModelModelWithDefinition subscriptions
+				do: [ :eachSubscription | 
+					aSubscriberMethod
+						addMethodPartSource: eachSubscription asSubscribeSourceString
+						id: eachSubscription ] ]
+]
+
+{ #category : #'api - generation' }
+GtRobocoderMetamodels >> generateUnsubscribeFromFor: eachViewModelModelWithDefinition [
+	(GtRobocoderMetamodelModelDerive
+		modelUnsubscriberMethodIn: eachViewModelModelWithDefinition)
+		ifNotNil: [ :anUnsubscriberMethod | 
+			(anUnsubscriberMethod parent isForTrait
+				and: [ eachViewModelModelWithDefinition subscriptions isNotEmpty ])
+					ifTrue: [ eachViewModelModelWithDefinition definition instanceSideDefinition methods addMethod: anUnsubscriberMethod copy ] ].
+
+	(GtRobocoderMetamodelModelDerive modelUnsubscriberMethodIn: eachViewModelModelWithDefinition)
+		ifNotNil: [ :anUnsubscriberMethod | 
+			(eachViewModelModelWithDefinition subscriptions groupedBy: [ :eachSubscription | eachSubscription announcerSelector ])
+				keysDo: [ :anAnnouncerSelector | 
+					anUnsubscriberMethod
+						addMethodPartSource: ('self ', anAnnouncerSelector, ' unsubscribe: self.')
+						id: anAnnouncerSelector ] ]
+]
+
 { #category : #initialization }
 GtRobocoderMetamodels >> initialize [
 	super initialize.
@@ -85,37 +121,31 @@ GtRobocoderMetamodels >> processDerivesOf: aGtRobocoderMetamodelsWithCodeDefinit
 	| thePreviousMetamodelsWithDefinitions |
 
 	thePreviousMetamodelsWithDefinitions := aGtRobocoderMetamodelsWithCodeDefinitions copy.
-
-	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
+	
+	aGtRobocoderMetamodelsWithCodeDefinitions
+		metamodelsWithCodeDefinition
 		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
-		thenDo: [ :eachViewModelModelWithDefinition |
+		thenDo: [ :eachViewModelModelWithDefinition | 
 			eachViewModelModelWithDefinition derives do: [ :eachDerive |
 				eachDerive applyOnViewModelModelWithCodeDefinition: eachViewModelModelWithDefinition ] ].
-
-	derives do: [ :eachDerive | eachDerive applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions ].
+	derives do: [ :eachDerive | 
+		eachDerive applyOnMetamodelsWithCodeDefinitions: aGtRobocoderMetamodelsWithCodeDefinitions ].
 	
-	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
+	aGtRobocoderMetamodelsWithCodeDefinitions
+		metamodelsWithCodeDefinition
 		select: [ :eachViewModelModelWithDefinition | eachViewModelModelWithDefinition alreadyHasClass not ]
-		thenDo: [ :eachViewModelModelWithDefinition |
-			(GtRobocoderMetamodelModelDerive modelSubscriberMethodIn: eachViewModelModelWithDefinition)
-				ifNotNil: [ :aSubscriberMethod |
-					(aSubscriberMethod parent isForTrait and: [ eachViewModelModelWithDefinition subscriptions isNotEmpty ])
-						ifTrue: [
-							eachViewModelModelWithDefinition definition instanceSideDefinition methods
-								addMethod: aSubscriberMethod copy ] ].
+		thenDo: [ :eachViewModelModelWithDefinition | 
+			self generateSubscribeToFor: eachViewModelModelWithDefinition.
+			self generateUnsubscribeFromFor: eachViewModelModelWithDefinition ].
 
-			(GtRobocoderMetamodelModelDerive modelSubscriberMethodIn: eachViewModelModelWithDefinition)
-				ifNotNil: [ :aSubscriberMethod |
-					eachViewModelModelWithDefinition subscriptions do: [ :eachSubscription |
-						aSubscriberMethod
-							addMethodPartSource: eachSubscription asSourceString
-							id: eachSubscription ] ] ].
-
-	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinition
+	aGtRobocoderMetamodelsWithCodeDefinitions
+		metamodelsWithCodeDefinition
 		with: thePreviousMetamodelsWithDefinitions metamodelsWithCodeDefinition
-		do: [ :aCurrentMetamodelWithDefinition :thePreviousMetamodelWithDefinition |
-			(aCurrentMetamodelWithDefinition definition differenceWith: thePreviousMetamodelWithDefinition definition)
-				hasDifference ifTrue: [ ^ true ] ].
+		do: [ :aCurrentMetamodelWithDefinition :thePreviousMetamodelWithDefinition | 
+			(aCurrentMetamodelWithDefinition definition
+				differenceWith: thePreviousMetamodelWithDefinition definition)
+				hasDifference
+				ifTrue: [ ^ true ] ].
 	^ false
 ]
 

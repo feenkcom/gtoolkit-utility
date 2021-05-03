@@ -10,16 +10,22 @@ GtRobocoderMetamodelWithPropertyDerive class >> isAbstract [
 ]
 
 { #category : #'private - generation' }
-GtRobocoderMetamodelWithPropertyDerive >> generatePropertyChangedAnnouncementFor: aViewModelModel [
+GtRobocoderMetamodelWithPropertyDerive >> generatePropertyChangedAnnouncementFor: aRobocoderMetamodelWithCodeDefinition [
 	| aDefinition |
 	
-	aDefinition := GtClassDefinition forNew.
-	aDefinition name: (self propertyChangedAnnouncementClassNameFor: aViewModelModel).
-	aDefinition superclass name: #Announcement.
-	aDefinition category package name: aViewModelModel package.
-	aDefinition category tag name: aViewModelModel fullTagForAnnouncements.
+	aDefinition := GtRobocoderClassGenerator new
+		templateClass: GtRobocoderMetamodelAnnouncementTemplate;
+		mappings: { 
+			#announcementName -> (self propertyChangedAnnouncementClassNameFor: aRobocoderMetamodelWithCodeDefinition).
+			#superclass -> #Announcement.
+			#package -> aRobocoderMetamodelWithCodeDefinition package.
+			#tag -> aRobocoderMetamodelWithCodeDefinition metamodel fullTagForAnnouncements.
+			#objectName -> (self propertyNameFor: aRobocoderMetamodelWithCodeDefinition) uncapitalized.
+			#objectId -> aRobocoderMetamodelWithCodeDefinition forOneModel name.
+		};
+		generate.
 	
-	^ aDefinition
+	aRobocoderMetamodelWithCodeDefinition addExtraDefinition: aDefinition
 ]
 
 { #category : #'private - generation' }
@@ -48,7 +54,7 @@ GtRobocoderMetamodelWithPropertyDerive >> propertyChangeNotifierMethodOf: aViewM
 GtRobocoderMetamodelWithPropertyDerive >> propertyChangedAnnouncementClassNameFor: aViewModelModel [
 	<return: #Symbol>
 
-	^ ('{project}{prefix}{suffix}{propertyName}Changed'
+	^ ('{prefix}{project}{propertyName}Changed'
 		format: {
 			#project -> aViewModelModel project.
 			#prefix -> aViewModelModel prefix capitalized.

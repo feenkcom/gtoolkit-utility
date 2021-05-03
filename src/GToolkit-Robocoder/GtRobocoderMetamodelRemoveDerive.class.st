@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtRobocoderMetamodelDerive,
 	#instVars : [
 		'delegate',
-		'subscription'
+		'subscription',
+		'primitive'
 	],
 	#category : #'GToolkit-Robocoder-Metamodel - Derives'
 }
@@ -92,6 +93,7 @@ GtRobocoderMetamodelRemoveDerive >> generateRemovalForMany: aGtRobocoderMetamode
 		mergeTemplateTrait: TGtRobocoderMetamodelRemovalForManyTemplate
 		mappings: { 
 			#removeDelegateSelector -> delegate.
+			#primitive -> primitive.
 
 			#childName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel name.
 			#childModelName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel shortName.
@@ -139,10 +141,26 @@ GtRobocoderMetamodelRemoveDerive >> initialize [
 	super initialize.
 
 	delegate := nil.
-	subscription := nil
+	subscription := nil.
+	primitive := false
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelRemoveDerive >> primitive [
+	^ primitive
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelRemoveDerive >> primitive: anObject [
+	primitive := anObject
 ]
 
 { #category : #accessing }
 GtRobocoderMetamodelRemoveDerive >> subscribe: anAnnouncementName [
 	subscription := anAnnouncementName
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelRemoveDerive >> subscription [
+	^ subscription
 ]
