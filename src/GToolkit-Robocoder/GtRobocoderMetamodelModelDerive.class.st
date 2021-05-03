@@ -16,8 +16,9 @@ GtRobocoderMetamodelModelDerive class >> label [
 
 { #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelGetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
-	^ aGtRobocoderMetamodelWithCodeDefinition
+	^ GtRobocoderMetamodelWithCodeDefinition
 		anyMethodWithPragmaNamedOrNil: self modelGetterPragma
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition
 ]
 
 { #category : #accessing }
@@ -35,8 +36,9 @@ GtRobocoderMetamodelModelDerive class >> modelGetterSelectorIn: aGtRobocoderMeta
 
 { #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelSetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
-	^ aGtRobocoderMetamodelWithCodeDefinition
+	^ GtRobocoderMetamodelWithCodeDefinition
 		anyMethodWithPragmaNamedOrNil: self modelSetterPragma
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition
 ]
 
 { #category : #accessing }
@@ -54,8 +56,9 @@ GtRobocoderMetamodelModelDerive class >> modelSetterSelectorIn: aGtRobocoderMeta
 
 { #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelSubscriberMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
-	^ aGtRobocoderMetamodelWithCodeDefinition
+	^ GtRobocoderMetamodelWithCodeDefinition
 		anyMethodWithPragmaNamedOrNil: self modelSubscriberPragma
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition
 ]
 
 { #category : #accessing }
@@ -73,8 +76,9 @@ GtRobocoderMetamodelModelDerive class >> modelSubscriberSelectorIn: aGtRobocoder
 
 { #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelUnsubscriberMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
-	^ aGtRobocoderMetamodelWithCodeDefinition
+	^ GtRobocoderMetamodelWithCodeDefinition
 		anyMethodWithPragmaNamedOrNil: self modelUnsubscriberPragma
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition
 ]
 
 { #category : #accessing }
@@ -133,8 +137,7 @@ GtRobocoderMetamodelModelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobo
 			aDomainModelTraitDefinition := GtTraitDefinition fromTrait: anApiTrait in: eachMetamodelWithCodeDefinition environment.
 			aDomainModelTraitDefinition withMethodsFromTrait: anApiTrait.
 			
-			(eachMetamodelWithCodeDefinition definition instanceSideDefinition traits hasTraitNamed: aDomainModelTraitDefinition name)
-				ifFalse: [ eachMetamodelWithCodeDefinition definition instanceSideDefinition traits addTrait: aDomainModelTraitDefinition ]
+			eachMetamodelWithCodeDefinition addTraitDefinition: aDomainModelTraitDefinition
 		] ifNil: [
 			| aModelName aDomainModelTraitDefinition aMetamodel |
 			

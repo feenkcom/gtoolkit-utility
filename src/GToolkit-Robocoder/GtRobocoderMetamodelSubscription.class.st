@@ -43,12 +43,18 @@ GtRobocoderMetamodelSubscription >> announcerSelector: anObject [
 ]
 
 { #category : #converting }
-GtRobocoderMetamodelSubscription >> asSourceString [
+GtRobocoderMetamodelSubscription >> asSubscribeSourceString [
 	^ 'self {model} when: {announcement} send: #{handler} to: self.' format: {
 			#model -> self announcerSelector.
 			#announcement -> self announcementName.
 			#handler -> self handlerSelector.
 		} asDictionary
+]
+
+{ #category : #converting }
+GtRobocoderMetamodelSubscription >> asUnsubscribeSourceString [
+	^ 'self {model} unsubsccribe: self.'
+		format: { #model -> self announcerSelector } asDictionary
 ]
 
 { #category : #accessing }

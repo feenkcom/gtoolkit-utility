@@ -29,7 +29,7 @@ GtRobocoderMetamodelApiTraitDerive >> generateMetamodelApiTraitFor: aRobocoderMe
 		pragmaName: GtRobocoderMetamodelModelDerive pragmaName;
 		objectId: aRobocoderMetamodel name;
 		objectName: (aRobocoderMetamodel project uncapitalized, aRobocoderMetamodel name capitalized, aRobocoderMetamodel suffix capitalized) uncapitalized;
-		projectPrefix: aRobocoderMetamodel prefix, aRobocoderMetamodel project capitalized;
+		projectPrefix: aRobocoderMetamodel prefix;
 		packageName: aRobocoderMetamodel package;
 		tagName: aRobocoderMetamodel fullTagForTraits;
 		generate

@@ -12,6 +12,34 @@ Class {
 }
 
 { #category : #accessing }
+GtRobocoderMetamodelWithCodeDefinition class >> anyMethodNamedOrNil: aSelector inFullClass: aFullClassDefinition [
+	"Find any method with a given selector"
+	<return: #GtPharoMethodDefinition>
+	
+	aFullClassDefinition instanceSideDefinition methods
+		methodNamed: aSelector
+		ifFound: [ :aMethod | ^ aMethod ]
+		ifNone: [  ].
+
+	aFullClassDefinition instanceSideDefinition traits do: [ :eachTrait |
+		eachTrait methods
+			methodNamed: aSelector
+			ifFound: [ :aMethod | ^ aMethod ]
+			ifNone: [  ] ].
+		
+	^ nil
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelWithCodeDefinition class >> anyMethodNamedSelectorOrNil: aSelector inFullClass: aFullClassDefinition [
+	"Find any method with a given selector"
+	<return: #GtPharoMethodDefinition>
+	
+	^ (self anyMethodNamedOrNil: aSelector inFullClass: aFullClassDefinition)
+		ifNotNil: [ :aMethod | aMethod selector ]
+]
+
+{ #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition class >> anyMethodSelectorWithPragmaNamedOrNil: aPragmaName andValue: aPragmaValue inFullClass: aFullClassDefinition [
 	"Find any method that is marked with a given pragma (in traits, instance side, etc.)"
 	<return: #GtPharoMethodDefinition or: nil>
@@ -194,10 +222,23 @@ GtRobocoderMetamodelWithCodeDefinition >> addExtraDefinitions: aCollectionOfGtCo
 
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition >> addSubscriptionWhen: anAnnouncementName in: aModelGetteer send: aSymbol [
-	subscriptions add: (GtRobocoderMetamodelSubscription new
+	| aNewSubscription |
+	
+	aNewSubscription := GtRobocoderMetamodelSubscription new
 		announcementName: anAnnouncementName;
 		announcerSelector: aModelGetteer;
-		handlerSelector: aSymbol)
+		handlerSelector: aSymbol.
+	
+	(subscriptions includes: aNewSubscription)
+		ifTrue: [ ^ self ].
+
+	subscriptions add: aNewSubscription
+]
+
+{ #category : #'api - modification' }
+GtRobocoderMetamodelWithCodeDefinition >> addTraitDefinition: aTraitDefinition [
+	(self definition instanceSideDefinition traits hasTraitNamed: aTraitDefinition name)
+		ifFalse: [ self definition instanceSideDefinition traits addTrait: aTraitDefinition ]
 ]
 
 { #category : #accessing }
@@ -215,72 +256,11 @@ GtRobocoderMetamodelWithCodeDefinition >> alreadyHasClass [
 	^ self metamodel alreadyHasClass
 ]
 
-{ #category : #'private - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> anyMethodNamedOrNil: aSelector [
-	"Find any method with a given selector"
-	<return: #GtPharoMethodDefinition>
-	
-	self definition instanceSideDefinition methods
-		methodNamed: aSelector
-		ifFound: [ :aMethod | ^ aMethod ]
-		ifNone: [  ].
-
-	self definition instanceSideDefinition traits do: [ :eachTrait |
-		eachTrait methods
-			methodNamed: aSelector
-			ifFound: [ :aMethod | ^ aMethod ]
-			ifNone: [  ] ].
-		
-	^ nil
-]
-
-{ #category : #'private - methods' }
+{ #category : #'api - methods' }
 GtRobocoderMetamodelWithCodeDefinition >> anyMethodNamedSelectorOrNil: aSelector [
-	"Find any method with a given selector"
-	<return: #GtPharoMethodDefinition>
-	
-	^ (self anyMethodNamedOrNil: aSelector)
-		ifNotNil: [ :aMethod | aMethod selector ]
-]
-
-{ #category : #'private - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName [
-	"Find any method that is marked with a given pragma (in traits, instance side, etc.)"
-	<return: #GtPharoMethodDefinition>
-	
-	self
-		methodsWithPragmaNamed: aPragmaName
-		inViewModelDefinition: self definition
-		do: [ :aMethodDefinition | ^ aMethodDefinition ].
-		
-	KeyNotFound signalFor: aPragmaName in: self
-]
-
-{ #category : #'private - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamed: aPragmaName andValue: aPragmaValue [
-	"Find any method that is marked with a given pragma (in traits, instance side, etc.) and its value"
-	<return: #GtPharoMethodDefinition>
-	
-	self
-		methodsWithPragmaNamed: aPragmaName
-		andValue: aPragmaValue
-		inViewModelDefinition: self definition
-		do: [ :aMethodDefinition | ^ aMethodDefinition ].
-		
-	KeyNotFound signalFor: aPragmaName in: self
-]
-
-{ #category : #'private - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> anyMethodWithPragmaNamedOrNil: aPragmaName [
-	"Find any method that is marked with a given pragma (in traits, instance side, etc.)"
-	<return: #GtPharoMethodDefinition or: nil>
-	
-	self
-		methodsWithPragmaNamed: aPragmaName
-		inViewModelDefinition: self definition
-		do: [ :aMethodDefinition | ^ aMethodDefinition ].
-		
-	^ nil
+	^ self class
+		anyMethodNamedSelectorOrNil: aSelector
+		inFullClass: self definition
 ]
 
 { #category : #'private - methods' }
@@ -323,11 +303,6 @@ GtRobocoderMetamodelWithCodeDefinition >> definition: anObject [
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition >> derives [
 	^ self metamodel derives
-]
-
-{ #category : #'api - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> elementViewModelSetterMethodDo: aFoundBlock ifNone: ifNoneBlock [
-	self extraDefinitions do: [ :each | ]
 ]
 
 { #category : #'api - accessing' }
@@ -381,7 +356,7 @@ GtRobocoderMetamodelWithCodeDefinition >> initialize [
 	super initialize.
 	
 	extraDefinitions := OrderedCollection new.
-	subscriptions := Set new
+	subscriptions := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -526,20 +501,6 @@ GtRobocoderMetamodelWithCodeDefinition >> parent [
 	^ self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: self metamodel parent
 ]
 
-{ #category : #'api - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> parentViewModelGetterMethodFor: aParentViewModelModel [
-	^ self
-		anyMethodWithPragmaNamed: #parentViewModelGetter:
-		andValue: aParentViewModelModel name
-]
-
-{ #category : #'api - selectors' }
-GtRobocoderMetamodelWithCodeDefinition >> parentViewModelGetterSelectorFor: aParentViewModelModel [
-	<return: #Symbol>
-
-	^ (self parentViewModelGetterMethodFor: aParentViewModelModel) selector
-]
-
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> parentViewModelSelectorName [
 	self
@@ -547,20 +508,6 @@ GtRobocoderMetamodelWithCodeDefinition >> parentViewModelSelectorName [
 		description: [ 'Only model for one can have a single parent' ].
 
 	^ self metamodel parentViewModelSelectorName
-]
-
-{ #category : #'api - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> parentViewModelSetterMethodFor: aParentViewModelModel [
-	^ self
-		anyMethodWithPragmaNamed: #parentObjectSetter:
-		andValue: aParentViewModelModel name
-]
-
-{ #category : #'api - methods' }
-GtRobocoderMetamodelWithCodeDefinition >> parentViewModelTesterMethodFor: aParentViewModelModel [
-	^ self
-		anyMethodWithPragmaNamed: #parentViewModelTester:
-		andValue: aParentViewModelModel name
 ]
 
 { #category : #'api - accessing' }

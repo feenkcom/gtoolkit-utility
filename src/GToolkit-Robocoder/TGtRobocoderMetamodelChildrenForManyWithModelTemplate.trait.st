@@ -79,6 +79,7 @@ TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> findObjectIfFoundIfNone
 			each{{childObject capitalized}} {{childModelGetter}} = a{{childName capitalized}} ]
 		ifFound: aFoundBlock
 		ifNone: aNoneBlock';
+		protocol: 'api - accessing';
 		storageMethod: thisContext method
 ]
 
@@ -98,7 +99,7 @@ TGtRobocoderMetamodelChildrenForManyWithModelTemplate >> findObjectTemplate [
 		find{{childObject capitalized}}: a{{childName capitalized}}
 		ifFound: [ :a{{childObject capitalized}} | a{{childObject capitalized}} ]
 		ifNone: [ nil ]';
-		protocol: 'api - testing';
+		protocol: 'api - accessing';
 		storageMethod: thisContext method
 ]
 
