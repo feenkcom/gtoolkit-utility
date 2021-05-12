@@ -41,7 +41,10 @@ TGtRobocoderMetamodelChildrenForOneTemplate >> createChildObjectsTemplate [
 		ifNotNil: [ :aSelector | ''childObject {{aSelector gtAsReader}}: self.'' ]
 		ifNil: [ '''' ]}}
 	{{childModelSetter
-		ifNotNil: [ :aSelector | ''childObject {{aSelector gtAsReader}}: self {{modelGetter ifNil: [ ''''yourself'''' ]}} {{childGetter}}.'' ]
+		ifNotNil: [ :aSelector |
+			(modelGetter isNil and: [ childGetter isNil ])
+				ifTrue: [ ''childObject {{aSelector gtAsReader}}: #().'' ]
+				ifFalse: [ ''childObject {{aSelector gtAsReader}}: self {{modelGetter ifNil: [ ''''yourself'''' ]}} {{childGetter ifNil: [ ''''yourself'''' ]}}.'' ] ]
 		ifNil: [ '''' ]}}
 	^ childObject';
 		protocol: 'private - instance creation';

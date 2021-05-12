@@ -12,6 +12,33 @@ Trait {
 }
 
 { #category : #templates }
+TGtRobocoderMetamodelParentAccessorTemplate >> allParentObjectsDoTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'allParent{{objectFullName capitalized}}Do: aBlock
+	"Evaluate a given block with all parents of the same type as the receiver"
+	| aCurrentParent |
+	
+	aCurrentParent := self.
+	{{pathToSameParent collect: [ :each |
+		| tester getter |
+		tester := each first.
+		getter := each second.
+	
+	''
+	aCurrentParent {{tester}}
+		ifFalse: [ ^ self ].
+	aCurrentParent := aCurrentParent {{getter}}.'' ]}}
+	aBlock value: aCurrentParent.
+	aCurrentParent allParent{{objectFullName capitalized}}Do: aBlock';
+		protocol: 'api - enumerating';
+		condition: 'pathToSameParent notEmpty';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
 TGtRobocoderMetamodelParentAccessorTemplate >> parentObjectGetterTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
@@ -77,5 +104,38 @@ TGtRobocoderMetamodelParentAccessorTemplate >> traitTemplate [
 	
 	^ GtRobocoderTemplateTrait new
 		definition: (GtTraitDefinition new category: (GtCategoryDefinition new package: (GtPackageDefinition new name: #''); tag: (GtTagDefinition new name: #'')); comment: (GtCommentDefinition new content: ''); methods: (GtPharoMethodsDefinition new definitions: #()); name: #TNameOfTrait; slots: (GtSlotsDefinition new definitions: ((Array new: 1) at: 1 put: (GtSlotDefinition new name: #'{{parentObject}}'; type: #InstanceVariableSlot); yourself)); traits: (GtTraitsDefinition new definitions: #()));
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelParentAccessorTemplate >> withAllParentObjectsDoTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'withAllParent{{objectFullName capitalized}}Do: aBlock
+	"Evaluate a given block with the receiver and all its parents of the same type"
+
+	aBlock value: self.
+	self allParent{{objectFullName capitalized}}Do: aBlock';
+		protocol: 'api - enumerating';
+		condition: 'pathToSameParent notEmpty';
+		storageMethod: thisContext method
+]
+
+{ #category : #templates }
+TGtRobocoderMetamodelParentAccessorTemplate >> withAllParentObjectsTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'withAllParent{{objectFullName capitalized}}
+	"Collect and return the receiver and all its parents in the bottom to top order starting with the receiver"
+	<return: #Array>
+
+	^ Array streamContents: [ :aStream |
+		self withAllParent{{objectFullName capitalized}}Do: [ :eachParent | aStream nextPut: eachParent ] ]';
+		protocol: 'api - enumerating';
+		condition: 'pathToSameParent notEmpty';
 		storageMethod: thisContext method
 ]

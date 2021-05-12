@@ -69,7 +69,7 @@ TGtRobocoderMetamodelAdditionForManyTemplate >> objectAddedHookTemplate [
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'on{{childObjectName capitalized}}Added: a{{childObjectName capitalized}}
 	"Is sent after a given child object was added to the receiver"
-
+	{{parentObjectSetter ifNotNil: [ ''a{{childObjectName capitalized}} {{parentObjectSetter gtAsReader}}: self.'' ] ifNil: [ '''']}}
 	self notify{{childObjectName capitalized}}Added: a{{childObjectName capitalized}}.';
 		protocol: 'api - adding';
 		condition: '{ announce . announcementClass . announcementSetter } allSatisfy: #notNil';

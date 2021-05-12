@@ -38,7 +38,7 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> notifyPropertySetTemplate [
 		sourceCode: 'notify{{objectName capitalized}}{{statusAdjective capitalized}}
 	<propertySetNotifier: #{{propertyName}}>
 
-	self announce: ({{statusAnnouncementClass}} new {{objectName}}: self)';
+	self announce: ({{statusAnnouncementClass}} new {{statusAnnouncementSetter gtAsReader}}: self)';
 		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
 ]
@@ -52,7 +52,7 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> notifyPropertyUnsetTemplate [
 		sourceCode: 'notify{{objectName capitalized}}{{negativeStatusAdjective capitalized}}
 	<propertyUnsetNotifier: #{{propertyName}}>
 
-	self announce: ({{negativeStatusAnnouncementClass}} new {{objectName}}: self)';
+	self announce: ({{negativeStatusAnnouncementClass}} new {{negativeStatusAnnouncementSetter gtAsReader}}: self)';
 		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
 ]
@@ -97,8 +97,9 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> setObjectTemplate [
 		sourceCode: '{{setVerb}}{{objectName capitalized}}
 	"Just {{setVerb}} a {{objectName}} without changing children"
 	<propertySetter: #{{propertyName}}>
-
-	self {{parentObjectGetter}} {{parentPropertySetter}}: self';
+	
+	self {{parentObjectTester}}
+		ifTrue: [ self {{parentObjectGetter}} {{parentPropertySetter gtAsReader}}: self ]';
 		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
 ]

@@ -24,10 +24,8 @@ GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions:
 				self generatePropertyChangedAnnouncementFor: eachMetamodelWithCodeDefinition ].
 		eachMetamodelWithCodeDefinition isForOne
 			ifTrue: [
-				eachMetamodelWithCodeDefinition addExtraDefinitions: { 
-					self generateViewModelSelectedAnnouncementFor: eachMetamodelWithCodeDefinition metamodel.
-					self generateViewModelDeselectedAnnouncementFor: eachMetamodelWithCodeDefinition metamodel.
-				} ] ].
+				self generateSelectedAnnouncementFor: eachMetamodelWithCodeDefinition.
+				self generateDeselectedAnnouncementFor: eachMetamodelWithCodeDefinition ] ].
 
 	"second pass to glue children with parents"
 	aGtRobocoderMetamodelsWithCodeDefinitions metamodelsWithCodeDefinitionDo: [ :eachMetamodelWithCodeDefinition |		
@@ -90,6 +88,31 @@ GtRobocoderMetamodelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFo
 ]
 
 { #category : #'private - generate' }
+GtRobocoderMetamodelWithSelectionDerive >> generateDeselectedAnnouncementFor: aRobocoderMetamodelWithCodeDefinition [
+	| aDefinition |
+	
+	self
+		assert: [ aRobocoderMetamodelWithCodeDefinition isForOne ]
+		description: [ 'Only view model for one can announce selected event' ].
+	
+	aDefinition := GtRobocoderClassGenerator new
+		templateClass: GtRobocoderMetamodelAnnouncementTemplate;
+		mappings: { 
+			#announcementName -> (self viewModelDeselectedAnnouncementNameFor: aRobocoderMetamodelWithCodeDefinition).
+			#superclass -> #Announcement.
+			#package -> aRobocoderMetamodelWithCodeDefinition package.
+			#tag -> aRobocoderMetamodelWithCodeDefinition metamodel fullTagForAnnouncements.
+			#objectName -> (aRobocoderMetamodelWithCodeDefinition metamodel generateSingularChildObjectGetterSelectorFor: aRobocoderMetamodelWithCodeDefinition) uncapitalized.
+			#objectId -> aRobocoderMetamodelWithCodeDefinition name.
+		};
+		generate.
+		
+	aRobocoderMetamodelWithCodeDefinition addExtraDefinition: aDefinition.
+
+	^ aDefinition
+]
+
+{ #category : #'private - generate' }
 GtRobocoderMetamodelWithSelectionDerive >> generateHasOtherSelectedEntitiesMethodFor: aViewModelModelWithCodeDefinition [
 	| aViewModelModel theChildrenForMany aMethodDefinition methodSourceCode |
 
@@ -136,34 +159,57 @@ GtRobocoderMetamodelWithSelectionDerive >> generateHasOtherSelectedEntitiesMetho
 ]
 
 { #category : #'private - generate' }
-GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor: aViewModelModelWithCodeDefinition [
-	^ GtRobocoderTraitGenerator new
+GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsDefinitionFor: aGtRobocoderMetamodelWithCodeDefinition [
+	| aSelectedAnnouncementDefinition aDeselectedAnnouncementDefinition aDefinition |
+
+	aSelectedAnnouncementDefinition := (aGtRobocoderMetamodelWithCodeDefinition extraDefinitionNamed: (self viewModelSelectedAnnouncementNameFor: aGtRobocoderMetamodelWithCodeDefinition))
+		ifNil: [ ^ self ].
+		
+	aDeselectedAnnouncementDefinition := (aGtRobocoderMetamodelWithCodeDefinition extraDefinitionNamed: (self viewModelDeselectedAnnouncementNameFor: aGtRobocoderMetamodelWithCodeDefinition))
+		ifNil: [ ^ self ].
+
+	aDefinition := GtRobocoderTraitGenerator new
 		templateTrait: TGtRobocoderMetamodelPropertyForChildTemplate;
 		mappings: { 
-			#__View_model_class__ -> aViewModelModelWithCodeDefinition metamodel objectClassName.
-			#__Parent_view_model_class__ -> aViewModelModelWithCodeDefinition metamodel parent objectClassName.
+			#__View_model_class__ -> aGtRobocoderMetamodelWithCodeDefinition metamodel objectClassName.
+			#__Parent_view_model_class__ -> aGtRobocoderMetamodelWithCodeDefinition metamodel parent objectClassName.
 			#protocol -> 'selection'.
 			
 			#statusAdjective -> 'selected'.
 			#negativeStatusAdjective -> 'deselected'.
 			#setVerb -> 'select'.
 			#unsetVerb -> 'deselect'.
-			#objectName -> aViewModelModelWithCodeDefinition name.
-			#propertyName -> (self propertyNameFor: aViewModelModelWithCodeDefinition parent metamodel).
-			#parentObjectGetter -> aViewModelModelWithCodeDefinition parentViewModelSelectorName.
-			#parentPropertyGetter -> (self propertyGetterSelectorOf: aViewModelModelWithCodeDefinition parent).
-			#parentPropertySetter -> (self propertySetterSelectorOf: aViewModelModelWithCodeDefinition parent).
-			#parentPropertyTester -> (self propertyTesterSelectorOf: aViewModelModelWithCodeDefinition parent).
+			#objectName -> aGtRobocoderMetamodelWithCodeDefinition name.
+			#propertyName -> (self propertyNameFor: aGtRobocoderMetamodelWithCodeDefinition parent metamodel).
+			#parentObjectGetter -> (GtRobocoderMetamodelParentDerive
+				parentObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				parentMetamodel: aGtRobocoderMetamodelWithCodeDefinition parent).
+			#parentObjectTester -> (GtRobocoderMetamodelParentDerive
+				parentObjectTesterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition
+				parentMetamodel: aGtRobocoderMetamodelWithCodeDefinition parent).
+			#parentPropertyGetter -> (self propertyGetterSelectorOf: aGtRobocoderMetamodelWithCodeDefinition parent).
+			#parentPropertySetter -> (self propertySetterSelectorOf: aGtRobocoderMetamodelWithCodeDefinition parent).
+			#parentPropertyTester -> (self propertyTesterSelectorOf: aGtRobocoderMetamodelWithCodeDefinition parent).
 			
-			#statusAnnouncementClass -> (self viewModelSelectedAnnouncementNameFor: aViewModelModelWithCodeDefinition metamodel).
-			#negativeStatusAnnouncementClass -> (self viewModelDeselectedAnnouncementNameFor: aViewModelModelWithCodeDefinition metamodel).
+			#statusAnnouncementClass -> (self viewModelSelectedAnnouncementNameFor: aGtRobocoderMetamodelWithCodeDefinition metamodel).
+			#statusAnnouncementSetter -> (GtRobocoderMetamodelWithCodeDefinition
+				anyMethodSelectorWithPragmaNamedOrNil: #objectSetter:
+				inFullClass: aSelectedAnnouncementDefinition).
+			#negativeStatusAnnouncementClass -> (self viewModelDeselectedAnnouncementNameFor: aGtRobocoderMetamodelWithCodeDefinition metamodel).
+			#negativeStatusAnnouncementSetter -> (GtRobocoderMetamodelWithCodeDefinition
+				anyMethodSelectorWithPragmaNamedOrNil: #objectSetter:
+				inFullClass: aDeselectedAnnouncementDefinition).
 		};
-		generate
+		generate.
+		
+	aGtRobocoderMetamodelWithCodeDefinition metamodel
+		mergeBehaviorDefinition: aDefinition
+		into: aGtRobocoderMetamodelWithCodeDefinition definition
 ]
 
 { #category : #'private - generate' }
 GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsFor: aViewModelModeWithCodeDefinition [
-	| aViewModelModel aSelectableDefinition |
+	| aViewModelModel |
 
 	aViewModelModel := aViewModelModeWithCodeDefinition metamodel.
 
@@ -173,11 +219,32 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectableChildAccessorsFor: 
 	aViewModelModel parent isForMany
 		ifFalse: [ ^ self ].
 
-	aSelectableDefinition := self generateSelectableChildAccessorsDefinitionFor: aViewModelModeWithCodeDefinition.
+	self generateSelectableChildAccessorsDefinitionFor: aViewModelModeWithCodeDefinition
+]
 
-	aViewModelModeWithCodeDefinition metamodel
-		mergeBehaviorDefinition: aSelectableDefinition
-		into: aViewModelModeWithCodeDefinition definition
+{ #category : #'private - generate' }
+GtRobocoderMetamodelWithSelectionDerive >> generateSelectedAnnouncementFor: aRobocoderMetamodelWithCodeDefinition [
+	| aDefinition |
+	
+	self
+		assert: [ aRobocoderMetamodelWithCodeDefinition isForOne ]
+		description: [ 'Only view model for one can announce selected event' ].
+	
+	aDefinition := GtRobocoderClassGenerator new
+		templateClass: GtRobocoderMetamodelAnnouncementTemplate;
+		mappings: { 
+			#announcementName -> (self viewModelSelectedAnnouncementNameFor: aRobocoderMetamodelWithCodeDefinition).
+			#superclass -> #Announcement.
+			#package -> aRobocoderMetamodelWithCodeDefinition package.
+			#tag -> aRobocoderMetamodelWithCodeDefinition metamodel fullTagForAnnouncements.
+			#objectName -> (aRobocoderMetamodelWithCodeDefinition metamodel generateSingularChildObjectGetterSelectorFor: aRobocoderMetamodelWithCodeDefinition) uncapitalized.
+			#objectId -> aRobocoderMetamodelWithCodeDefinition name.
+		};
+		generate.
+		
+	aRobocoderMetamodelWithCodeDefinition addExtraDefinition: aDefinition.
+
+	^ aDefinition
 ]
 
 { #category : #'private - generate' }
@@ -254,58 +321,6 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: a
 ]
 
 { #category : #'private - generate' }
-GtRobocoderMetamodelWithSelectionDerive >> generateViewModelDeselectedAnnouncementFor: aViewModelModel [
-	| aDefinition |
-	
-	self
-		assert: [ aViewModelModel isForOne ]
-		description: [ 'Only view model for one can announce deselected event' ].
-	
-	aDefinition := GtClassDefinition forNew.
-	aDefinition name: (self viewModelDeselectedAnnouncementNameFor: aViewModelModel).
-	aDefinition superclass name: #Announcement.
-	aDefinition category package name: aViewModelModel package.
-	aDefinition category tag name: aViewModelModel fullTagForAnnouncements.
-	aDefinition slots addSlotNamed: aViewModelModel name, 'ViewModel'.
-	aDefinition methods
-		addMethod: ('{name}ViewModel
-	^ {name}ViewModel' format: { #name -> aViewModelModel name } asDictionary)
-		protocol: 'accessing'.
-	aDefinition methods
-		addMethod: ('{name}ViewModel: anObject
-	{name}ViewModel := anObject' format: { #name -> aViewModelModel name } asDictionary)
-		protocol: 'accessing'.
-
-	^ aDefinition
-]
-
-{ #category : #'private - generate' }
-GtRobocoderMetamodelWithSelectionDerive >> generateViewModelSelectedAnnouncementFor: aViewModelModel [
-	| aDefinition |
-	
-	self
-		assert: [ aViewModelModel isForOne ]
-		description: [ 'Only view model for one can announce selected event' ].
-	
-	aDefinition := GtClassDefinition forNew.
-	aDefinition name: (self viewModelSelectedAnnouncementNameFor: aViewModelModel).
-	aDefinition superclass name: #Announcement.
-	aDefinition category package name: aViewModelModel package.
-	aDefinition category tag name: aViewModelModel fullTagForAnnouncements.
-	aDefinition slots addSlotNamed: aViewModelModel name, 'ViewModel'.
-	aDefinition methods
-		addMethod: ('{name}ViewModel
-	^ {name}ViewModel' format: { #name -> aViewModelModel name } asDictionary)
-		protocol: 'accessing'.
-	aDefinition methods
-		addMethod: ('{name}ViewModel: anObject
-	{name}ViewModel := anObject' format: { #name -> aViewModelModel name } asDictionary)
-		protocol: 'accessing'.
-
-	^ aDefinition
-]
-
-{ #category : #'private - generate' }
 GtRobocoderMetamodelWithSelectionDerive >> generateWithSelectedPropertyTraitFor: aGtRobocoderMetamodelWithCodeDefinition [
 	| aMetamodel aCodeDefinition aPropertyTraitDefinition |
 
@@ -356,7 +371,7 @@ GtRobocoderMetamodelWithSelectionDerive >> propertyUnappliedStatusName [
 
 { #category : #'private - class names' }
 GtRobocoderMetamodelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFor: aViewModelModel [
-	^ '{project}{prefix}{name}{suffix}ViewModelDeselected'
+	^ '{prefix}{project}{name}{suffix}ViewModelDeselected'
 		format: { 
 			#project -> aViewModelModel project.
 			#prefix -> aViewModelModel prefix capitalized.
@@ -367,7 +382,7 @@ GtRobocoderMetamodelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFo
 
 { #category : #'private - class names' }
 GtRobocoderMetamodelWithSelectionDerive >> viewModelSelectedAnnouncementNameFor: aViewModelModel [
-	^ '{project}{prefix}{name}{suffix}ViewModelSelected'
+	^ '{prefix}{project}{name}{suffix}ViewModelSelected'
 		format: { 
 			#project -> aViewModelModel project.
 			#prefix -> aViewModelModel prefix capitalized.
