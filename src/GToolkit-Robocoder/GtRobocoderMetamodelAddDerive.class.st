@@ -79,6 +79,10 @@ GtRobocoderMetamodelAddDerive >> generateAdditionForMany: aGtRobocoderMetamodelW
 			#childObjectName -> aGtRobocoderMetamodelWithCodeDefinition forOneModel fullName.
 
 			#modelGetter -> (GtRobocoderMetamodelModelDerive modelGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition).
+			
+			#parentObjectSetter -> (GtRobocoderMetamodelParentDerive
+				parentObjectGetterSelectorIn: aGtRobocoderMetamodelWithCodeDefinition forOneModel
+				parentMetamodel: aGtRobocoderMetamodelWithCodeDefinition).
 
 			#childObjectFinder -> (GtRobocoderMetamodelChildrenDerive
 				childObjectFinderSelectorIn: aGtRobocoderMetamodelWithCodeDefinition

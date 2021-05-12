@@ -518,6 +518,12 @@ GtRobocoderMetamodelWithCodeDefinition >> parents [
 		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachParentViewModelModel ]
 ]
 
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> pathToParentNamed: aName [
+	^ (self metamodel pathToParentNamed: aName) collect: [ :eachMetamodel |
+		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachMetamodel ]
+]
+
 { #category : #copying }
 GtRobocoderMetamodelWithCodeDefinition >> postCopy [
 	definition := definition copy

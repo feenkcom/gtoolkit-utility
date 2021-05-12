@@ -17,6 +17,38 @@ GtRobocoderMetamodel >> addDerive: aDerive [
 	derives add: aDerive
 ]
 
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> allParentsBreadthFirstDo: aBlock [
+	self parents do: [ :eachParent | aBlock value: eachParent ].
+	self parents do: [ :eachParent | eachParent allParentsBreadthFirstDo: aBlock ]
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> allParentsBreadthFirstDo: aBlock whenUpDo: whenUpBlock whenDownDo: whenDownBlock [
+	self
+		allParentsBreadthFirstDo: aBlock
+		whenUpDo: whenUpBlock
+		whenDownDo: whenDownBlock
+		visitedParents: Set new
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> allParentsBreadthFirstDo: aBlock whenUpDo: whenUpBlock whenDownDo: whenDownBlock visitedParents: aSetOfVisitedParents [
+	(aSetOfVisitedParents includes: self)
+		ifTrue: [ ^ self ].
+
+	self parents do: [ :eachParent | aBlock value: eachParent ].
+
+	aSetOfVisitedParents add: self.
+
+	self parents do: [ :eachParent |
+		(aSetOfVisitedParents includes: eachParent)
+			ifFalse: [
+				whenUpBlock value: eachParent.
+				eachParent allParentsBreadthFirstDo: aBlock whenUpDo: whenUpBlock whenDownDo: whenDownBlock visitedParents: aSetOfVisitedParents.
+				whenDownBlock value: eachParent ] ]
+]
+
 { #category : #testing }
 GtRobocoderMetamodel >> alreadyHasClass [
 	^ self properties includesKey: #class
@@ -98,7 +130,9 @@ GtRobocoderMetamodel >> generateChildObjectGetterSelectorFor: aChildMetamodel [
 	^ ('{singular}{ending}'
 		format: { 
 			#singular -> (self generateSingularChildObjectGetterSelectorFor: aChildMetamodel).
-			#ending -> (aChildMetamodel isForMany ifTrue: [ '' ] ifFalse: [ 's' ])
+			#ending -> ((self isForMany and: [ aChildMetamodel isForOne ])
+				ifTrue: [ 's' ]
+				ifFalse: [ '' ])
 		} asDictionary) uncapitalized
 ]
 
@@ -241,8 +275,35 @@ GtRobocoderMetamodel >> objectClassName [
 ]
 
 { #category : #'api - accessing' }
+GtRobocoderMetamodel >> parentNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
+	^ self parents
+		detect: [ :eachParentMetamodel | eachParentMetamodel name = aName ]
+		ifFound: aFoundBlock
+		ifNone: aNoneBlock
+]
+
+{ #category : #'api - accessing' }
 GtRobocoderMetamodel >> parents [
 	^ self subclassResponsibility
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> pathToParentNamed: aName [
+	| parentStack |
+
+	parentStack := Stack new.
+	parentStack push: self.
+
+	self
+		allParentsBreadthFirstDo: [ :eachParent |
+			eachParent name = aName
+				ifTrue: [
+					parentStack push: eachParent.
+					^ parentStack asArray reversed ] ]
+		whenUpDo: [ :nextParent | parentStack push: nextParent ]
+		whenDownDo: [ :previousParent | parentStack pop ].
+		
+	^ #()
 ]
 
 { #category : #printing }
