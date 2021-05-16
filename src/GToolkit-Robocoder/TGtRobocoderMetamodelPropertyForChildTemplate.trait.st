@@ -130,27 +130,37 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> traitTemplate [
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelPropertyForChildTemplate >> unsetObjectTemplate [
+TGtRobocoderMetamodelPropertyForChildTemplate >> unsetChildrenTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{unsetVerb}}OtherEntities
+		sourceCode: '{{unsetVerb}}Children
 	"{{unsetVerb capitalized}} any {{statusAdjective}} child"
-	<propertyUnsetOthers: #{{propertyName}}>';
+	<propertyUnsetChilddren: #{{propertyName}}>';
 		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
 ]
 
 { #category : #templates }
-TGtRobocoderMetamodelPropertyForChildTemplate >> unsetOtherObjectsTemplate [
+TGtRobocoderMetamodelPropertyForChildTemplate >> unsetParentsTemplate [
 	<gtMethodTemplate>
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{unsetVerb}}OtherEntities
-	"{{unsetVerb capitalized}} any {{statusAdjective}} child"
-	<propertyUnsetOthers: #{{propertyName}}>';
-		protocol: 'api - {{protocol}}';
+		sourceCode: '{{unsetVerb}}AllFromTopMostParent
+	"{{unsetVerb capitalized}} any {{statusAdjective}} child starting from the top most parent"
+	<propertyUnsetFromParent: #{{propertyName}}>
+
+	{{parents collect: [ :eachParent |
+	''self {{(eachParent at: #tester)}}
+		ifTrue: [
+			| eachParent |
+			eachParent := self {{(eachParent at: #getter)}}.
+			eachParent {{(eachParent at: #grandTester)}}
+				ifTrue: [ eachParent {{(eachParent at: #grandGetter)}} {{(eachParent at: #fromParentUnsetter)}} ]
+				ifFalse: [ eachParent {{eachParent at: #childrenUnsetter}} ] ].''	
+	] separatedBy: [ String cr, String cr, String tab ]}}
+	';
 		storageMethod: thisContext method
 ]

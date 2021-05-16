@@ -9,6 +9,50 @@ GtRobocoderMetamodelWithChoicePropertyFromManyDerive class >> isAbstract [
 	^ self = GtRobocoderMetamodelWithChoicePropertyFromManyDerive
 ]
 
+{ #category : #accessing }
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive class >> propertyUnsetChildrenOfOneMethodIn: aGtRobocoderMetamodelWithCodeDefinition property: aPropertyName [
+	^ GtRobocoderMetamodelWithCodeDefinition
+		anyMethodWithPragmaNamedOrNil: #propertyUnsetChildren:
+		andValue: aPropertyName
+		inFullClass: aGtRobocoderMetamodelWithCodeDefinition definition
+]
+
+{ #category : #accessing }
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive class >> propertyUnsetChildrenOfOneSelectorIn: aGtRobocoderMetamodelWithCodeDefinition property: aPropertyName [
+	^ (self propertyUnsetChildrenOfOneMethodIn: aGtRobocoderMetamodelWithCodeDefinition property: aPropertyName)
+		ifNotNil: [ :aMethod | aMethod selector ]
+]
+
+{ #category : #'private - generate' }
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> generateUnsetChildrenOfOneMethodFor: aMetamodelWithCodeDefinition [
+	| aMethodDefinition theChildrenForMany |
+
+	self
+		assert: [ aMetamodelWithCodeDefinition isForOne ]
+		description: [ 'Only metamodel for one can implement child specific selection methods' ].
+	
+	theChildrenForMany := (aMetamodelWithCodeDefinition children select: #isForMany)
+		ifEmpty: [ ^ self ].
+
+	aMethodDefinition := (self propertyUnsetOthersMethodOfOne: aMetamodelWithCodeDefinition)
+		ifNil: [ ^ self ].
+
+	theChildrenForMany do: [ :eachMetamodelWithCodeDefinition |
+		| eachSourceCode |		
+		eachSourceCode := GtRobocoderTemplateMethodCoder new
+			doNotEmbedGeneratedFromPragma;
+			forMethod: GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> #unsetChildrenTemplate;
+			mappings: {
+				#childrenGetter -> (GtRobocoderMetamodelChildrenDerive
+					childObjectGetterSelectorIn: aMetamodelWithCodeDefinition childMetamodel: eachMetamodelWithCodeDefinition).
+				#propertyUnsetter -> (self propertyUnsetterSelectorOf: eachMetamodelWithCodeDefinition) };
+			translate.
+
+		aMethodDefinition
+			addMethodPartSource: eachSourceCode
+			id: eachMetamodelWithCodeDefinition name ]
+]
+
 { #category : #'private - methods' }
 GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertySetNotifierMethodOfOne: aViewModelModelWithCodeDefinition [
 	self
@@ -46,14 +90,14 @@ GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetNotifierSel
 ]
 
 { #category : #'private - methods' }
-GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition [
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetOthersMethodOfOne: aGtRobocoderMetamodelWithCodeDefinition [
 	self
-		assert: [ aViewModelModelWithCodeDefinition isForOne ]
+		assert: [ aGtRobocoderMetamodelWithCodeDefinition isForOne ]
 		description: [ 'Only view model for one can have this method' ].
-
-	^ self
-		propertyMethodOfType: #propertyUnsetOthers:
-		inViewModelModelWithCodeDefinition: aViewModelModelWithCodeDefinition
+		
+	^ self class
+		propertyUnsetChildrenOfOneMethodIn: aGtRobocoderMetamodelWithCodeDefinition
+		property: (self propertyNameFor: aGtRobocoderMetamodelWithCodeDefinition)
 ]
 
 { #category : #'private - selectors' }
@@ -61,4 +105,15 @@ GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertyUnsetOthersSelec
 	<return: #Symbol>
 
 	^ (self propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition) selector
+]
+
+{ #category : #'private - templates' }
+GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> unsetChildrenTemplate [
+	<gtMethodTemplate>
+	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
+	
+	^ GtRobocoderTemplateMethod new
+		sourceCode: 'self {{childrenGetter}} {{propertyUnsetter}}.';
+		protocol: 'api - converting';
+		storageMethod: thisContext method
 ]

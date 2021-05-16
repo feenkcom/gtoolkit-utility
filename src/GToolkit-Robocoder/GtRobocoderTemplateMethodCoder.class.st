@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtPharoSourceCoder,
 	#instVars : [
 		'templateMethod',
-		'bindings'
+		'bindings',
+		'shouldEmbedGeneratedFromPragma'
 	],
 	#category : #'GToolkit-Robocoder-Coder - Template method'
 }
@@ -76,6 +77,11 @@ GtRobocoderTemplateMethodCoder >> createCompileMethodChangeIn: aBehavior inConte
 				for: aGtPharoSourceCoderEvaluationContext ]
 ]
 
+{ #category : #'api - accessing' }
+GtRobocoderTemplateMethodCoder >> doNotEmbedGeneratedFromPragma [
+	shouldEmbedGeneratedFromPragma := false
+]
+
 { #category : #initialization }
 GtRobocoderTemplateMethodCoder >> forCompiledMethod: aCompiledMethod [
 	self forMethod: aCompiledMethod
@@ -139,7 +145,8 @@ GtRobocoderTemplateMethodCoder >> highlighter: anObject [
 { #category : #initialization }
 GtRobocoderTemplateMethodCoder >> initialize [
 	super initialize.
-
+	
+	shouldEmbedGeneratedFromPragma := true.
 	bindings := GtSnippetBindings new.
 	templateMethod := GtRobocoderTemplateMethod new
 		sourceCode: ''
@@ -234,12 +241,23 @@ GtRobocoderTemplateMethodCoder >> mappings: aCollectionOfAssociations [
 
 { #category : #'private - actions' }
 GtRobocoderTemplateMethodCoder >> primitiveEvaluate: aSourceString inContext: aGtPharoSourceCoderEvaluationContext onFailDo: anEvaluationFailBlock [
-	| aTranslatedMethodCode aTranslatedAst |
+	| aTranslatedMethodCode |
 
 	aTranslatedMethodCode := GtRobocoderTemplateTranslator new
 		evaluationContext: aGtPharoSourceCoderEvaluationContext;
 		bindings: bindings;
 		translate: aSourceString.
+		
+	^ shouldEmbedGeneratedFromPragma
+		ifTrue: [ self privateEmbedGeneratedFromPragma: aTranslatedMethodCode ]
+		ifFalse: [ aTranslatedMethodCode ]
+]
+
+{ #category : #'private - actions' }
+GtRobocoderTemplateMethodCoder >> privateEmbedGeneratedFromPragma: aTranslatedMethodCode [
+	| aTranslatedAst  aTranslatedMethodCodeWithPragma |
+
+	aTranslatedMethodCodeWithPragma := aTranslatedMethodCode.
 
 	aTranslatedAst := GtPharoParser
 		parseWithErrors: aTranslatedMethodCode
@@ -269,7 +287,7 @@ GtRobocoderTemplateMethodCoder >> primitiveEvaluate: aSourceString inContext: aG
 						ifFalse: [ aTranslatedAst pattern stopPosition ] ]
 				ifNotEmpty: [ :thePragmas | thePragmas last stopPosition ].
 
-			aTranslatedMethodCode := String streamContents: [ :aStream |
+			aTranslatedMethodCodeWithPragma := String streamContents: [ :aStream |
 				aStream nextPutAll: (aTranslatedMethodCode
 					copyFrom: 1
 					to: aGeneratedPragmaIndex).
@@ -286,10 +304,9 @@ GtRobocoderTemplateMethodCoder >> primitiveEvaluate: aSourceString inContext: aG
 				aStream nextPutAll: (aTranslatedMethodCode
 					copyFrom: aGeneratedPragmaIndex + 1
 					to: aTranslatedMethodCode size) ]
-		].
-	].
+		] ].
 
-	^ aTranslatedMethodCode
+	^ aTranslatedMethodCodeWithPragma
 ]
 
 { #category : #'api - accessing' }

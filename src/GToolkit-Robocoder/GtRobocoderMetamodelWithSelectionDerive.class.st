@@ -32,7 +32,7 @@ GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions:
 		eachMetamodelWithCodeDefinition isForOne
 			ifTrue: [
 				self generateSelectableChildAccessorsFor: eachMetamodelWithCodeDefinition.
-				self generateDeselectOtherEntitiesMethodFor: eachMetamodelWithCodeDefinition.
+				self generateUnsetChildrenOfOneMethodFor: eachMetamodelWithCodeDefinition.
 				self generateHasOtherSelectedEntitiesMethodFor: eachMetamodelWithCodeDefinition
 			] ].
 	
@@ -46,45 +46,6 @@ GtRobocoderMetamodelWithSelectionDerive >> applyOnMetamodelsWithCodeDefinitions:
 			] ].
 	
 
-]
-
-{ #category : #'private - generate' }
-GtRobocoderMetamodelWithSelectionDerive >> generateDeselectOtherEntitiesMethodFor: aViewModelModelWithCodeDefinition [
-	| aViewModelModel aMethodDefinition methodSourceCode theChildrenForMany |
-
-	self
-		assert: [ aViewModelModelWithCodeDefinition isForOne ]
-		description: [ 'Only view model for one can implement child specific selection methods' ].
-
-	aViewModelModel := aViewModelModelWithCodeDefinition metamodel.
-	
-	theChildrenForMany := aViewModelModelWithCodeDefinition children select: #isForMany.
-	
-	theChildrenForMany
-		ifEmpty: [ ^ self ].
-
-	aMethodDefinition := self
-		propertyUnsetOthersMethodOfOne: aViewModelModelWithCodeDefinition.
-	
-	aMethodDefinition
-		ifNil: [ ^ self ].
-	
-	methodSourceCode := String streamContents: [ :aStream |
-		aStream
-			nextPutAll: aMethodDefinition sourceCode; cr.
-		
-		theChildrenForMany do: [ :eachChildViewModelModelWithCodeDefinition |
-			aStream
-				cr;
-				tab;
-					nextPutAll: 'self';
-					space;
-					nextPutAll: (aViewModelModel generateChildObjectGetterSelectorFor: eachChildViewModelModelWithCodeDefinition metamodel) uncapitalized;
-					space;
-					nextPutAll: (self propertyUnsetterSelectorOf: eachChildViewModelModelWithCodeDefinition);
-					nextPut: $. ] ].
-
-	aMethodDefinition sourceCode: methodSourceCode
 ]
 
 { #category : #'private - generate' }
@@ -327,9 +288,9 @@ GtRobocoderMetamodelWithSelectionDerive >> generateWithSelectedPropertyTraitFor:
 	self
 		assert: [ aGtRobocoderMetamodelWithCodeDefinition isForMany ]
 		description: [ 'Only view model for many can implement selection trait' ].
-	
+
 	aMetamodel := aGtRobocoderMetamodelWithCodeDefinition metamodel.
-	aCodeDefinition := aGtRobocoderMetamodelWithCodeDefinition definition.	
+	aCodeDefinition := aGtRobocoderMetamodelWithCodeDefinition definition.
 
 	aPropertyTraitDefinition := GtRobocoderWithPropertyTraitGenerator new
 		environment: aCodeDefinition environment;
