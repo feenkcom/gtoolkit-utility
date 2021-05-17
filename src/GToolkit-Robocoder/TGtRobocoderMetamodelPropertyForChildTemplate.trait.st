@@ -113,7 +113,7 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> setObjectWithoutOtherEntitiesTe
 		sourceCode: '{{setVerb}}{{objectName capitalized}}WithoutOtherEntities
 	"{{setVerb capitalized}} a {{objectName}} and {{unsetVerb}} other {{statusAdjective}} children"
 
-	self {{unsetVerb}}OtherEntities.
+	self {{unsetVerb}}AllFromTopMostParent.
 	self {{setVerb}}{{objectName capitalized}}';
 		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
@@ -126,31 +126,5 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> traitTemplate [
 	
 	^ GtRobocoderTemplateTrait new
 		definition: (GtTraitDefinition new category: (GtCategoryDefinition new package: (GtPackageDefinition new name: #''); tag: (GtTagDefinition new name: #'')); comment: (GtCommentDefinition new content: ''); methods: (GtPharoMethodsDefinition new definitions: #()); name: #TNameOfTrait; slots: (GtSlotsDefinition new definitions: #()); traits: (GtTraitsDefinition new definitions: #()));
-		storageMethod: thisContext method
-]
-
-{ #category : #templates }
-TGtRobocoderMetamodelPropertyForChildTemplate >> unsetObjectTemplate [
-	<gtMethodTemplate>
-	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
-	
-	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{unsetVerb}}OtherEntities
-	"{{unsetVerb capitalized}} any {{statusAdjective}} child"
-	<propertyUnsetOthers: #{{propertyName}}>';
-		protocol: 'api - {{protocol}}';
-		storageMethod: thisContext method
-]
-
-{ #category : #templates }
-TGtRobocoderMetamodelPropertyForChildTemplate >> unsetOtherObjectsTemplate [
-	<gtMethodTemplate>
-	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
-	
-	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{unsetVerb}}OtherEntities
-	"{{unsetVerb capitalized}} any {{statusAdjective}} child"
-	<propertyUnsetOthers: #{{propertyName}}>';
-		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
 ]

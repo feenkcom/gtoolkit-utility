@@ -22,15 +22,11 @@ TGtRobocoderMetamodelParentAccessorTemplate >> allParentObjectsDoTemplate [
 	| aCurrentParent |
 	
 	aCurrentParent := self.
-	{{pathToSameParent collect: [ :each |
-		| tester getter |
-		tester := each first.
-		getter := each second.
-	
+	{{pathToSameParent collect: [ :eachParent |	
 	''
-	aCurrentParent {{tester}}
+	aCurrentParent {{eachParent tester}}
 		ifFalse: [ ^ self ].
-	aCurrentParent := aCurrentParent {{getter}}.'' ]}}
+	aCurrentParent := aCurrentParent {{eachParent getter}}.'' ]}}
 	aBlock value: aCurrentParent.
 	aCurrentParent allParent{{objectFullName capitalized}}Do: aBlock';
 		protocol: 'api - enumerating';

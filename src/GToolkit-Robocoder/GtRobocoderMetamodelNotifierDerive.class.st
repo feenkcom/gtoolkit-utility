@@ -15,10 +15,7 @@ GtRobocoderMetamodelNotifierDerive >> announceTemplate [
 	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
 	
 	^ GtRobocoderTemplateMethod new
-		sourceCode: 'announce: anAnnouncement
-	{{announcer}} ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].
-
-	"Dispatch anAnnouncement to the parent objects if they are assigned"
+		sourceCode: '"Dispatch anAnnouncement to the parent objects if they are assigned"
 	{{parents collect: [ :each |
 	''self {{each at: #tester}}
 		ifTrue: [ self {{each at: #getter}} announce: anAnnouncement ].''
@@ -39,14 +36,11 @@ GtRobocoderMetamodelNotifierDerive >> generateAnnounceMethodFor: aMetamodelWithC
 	aMetamodelWithCodeDefinition hasParents
 		ifFalse: [ ^ self ].
 
-	anAnnounceMethod := aMetamodelWithCodeDefinition definition instanceSideDefinition methods
-		methodNamed: #announce:
-		ifFound: #yourself
-		ifNone: [ ^ self ].
+	anAnnounceMethod := (GtRobocoderMetamodelWithCodeDefinition
+		anyMethodNamedOrNil: #announce:
+		inFullClass: aMetamodelWithCodeDefinition definition)
+			ifNil: [ ^ self ].
 	
-	anAnnounceMethod
-		ifNil: [ ^ self ].
-		
 	theParents := Array streamContents: [ :aStream |
 		aMetamodelWithCodeDefinition parents do: [ :eachParentMetamodelWithCodeDefinition |
 			| parentGetter parentTester |
@@ -67,13 +61,14 @@ GtRobocoderMetamodelNotifierDerive >> generateAnnounceMethodFor: aMetamodelWithC
 		ifEmpty: [ ^ self ].
 
 	anAnnounceMethodSourceCode := GtRobocoderTemplateMethodCoder new
+			doNotEmbedGeneratedFromPragma;
 			forMethod: self class >> #announceTemplate;
 			mappings: {
 				#announcer -> GtRobocoderMetamodelAnnouncerDerive generateAnnouncerTrait slots all first name.
 				#parents -> theParents };
 			translate.
-
-	aMetamodelWithCodeDefinition definition instanceSideDefinition methods
-		addMethod: anAnnounceMethodSourceCode
-		protocol: anAnnounceMethod protocol
+	
+	anAnnounceMethod
+		addMethodPartSource: anAnnounceMethodSourceCode
+		id: #notifier
 ]

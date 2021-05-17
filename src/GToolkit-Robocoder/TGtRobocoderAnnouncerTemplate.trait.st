@@ -10,7 +10,7 @@ TGtRobocoderAnnouncerTemplate >> announceTemplate [
 	
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'announce: anAnnouncement
-	{{announcer}} ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ]';
+	{{announcer}} ifNotNil: [ :anAnnouncer | anAnnouncer announce: anAnnouncement ].';
 		protocol: 'api - announcer';
 		storageMethod: thisContext method
 ]
