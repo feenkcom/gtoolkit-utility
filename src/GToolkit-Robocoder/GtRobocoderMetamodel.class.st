@@ -34,19 +34,54 @@ GtRobocoderMetamodel >> allParentsBreadthFirstDo: aBlock whenUpDo: whenUpBlock w
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodel >> allParentsBreadthFirstDo: aBlock whenUpDo: whenUpBlock whenDownDo: whenDownBlock visitedParents: aSetOfVisitedParents [
+	| theParentsToContinue |
 	(aSetOfVisitedParents includes: self)
 		ifTrue: [ ^ self ].
-
-	self parents do: [ :eachParent | aBlock value: eachParent ].
+	
+	theParentsToContinue := OrderedCollection new.
+	self parents do: [ :eachParent |
+		(aBlock value: eachParent) = true
+			ifFalse: [ theParentsToContinue add: eachParent ] ].
 
 	aSetOfVisitedParents add: self.
 
-	self parents do: [ :eachParent |
+	theParentsToContinue do: [ :eachParent |
 		(aSetOfVisitedParents includes: eachParent)
 			ifFalse: [
 				whenUpBlock value: eachParent.
-				eachParent allParentsBreadthFirstDo: aBlock whenUpDo: whenUpBlock whenDownDo: whenDownBlock visitedParents: aSetOfVisitedParents.
+				eachParent
+					allParentsBreadthFirstDo: aBlock
+					whenUpDo: whenUpBlock
+					whenDownDo: whenDownBlock
+					visitedParents: aSetOfVisitedParents.
 				whenDownBlock value: eachParent ] ]
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> allPathsToParentsSuchThat: aBlock [
+	| parentStacks parentStack |
+
+	parentStacks := OrderedCollection new.
+
+	parentStack := Stack new.
+	parentStack push: self.
+
+	self
+		allParentsBreadthFirstDo: [ :eachParent |
+			(aBlock value: eachParent)
+				ifTrue: [
+					| aPathArray |
+					parentStack push: eachParent.
+
+					aPathArray := parentStack asArray reversed.
+					(parentStacks includes: aPathArray)
+						ifFalse: [ parentStacks add: aPathArray ].
+					true ]
+				ifFalse: [ false ] ]
+		whenUpDo: [ :nextParent | parentStack push: nextParent ]
+		whenDownDo: [ :previousParent | parentStack pop ].
+		
+	^ parentStacks asArray
 ]
 
 { #category : #testing }
@@ -289,6 +324,11 @@ GtRobocoderMetamodel >> parents [
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodel >> pathToParentNamed: aName [
+	^ self pathToParentSuchThat: [ :eachParent | eachParent name = aName ]
+]
+
+{ #category : #'api - accessing' }
+GtRobocoderMetamodel >> pathToParentSuchThat: aBlock [
 	| parentStack |
 
 	parentStack := Stack new.
@@ -296,7 +336,7 @@ GtRobocoderMetamodel >> pathToParentNamed: aName [
 
 	self
 		allParentsBreadthFirstDo: [ :eachParent |
-			eachParent name = aName
+			(aBlock value: eachParent)
 				ifTrue: [
 					parentStack push: eachParent.
 					^ parentStack asArray reversed ] ]

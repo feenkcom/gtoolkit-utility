@@ -113,7 +113,7 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> setObjectWithoutOtherEntitiesTe
 		sourceCode: '{{setVerb}}{{objectName capitalized}}WithoutOtherEntities
 	"{{setVerb capitalized}} a {{objectName}} and {{unsetVerb}} other {{statusAdjective}} children"
 
-	self {{unsetVerb}}OtherEntities.
+	self {{unsetVerb}}AllFromTopMostParent.
 	self {{setVerb}}{{objectName capitalized}}';
 		protocol: 'api - {{protocol}}';
 		storageMethod: thisContext method
@@ -126,41 +126,5 @@ TGtRobocoderMetamodelPropertyForChildTemplate >> traitTemplate [
 	
 	^ GtRobocoderTemplateTrait new
 		definition: (GtTraitDefinition new category: (GtCategoryDefinition new package: (GtPackageDefinition new name: #''); tag: (GtTagDefinition new name: #'')); comment: (GtCommentDefinition new content: ''); methods: (GtPharoMethodsDefinition new definitions: #()); name: #TNameOfTrait; slots: (GtSlotsDefinition new definitions: #()); traits: (GtTraitsDefinition new definitions: #()));
-		storageMethod: thisContext method
-]
-
-{ #category : #templates }
-TGtRobocoderMetamodelPropertyForChildTemplate >> unsetChildrenTemplate [
-	<gtMethodTemplate>
-	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
-	
-	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{unsetVerb}}Children
-	"{{unsetVerb capitalized}} any {{statusAdjective}} child"
-	<propertyUnsetChilddren: #{{propertyName}}>';
-		protocol: 'api - {{protocol}}';
-		storageMethod: thisContext method
-]
-
-{ #category : #templates }
-TGtRobocoderMetamodelPropertyForChildTemplate >> unsetParentsTemplate [
-	<gtMethodTemplate>
-	<generatedFrom: #'GtRobocoderTemplateMethod class>>#storageMethodTemplate'>
-	
-	^ GtRobocoderTemplateMethod new
-		sourceCode: '{{unsetVerb}}AllFromTopMostParent
-	"{{unsetVerb capitalized}} any {{statusAdjective}} child starting from the top most parent"
-	<propertyUnsetFromParent: #{{propertyName}}>
-
-	{{parents collect: [ :eachParent |
-	''self {{(eachParent at: #tester)}}
-		ifTrue: [
-			| eachParent |
-			eachParent := self {{(eachParent at: #getter)}}.
-			eachParent {{(eachParent at: #grandTester)}}
-				ifTrue: [ eachParent {{(eachParent at: #grandGetter)}} {{(eachParent at: #fromParentUnsetter)}} ]
-				ifFalse: [ eachParent {{eachParent at: #childrenUnsetter}} ] ].''	
-	] separatedBy: [ String cr, String cr, String tab ]}}
-	';
 		storageMethod: thisContext method
 ]

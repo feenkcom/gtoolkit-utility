@@ -72,26 +72,9 @@ GtRobocoderMetamodelParentDerive >> generateParentAccessorsFor: aMetamodelWithDe
 
 { #category : #'private - generation' }
 GtRobocoderMetamodelParentDerive >> generateParentAccessorsFor: aMetamodelWithDefinition parentMetamodel: aParentMetamodel [
-	| aTemplateDefinition aMetamodel pathWithTestersAndGetters |
+	| aTemplateDefinition aMetamodel |
 
 	aMetamodel := aMetamodelWithDefinition metamodel.
-	
-	pathWithTestersAndGetters := (aMetamodelWithDefinition pathToParentNamed: aMetamodelWithDefinition name)
-		ifEmpty: [ #() ]
-		ifNotEmpty: [ :theMetamodelsWithDefinitions |
-			| testersAndGetters |
-			testersAndGetters := theMetamodelsWithDefinitions allButLast collectWithIndex: [ :eachMetamodelWithDefinition :eachIndex |
-				{
-					GtRobocoderMetamodelParentDerive
-						parentObjectTesterSelectorIn: eachMetamodelWithDefinition
-						parentMetamodel: (theMetamodelsWithDefinitions at: eachIndex + 1).
-					GtRobocoderMetamodelParentDerive
-						parentObjectGetterSelectorIn: eachMetamodelWithDefinition
-						parentMetamodel: (theMetamodelsWithDefinitions at: eachIndex + 1)
-				} ].
-			(testersAndGetters allSatisfy: [ :eachPair | eachPair allSatisfy: #notNil ])
-				ifFalse: [ testersAndGetters := #() ].
-			testersAndGetters ].
 
 	aTemplateDefinition := GtRobocoderTraitGenerator new
 		templateTrait: TGtRobocoderMetamodelParentAccessorTemplate;
@@ -103,7 +86,7 @@ GtRobocoderMetamodelParentDerive >> generateParentAccessorsFor: aMetamodelWithDe
 			#parentObjectName -> aParentMetamodel name.
 			#parentObject -> (self generateParentObjectGetterSelectorFor: aMetamodel parentMetamodel: aParentMetamodel) uncapitalized.
 			#parentObjectClass -> aParentMetamodel objectClassName capitalized.
-			#pathToSameParent -> pathWithTestersAndGetters
+			#pathToSameParent -> (aMetamodelWithDefinition pathToParentNamed: aMetamodelWithDefinition name)
 		};
 		generate.
 

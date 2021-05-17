@@ -241,6 +241,17 @@ GtRobocoderMetamodelWithCodeDefinition >> addTraitDefinition: aTraitDefinition [
 		ifFalse: [ self definition instanceSideDefinition traits addTrait: aTraitDefinition ]
 ]
 
+{ #category : #'api - accessing' }
+GtRobocoderMetamodelWithCodeDefinition >> allPathsToParentsSuchThat: aBlock [
+	<return: #Collection of: #GtRobocoderMetamodelWithCodeDefinitionParentPath>
+
+	^ (self metamodel allPathsToParentsSuchThat: [ :eachParentMetamodel |
+			aBlock value: (self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachParentMetamodel) ])
+		collect: [ :eachPath |
+			GtRobocoderMetamodelWithCodeDefinitionParentPath fromMetamodelsWithCodeDefinition:
+				(eachPath collect: [ :eachMetamodel | self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachMetamodel ]) ]
+]
+
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition >> allViewModelModelDefinitions [
 	^ allViewModelModelDefinitions
@@ -520,8 +531,11 @@ GtRobocoderMetamodelWithCodeDefinition >> parents [
 
 { #category : #'api - accessing' }
 GtRobocoderMetamodelWithCodeDefinition >> pathToParentNamed: aName [
-	^ (self metamodel pathToParentNamed: aName) collect: [ :eachMetamodel |
-		self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachMetamodel ]
+	<return: #GtRobocoderMetamodelWithCodeDefinitionParentPath>
+
+	^ GtRobocoderMetamodelWithCodeDefinitionParentPath fromMetamodelsWithCodeDefinition:
+		((self metamodel pathToParentNamed: aName) collect: [ :eachMetamodel |
+			self allViewModelModelDefinitions viewModelModelWithCodeDefinitionFor: eachMetamodel ])
 ]
 
 { #category : #copying }
