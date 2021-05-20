@@ -277,7 +277,7 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectionSetHookMethodTo: aVi
 				aStream cr ] ].
 
 		aStream
-			tab; nextPutAll: aArgumentName; space; nextPutAll: (self propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ].
+			tab; nextPutAll: aArgumentName; space; nextPutAll: ((self propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ifNil: [ ^ self ]) ].
 
 	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 		addMethod: methodSourceCode
@@ -302,11 +302,11 @@ GtRobocoderMetamodelWithSelectionDerive >> generateSelectionUnsetHookMethodTo: a
 			cr;
 			tab;
 				nextPutAll: aArgumentName; space;
-				nextPutAll: (self propertyUnsetOthersSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel);
+				nextPutAll: ((self propertyUnsetOthersSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ifNil: [ ^ self ]);
 				nextPut: $.; cr;
 			tab;
 				nextPutAll: aArgumentName; space;
-				nextPutAll: (self propertyUnsetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ].
+				nextPutAll: ((self propertyUnsetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition forOneModel) ifNil: [ ^ self ]) ].
 
 	aViewModelModelWithCodeDefinition definition instanceSideDefinition methods
 		addMethod: methodSourceCode

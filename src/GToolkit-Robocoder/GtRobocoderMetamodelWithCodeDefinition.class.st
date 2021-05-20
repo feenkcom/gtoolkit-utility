@@ -11,6 +11,40 @@ Class {
 	#category : #'GToolkit-Robocoder-Metamodel'
 }
 
+{ #category : #'api - enumeration' }
+GtRobocoderMetamodelWithCodeDefinition class >> allMethodsInFullClass: aFullClassDefinition do: aBlock [
+
+	aFullClassDefinition instanceSideDefinition traits do: [ :eachTrait |
+		self
+			methodsInBehaviorDefinition: eachTrait
+			do: aBlock ].
+		
+	self
+		methodsInBehaviorDefinition: aFullClassDefinition instanceSideDefinition
+		do: aBlock.
+	
+	(aFullClassDefinition instanceSideDefinition superclass name = #Object or: [ 
+		aFullClassDefinition instanceSideDefinition superclass name = #ProtoObject ])
+			ifTrue: [ ^ self ].
+	
+	aFullClassDefinition environment
+		at: aFullClassDefinition instanceSideDefinition superclass name
+		ifPresent: [ :aSuperclassClassDefinition |
+			self
+				allMethodsInFullClass: aSuperclassClassDefinition
+				do: aBlock ]
+		ifAbsent: [
+			self class environment
+				at: aFullClassDefinition instanceSideDefinition superclass name
+				ifPresent: [ :aSuperclass |
+					| aSuperclassClassDefinition |
+					aSuperclassClassDefinition := (GtBehaviorDefinition fromBehavior: aSuperclass in: aFullClassDefinition environment)
+						withMethodsFromClass: aSuperclass.
+					self
+						allMethodsInFullClass: aSuperclassClassDefinition
+						do: aBlock ] ]
+]
+
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition class >> anyMethodNamedOrNil: aSelector inFullClass: aFullClassDefinition [
 	"Find any method with a given selector"
@@ -115,6 +149,11 @@ GtRobocoderMetamodelWithCodeDefinition class >> anyMethodWithPragmaNamedOrNil: a
 	^ nil
 ]
 
+{ #category : #'api - enumeration' }
+GtRobocoderMetamodelWithCodeDefinition class >> methodsInBehaviorDefinition: aBehaviorDefinition do: aBlock [
+	aBehaviorDefinition methods do: aBlock
+]
+
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaName andValue: aPragmaValue inBehaviorDefinition: aBehaviorDefinition do: aFoundBlock [
 	"Given a behavior definition and a pragma name find all methods that has such pragma"
@@ -140,7 +179,7 @@ GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaN
 GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaName andValues: aCollectionOfValues inBehaviorDefinition: aBehaviorDefinition do: aFoundBlock [
 	"Given a behavior definition and a pragma name find all methods that has such pragma"
 
-	aBehaviorDefinition methods do: [ :eachMethod |
+	self methodsInBehaviorDefinition: aBehaviorDefinition do: [ :eachMethod |
 		| anAst |
 		anAst := GtPharoParser
 			parseWithErrors: eachMethod sourceCode
@@ -160,25 +199,27 @@ GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaN
 GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaName andValues: aCollectionOfValues inFullClass: aFullClassDefinition do: aFoundBlock [
 	"Given a behavior definition and a pragma name find all methods that has such pragma"
 
-	aFullClassDefinition instanceSideDefinition traits do: [ :eachTrait |
-		self
-			methodsWithPragmaNamed: aPragmaName
-			andValues: aCollectionOfValues
-			inBehaviorDefinition: eachTrait
-			do: aFoundBlock ].
-		
-	self
-		methodsWithPragmaNamed: aPragmaName
-		andValues: aCollectionOfValues
-		inBehaviorDefinition: aFullClassDefinition instanceSideDefinition
-		do: aFoundBlock
+	self allMethodsInFullClass: aFullClassDefinition do: [ :eachMethod |
+		| anAst |
+		anAst := GtPharoParser
+			parseWithErrors: eachMethod sourceCode
+			startingAt: GtPharoParser startingStateForMethod.
+
+		anAst pragmas
+			detect: [ :eachPragmaNode | eachPragmaNode selector = aPragmaName ]
+			ifFound: [ :aPragmaNode |
+				| thePragmaValues |
+				
+				thePragmaValues := aPragmaNode values collect: [ :eachPragmaValueNode | eachPragmaValueNode literalValue ].
+				thePragmaValues asArray = aCollectionOfValues asArray
+					ifTrue: [ aFoundBlock value: eachMethod ] ] ]
 ]
 
 { #category : #accessing }
 GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaName inBehaviorDefinition: aBehaviorDefinition do: aFoundBlock [
 	"Given a behavior definition and a pragma name find all methods that has such pragma"
 
-	aBehaviorDefinition methods do: [ :eachMethod |
+	self methodsInBehaviorDefinition: aBehaviorDefinition do: [ :eachMethod |
 		| anAst |
 		anAst := GtPharoParser
 			parseWithErrors: eachMethod sourceCode
@@ -193,19 +234,15 @@ GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaN
 GtRobocoderMetamodelWithCodeDefinition class >> methodsWithPragmaNamed: aPragmaName inFullClass: aFullClassDefinition do: aFoundBlock [
 	"Given a behavior definition and a pragma name find all methods that has such pragma"
 
-	aFullClassDefinition
-		ifNil: [ ^ self ].
+	self allMethodsInFullClass: aFullClassDefinition do: [ :eachMethod |
+		| anAst |
+		anAst := GtPharoParser
+			parseWithErrors: eachMethod sourceCode
+			startingAt: GtPharoParser startingStateForMethod.
 
-	aFullClassDefinition instanceSideDefinition traits do: [ :eachTrait |
-		self
-			methodsWithPragmaNamed: aPragmaName
-			inBehaviorDefinition: eachTrait
-			do: aFoundBlock ].
-		
-	self
-		methodsWithPragmaNamed: aPragmaName
-		inBehaviorDefinition: aFullClassDefinition instanceSideDefinition
-		do: aFoundBlock
+		anAst pragmas
+			detect: [ :eachPragmaNode | eachPragmaNode selector = aPragmaName ]
+			ifFound: [ :aPragmaNode | aFoundBlock value: eachMethod ] ]
 ]
 
 { #category : #accessing }

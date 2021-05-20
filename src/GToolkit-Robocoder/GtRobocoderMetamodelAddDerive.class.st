@@ -134,9 +134,9 @@ GtRobocoderMetamodelAddDerive >> generateAnnouncementForMany: aRobocoderMetamode
 			#objectId -> aRobocoderMetamodelWithCodeDefinition forOneModel name.
 		};
 		generate.
-		
+
 	aRobocoderMetamodelWithCodeDefinition addExtraDefinition: aDefinition.
-	
+
 	^ aDefinition
 ]
 

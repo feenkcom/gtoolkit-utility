@@ -86,6 +86,11 @@ TGtRobocoderMetamodelProgramNodeVisitor >> visitLocalSetting: aLocalSetting [
 ]
 
 { #category : #generated }
+TGtRobocoderMetamodelProgramNodeVisitor >> visitMethodPropertyValue: aMethodPropertyValue [
+	^ self visitPropertyValue: aMethodPropertyValue
+]
+
+{ #category : #generated }
 TGtRobocoderMetamodelProgramNodeVisitor >> visitNestedLevel: aNestedLevel [
 	^ self visitLevel: aNestedLevel
 ]

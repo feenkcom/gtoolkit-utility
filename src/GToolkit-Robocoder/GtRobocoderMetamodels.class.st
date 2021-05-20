@@ -45,7 +45,8 @@ GtRobocoderMetamodels >> generateCodeDefinitions [
 		aDefinition := eachViewModelModel alreadyHasClass
 			ifTrue: [ GtBehaviorDefinition fromBehavior: eachViewModelModel existingViewModelClass in: anEnvironment ]
 			ifFalse: [ eachViewModelModel generateBehavior ].
-
+		
+		aDefinition environment: anEnvironment.
 		anEnvironment registerBehavior: aDefinition.
 
 		GtRobocoderMetamodelWithCodeDefinition new
@@ -61,15 +62,29 @@ GtRobocoderMetamodels >> generateCodeDefinitions [
 
 { #category : #'api - generation' }
 GtRobocoderMetamodels >> generateSubscribeToFor: eachViewModelModelWithDefinition [
+	| isSubscriberInSuperclass |
+	
+	isSubscriberInSuperclass := false.
+	
 	(GtRobocoderMetamodelModelDerive
 		modelSubscriberMethodIn: eachViewModelModelWithDefinition)
 		ifNotNil: [ :aSubscriberMethod | 
+			isSubscriberInSuperclass := aSubscriberMethod parent isForTrait
+				ifTrue: [ aSubscriberMethod parent parent notNil and: [  aSubscriberMethod parent parent name ~= eachViewModelModelWithDefinition definition name ] ]
+				ifFalse: [ aSubscriberMethod parent name ~= eachViewModelModelWithDefinition definition name ].
+			
 			(aSubscriberMethod parent isForTrait
 				and: [ eachViewModelModelWithDefinition subscriptions isNotEmpty ])
 					ifTrue: [ eachViewModelModelWithDefinition definition instanceSideDefinition methods addMethod: aSubscriberMethod copy ] ].
 
 	(GtRobocoderMetamodelModelDerive modelSubscriberMethodIn: eachViewModelModelWithDefinition)
 		ifNotNil: [ :aSubscriberMethod | 
+			(eachViewModelModelWithDefinition subscriptions isNotEmpty and: [ isSubscriberInSuperclass ])
+				ifTrue: [
+					aSubscriberMethod
+						addMethodPartSource: ('super ', aSubscriberMethod selector, '.')
+						id: #super ].
+			
 			eachViewModelModelWithDefinition subscriptions
 				do: [ :eachSubscription | 
 					aSubscriberMethod
@@ -79,15 +94,30 @@ GtRobocoderMetamodels >> generateSubscribeToFor: eachViewModelModelWithDefinitio
 
 { #category : #'api - generation' }
 GtRobocoderMetamodels >> generateUnsubscribeFromFor: eachViewModelModelWithDefinition [
+	| isUnsubscriberInSuperclass |
+	
+	isUnsubscriberInSuperclass := false.
+	
 	(GtRobocoderMetamodelModelDerive
 		modelUnsubscriberMethodIn: eachViewModelModelWithDefinition)
 		ifNotNil: [ :anUnsubscriberMethod | 
+
+			isUnsubscriberInSuperclass := anUnsubscriberMethod parent isForTrait
+				ifTrue: [ anUnsubscriberMethod parent parent notNil and: [  anUnsubscriberMethod parent parent name ~= eachViewModelModelWithDefinition definition name ] ]
+				ifFalse: [ anUnsubscriberMethod parent name ~= eachViewModelModelWithDefinition definition name ].
+
 			(anUnsubscriberMethod parent isForTrait
 				and: [ eachViewModelModelWithDefinition subscriptions isNotEmpty ])
 					ifTrue: [ eachViewModelModelWithDefinition definition instanceSideDefinition methods addMethod: anUnsubscriberMethod copy ] ].
-
+	
 	(GtRobocoderMetamodelModelDerive modelUnsubscriberMethodIn: eachViewModelModelWithDefinition)
 		ifNotNil: [ :anUnsubscriberMethod | 
+			(eachViewModelModelWithDefinition subscriptions isNotEmpty and: [ isUnsubscriberInSuperclass ])
+				ifTrue: [
+					anUnsubscriberMethod
+						addMethodPartSource: ('super ', anUnsubscriberMethod selector, '.')
+						id: #super ].
+			
 			(eachViewModelModelWithDefinition subscriptions groupedBy: [ :eachSubscription | eachSubscription announcerSelector ])
 				keysDo: [ :anAnnouncerSelector | 
 					anUnsubscriberMethod

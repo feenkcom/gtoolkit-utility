@@ -35,6 +35,14 @@ GtRobocoderMetamodelModelDerive class >> modelGetterSelectorIn: aGtRobocoderMeta
 ]
 
 { #category : #'accessing - methods' }
+GtRobocoderMetamodelModelDerive class >> modelNameIn: aGtRobocoderMetamodelWithCodeDefinition [
+	^ (self modelGetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition)
+		ifNotNil: [ :aMethod |
+			(aMethod pragmaNamed: self modelGetterPragma)
+				ifNotNil: [ :aPragma | aPragma argumentAt: 1 ] ]
+]
+
+{ #category : #'accessing - methods' }
 GtRobocoderMetamodelModelDerive class >> modelSetterMethodIn: aGtRobocoderMetamodelWithCodeDefinition [
 	^ GtRobocoderMetamodelWithCodeDefinition
 		anyMethodWithPragmaNamedOrNil: self modelSetterPragma
@@ -136,7 +144,7 @@ GtRobocoderMetamodelModelDerive >> applyOnMetamodelsWithCodeDefinitions: aGtRobo
 			anApiTrait ifNil: [ self error: 'Api is defined but trait does not exist' ].
 			aDomainModelTraitDefinition := GtTraitDefinition fromTrait: anApiTrait in: eachMetamodelWithCodeDefinition environment.
 			aDomainModelTraitDefinition withMethodsFromTrait: anApiTrait.
-			
+
 			eachMetamodelWithCodeDefinition addTraitDefinition: aDomainModelTraitDefinition
 		] ifNil: [
 			| aModelName aDomainModelTraitDefinition aMetamodel |

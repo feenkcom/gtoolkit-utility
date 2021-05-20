@@ -22,12 +22,12 @@ GtRobocoderMetamodelScanner >> andId [
 
 { #category : #generated }
 GtRobocoderMetamodelScanner >> emptySymbolTokenId [
-	^ 49
+	^ 51
 ]
 
 { #category : #generated }
 GtRobocoderMetamodelScanner >> errorTokenId [
-	^ 50
+	^ 52
 ]
 
 { #category : #generated }
@@ -39,9 +39,160 @@ GtRobocoderMetamodelScanner >> followsId [
 GtRobocoderMetamodelScanner >> scan1 [
 	self step.
 	currentCharacter == $#
+		ifTrue: [ ^ self scan2 ].
+	currentCharacter == $'
+		ifTrue: [ ^ self scan7 ].
+	currentCharacter == $(
+		ifTrue: [ ^ self recordAndReportMatch: #(7) ].
+	^ self scan1X2
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan10 [
+	self step.
+	currentCharacter == $>
+		ifTrue: [ ^ self scan11 ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan11 [
+	[ self step.
+	currentCharacter == $#
+		ifTrue: [ self step.
+			currentCharacter == $#
+				ifTrue: [ self step ].
+			currentCharacter == $'
+				ifTrue: [ ^ self scan12 ].
+			(currentCharacter == $!
+				or: [ (currentCharacter between: $% and: $&)
+						or: [ (currentCharacter between: $* and: $-)
+								or: [ currentCharacter == $/
+										or: [ (currentCharacter between: $< and: $@)
+												or: [ '\|~' includes: currentCharacter ] ] ] ] ])
+				ifTrue: [ [ self recordMatch: #(18).
+					self step.
+					currentCharacter == $!
+						or: [ (currentCharacter between: $% and: $&)
+								or: [ (currentCharacter between: $* and: $-)
+										or: [ currentCharacter == $/
+												or: [ (currentCharacter between: $< and: $@)
+														or: [ '\|~' includes: currentCharacter ] ] ] ] ] ]
+						whileTrue.
+					^ self reportLastMatch ].
+			(currentCharacter isLetter or: [ currentCharacter == $_ ])
+				ifTrue: [ ^ self scan13 ].
+			^ self reportLastMatch ].
+	currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan12 [
+	[ self step.
+	currentCharacter == $'
+		ifTrue: [ self recordMatch: #(18).
+			self step.
+			currentCharacter == $'
+				ifTrue: [ ^ self scan12 ].
+			^ self reportLastMatch ].
+	true ] whileTrue
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan13 [
+	[ self recordMatch: #(18).
+	self step.
+	currentCharacter == $:
+		ifTrue: [ self recordMatch: #(18).
+			self step.
+			currentCharacter == $:
+				ifTrue: [ ^ self scan14 ].
+			(currentCharacter isLetter or: [ currentCharacter == $_ ])
+				ifTrue: [ ^ self scan15 ].
+			^ self reportLastMatch ].
+	currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
+		whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan14 [
+	self step.
+	(currentCharacter isLetter or: [ currentCharacter == $_ ])
+		ifTrue: [ [ self recordMatch: #(18).
+			self step.
+			currentCharacter == $:
+				ifTrue: [ self step.
+					currentCharacter == $:
+						ifTrue: [ ^ self scan14 ].
+					^ self reportLastMatch ].
+			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
+				whileTrue ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan15 [
+	[ self step.
+	currentCharacter == $:
+		ifTrue: [ self recordMatch: #(18).
+			self step.
+			(currentCharacter isLetter or: [ currentCharacter == $_ ])
+				ifTrue: [ ^ self scan15 ].
+			^ self reportLastMatch ].
+	currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
+		whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan1X1 [
+	[ self recordMatch: #(5).
+	self step.
+	currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan1X2 [
+	currentCharacter == $)
+		ifTrue: [ ^ self recordAndReportMatch: #(6) ].
+	currentCharacter == $,
+		ifTrue: [ ^ self recordAndReportMatch: #(10) ].
+	currentCharacter == $.
+		ifTrue: [ ^ self recordAndReportMatch: #(8) ].
+	currentCharacter == $:
+		ifTrue: [ ^ self recordAndReportMatch: #(9) ].
+	currentCharacter == $=
+		ifTrue: [ ^ self scan8 ].
+	currentCharacter == $@
+		ifTrue: [ ^ self recordAndReportMatch: #(15) ].
+	currentCharacter == ${
+		ifTrue: [ ^ self recordAndReportMatch: #(1) ].
+	currentCharacter == $}
+		ifTrue: [ ^ self recordAndReportMatch: #(2) ].
+	(currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ])
+		ifTrue:
+			[ ^ self scan1X1 ].
+	(currentCharacter isLetter or: [ currentCharacter == $_ ])
+		ifTrue: [ ^ self scan9 ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan2 [
+	self step.
+	currentCharacter == $#
 		ifTrue: [ self step ].
 	currentCharacter == $'
-		ifTrue: [ ^ self scan2 ].
+		ifTrue: [ ^ self scan3 ].
 	(currentCharacter == $!
 		or: [ (currentCharacter between: $% and: $&)
 				or: [ (currentCharacter between: $* and: $-)
@@ -59,33 +210,33 @@ GtRobocoderMetamodelScanner >> scan1 [
 				whileTrue.
 			^ self reportLastMatch ].
 	(currentCharacter isLetter or: [ currentCharacter == $_ ])
-		ifTrue: [ ^ self scan3 ].
+		ifTrue: [ ^ self scan4 ].
 	^ self reportLastMatch
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelScanner >> scan2 [
+GtRobocoderMetamodelScanner >> scan3 [
 	[ self step.
 	currentCharacter == $'
 		ifTrue: [ self recordMatch: #(11).
 			self step.
 			currentCharacter == $'
-				ifTrue: [ ^ self scan2 ].
+				ifTrue: [ ^ self scan3 ].
 			^ self reportLastMatch ].
 	true ] whileTrue
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelScanner >> scan3 [
+GtRobocoderMetamodelScanner >> scan4 [
 	[ self recordMatch: #(11).
 	self step.
 	currentCharacter == $:
 		ifTrue: [ self recordMatch: #(11).
 			self step.
 			currentCharacter == $:
-				ifTrue: [ ^ self scan4 ].
-			(currentCharacter isLetter or: [ currentCharacter == $_ ])
 				ifTrue: [ ^ self scan5 ].
+			(currentCharacter isLetter or: [ currentCharacter == $_ ])
+				ifTrue: [ ^ self scan6 ].
 			^ self reportLastMatch ].
 	currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
 		whileTrue.
@@ -93,7 +244,7 @@ GtRobocoderMetamodelScanner >> scan3 [
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelScanner >> scan4 [
+GtRobocoderMetamodelScanner >> scan5 [
 	self step.
 	(currentCharacter isLetter or: [ currentCharacter == $_ ])
 		ifTrue: [ [ self recordMatch: #(11).
@@ -101,7 +252,7 @@ GtRobocoderMetamodelScanner >> scan4 [
 			currentCharacter == $:
 				ifTrue: [ self step.
 					currentCharacter == $:
-						ifTrue: [ ^ self scan4 ].
+						ifTrue: [ ^ self scan5 ].
 					^ self reportLastMatch ].
 			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
 				whileTrue ].
@@ -109,13 +260,13 @@ GtRobocoderMetamodelScanner >> scan4 [
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelScanner >> scan5 [
+GtRobocoderMetamodelScanner >> scan6 [
 	[ self step.
 	currentCharacter == $:
 		ifTrue: [ self recordMatch: #(11).
 			self step.
 			(currentCharacter isLetter or: [ currentCharacter == $_ ])
-				ifTrue: [ ^ self scan5 ].
+				ifTrue: [ ^ self scan6 ].
 			^ self reportLastMatch ].
 	currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
 		whileTrue.
@@ -123,22 +274,52 @@ GtRobocoderMetamodelScanner >> scan5 [
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelScanner >> scan6 [
+GtRobocoderMetamodelScanner >> scan7 [
 	[ self step.
 	currentCharacter == $'
 		ifTrue: [ self recordMatch: #(12).
 			self step.
 			currentCharacter == $'
-				ifTrue: [ ^ self scan6 ].
+				ifTrue: [ ^ self scan7 ].
 			^ self reportLastMatch ].
 	true ] whileTrue
 ]
 
 { #category : #generated }
-GtRobocoderMetamodelScanner >> scan7 [
+GtRobocoderMetamodelScanner >> scan8 [
 	self step.
 	currentCharacter == $>
 		ifTrue: [ ^ self recordAndReportMatch: #(4) ].
+	^ self reportLastMatch
+]
+
+{ #category : #generated }
+GtRobocoderMetamodelScanner >> scan9 [
+	[ self recordMatch: #(3).
+	self step.
+	currentCharacter == $>
+		ifTrue: [ ^ self scan10 ].
+	(currentCharacter isSeparator
+		or: [ currentCharacter == Character null
+				or: [ currentCharacter == Character pageUp ] ])
+		ifTrue: [ [ self step.
+			currentCharacter == $>
+				ifTrue: [ ^ self scan10 ].
+			currentCharacter == $c
+				ifTrue: [ (self scanForString: 'lass')
+						ifTrue: [ [ self step.
+							currentCharacter == $>
+								ifTrue: [ ^ self scan10 ].
+							currentCharacter isSeparator
+								or: [ currentCharacter == Character null
+										or: [ currentCharacter == Character pageUp ] ] ] whileTrue ].
+					^ self reportLastMatch ].
+			currentCharacter isSeparator
+				or: [ currentCharacter == Character null
+						or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
+			^ self reportLastMatch ].
+	currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
+		whileTrue.
 	^ self reportLastMatch
 ]
 
@@ -148,37 +329,7 @@ GtRobocoderMetamodelScanner >> scanForToken [
 		ifTrue:
 			[ ^ self scanForTokenX1 ].
 	scope == #default
-		ifTrue: [ self step.
-			currentCharacter == $#
-				ifTrue: [ ^ self scan1 ].
-			currentCharacter == $'
-				ifTrue: [ ^ self scan6 ].
-			currentCharacter == $(
-				ifTrue: [ ^ self recordAndReportMatch: #(7) ].
-			currentCharacter == $)
-				ifTrue: [ ^ self recordAndReportMatch: #(6) ].
-			currentCharacter == $,
-				ifTrue: [ ^ self recordAndReportMatch: #(10) ].
-			currentCharacter == $.
-				ifTrue: [ ^ self recordAndReportMatch: #(8) ].
-			currentCharacter == $:
-				ifTrue: [ ^ self recordAndReportMatch: #(9) ].
-			currentCharacter == $=
-				ifTrue: [ ^ self scan7 ].
-			currentCharacter == $@
-				ifTrue: [ ^ self recordAndReportMatch: #(15) ].
-			currentCharacter == ${
-				ifTrue: [ ^ self recordAndReportMatch: #(1) ].
-			currentCharacter == $}
-				ifTrue: [ ^ self recordAndReportMatch: #(2) ].
-			(currentCharacter isSeparator
-				or: [ currentCharacter == Character null
-						or: [ currentCharacter == Character pageUp ] ])
-				ifTrue:
-					[ ^ self scanForTokenX2 ].
-			(currentCharacter isLetter or: [ currentCharacter == $_ ])
-				ifTrue:
-					[ self scanForTokenX3 ] ].
+		ifTrue: [ ^ self scan1 ].
 	^ self reportLastMatch
 ]
 
@@ -186,9 +337,9 @@ GtRobocoderMetamodelScanner >> scanForToken [
 GtRobocoderMetamodelScanner >> scanForTokenX1 [
 	self step.
 	currentCharacter == $#
-		ifTrue: [ ^ self scan1 ].
+		ifTrue: [ ^ self scan2 ].
 	currentCharacter == $'
-		ifTrue: [ ^ self scan6 ].
+		ifTrue: [ ^ self scan7 ].
 	currentCharacter == $(
 		ifTrue: [ ^ self recordAndReportMatch: #(7) ].
 	currentCharacter == $)
@@ -198,7 +349,7 @@ GtRobocoderMetamodelScanner >> scanForTokenX1 [
 	currentCharacter == $.
 		ifTrue: [ ^ self recordAndReportMatch: #(8) ].
 	currentCharacter == $=
-		ifTrue: [ ^ self scan7 ].
+		ifTrue: [ ^ self scan8 ].
 	(currentCharacter isSeparator
 		or: [ currentCharacter == Character null
 				or: [ currentCharacter == Character pageUp ] ])
@@ -214,24 +365,6 @@ GtRobocoderMetamodelScanner >> scanForTokenX1 [
 			currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
 				whileTrue ].
 	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtRobocoderMetamodelScanner >> scanForTokenX2 [
-	[ self recordMatch: #(5).
-	self step.
-	currentCharacter isSeparator
-		or: [ currentCharacter == Character null
-				or: [ currentCharacter == Character pageUp ] ] ] whileTrue.
-	^ self reportLastMatch
-]
-
-{ #category : #generated }
-GtRobocoderMetamodelScanner >> scanForTokenX3 [
-	[ self recordMatch: #(3).
-	self step.
-	currentCharacter isAlphaNumeric or: [ currentCharacter == $_ ] ]
-		whileTrue
 ]
 
 { #category : #generated }
