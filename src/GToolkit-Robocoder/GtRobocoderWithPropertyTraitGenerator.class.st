@@ -23,6 +23,7 @@ Class {
 		'propertyUnsetter',
 		'propertyType',
 		'propertyComparator',
+		'propertyAnnouncement',
 		'projectPrefix',
 		'packageName',
 		'tagName'
@@ -68,6 +69,7 @@ GtRobocoderWithPropertyTraitGenerator >> generator [
 			#propertyUnsetter -> self propertyUnsetter.
 			#propertyType -> self propertyType asString.
 			#propertyComparator -> self propertyComparator.
+			#propertyAnnouncement -> self propertyAnnouncement.
 			#traitName -> self traitName.
 			#package -> self packageName.
 			#tag -> self tagName.
@@ -92,6 +94,16 @@ GtRobocoderWithPropertyTraitGenerator >> projectPrefix [
 { #category : #accessing }
 GtRobocoderWithPropertyTraitGenerator >> projectPrefix: anObject [
 	projectPrefix := anObject
+]
+
+{ #category : #accessing }
+GtRobocoderWithPropertyTraitGenerator >> propertyAnnouncement [
+	^ propertyAnnouncement
+]
+
+{ #category : #accessing }
+GtRobocoderWithPropertyTraitGenerator >> propertyAnnouncement: anObject [
+	propertyAnnouncement := anObject
 ]
 
 { #category : #accessing }

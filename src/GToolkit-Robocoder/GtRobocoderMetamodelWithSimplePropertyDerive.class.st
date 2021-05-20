@@ -29,12 +29,16 @@ GtRobocoderMetamodelWithSimplePropertyDerive >> applyOnMetamodelsWithCodeDefinit
 			propertyUnsetter: self unsetter;
 			propertyType: self type;
 			propertyComparator: self comparator;
+			propertyAnnouncement: (self propertyChangedAnnouncementClassNameFor: eachMetamodelWithCodeDefinition);
 			projectPrefix: (eachMetamodelWithCodeDefinition prefix, eachMetamodelWithCodeDefinition project capitalized);
 			packageName: eachMetamodelWithCodeDefinition package;
 			tagName: eachMetamodelWithCodeDefinition metamodel fullTagForTraits;
 			generate.
-			
-		eachMetamodelWithCodeDefinition mergeBehaviorDefinition: aDefinition ]
+
+		eachMetamodelWithCodeDefinition mergeBehaviorDefinition: aDefinition.
+
+		self generatePropertyChangedAnnouncementFor: eachMetamodelWithCodeDefinition.
+		self generatePropertyChangedNotifierMethodFor: eachMetamodelWithCodeDefinition ]
 ]
 
 { #category : #accessing }
@@ -65,6 +69,18 @@ GtRobocoderMetamodelWithSimplePropertyDerive >> name [
 { #category : #accessing }
 GtRobocoderMetamodelWithSimplePropertyDerive >> name: anObject [
 	name := anObject
+]
+
+{ #category : #'private - class names' }
+GtRobocoderMetamodelWithSimplePropertyDerive >> propertyChangedAnnouncementClassNameFor: aViewModelModel [
+	<return: #Symbol>
+
+	^ ('{prefix}{objectName}{propertyName}Changed'
+		format: {
+			#prefix -> aViewModelModel prefix.
+			#objectName -> aViewModelModel fullName capitalized.
+			#propertyName -> (self propertyNameFor: aViewModelModel) capitalized.
+		} asDictionary) capitalized asSymbol
 ]
 
 { #category : #'private - accessing' }

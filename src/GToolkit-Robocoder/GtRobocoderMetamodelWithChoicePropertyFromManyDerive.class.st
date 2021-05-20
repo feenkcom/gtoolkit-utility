@@ -118,7 +118,8 @@ GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertySetNotifierMetho
 GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> propertySetNotifierSelectorOfOne: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
-	^ (self propertySetNotifierMethodOfOne: aViewModelModelWithCodeDefinition) selector
+	^ (self propertySetNotifierMethodOfOne: aViewModelModelWithCodeDefinition)
+		ifNotNil: [ :aMethod | aMethod selector ]
 ]
 
 { #category : #'private - methods' }
@@ -184,6 +185,5 @@ GtRobocoderMetamodelWithChoicePropertyFromManyDerive >> unsetChildrenTemplate [
 	
 	^ GtRobocoderTemplateMethod new
 		sourceCode: 'self {{childrenGetter}} {{propertyUnsetter}}.';
-		protocol: 'api - converting';
 		storageMethod: thisContext method
 ]

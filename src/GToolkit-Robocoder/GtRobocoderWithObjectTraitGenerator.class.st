@@ -4,7 +4,7 @@
 Usage example to generate an api trait for a view model:
 [[[
 GtRobocoderWithObjectTraitGenerator new
-	modelName: 'testViewModel';
+	objectName: 'testViewModel';
 	projectPrefix: 'Pr';
 	packageName: 'GToolkit-MVVM-Test';
 	generate

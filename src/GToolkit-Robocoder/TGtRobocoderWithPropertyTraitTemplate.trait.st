@@ -83,7 +83,8 @@ TGtRobocoderWithPropertyTraitTemplate >> propertySetterTemplate [
 	
 	^ GtRobocoderTemplateMethod new
 		sourceCode: '{{propertySetter}}: aNew{{propertyName capitalized}}
-	<propertySetter: #{{propertyName}}>
+	<propertySetter: #{{propertyName}}>{{propertyAnnouncement ifNotNil: [ ''
+	<propertyAnnouncement: #{{propertyAnnouncement}}>'' ] ifNil: [ '''' ]}}
 
 	(self has{{propertyName capitalized}}
 		and: [ self {{propertyGetter}} {{propertyComparator}} aNew{{propertyName capitalized}} ])
