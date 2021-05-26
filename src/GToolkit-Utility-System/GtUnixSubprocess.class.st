@@ -47,6 +47,7 @@ Class {
 	#instVars : [
 		'command',
 		'arguments',
+		'shellCommand',
 		'process',
 		'semaphore',
 		'stdout',
@@ -161,11 +162,10 @@ GtUnixSubprocess >> runProcess [
 	"Run the requested command as a separate process"
 	| stdoutStream stderrStream |
 
+	self setCommand.
 	stdoutStream := String new writeStream.
 	stderrStream := String new writeStream.
 	self process
-		command: command;
-		arguments: arguments;
 		redirectStdout;
 		redirectStderr.
 	workingDirectory ifNotNil: 
@@ -187,6 +187,35 @@ GtUnixSubprocess >> runProcess [
 				ifTrue: [ errorBlock value: self ] ]
 		ifNotNil: [ semaphore signal ] ] fork.
 
+]
+
+{ #category : #private }
+GtUnixSubprocess >> setCommand [
+	"Set the command or shell command in the process.
+	Either may be specified, but not both :-)"
+
+	(command isNil and: [ shellCommand isNil ]) ifTrue: 
+		[ self error: 'No command supplied' ].
+	(command isNotNil and: [ shellCommand isNotNil ]) ifTrue: 
+		[ self error: 'Only one of a command or shell command may be supplied' ].
+
+	command ifNil: 
+		[ self process shellCommand: shellCommand ]
+	ifNotNil:
+		[ self process
+			command: command;
+			arguments: arguments ].
+
+]
+
+{ #category : #accessing }
+GtUnixSubprocess >> shellCommand [
+	^ shellCommand
+]
+
+{ #category : #accessing }
+GtUnixSubprocess >> shellCommand: anObject [
+	shellCommand := anObject
 ]
 
 { #category : #'OS signal sending' }
