@@ -53,9 +53,17 @@ GtUrlStringUtility >> isValid [
 	- It is a valid looking URL (scheme ~= #file, no existence checking)"
 	<return: #Boolean>
 
+	znUrl ifNil: [ ^ false ].
 	(znUrl hasScheme and: [ znUrl isFile not ]) ifTrue: [ ^ true ].
 	^ znUrl asFileReference exists.
 
+]
+
+{ #category : #printing }
+GtUrlStringUtility >> printOn: aStream [
+
+	znUrl ifNil: [ ^ super printOn: aStream ].
+	znUrl printOn: aStream.
 ]
 
 { #category : #private }
