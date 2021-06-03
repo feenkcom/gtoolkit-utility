@@ -227,7 +227,8 @@ GtRobocoderMetamodelWithPropertyDerive >> propertyTesterMethodOf: aViewModelMode
 GtRobocoderMetamodelWithPropertyDerive >> propertyTesterSelectorOf: aViewModelModelWithCodeDefinition [
 	<return: #Symbol>
 
-	^ (self propertyTesterMethodOf: aViewModelModelWithCodeDefinition) selector
+	^ (self propertyTesterMethodOf: aViewModelModelWithCodeDefinition)
+		ifNotNil: [ :aMethod | aMethod selector ]
 ]
 
 { #category : #'private - methods' }
