@@ -364,7 +364,7 @@ GtRobocoderMetamodelWithSelectionDerive >> propertyUnappliedStatusName [
 
 { #category : #'private - class names' }
 GtRobocoderMetamodelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFor: aViewModelModel [
-	^ '{prefix}{project}{name}{suffix}ViewModelDeselected'
+	^ '{prefix}{project}{name}{suffix}Deselected'
 		format: { 
 			#project -> aViewModelModel project.
 			#prefix -> aViewModelModel prefix capitalized.
@@ -375,7 +375,7 @@ GtRobocoderMetamodelWithSelectionDerive >> viewModelDeselectedAnnouncementNameFo
 
 { #category : #'private - class names' }
 GtRobocoderMetamodelWithSelectionDerive >> viewModelSelectedAnnouncementNameFor: aViewModelModel [
-	^ '{prefix}{project}{name}{suffix}ViewModelSelected'
+	^ '{prefix}{project}{name}{suffix}Selected'
 		format: { 
 			#project -> aViewModelModel project.
 			#prefix -> aViewModelModel prefix capitalized.

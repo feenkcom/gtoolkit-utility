@@ -14,7 +14,9 @@ GtRobocoderMetamodelLevelForManyNode >> acceptVisitor: aProgramVisitor [
 
 { #category : #accessing }
 GtRobocoderMetamodelLevelForManyNode >> fullNameString [
-	^ self nameString, self suffix source
+	^ ((self nameString endsWith: 'y')
+		ifTrue: [ self nameString allButLast, 'ie' ]
+		ifFalse: [ self nameString ]) , self suffix source
 ]
 
 { #category : #generated }

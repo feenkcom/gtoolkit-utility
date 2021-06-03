@@ -40,7 +40,7 @@ TGtRobocoderMetamodelAdditionForManyTemplate >> addObjectTemplate [
 	self {{childObjectGetter}} add: a{{childObjectName capitalized}}.
 	self on{{childObjectName capitalized}}Added: a{{childObjectName capitalized}}';
 		protocol: 'api - adding';
-		condition: 'addDelegateSelector isNil and: [ { childObjectFinder . childObjectGetter } allSatisfy: #notNil ]';
+		condition: '({ addDelegateSelector . childAnnouncementClass } allSatisfy: #isNil) and: [ { childObjectFinder . childObjectGetter } allSatisfy: #notNil ]';
 		storageMethod: thisContext method
 ]
 

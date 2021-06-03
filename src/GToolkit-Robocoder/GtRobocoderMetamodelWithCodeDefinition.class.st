@@ -13,6 +13,8 @@ Class {
 
 { #category : #'api - enumeration' }
 GtRobocoderMetamodelWithCodeDefinition class >> allMethodsInFullClass: aFullClassDefinition do: aBlock [
+	aFullClassDefinition
+		ifNil: [ ^ self ].
 
 	aFullClassDefinition instanceSideDefinition traits do: [ :eachTrait |
 		self

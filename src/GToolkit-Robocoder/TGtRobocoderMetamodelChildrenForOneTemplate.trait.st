@@ -42,8 +42,8 @@ TGtRobocoderMetamodelChildrenForOneTemplate >> createChildObjectsTemplate [
 		ifNil: [ '''' ]}}
 	{{childModelSetter
 		ifNotNil: [ :aSelector |
-			(modelGetter isNil and: [ childGetter isNil ])
-				ifTrue: [ ''childObject {{aSelector gtAsReader}}: #().'' ]
+			(modelGetter isNil or: [ childGetter isNil ])
+				ifTrue: [ '''' ]
 				ifFalse: [ ''childObject {{aSelector gtAsReader}}: self {{modelGetter ifNil: [ ''''yourself'''' ]}} {{childGetter ifNil: [ ''''yourself'''' ]}}.'' ] ]
 		ifNil: [ '''' ]}}
 	^ childObject';
