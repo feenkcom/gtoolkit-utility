@@ -15,9 +15,31 @@ GtUrlStringUtilityExamples >> fileAbsoluteUrl [
 	imageReference := FileLocator image resolve.
 	self deny: (imageReference fullName includes: Character space)
 		description: 'This test assumes that image path doesn''t include spaces'.
+	self deny: imageReference fullName isWideString
+		description: 'This test assumes that the image path is ascii only'.
 	urlString := imageReference asZnUrl asString.
 	self
 		assert: (urlUtility urlString: urlString) url asFileReference
+		equals: imageReference.
+	^ urlUtility
+]
+
+{ #category : #examples }
+GtUrlStringUtilityExamples >> fileLocatorImage [
+	<gtExample>
+	| urlUtility imageReference urlString |
+
+	urlUtility := GtUrlStringUtility rootDirectory: FileLocator root resolve.
+	imageReference := FileLocator image resolve.
+	self deny: (imageReference fullName includes: Character space)
+		description: 'This test assumes that image path doesn''t include spaces'.
+	self deny: imageReference fullName isWideString
+		description: 'This test assumes that the image path is ascii only'.
+	urlString := 'filelocator://imageDirectory/', imageReference basename.
+	urlUtility urlString: urlString.
+	self assert: urlUtility isFile.
+	self
+		assert: urlUtility asFileReference resolve
 		equals: imageReference.
 	^ urlUtility
 ]
@@ -31,6 +53,8 @@ GtUrlStringUtilityExamples >> fileNoHostAbsoluteUrl [
 	imageReference := FileLocator image resolve.
 	self deny: (imageReference fullName includes: Character space)
 		description: 'This test assumes that image path doesn''t include spaces'.
+	self deny: imageReference fullName isWideString
+		description: 'This test assumes that the image path is ascii only'.
 	urlString := (imageReference asZnUrl host: 'localhost') asString.
 	self
 		assert: (urlUtility urlString: urlString) url asFileReference
@@ -48,6 +72,8 @@ GtUrlStringUtilityExamples >> fileNoHostRelativeUrl [
 	imageReference := urlUtility rootDirectory / imageBasename.
 	self deny: (imageReference fullName includes: Character space)
 		description: 'This test assumes that image path doesn''t include spaces'.
+	self deny: imageReference fullName isWideString
+		description: 'This test assumes that the image path is ascii only'.
 	urlString := 'file:///', imageBasename.
 	self
 		assert: (urlUtility urlString: urlString) url asFileReference
@@ -88,6 +114,8 @@ GtUrlStringUtilityExamples >> fileRelativeUrl [
 
 	urlUtility := GtUrlStringUtility rootDirectory: FileLocator imageDirectory resolve.
 	imageName := FileLocator image basename.
+	self deny: imageName isWideString
+		description: 'This test assumes that the image name is ascii only'.
 	self
 		assert: (urlUtility urlString: 'file:///', imageName) url asFileReference
 		equals: FileLocator image resolve.
