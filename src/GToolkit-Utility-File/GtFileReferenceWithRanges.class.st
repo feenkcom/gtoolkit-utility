@@ -3,21 +3,24 @@ GtFileReferenceWithRanges contains a collection of ranges which are highlighted 
 
 For example, assuming that we want to highlight a single line at a given column:
 
-[[[ 
+``` 
 '/path/to/source.code' asFileReference asGtFileReferenceWithRanges 
 	addStartLine: startLine
 	startColumn: startColumn 
 	endLine: startLine
 	endColumn: 0
-]]]
+```
 
 Note that when the startLine and EndLine are the same, an endColumn of 0 indicates that the remainder of the line should be highlighted.
  
-!!Internal Representation and Key Implementation Points.
+1. # Internal Representation and Key Implementation Points.
 
-!!!Instance Variables
+
+1. ## Instance Variables
+
 
 	highlightRanges:		<Array of GtFileRange>
+
 
 "
 Class {

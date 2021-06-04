@@ -1,10 +1,11 @@
 "
 I represent a search result which can be either
-- positive: ${class:GtResourcesUtilityLocationExistingResult}$, or
-- negative: ${class:GtResourcesUtilityLocationNoResult}$.
-I am used by ${class:GtResourcesUtilityLocation}$.
+- positive: {{gtClass:GtResourcesUtilityLocationExistingResult}}, or
+- negative: {{gtClass:GtResourcesUtilityLocationNoResult}}.
+I am used by {{gtClass:GtResourcesUtilityLocation}}.
 
-My subclasses are created in ${method:GtResourcesUtilityLocation>>#resultForFile:|expanded=true}$.
+My subclasses are created in {{gtMethod:GtResourcesUtilityLocation>>#resultForFile:|expanded=true}}.
+
 
 "
 Class {

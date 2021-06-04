@@ -2,6 +2,8 @@
 I am a copy of class BaselineOfGToolkitUtility. This comment is copied from there, and might not be entirely accurate
 
 A set of utilities.
+
+
 "
 Class {
 	#name : #BaselineOfGToolkitResourcesUtility,

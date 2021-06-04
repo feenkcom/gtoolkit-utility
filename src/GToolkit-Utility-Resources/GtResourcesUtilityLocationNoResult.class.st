@@ -1,10 +1,12 @@
 "
 I represent a negative result. It means that a file or directory does not exist.
-See ${class:GtResourcesUtilityLocationResult}$ for more details.
+See {{gtClass:GtResourcesUtilityLocationResult}} for more details.
 
-!! Example
+1. # Example
 
-${example:GtResourcesUtilityExamples>>#noResult|codeExpanded=false|previewExpanded=true}$
+
+{{gtExample:GtResourcesUtilityExamples>>#noResult|codeExpanded=false|previewExpanded=true}}
+
 
 "
 Class {

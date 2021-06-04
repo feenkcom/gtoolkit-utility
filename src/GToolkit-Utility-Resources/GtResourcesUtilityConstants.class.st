@@ -1,5 +1,7 @@
 "
-I keep constrants used by ${class:GtResourcesUtility}$.
+I keep constrants used by {{gtClass:GtResourcesUtility}}.
+
+
 "
 Class {
 	#name : #GtResourcesUtilityConstants,

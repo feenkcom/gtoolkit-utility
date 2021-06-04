@@ -4,6 +4,8 @@ pulseListener
 	registerPulseLoop;
 	registerSpaceListenerFor: BlUniverse default spaceManager spaces first.
 pulseListener unregisterAll.
+
+
 "
 Class {
 	#name : #GtRecordingPulseListener,

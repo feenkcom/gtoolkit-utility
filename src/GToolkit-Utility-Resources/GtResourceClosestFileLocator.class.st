@@ -1,13 +1,18 @@
 "
-I transform a ${class:FileReference}$ to a ${class:FileLocator}$.
-I search for a ${class:FileLocator}$ parent that is closest to a referenced file.
-!! Usage
-You can use ${method:AbstractFileReference>>#gtWithClosestFileLocatorParent}$ to transform a ${class:FileReference}$ into ${class:FileLocator}$.
-!! Local Directory Example
-The following example shows an original file reference transformed to ${method:FileLocator class>>#localDirectory|label=#selector}$: ${example:GtResourceClosestFileLocatorExamples>>#locator_FileReference_localDirectoryChild|previewExpanded=true|codeExpanded=false|previewHeight=200}$
-!! Resource Directory Example
-Similarly we can transform a file reference into a ${method:FileLocator class>>#gtResource|label=#selector}$:
-${example:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResourceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}$
+I transform a {{gtClass:FileReference}} to a {{gtClass:FileLocator}}.
+I search for a {{gtClass:FileLocator}} parent that is closest to a referenced file.
+1. # Usage
+
+You can use {{gtMethod:AbstractFileReference>>#gtWithClosestFileLocatorParent}} to transform a {{gtClass:FileReference}} into {{gtClass:FileLocator}}.
+1. # Local Directory Example
+
+The following example shows an original file reference transformed to {{gtMethod:FileLocator class>>#localDirectory|label=#selector}}: {{gtExample:GtResourceClosestFileLocatorExamples>>#locator_FileReference_localDirectoryChild|previewExpanded=true|codeExpanded=false|previewHeight=200}}
+1. # Resource Directory Example
+
+Similarly we can transform a file reference into a {{gtMethod:FileLocator class>>#gtResource|label=#selector}}:
+{{gtExample:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResourceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}}
+
+
 "
 Class {
 	#name : #GtResourceClosestFileLocator,

@@ -1,24 +1,29 @@
 "
-I am like ${class:FileReference}$. You can use me to dynamically resolve a resource file reference.
-Users can use me to read resourcers, e.g., ${method:GtResourceReference>>#binaryReadStreamDo:}$, ${method:GtResourceReference>>#readStreamEncoded:do:}$.
+I am like {{gtClass:FileReference}}. You can use me to dynamically resolve a resource file reference.
+Users can use me to read resourcers, e.g., {{gtMethod:GtResourceReference>>#binaryReadStreamDo:}}, {{gtMethod:GtResourceReference>>#readStreamEncoded:do:}}.
 
-Whenever I am asked to access a file or a directory, I ask ${class:GtResourcesUtility}$ using ${method:GtResourceReference>>#utility}$ to provide me a ${class:FileReference}$. See the ${class:GtResourcesUtility}$ class comment for more details.
-!! Convenience Usage
-For the convenience, we recommend to use ${method:FileLocator class>>#gtResource}$ instead of direct usage of ${class:GtResourceReference}$: ${example:GtResourcesUtilityExamples>>#fileLocator_withSlashes|previewExpanded=true}$ 
-!! Live Search 
+Whenever I am asked to access a file or a directory, I ask {{gtClass:GtResourcesUtility}} using {{gtMethod:GtResourceReference>>#utility}} to provide me a {{gtClass:FileReference}}. See the {{gtClass:GtResourcesUtility}} class comment for more details.
+1. # Convenience Usage
+
+For the convenience, we recommend to use {{gtMethod:FileLocator class>>#gtResource}} instead of direct usage of {{gtClass:GtResourceReference}}: {{gtExample:GtResourcesUtilityExamples>>#fileLocator_withSlashes|previewExpanded=true}} 
+1. # Live Search 
+
 
 You can search live here by clicking on the search icon in the inspector: 
-${example:GtResourcesUtilityExamples>>#gtResourceReferenceOfExistingPath|noCode|previewHeight=230}$
+{{gtExample:GtResourcesUtilityExamples>>#gtResourceReferenceOfExistingPath|noCode|previewHeight=230}}
 
-!! Usage
+1. # Usage
 
-You can either use a relative ${class:Path}$ to a resource:
-${example:GtResourcesUtilityExamples>>#gtResourceReferenceOfExistingPath}$
 
-Or you can pass a ${class:String}$ as a relative resource path:
-${example:GtResourcesUtilityExamples>>#gtResourceReferenceOfExistingStringPath}$
+You can either use a relative {{gtClass:Path}} to a resource:
+{{gtExample:GtResourcesUtilityExamples>>#gtResourceReferenceOfExistingPath}}
 
-In case of a non-existing path, it will return a possible reference inside, responding ${example:GtResourcesUtilityExamples>>#gtResourceReferenceOfNotExistingPath|label=#exists}$ to ==exists== calls: ${example:GtResourcesUtilityExamples>>#gtResourceReferenceOfNotExistingPath}$
+Or you can pass a {{gtClass:String}} as a relative resource path:
+{{gtExample:GtResourcesUtilityExamples>>#gtResourceReferenceOfExistingStringPath}}
+
+In case of a non-existing path, it will return a possible reference inside, responding {{gtExample:GtResourcesUtilityExamples>>#gtResourceReferenceOfNotExistingPath|label=#exists}} to `exists` calls: {{gtExample:GtResourcesUtilityExamples>>#gtResourceReferenceOfNotExistingPath}}
+
+
 "
 Class {
 	#name : #GtResourceReference,

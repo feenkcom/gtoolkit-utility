@@ -1,6 +1,7 @@
 "
 I search for a resource (file or directory) in a MacOS resources directory:
-${example:GtResourcesUtilityExamples>>#basicMacOSResourcesLocation|previewExpanded=true|noCode}$
+{{gtExample:GtResourcesUtilityExamples>>#basicMacOSResourcesLocation|previewExpanded=true|noCode}}
+
 
 "
 Class {

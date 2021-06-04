@@ -1,5 +1,7 @@
 "
-I exemplify ${class:GtResourcesUtility}$ and ${class:GtResourceReference}$.
+I exemplify {{gtClass:GtResourcesUtility}} and {{gtClass:GtResourceReference}}.
+
+
 "
 Class {
 	#name : #GtResourcesUtilityExamples,

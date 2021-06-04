@@ -1,5 +1,7 @@
 "
-Use ${class:GtResourcesUtility}$ instead.
+Use {{gtClass:GtResourcesUtility}} instead.
+
+
 "
 Class {
 	#name : #GtIcebergUtility,

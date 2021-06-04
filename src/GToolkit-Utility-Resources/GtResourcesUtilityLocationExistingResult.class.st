@@ -1,10 +1,12 @@
 "
 I represent a positive result. It means that a file or directory exists.
-See ${class:GtResourcesUtilityLocationResult}$ for more details.
+See {{gtClass:GtResourcesUtilityLocationResult}} for more details.
 
-!! Example
+1. # Example
 
-${example:GtResourcesUtilityExamples>>#existingResult|codeExpanded=false|previewExpanded=true}$
+
+{{gtExample:GtResourcesUtilityExamples>>#existingResult|codeExpanded=false|previewExpanded=true}}
+
 
 "
 Class {

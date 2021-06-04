@@ -1,5 +1,7 @@
 "
 A set of utilities.
+
+
 "
 Class {
 	#name : #BaselineOfGToolkitUtility,

@@ -1,5 +1,7 @@
 "
-I exemplify ${class:GtResourcesUtilityPathExtractor}$.
+I exemplify {{gtClass:GtResourcesUtilityPathExtractor}}.
+
+
 "
 Class {
 	#name : #GtResourcesUtilityPathExtractorExamples,

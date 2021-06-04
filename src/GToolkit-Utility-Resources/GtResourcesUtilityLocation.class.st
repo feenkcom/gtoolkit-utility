@@ -1,9 +1,11 @@
 "
-I represent a location where a ${class:Path}$ (file or directory) is searched for.
-My subclasses should implement ${method:GtResourcesUtilityLocation>>#resourceAtPath:}$. 
-My subclasses are used by ${class:GtResourcesUtility}$.
+I represent a location where a {{gtClass:Path}} (file or directory) is searched for.
+My subclasses should implement {{gtMethod:GtResourcesUtilityLocation>>#resourceAtPath:}}. 
+My subclasses are used by {{gtClass:GtResourcesUtility}}.
 
-See my subclasses for more details ${class:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:}$.
+See my subclasses for more details {{gtClass:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:}}.
+
+
 "
 Class {
 	#name : #GtResourcesUtilityLocation,
