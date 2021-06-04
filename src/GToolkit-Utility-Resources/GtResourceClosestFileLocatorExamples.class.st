@@ -1,5 +1,7 @@
 "
-I exemplify ${class:GtResourceClosestFileLocator}$.
+I exemplify {{gtClass:GtResourceClosestFileLocator}}.
+
+
 "
 Class {
 	#name : #GtResourceClosestFileLocatorExamples,

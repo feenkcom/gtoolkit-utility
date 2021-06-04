@@ -3,12 +3,12 @@ OSSUnixSubprocessss is a convenience wrapper around OSSUnixSubprocess for the co
 
 Typical usage is: 
 
-[[[ 
+``` 
 proc := (GtUnixSubprocess command: 'ls' arguments: #('-lh'))
 proc errorBlock: [ :proc | self error: 'External process failed, see proc' ].
 proc runAndWait
 proc stdout
-]]]
+```
 
 If no error block is supplied the completion status should be checked with `#isSuccess`.
 
@@ -27,9 +27,11 @@ Public API and Key Messages
 
    One simple example is simply gorgeous.
  
-!!Internal Representation and Key Implementation Points.
+1. # Internal Representation and Key Implementation Points.
 
-!!!Instance Variables
+
+1. ## Instance Variables
+
 	arguments:		<Array>
 	command:			<String>
 	errorBlock:		<BlockClosure>
@@ -39,7 +41,9 @@ Public API and Key Messages
 	stdout:			<String>
 
 
-!!!Implementation Points
+1. ## Implementation Points
+
+
 "
 Class {
 	#name : #GtUnixSubprocess,

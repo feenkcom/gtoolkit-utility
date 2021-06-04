@@ -1,24 +1,27 @@
 "
-I find a ${class:FileReference}$ resource (file or directory)) that is in one of locations.
-My main method is ${method:GtResourcesUtility>>#resourceAtPath:}$.
+I find a {{gtClass:FileReference}} resource (file or directory)) that is in one of locations.
+My main method is {{gtMethod:GtResourcesUtility>>#resourceAtPath:}}.
 
-I keep ${class:GtResourcesUtilityLocation}$ instances. Each instance defines where a resource is searched. Check individual class comments ${class:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:|height=150}$ for more details.
+I keep {{gtClass:GtResourcesUtilityLocation}} instances. Each instance defines where a resource is searched. Check individual class comments {{gtClass:GtResourcesUtilityLocation|expanded=true|show=#gtSubclassesFor:|height=150}} for more details.
 
-!! Live Search 
+1. # Live Search 
+
 
 You can search live here by clicking on the search icon in the inspector: 
-${example:GtResourcesUtilityExamples>>#resourceUtility|noCode|previewHeight=200}$
+{{gtExample:GtResourcesUtilityExamples>>#resourceUtility|noCode|previewHeight=200}}
 
-!! Usage
+1. # Usage
 
-You can either use a relative ${class:Path}$ to a recourse:
-${example:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsPath}$
 
-Or you can pass a ${class:String}$ as a relative resource path:
-${example:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsString}$
+You can either use a relative {{gtClass:Path}} to a recourse:
+{{gtExample:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsPath}}
 
-In case of a non-existing path, I will return a possible reference inside of the ${method:IceLibgitRepository class>>#repositoriesLocation}$ directory:
-${example:GtResourcesUtilityExamples>>#gtResourceAtNonExistingPath}$
+Or you can pass a {{gtClass:String}} as a relative resource path:
+{{gtExample:GtResourcesUtilityExamples>>#gtResourceAtFeenkUtilityDefinedAsString}}
+
+In case of a non-existing path, I will return a possible reference inside of the {{gtMethod:IceLibgitRepository class>>#repositoriesLocation}} directory:
+{{gtExample:GtResourcesUtilityExamples>>#gtResourceAtNonExistingPath}}
+
 
 "
 Class {

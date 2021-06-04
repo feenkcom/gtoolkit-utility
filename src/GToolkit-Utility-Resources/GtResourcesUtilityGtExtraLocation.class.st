@@ -1,6 +1,7 @@
 "
-I search for a resource (file or directory) in a ${example:GtResourcesUtilityExamples>>#gtExtraDirectory|label=#basename}$ directory:
-${example:GtResourcesUtilityExamples>>#basicGtExtraLocation|previewExpanded=true|noCode}$
+I search for a resource (file or directory) in a {{gtExample:GtResourcesUtilityExamples>>#gtExtraDirectory|label=#basename}} directory:
+{{gtExample:GtResourcesUtilityExamples>>#basicGtExtraLocation|previewExpanded=true|noCode}}
+
 
 "
 Class {

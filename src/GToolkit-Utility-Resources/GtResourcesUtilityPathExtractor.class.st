@@ -1,18 +1,22 @@
 "
-I receive a code snippet string and return a ${class:Path}$ as a result of the code snippet.
-My main method to use is ${method:GtResourcesUtilityPathExtractor>>#canEvaluate:}$. 
+I receive a code snippet string and return a {{gtClass:Path}} as a result of the code snippet.
+My main method to use is {{gtMethod:GtResourcesUtilityPathExtractor>>#canEvaluate:}}. 
 
-!! Valid Code Snippets
+1. # Valid Code Snippets
 
-The following code snippet ${example:GtResourcesUtilityPathExtractorExamples>>#permitedLongPathString|label=#yourself}$ is evaluated and I return:
-${example:GtResourcesUtilityPathExtractorExamples>>#permitedLongPath|codeExpanded=false|previewExpanded=true}$
 
-!! Invalid Code Snippets
+The following code snippet {{gtExample:GtResourcesUtilityPathExtractorExamples>>#permitedLongPathString|label=#yourself}} is evaluated and I return:
+{{gtExample:GtResourcesUtilityPathExtractorExamples>>#permitedLongPath|codeExpanded=false|previewExpanded=true}}
 
-Only snippets with reference to ${class:Path}$, string literals, and ==*== and ==/== messages are valid.
+1. # Invalid Code Snippets
 
-For example, the ${example:GtResourcesUtilityPathExtractorExamples>>#unwantedUnarySender2String|label=#yourself}$ is not evaluated and I return ==nil== instead: 
-${example:GtResourcesUtilityPathExtractorExamples>>#unwantedUnarySender2}$
+
+Only snippets with reference to {{gtClass:Path}}, string literals, and `*` and `/` messages are valid.
+
+For example, the {{gtExample:GtResourcesUtilityPathExtractorExamples>>#unwantedUnarySender2String|label=#yourself}} is not evaluated and I return `nil` instead: 
+{{gtExample:GtResourcesUtilityPathExtractorExamples>>#unwantedUnarySender2}}
+
+
 "
 Class {
 	#name : #GtResourcesUtilityPathExtractor,

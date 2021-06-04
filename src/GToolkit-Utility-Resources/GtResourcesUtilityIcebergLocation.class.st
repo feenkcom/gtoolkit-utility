@@ -1,6 +1,7 @@
 "
 I search for a resource (file or directory) in Iceberg repositories directory:
-${example:GtResourcesUtilityExamples>>#basicIcebergLocation|previewExpanded=true|noCode}$
+{{gtExample:GtResourcesUtilityExamples>>#basicIcebergLocation|previewExpanded=true|noCode}}
+
 
 "
 Class {
