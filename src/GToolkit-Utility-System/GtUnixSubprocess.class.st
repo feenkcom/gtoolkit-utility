@@ -1,5 +1,5 @@
 "
-OSSUnixSubprocessss is a convenience wrapper around OSSUnixSubprocess for the common case of executing a command and capturing stdout and stderr, which are strings and are larger than one OS buffer, but small enough to fit in RAM.
+GtUnixSubprocessss is a convenience wrapper around OSSUnixSubprocess for the common case of executing a command and capturing stdout and stderr, which are strings and are larger than one OS buffer, but small enough to fit in RAM.
 
 Typical usage is: 
 
@@ -25,23 +25,22 @@ Public API and Key Messages
 - isSuccess 				Answer a boolean indicating if the command completed successfully.
 - stdout, stderr: 		The output strings.
 
-   One simple example is simply gorgeous.
  
-1. # Internal Representation and Key Implementation Points.
+## Internal Representation and Key Implementation Points.
 
 
-1. ## Instance Variables
+### Instance Variables
 
 	arguments:		<Array>
 	command:			<String>
 	errorBlock:		<BlockClosure>
 	process:			<OSSUnixSubprocess>
 	semaphore:		<Semaphore>
-	stderr:			<String>
-	stdout:			<String>
+	stderrStream:	<WriteStream on: String>
+	stdoutStream:	<WriteStream on: String>
 
 
-1. ## Implementation Points
+### Implementation Points
 
 
 "
@@ -54,10 +53,10 @@ Class {
 		'shellCommand',
 		'process',
 		'semaphore',
-		'stdout',
-		'stderr',
 		'errorBlock',
-		'workingDirectory'
+		'workingDirectory',
+		'stdoutStream',
+		'stderrStream'
 	],
 	#category : #'GToolkit-Utility-System'
 }
@@ -70,6 +69,12 @@ GtUnixSubprocess class >> command: cmd arguments: args [
 		arguments: args.
 ]
 
+{ #category : #adding }
+GtUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
+
+	self process addAllEnvVariablesFromParentWithoutOverride
+]
+
 { #category : #accessing }
 GtUnixSubprocess >> arguments [
 	^ arguments
@@ -80,6 +85,13 @@ GtUnixSubprocess >> arguments: anObject [
 	arguments := anObject
 ]
 
+{ #category : #cleaning }
+GtUnixSubprocess >> closeAndCleanStreams [
+
+	process ifNil: [ ^ self ].
+	process closeAndCleanStreams.
+]
+
 { #category : #accessing }
 GtUnixSubprocess >> command [
 	^ command
@@ -88,6 +100,18 @@ GtUnixSubprocess >> command [
 { #category : #accessing }
 GtUnixSubprocess >> command: anObject [
 	command := anObject
+]
+
+{ #category : #'env building' }
+GtUnixSubprocess >> envVariables [
+
+	^ process envVariables
+]
+
+{ #category : #accessing }
+GtUnixSubprocess >> environmentAt: key put: value [
+
+	^ self process environmentAt: key put: value
 ]
 
 { #category : #accessing }
@@ -106,6 +130,19 @@ GtUnixSubprocess >> exitStatusInterpreter [
 	^ process exitStatusInterpreter
 ]
 
+{ #category : #initialization }
+GtUnixSubprocess >> initialize [
+
+	super initialize.
+	arguments := #().
+]
+
+{ #category : #testing }
+GtUnixSubprocess >> isRunning [ 
+
+	^ self process isRunning
+]
+
 { #category : #accessing }
 GtUnixSubprocess >> isSuccess [
 	"Answer whether the command completed successfully.
@@ -119,18 +156,24 @@ GtUnixSubprocess >> printOn: aStream [
 
 	process ifNil: [ ^super printOn: aStream ].
 	process isRunning ifTrue:
-		[ aStream nextPutAll: 'a Running AKGUnixSubprocess' ]
+		[ aStream nextPutAll: 'a Running GtUnixSubprocess' ]
 	ifFalse:
 		[ self isSuccess ifTrue: 
-				[ aStream nextPutAll: 'a Successfull AKGUnixSubprocess' ]
+				[ aStream nextPutAll: 'a Successfull GtUnixSubprocess' ]
 			ifFalse:
-				[ aStream nextPutAll: 'an Unsuccessfull AKGUnixSubprocess' ] ].
+				[ aStream nextPutAll: 'an Unsuccessfull GtUnixSubprocess' ] ].
 ]
 
 { #category : #accessing }
 GtUnixSubprocess >> process [
 
 	^ process ifNil: [ process := OSSUnixSubprocess new ]
+]
+
+{ #category : #status }
+GtUnixSubprocess >> queryExitStatus [
+
+	^ process queryExitStatus
 ]
 
 { #category : #removing }
@@ -164,7 +207,6 @@ GtUnixSubprocess >> runAndWait [
 { #category : #private }
 GtUnixSubprocess >> runProcess [
 	"Run the requested command as a separate process"
-	| stdoutStream stderrStream |
 
 	self setCommand.
 	stdoutStream := String new writeStream.
@@ -182,8 +224,6 @@ GtUnixSubprocess >> runProcess [
 			stdoutStream nextPutAll: outStream upToEnd.
 			stderrStream nextPutAll: errStream upToEnd ].
 	self process closeAndCleanStreams.
-	stdout := stdoutStream contents.
-	stderr := stderrStream contents.
 	"Async processes have errors signalled here.
 	If waiting, raise the error after signalling the semaphore (in #runAndWait)"
 	semaphore
@@ -231,12 +271,24 @@ GtUnixSubprocess >> sigterm [
 
 { #category : #accessing }
 GtUnixSubprocess >> stderr [
-	^ stderr
+	^ stderrStream contents
 ]
 
 { #category : #accessing }
 GtUnixSubprocess >> stdout [
-	^ stdout
+	^ stdoutStream contents
+]
+
+{ #category : #actions }
+GtUnixSubprocess >> terminate [
+
+	process terminate
+]
+
+{ #category : #'system startup & shutdown' }
+GtUnixSubprocess >> terminateOnShutdown [
+
+	self process terminateOnShutdown
 ]
 
 { #category : #accessing }
