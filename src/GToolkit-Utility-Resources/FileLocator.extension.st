@@ -11,3 +11,10 @@ FileLocator class >> gtLocations [
 FileLocator class >> gtResource [
 	^ self origin: #gtResource
 ]
+
+{ #category : #'*GToolkit-Utility-Resources' }
+FileLocator >> parent [
+	^ GtResourceClosestFileLocator new
+		file: self resolve parent;
+		transform
+]

@@ -18,6 +18,52 @@ GtResourceClosestFileLocatorExamples >> basicLocator [
 	^ aLocator
 ]
 
+{ #category : #'examples - file locator parent' }
+GtResourceClosestFileLocatorExamples >> fileLocator_Parent_OneSubDirectory [
+	<gtExample>
+	
+	| aChild aParent |
+	aChild := FileLocator documents / 'dir1'.
+	aParent := aChild parent.
+	
+	self assert: aParent path equals: Path workingDirectory.
+	self assert: aParent origin equals: aChild origin.
+	
+	^ aParent
+]
+
+{ #category : #'examples - file locator parent' }
+GtResourceClosestFileLocatorExamples >> fileLocator_Parent_TwoSubDirectories [
+	<gtExample>
+	
+	| aChild aParent |
+	aChild := (FileLocator documents / 'dir1' / 'dir2').
+	aParent := aChild parent.
+	
+	self assert: aParent path equals: Path * 'dir1'.
+	self assert: aParent origin equals: aChild origin.
+	
+	^ aParent
+]
+
+{ #category : #'examples - file locator parent' }
+GtResourceClosestFileLocatorExamples >> fileLocator_Parent_ZeroSubDirectories [
+	<gtExample>
+	
+	| aChild aParent |
+	aChild := FileLocator documents.
+	aParent := aChild parent.
+	
+	(aParent isKindOf: FileLocator)
+		ifTrue: [ 
+			self assert: aParent path equals: Path workingDirectory.
+			self assert: aParent origin ~= aChild origin ]
+		ifFalse: [ 
+			self assert: aParent equals: aChild resolve parent ].
+	
+	^ aParent
+]
+
 { #category : #'examples - locator' }
 GtResourceClosestFileLocatorExamples >> locator_FileLocator_imageDirectory_pointingToLocalDirectory [
 	<gtExample>
