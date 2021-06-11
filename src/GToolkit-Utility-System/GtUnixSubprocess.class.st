@@ -124,6 +124,12 @@ GtUnixSubprocess >> errorBlock: anObject [
 	errorBlock := anObject
 ]
 
+{ #category : #accessing }
+GtUnixSubprocess >> exitStatus [ 
+
+	^ process exitStatus
+]
+
 { #category : #status }
 GtUnixSubprocess >> exitStatusInterpreter [
 
