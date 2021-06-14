@@ -23,6 +23,12 @@ TGtUniqueInstance classSide >> default [
 	^ self uniqueInstance
 ]
 
+{ #category : #testing }
+TGtUniqueInstance classSide >> hasUniqueInstance [
+
+	^ uniqueInstance isNotNil
+]
+
 { #category : #accessing }
 TGtUniqueInstance classSide >> instance [
 	^ self uniqueInstance
