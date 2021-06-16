@@ -125,6 +125,14 @@ GtUnixSubprocess >> errorBlock: anObject [
 ]
 
 { #category : #accessing }
+GtUnixSubprocess >> exitCode [ 
+	"Answer the interpretted exit status, or nil if not available"
+
+	(process isNil or: [ process isRunning ]) ifTrue: [ ^ nil ].
+	^ process exitStatusInterpreter exitStatus
+]
+
+{ #category : #accessing }
 GtUnixSubprocess >> exitStatus [ 
 
 	^ process exitStatus
