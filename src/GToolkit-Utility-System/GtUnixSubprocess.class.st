@@ -136,6 +136,13 @@ GtUnixSubprocess >> exitStatusInterpreter [
 	^ process exitStatusInterpreter
 ]
 
+{ #category : #testing }
+GtUnixSubprocess >> hasProcess [
+	"Answer a boolean indicating whether the receiver has a process object"
+
+	^ process isNotNil
+]
+
 { #category : #initialization }
 GtUnixSubprocess >> initialize [
 
