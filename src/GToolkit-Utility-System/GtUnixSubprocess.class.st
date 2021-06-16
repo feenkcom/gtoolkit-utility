@@ -125,6 +125,14 @@ GtUnixSubprocess >> errorBlock: anObject [
 ]
 
 { #category : #accessing }
+GtUnixSubprocess >> exitCode [ 
+	"Answer the interpretted exit status, or nil if not available"
+
+	(process isNil or: [ process isRunning ]) ifTrue: [ ^ nil ].
+	^ process exitStatusInterpreter exitStatus
+]
+
+{ #category : #accessing }
 GtUnixSubprocess >> exitStatus [ 
 
 	^ process exitStatus
@@ -134,6 +142,13 @@ GtUnixSubprocess >> exitStatus [
 GtUnixSubprocess >> exitStatusInterpreter [
 
 	^ process exitStatusInterpreter
+]
+
+{ #category : #testing }
+GtUnixSubprocess >> hasProcess [
+	"Answer a boolean indicating whether the receiver has a process object"
+
+	^ process isNotNil
 ]
 
 { #category : #initialization }
