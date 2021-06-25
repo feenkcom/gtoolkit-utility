@@ -204,11 +204,13 @@ GtUnixSubprocess >> printOn: aStream [
 	process ifNil: [ ^super printOn: aStream ].
 	process isRunning ifTrue:
 		[ aStream nextPutAll: 'a Running GtUnixSubprocess' ]
-	ifFalse:
+	ifFalse: [ process isComplete ifFalse:
+		[ aStream nextPutAll: 'an Incomplete GtUnixSubprocess' ]
+	ifTrue:
 		[ self isSuccess ifTrue: 
 				[ aStream nextPutAll: 'a Successfull GtUnixSubprocess' ]
 			ifFalse:
-				[ aStream nextPutAll: 'an Unsuccessfull GtUnixSubprocess' ] ].
+				[ aStream nextPutAll: 'an Unsuccessfull GtUnixSubprocess' ] ] ].
 ]
 
 { #category : #accessing }
