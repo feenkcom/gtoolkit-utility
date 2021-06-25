@@ -144,6 +144,32 @@ GtUnixSubprocess >> exitStatusInterpreter [
 	^ process exitStatusInterpreter
 ]
 
+{ #category : #ui }
+GtUnixSubprocess >> gtStderrFor: aView [
+	<gtView>
+
+	stderrStream ifNil: [ ^ aView empty ].
+	^ aView textEditor 
+		title: 'stderr';
+		priority: 20;
+		text: [ stderrStream contents asRopedText glamorousCodeFont ];
+		actionUpdateButtonTooltip: 'Update stderr'
+
+]
+
+{ #category : #ui }
+GtUnixSubprocess >> gtStdoutFor: aView [
+	<gtView>
+
+	stdoutStream ifNil: [ ^ aView empty ].
+	^ aView textEditor 
+		title: 'stdout';
+		priority: 20;
+		text: [ stdoutStream contents asRopedText glamorousCodeFont ];
+		actionUpdateButtonTooltip: 'Update stdout'
+
+]
+
 { #category : #testing }
 GtUnixSubprocess >> hasProcess [
 	"Answer a boolean indicating whether the receiver has a process object"
