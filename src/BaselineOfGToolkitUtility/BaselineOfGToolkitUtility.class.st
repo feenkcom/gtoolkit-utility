@@ -26,11 +26,8 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
 			baseline: 'GToolkitRefactoringsUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
-			baseline: 'GToolkitRobocoderUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility/src' ];
 			package: 'GToolkit-Utility-MessageTally';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #( 'GToolkitFileUtility' ) ]
 	]
-
 ]
