@@ -1,6 +1,6 @@
 Class {
-	#name : #RBAddPackageTagChange,
-	#superclass : #RBAddPackageChange,
+	#name : #GtRBAddPackageTagChange,
+	#superclass : #GtRBAddPackageChange,
 	#instVars : [
 		'tagName'
 	],
@@ -8,38 +8,38 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBAddPackageTagChange class >> packageName: aString tagName: tagName [
+GtRBAddPackageTagChange class >> packageName: aString tagName: tagName [
 	^ (self packageName: aString)
 		tagName: tagName;
 		yourself
 ]
 
 { #category : #converting }
-RBAddPackageTagChange >> asUndoOperation [
+GtRBAddPackageTagChange >> asUndoOperation [
 	^ self package isNil
-		ifTrue: [ RBRemovePackageChange packageName: packageName ]
-		ifFalse: [ RBRemovePackageTagChange packageName: packageName tagName: tagName ]
+		ifTrue: [ GtRBRemovePackageChange packageName: packageName ]
+		ifFalse: [ GtRBRemovePackageTagChange packageName: packageName tagName: tagName ]
 ]
 
 { #category : #private }
-RBAddPackageTagChange >> primitiveExecute [
+GtRBAddPackageTagChange >> primitiveExecute [
 	self package isNil
 		ifTrue: [ super primitiveExecute ].
 	self package addClassTag: tagName
 ]
 
 { #category : #accessing }
-RBAddPackageTagChange >> tag [
+GtRBAddPackageTagChange >> tag [
 	^ self package
 		ifNotNil: [ :pkg | pkg classTagNamed: tagName ifAbsent: [  ] ]
 ]
 
 { #category : #accessing }
-RBAddPackageTagChange >> tagName [
+GtRBAddPackageTagChange >> tagName [
 	^ tagName
 ]
 
 { #category : #accessing }
-RBAddPackageTagChange >> tagName: aString [
+GtRBAddPackageTagChange >> tagName: aString [
 	tagName := aString asSymbol
 ]

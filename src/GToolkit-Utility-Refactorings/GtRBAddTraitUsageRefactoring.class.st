@@ -1,11 +1,11 @@
 Class {
-	#name : #RBAddTraitUsageRefactoring,
-	#superclass : #RBTraitRefactoring,
+	#name : #GtRBAddTraitUsageRefactoring,
+	#superclass : #GtRBTraitRefactoring,
 	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #private }
-RBAddTraitUsageRefactoring >> checkClassDoesNotHaveSameSlotsAsTrait [
+GtRBAddTraitUsageRefactoring >> checkClassDoesNotHaveSameSlotsAsTrait [
 	| aTrait theTraitSlots aClass |
 
 	aClass := class.
@@ -27,7 +27,7 @@ RBAddTraitUsageRefactoring >> checkClassDoesNotHaveSameSlotsAsTrait [
 ]
 
 { #category : #private }
-RBAddTraitUsageRefactoring >> checkClassDoesNotIncludeTrait [
+GtRBAddTraitUsageRefactoring >> checkClassDoesNotIncludeTrait [
 	class := class asClassWithTrait.
 	class withAllSuperclasses
 		do: [ :each | 
@@ -37,7 +37,7 @@ RBAddTraitUsageRefactoring >> checkClassDoesNotIncludeTrait [
 ]
 
 { #category : #preconditions }
-RBAddTraitUsageRefactoring >> preconditions [
+GtRBAddTraitUsageRefactoring >> preconditions [
 	^ (super preconditions
 		&
 			(RBCondition
@@ -50,7 +50,7 @@ RBAddTraitUsageRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBAddTraitUsageRefactoring >> transform [
+GtRBAddTraitUsageRefactoring >> transform [
 	| newExpression |
 	newExpression := class traitExpression
 		ifNil: [ traitName ]

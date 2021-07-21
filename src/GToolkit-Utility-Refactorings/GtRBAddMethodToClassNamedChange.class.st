@@ -1,11 +1,11 @@
 Class {
-	#name : #RBAddMethodToClassNamedChange,
+	#name : #GtRBAddMethodToClassNamedChange,
 	#superclass : #RBAddMethodChange,
 	#category : #'GToolkit-Utility-Refactorings-Changes'
 }
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange class >> compile: aString inBehaviorNamed: aBehaviorName protocol: aProtocol isMeta: isMeta [
+GtRBAddMethodToClassNamedChange class >> compile: aString inBehaviorNamed: aBehaviorName protocol: aProtocol isMeta: isMeta [
 	^ self new
 		compile: aString
 		inBehaviorNamed: aBehaviorName
@@ -14,7 +14,7 @@ RBAddMethodToClassNamedChange class >> compile: aString inBehaviorNamed: aBehavi
 ]
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange class >> compile: aString protocol: aProtocol [
+GtRBAddMethodToClassNamedChange class >> compile: aString protocol: aProtocol [
 	^ self new
 		compile: aString
 		protocol: aProtocol
@@ -22,7 +22,7 @@ RBAddMethodToClassNamedChange class >> compile: aString protocol: aProtocol [
 ]
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange class >> compile: aString protocol: aProtocol isMeta: isMeta [
+GtRBAddMethodToClassNamedChange class >> compile: aString protocol: aProtocol isMeta: isMeta [
 	^ self new
 		compile: aString
 		protocol: aProtocol
@@ -30,12 +30,12 @@ RBAddMethodToClassNamedChange class >> compile: aString protocol: aProtocol isMe
 ]
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange >> behaviorName: aBehaviorName [
+GtRBAddMethodToClassNamedChange >> behaviorName: aBehaviorName [
 	className := aBehaviorName
 ]
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange >> compile: aString inBehaviorNamed: aBehaviorName protocol: aProtocol isMeta: isMetaClass [
+GtRBAddMethodToClassNamedChange >> compile: aString inBehaviorNamed: aBehaviorName protocol: aProtocol isMeta: isMetaClass [
 	isMeta := isMetaClass.
 	className := aBehaviorName.
 	self protocols: aProtocol.
@@ -44,7 +44,7 @@ RBAddMethodToClassNamedChange >> compile: aString inBehaviorNamed: aBehaviorName
 ]
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange >> compile: aString protocol: aProtocol isMeta: isMetaClass [
+GtRBAddMethodToClassNamedChange >> compile: aString protocol: aProtocol isMeta: isMetaClass [
 	isMeta := isMetaClass.
 	self protocols: aProtocol.
 	source := aString.
@@ -52,6 +52,6 @@ RBAddMethodToClassNamedChange >> compile: aString protocol: aProtocol isMeta: is
 ]
 
 { #category : #compiling }
-RBAddMethodToClassNamedChange >> isMeta: isMetaClass [
+GtRBAddMethodToClassNamedChange >> isMeta: isMetaClass [
 	isMeta := isMetaClass
 ]

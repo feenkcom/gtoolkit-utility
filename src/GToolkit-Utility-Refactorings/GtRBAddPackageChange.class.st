@@ -1,16 +1,16 @@
 Class {
-	#name : #RBAddPackageChange,
-	#superclass : #RBPackageChange,
+	#name : #GtRBAddPackageChange,
+	#superclass : #GtRBPackageChange,
 	#category : #'GToolkit-Utility-Refactorings-Changes'
 }
 
 { #category : #converting }
-RBAddPackageChange >> asUndoOperation [
-	^ RBRemovePackageChange packageName: packageName
+GtRBAddPackageChange >> asUndoOperation [
+	^ GtRBRemovePackageChange packageName: packageName
 ]
 
 { #category : #private }
-RBAddPackageChange >> primitiveExecute [	
+GtRBAddPackageChange >> primitiveExecute [	
 	(RPackage organizer includesPackageNamed: packageName)
 		ifTrue: [ ^ self ].
 

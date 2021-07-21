@@ -1,5 +1,5 @@
 Class {
-	#name : #RBClassWithTrait,
+	#name : #GtRBClassWithTrait,
 	#superclass : #RBClass,
 	#instVars : [
 		'traitExpression'
@@ -8,16 +8,16 @@ Class {
 }
 
 { #category : #converting }
-RBClassWithTrait >> asClassWithTrait [
+GtRBClassWithTrait >> asClassWithTrait [
 	^ self
 ]
 
 { #category : #accessing }
-RBClassWithTrait >> traitExpression [
+GtRBClassWithTrait >> traitExpression [
 	^ traitExpression ifNil: [ traitExpression := super traitExpression ]
 ]
 
 { #category : #accessing }
-RBClassWithTrait >> traitExpression: aString [
+GtRBClassWithTrait >> traitExpression: aString [
 	traitExpression := aString
 ]

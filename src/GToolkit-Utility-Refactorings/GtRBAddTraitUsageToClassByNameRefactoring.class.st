@@ -1,5 +1,5 @@
 Class {
-	#name : #RBAddTraitUsageToClassByNameRefactoring,
+	#name : #GtRBAddTraitUsageToClassByNameRefactoring,
 	#superclass : #RBRefactoring,
 	#instVars : [
 		'className',
@@ -9,14 +9,14 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBAddTraitUsageToClassByNameRefactoring class >> traitName: aTraitName inClassNamed: aClassName [
+GtRBAddTraitUsageToClassByNameRefactoring class >> traitName: aTraitName inClassNamed: aClassName [
 	^ self new
 		className: aClassName asSymbol 
 		traitName: aTraitName asSymbol
 ]
 
 { #category : #private }
-RBAddTraitUsageToClassByNameRefactoring >> checkClassDoesNotIncludeTraitFor: aClass [ 
+GtRBAddTraitUsageToClassByNameRefactoring >> checkClassDoesNotIncludeTraitFor: aClass [ 
 	aClass withAllSuperclasses
 		do: [ :each | 
 			(self includesTrait: traitName in: each)
@@ -25,13 +25,13 @@ RBAddTraitUsageToClassByNameRefactoring >> checkClassDoesNotIncludeTraitFor: aCl
 ]
 
 { #category : #'initialize-release' }
-RBAddTraitUsageToClassByNameRefactoring >> className: aClassName traitName: aTraitName [
+GtRBAddTraitUsageToClassByNameRefactoring >> className: aClassName traitName: aTraitName [
 	className := aClassName.
 	traitName := aTraitName
 ]
 
 { #category : #private }
-RBAddTraitUsageToClassByNameRefactoring >> includesTrait: aString in: aRBClass [
+GtRBAddTraitUsageToClassByNameRefactoring >> includesTrait: aString in: aRBClass [
 	| expression |
 	aRBClass traitExpression isNil
 		ifTrue: [ ^ false ].
@@ -44,7 +44,7 @@ RBAddTraitUsageToClassByNameRefactoring >> includesTrait: aString in: aRBClass [
 ]
 
 { #category : #preconditions }
-RBAddTraitUsageToClassByNameRefactoring >> preconditions [
+GtRBAddTraitUsageToClassByNameRefactoring >> preconditions [
 	| class |
 	class := (self model classNamed: className) asClassWithTrait.
 	
@@ -65,7 +65,7 @@ RBAddTraitUsageToClassByNameRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBAddTraitUsageToClassByNameRefactoring >> transform [
+GtRBAddTraitUsageToClassByNameRefactoring >> transform [
 	| newExpression class |
 	class := self model classNamed: className.
 	newExpression := class traitExpression

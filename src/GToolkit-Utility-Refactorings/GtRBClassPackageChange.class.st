@@ -1,11 +1,11 @@
 Class {
-	#name : #RBClassPackageChange,
+	#name : #GtRBClassPackageChange,
 	#superclass : #RBClassCategoryChange,
 	#category : #'GToolkit-Utility-Refactorings-Changes'
 }
 
 { #category : #private }
-RBClassPackageChange >> primitiveExecute [
+GtRBClassPackageChange >> primitiveExecute [
 	| class |
 	class := self changeClass.
 	class classInstaller

@@ -1,5 +1,5 @@
 Class {
-	#name : #RBChangeSuperclassRefactoring,
+	#name : #GtRBChangeSuperclassRefactoring,
 	#superclass : #RBClassRefactoring,
 	#instVars : [
 		'class',
@@ -9,14 +9,14 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBChangeSuperclassRefactoring class >> changeSuperclassOf: aClass to: superClass [
+GtRBChangeSuperclassRefactoring class >> changeSuperclassOf: aClass to: superClass [
 	^ self new
 		changeSuperclassOf: aClass to: superClass;
 		yourself
 ]
 
 { #category : #'initialize-release' }
-RBChangeSuperclassRefactoring >> changeSuperclassOf: aClass to: superClass [
+GtRBChangeSuperclassRefactoring >> changeSuperclassOf: aClass to: superClass [
 	className := aClass name.
 	class := self model classFor: aClass.
 	class gtRemoveSlotsFromTraits.
@@ -24,7 +24,7 @@ RBChangeSuperclassRefactoring >> changeSuperclassOf: aClass to: superClass [
 ]
 
 { #category : #preconditions }
-RBChangeSuperclassRefactoring >> preconditions [
+GtRBChangeSuperclassRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
 		& (RBCondition isMetaclass: newSuperclass) not
 		&
@@ -38,7 +38,7 @@ RBChangeSuperclassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBChangeSuperclassRefactoring >> transform [
+GtRBChangeSuperclassRefactoring >> transform [
 	class superclass: newSuperclass.
 	class classSide superclass: newSuperclass classSide.
 	self model changes defineClass: class gtDefinitionString

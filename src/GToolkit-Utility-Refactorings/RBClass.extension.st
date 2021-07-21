@@ -5,7 +5,7 @@ RBClass >> asClassWithTrait [
 	"Hack to add a trait expression variable to the class"
 
 	| classWithTrait |
-	classWithTrait := RBClassWithTrait new.
+	classWithTrait := GtRBClassWithTrait new.
 	1 to: self class instSize do: [ :i | classWithTrait instVarAt: i put: (self instVarAt: i) ].
 	
 	(model changedClasses includesKey: self name)

@@ -1,5 +1,5 @@
 Class {
-	#name : #RBDefineClassRefactoring,
+	#name : #GtRBDefineClassRefactoring,
 	#superclass : #RBClassRefactoring,
 	#instVars : [
 		'definitionString',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBDefineClassRefactoring class >> model: aRBSmalltalk addClass: aName superclass: aSuperclassName category: aSymbol definition: aString [
+GtRBDefineClassRefactoring class >> model: aRBSmalltalk addClass: aName superclass: aSuperclassName category: aSymbol definition: aString [
 	^self new
 		model: aRBSmalltalk;
 		addClass: aName
@@ -21,7 +21,7 @@ RBDefineClassRefactoring class >> model: aRBSmalltalk addClass: aName superclass
 ]
 
 { #category : #accessing }
-RBDefineClassRefactoring >> addClass: aName superclass: aSuperclassName category: aSymbol definition: aString [ 
+GtRBDefineClassRefactoring >> addClass: aName superclass: aSuperclassName category: aSymbol definition: aString [ 
 	self className: aName.
 	superclass := self classObjectFor: aSuperclassName.
 	category := aSymbol.
@@ -30,13 +30,13 @@ RBDefineClassRefactoring >> addClass: aName superclass: aSuperclassName category
 ]
 
 { #category : #accessing }
-RBDefineClassRefactoring >> definition: aString [
+GtRBDefineClassRefactoring >> definition: aString [
 	definitionString := aString
 	
 ]
 
 { #category : #preconditions }
-RBDefineClassRefactoring >> preconditions [
+GtRBDefineClassRefactoring >> preconditions [
 	| cond |
 	cond := ((RBCondition isMetaclass: superclass) 
 				errorMacro: 'Superclass must not be a metaclass') not.
@@ -49,6 +49,6 @@ RBDefineClassRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBDefineClassRefactoring >> transform [
+GtRBDefineClassRefactoring >> transform [
 	self model changes defineClass: definitionString
 ]

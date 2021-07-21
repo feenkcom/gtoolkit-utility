@@ -1,11 +1,11 @@
 Class {
-	#name : #RBRemoveTraitUsageRefactoring,
-	#superclass : #RBTraitRefactoring,
+	#name : #GtRBRemoveTraitUsageRefactoring,
+	#superclass : #GtRBTraitRefactoring,
 	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #preconditions }
-RBRemoveTraitUsageRefactoring >> checkClassIncludesTrait [
+GtRBRemoveTraitUsageRefactoring >> checkClassIncludesTrait [
 	class := class asClassWithTrait.
 	(self includesTrait: traitName in: class)
 		ifFalse:
@@ -13,7 +13,7 @@ RBRemoveTraitUsageRefactoring >> checkClassIncludesTrait [
 ]
 
 { #category : #preconditions }
-RBRemoveTraitUsageRefactoring >> preconditions [
+GtRBRemoveTraitUsageRefactoring >> preconditions [
 	^ super preconditions
 		&
 			(RBCondition
@@ -22,7 +22,7 @@ RBRemoveTraitUsageRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRemoveTraitUsageRefactoring >> removeTraitFromExpression: anAST [
+GtRBRemoveTraitUsageRefactoring >> removeTraitFromExpression: anAST [
 	anAST isVariable
 		ifTrue: [ ^ anAST name = traitName
 				ifTrue: [ nil ]
@@ -47,7 +47,7 @@ RBRemoveTraitUsageRefactoring >> removeTraitFromExpression: anAST [
 ]
 
 { #category : #transforming }
-RBRemoveTraitUsageRefactoring >> traitExpressionAfterRemoval [
+GtRBRemoveTraitUsageRefactoring >> traitExpressionAfterRemoval [
 	| expression ast |
 	expression := class traitExpression.
 	ast := RBParser parseExpression: expression.
@@ -58,7 +58,7 @@ RBRemoveTraitUsageRefactoring >> traitExpressionAfterRemoval [
 ]
 
 { #category : #transforming }
-RBRemoveTraitUsageRefactoring >> transform [
+GtRBRemoveTraitUsageRefactoring >> transform [
 	class traitExpression: self traitExpressionAfterRemoval.
 	self model changes defineClass: class gtDefinitionString
 ]
