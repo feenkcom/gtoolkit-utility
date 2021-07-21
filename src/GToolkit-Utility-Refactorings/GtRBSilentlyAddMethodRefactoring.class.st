@@ -1,11 +1,11 @@
 Class {
-	#name : #RBSilentlyAddMethodRefactoring,
+	#name : #GtRBSilentlyAddMethodRefactoring,
 	#superclass : #RBAddMethodRefactoring,
 	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #preconditions }
-RBSilentlyAddMethodRefactoring >> preconditions [
+GtRBSilentlyAddMethodRefactoring >> preconditions [
 	| selector method |
 	method := RBParser parseMethod: source
 				onError: 

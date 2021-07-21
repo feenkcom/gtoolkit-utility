@@ -1,5 +1,5 @@
 Class {
-	#name : #RBRenamePackageRefactoring,
+	#name : #GtRBRenamePackageRefactoring,
 	#superclass : #RBRefactoring,
 	#instVars : [
 		'oldName',
@@ -9,20 +9,20 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBRenamePackageRefactoring class >> from: oldName to: newName [
+GtRBRenamePackageRefactoring class >> from: oldName to: newName [
 	^ self new
 		from: oldName to: newName;
 		yourself
 ]
 
 { #category : #'initialize-release' }
-RBRenamePackageRefactoring >> from: oldPackageName to: newPackageName [
+GtRBRenamePackageRefactoring >> from: oldPackageName to: newPackageName [
 	oldName := oldPackageName.
 	newName := newPackageName
 ]
 
 { #category : #accessing }
-RBRenamePackageRefactoring >> preconditions [
+GtRBRenamePackageRefactoring >> preconditions [
 	^ ((RBCondition
 		withBlock: [ (RPackage organizer packageNamed: oldName asSymbol ifAbsent: [  ])
 				notNil ]) errorMacro: 'Package ' , oldName , ' does not exist')
@@ -33,7 +33,7 @@ RBRenamePackageRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRenamePackageRefactoring >> renameBaselineReferences [
+GtRBRenamePackageRefactoring >> renameBaselineReferences [
 	| rewriter baselineClass |
 	baselineClass := self model classNamed: #BaselineOf.
 	baselineClass isNil
@@ -49,13 +49,13 @@ RBRenamePackageRefactoring >> renameBaselineReferences [
 ]
 
 { #category : #transforming }
-RBRenamePackageRefactoring >> renamePackage [
+GtRBRenamePackageRefactoring >> renamePackage [
 	self model changes
-		addChange: (RBRenamePackageChange from: oldName to: newName)
+		addChange: (GtRBRenamePackageChange from: oldName to: newName)
 ]
 
 { #category : #transforming }
-RBRenamePackageRefactoring >> transform [
+GtRBRenamePackageRefactoring >> transform [
 	self renamePackage.
 	self renameBaselineReferences
 ]

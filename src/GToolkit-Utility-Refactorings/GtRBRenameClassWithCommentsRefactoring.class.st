@@ -1,11 +1,11 @@
 Class {
-	#name : #RBRenameClassWithCommentsRefactoring,
+	#name : #GtRBRenameClassWithCommentsRefactoring,
 	#superclass : #RBRenameClassRefactoring,
 	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #transforming }
-RBRenameClassWithCommentsRefactoring >> renameClassComments [
+GtRBRenameClassWithCommentsRefactoring >> renameClassComments [
 	self model
 		allClassesDo: [ :each | 
 			| newComment |
@@ -16,7 +16,7 @@ RBRenameClassWithCommentsRefactoring >> renameClassComments [
 ]
 
 { #category : #transforming }
-RBRenameClassWithCommentsRefactoring >> renameClassInComment: aString [
+GtRBRenameClassWithCommentsRefactoring >> renameClassInComment: aString [
 	| index indices |
 	aString isNil
 		ifTrue: [ ^ nil ].
@@ -49,7 +49,7 @@ RBRenameClassWithCommentsRefactoring >> renameClassInComment: aString [
 ]
 
 { #category : #transforming }
-RBRenameClassWithCommentsRefactoring >> renameClassNameInMethodComments: aRBMethod [
+GtRBRenameClassWithCommentsRefactoring >> renameClassNameInMethodComments: aRBMethod [
 	| comments index newSource originalSource |
 	comments := OrderedCollection new.
 	aRBMethod ast nodesDo: [ :each | comments addAll: each comments ].
@@ -70,7 +70,7 @@ RBRenameClassWithCommentsRefactoring >> renameClassNameInMethodComments: aRBMeth
 ]
 
 { #category : #transforming }
-RBRenameClassWithCommentsRefactoring >> renameMethodComments [
+GtRBRenameClassWithCommentsRefactoring >> renameMethodComments [
 	self model
 		allClassesDo: [ :cls | 
 			cls selectors
@@ -82,7 +82,7 @@ RBRenameClassWithCommentsRefactoring >> renameMethodComments [
 ]
 
 { #category : #transforming }
-RBRenameClassWithCommentsRefactoring >> renameReferences [
+GtRBRenameClassWithCommentsRefactoring >> renameReferences [
 	super renameReferences.
 	self renameClassComments.
 	self renameMethodComments

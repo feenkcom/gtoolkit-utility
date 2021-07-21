@@ -1,5 +1,5 @@
 Class {
-	#name : #RBPackageClassRefactoring,
+	#name : #GtRBPackageClassRefactoring,
 	#superclass : #RBClassRefactoring,
 	#instVars : [
 		'class',
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBPackageClassRefactoring class >> class: aClass packageName: packageString tagName: tagString [
+GtRBPackageClassRefactoring class >> class: aClass packageName: packageString tagName: tagString [
 	^ self new
 		class: aClass packageName: packageString tagName: tagString;
 		yourself
 ]
 
 { #category : #'initialize-release' }
-RBPackageClassRefactoring >> class: aClass packageName: packageString tagName: tagString [
+GtRBPackageClassRefactoring >> class: aClass packageName: packageString tagName: tagString [
 	class := self model classFor: aClass.
 	className := class name.
 	packageName := packageString.
@@ -25,16 +25,16 @@ RBPackageClassRefactoring >> class: aClass packageName: packageString tagName: t
 ]
 
 { #category : #preconditions }
-RBPackageClassRefactoring >> preconditions [
+GtRBPackageClassRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
 ]
 
 { #category : #transforming }
-RBPackageClassRefactoring >> transform [
+GtRBPackageClassRefactoring >> transform [
 	RPackageOrganizer default
 		packageNamed: packageName asSymbol
 		ifAbsent: [ self model changes
-				addChange: (RBAddPackageChange packageName: packageName) ].
+				addChange: (GtRBAddPackageChange packageName: packageName) ].
 	class
 		category:
 			packageName

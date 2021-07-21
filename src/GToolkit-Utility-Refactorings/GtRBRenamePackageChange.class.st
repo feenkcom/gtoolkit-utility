@@ -1,6 +1,6 @@
 Class {
-	#name : #RBRenamePackageChange,
-	#superclass : #RBPackageChange,
+	#name : #GtRBRenamePackageChange,
+	#superclass : #GtRBPackageChange,
 	#instVars : [
 		'newPackageName'
 	],
@@ -8,34 +8,34 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBRenamePackageChange class >> from: oldName to: newName [
+GtRBRenamePackageChange class >> from: oldName to: newName [
 	^ (self packageName: oldName)
 		newPackageName: newName;
 		yourself
 ]
 
 { #category : #converting }
-RBRenamePackageChange >> asUndoOperation [
+GtRBRenamePackageChange >> asUndoOperation [
 	^ self class from: newPackageName to: packageName
 ]
 
 { #category : #printing }
-RBRenamePackageChange >> changeString [
+GtRBRenamePackageChange >> changeString [
 	^ 'Rename package ' , packageName , ' to ' , newPackageName
 ]
 
 { #category : #accessing }
-RBRenamePackageChange >> newPackageName [
+GtRBRenamePackageChange >> newPackageName [
 	^ newPackageName
 ]
 
 { #category : #accessing }
-RBRenamePackageChange >> newPackageName: aString [
+GtRBRenamePackageChange >> newPackageName: aString [
 	newPackageName := aString
 ]
 
 { #category : #private }
-RBRenamePackageChange >> primitiveExecute [
+GtRBRenamePackageChange >> primitiveExecute [
 	| package |
 	package := RPackage organizer packageNamed: packageName asSymbol.
 	package renameTo: newPackageName asSymbol

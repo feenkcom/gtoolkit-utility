@@ -1,11 +1,11 @@
 Class {
-	#name : #RBRemovePoolVariableRefactoring,
+	#name : #GtRBRemovePoolVariableRefactoring,
 	#superclass : #RBVariableRefactoring,
 	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #preconditions }
-RBRemovePoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociation [
+GtRBRemovePoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociation [
 	class withAllSubclasses
 		do: [ :sub | 
 			sub realClass
@@ -23,7 +23,7 @@ RBRemovePoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociatio
 ]
 
 { #category : #preconditions }
-RBRemovePoolVariableRefactoring >> checkReferenceToPoolDictionary [
+GtRBRemovePoolVariableRefactoring >> checkReferenceToPoolDictionary [
 	| newPool |
 	newPool := Smalltalk globals at: variableName asSymbol.
 	newPool
@@ -32,7 +32,7 @@ RBRemovePoolVariableRefactoring >> checkReferenceToPoolDictionary [
 ]
 
 { #category : #preconditions }
-RBRemovePoolVariableRefactoring >> preconditions [
+GtRBRemovePoolVariableRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
 		& (RBCondition includesPoolDictionary: variableName in: class)
 		&
@@ -42,6 +42,6 @@ RBRemovePoolVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRemovePoolVariableRefactoring >> transform [
+GtRBRemovePoolVariableRefactoring >> transform [
 	class removePoolDictionary: variableName asSymbol
 ]

@@ -1,11 +1,11 @@
 Class {
-	#name : #RBAddPoolVariableRefactoring,
+	#name : #GtRBAddPoolVariableRefactoring,
 	#superclass : #RBVariableRefactoring,
 	#category : #'GToolkit-Utility-Refactorings-Refactorings'
 }
 
 { #category : #preconditions }
-RBAddPoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociation existingPoolName: aString [
+GtRBAddPoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociation existingPoolName: aString [
 	class withAllSubclasses
 		do: [ :sub | 
 			sub realClass
@@ -24,7 +24,7 @@ RBAddPoolVariableRefactoring >> checkClassReferencePoolVariable: anAssociation e
 ]
 
 { #category : #preconditions }
-RBAddPoolVariableRefactoring >> checkConflictingPoolVariableNames [
+GtRBAddPoolVariableRefactoring >> checkConflictingPoolVariableNames [
 	| newPool |
 	newPool := Smalltalk globals at: variableName asSymbol.
 	class sharedPools
@@ -39,7 +39,7 @@ RBAddPoolVariableRefactoring >> checkConflictingPoolVariableNames [
 ]
 
 { #category : #preconditions }
-RBAddPoolVariableRefactoring >> preconditions [
+GtRBAddPoolVariableRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
 		& (RBCondition isPoolDictionary: variableName in: self model)
 		& (RBCondition includesPoolDictionary: variableName in: class) not
@@ -50,6 +50,6 @@ RBAddPoolVariableRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBAddPoolVariableRefactoring >> transform [
+GtRBAddPoolVariableRefactoring >> transform [
 	class addPoolDictionary: variableName asSymbol
 ]

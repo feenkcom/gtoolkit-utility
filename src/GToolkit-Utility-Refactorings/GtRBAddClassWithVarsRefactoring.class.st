@@ -1,5 +1,5 @@
 Class {
-	#name : #RBAddClassWithVarsRefactoring,
+	#name : #GtRBAddClassWithVarsRefactoring,
 	#superclass : #RBAddClassRefactoring,
 	#instVars : [
 		'instanceVariableNames',
@@ -10,44 +10,44 @@ Class {
 }
 
 { #category : #accessing }
-RBAddClassWithVarsRefactoring >> classVariableNames [
+GtRBAddClassWithVarsRefactoring >> classVariableNames [
 	^ classVariableNames
 ]
 
 { #category : #accessing }
-RBAddClassWithVarsRefactoring >> classVariableNames: anObject [
+GtRBAddClassWithVarsRefactoring >> classVariableNames: anObject [
 	classVariableNames := anObject
 ]
 
 { #category : #accessing }
-RBAddClassWithVarsRefactoring >> classVariableNamesString [
+GtRBAddClassWithVarsRefactoring >> classVariableNamesString [
 	^ String space join: self classVariableNames
 ]
 
 { #category : #initialize }
-RBAddClassWithVarsRefactoring >> initialize [
+GtRBAddClassWithVarsRefactoring >> initialize [
 	super initialize.
 	instanceVariableNames := OrderedCollection new.
 	classVariableNames := OrderedCollection new
 ]
 
 { #category : #accessing }
-RBAddClassWithVarsRefactoring >> instanceVariableNames [
+GtRBAddClassWithVarsRefactoring >> instanceVariableNames [
 	^ instanceVariableNames
 ]
 
 { #category : #accessing }
-RBAddClassWithVarsRefactoring >> instanceVariableNames: anObject [
+GtRBAddClassWithVarsRefactoring >> instanceVariableNames: anObject [
 	instanceVariableNames := anObject
 ]
 
 { #category : #accessing }
-RBAddClassWithVarsRefactoring >> instanceVariableNamesString [
+GtRBAddClassWithVarsRefactoring >> instanceVariableNamesString [
 	^ String space join: self instanceVariableNames
 ]
 
 { #category : #preconditions }
-RBAddClassWithVarsRefactoring >> preconditions [
+GtRBAddClassWithVarsRefactoring >> preconditions [
 	| preconditions |
 	preconditions := self instanceVariableNames inject: super preconditions into: [ :pre :each | 
 		pre 
@@ -62,7 +62,7 @@ RBAddClassWithVarsRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBAddClassWithVarsRefactoring >> transform [
+GtRBAddClassWithVarsRefactoring >> transform [
 	(self model)
 		defineClass: ('<1p> subclass: #<2s> instanceVariableNames: <3p> classVariableNames: <4p> poolDictionaries: '''' category: <5p>' 
 					expandMacrosWithArguments: (

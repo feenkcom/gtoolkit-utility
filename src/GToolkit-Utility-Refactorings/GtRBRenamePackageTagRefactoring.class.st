@@ -1,5 +1,5 @@
 Class {
-	#name : #RBRenamePackageTagRefactoring,
+	#name : #GtRBRenamePackageTagRefactoring,
 	#superclass : #RBRefactoring,
 	#instVars : [
 		'packageName',
@@ -10,21 +10,21 @@ Class {
 }
 
 { #category : #'instace creation' }
-RBRenamePackageTagRefactoring class >> packageName: aPackageName from: oldTagName to: newTagName [
+GtRBRenamePackageTagRefactoring class >> packageName: aPackageName from: oldTagName to: newTagName [
 	^ self new
 		packageName: aPackageName from: oldTagName to: newTagName;
 		yourself
 ]
 
 { #category : #'initialize-release' }
-RBRenamePackageTagRefactoring >> packageName: aPackageName from: oldTagName to: newTagName [
+GtRBRenamePackageTagRefactoring >> packageName: aPackageName from: oldTagName to: newTagName [
 	packageName := aPackageName.
 	oldName := oldTagName.
 	newName := newTagName
 ]
 
 { #category : #preconditions }
-RBRenamePackageTagRefactoring >> preconditions [
+GtRBRenamePackageTagRefactoring >> preconditions [
 	| package |
 	package := RPackage organizer
 		packageNamed: packageName asSymbol
@@ -44,10 +44,10 @@ RBRenamePackageTagRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-RBRenamePackageTagRefactoring >> transform [
+GtRBRenamePackageTagRefactoring >> transform [
 	self model changes
 		addChange:
-			(RBRenamePackageTagChange
+			(GtRBRenamePackageTagChange
 				packageName: packageName
 				from: oldName
 				to: newName)

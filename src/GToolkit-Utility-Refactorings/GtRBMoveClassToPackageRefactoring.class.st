@@ -1,5 +1,5 @@
 Class {
-	#name : #RBMoveClassToPackageRefactoring,
+	#name : #GtRBMoveClassToPackageRefactoring,
 	#superclass : #RBClassTransformation,
 	#instVars : [
 		'packageName'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBMoveClassToPackageRefactoring class >> model: aRBModel move: aClassName to: aPackageName [
+GtRBMoveClassToPackageRefactoring class >> model: aRBModel move: aClassName to: aPackageName [
 	^ self new
 		model: aRBModel;
 		move: aClassName to: aPackageName;
@@ -16,21 +16,21 @@ RBMoveClassToPackageRefactoring class >> model: aRBModel move: aClassName to: aP
 ]
 
 { #category : #'instance creation' }
-RBMoveClassToPackageRefactoring class >> move: aClassName to: aPackageName [
+GtRBMoveClassToPackageRefactoring class >> move: aClassName to: aPackageName [
 	^ self new
 		move: aClassName to: aPackageName;
 		yourself
 ]
 
 { #category : #executing }
-RBMoveClassToPackageRefactoring >> ensurePackageCreated [
+GtRBMoveClassToPackageRefactoring >> ensurePackageCreated [
 	(self isPackage: packageName)
 		ifTrue: [ ^ self ].
-	model changes addChange: (RBAddPackageChange packageName: packageName)
+	model changes addChange: (GtRBAddPackageChange packageName: packageName)
 ]
 
 { #category : #testing }
-RBMoveClassToPackageRefactoring >> isPackage: aSymbol [
+GtRBMoveClassToPackageRefactoring >> isPackage: aSymbol [
 	RPackageOrganizer default
 		packageNamed: aSymbol
 		ifAbsent: [ | index |
@@ -42,13 +42,13 @@ RBMoveClassToPackageRefactoring >> isPackage: aSymbol [
 ]
 
 { #category : #'initialize-release' }
-RBMoveClassToPackageRefactoring >> move: aClassName to: aPackageName [
+GtRBMoveClassToPackageRefactoring >> move: aClassName to: aPackageName [
 	self className: aClassName.
 	packageName := aPackageName
 ]
 
 { #category : #preconditions }
-RBMoveClassToPackageRefactoring >> preconditions [
+GtRBMoveClassToPackageRefactoring >> preconditions [
 	^ (RBCondition
 		withBlock: [ self definingClass isNotNil ]
 		errorString: 'Class named ' , className , ' does not exist')
@@ -59,9 +59,9 @@ RBMoveClassToPackageRefactoring >> preconditions [
 ]
 
 { #category : #executing }
-RBMoveClassToPackageRefactoring >> privateTransform [
+GtRBMoveClassToPackageRefactoring >> privateTransform [
 	self ensurePackageCreated.
 	self definingClass category: packageName.
 	self model changes
-		addChange: (RBClassPackageChange category: packageName for: self definingClass)
+		addChange: (GtRBClassPackageChange category: packageName for: self definingClass)
 ]

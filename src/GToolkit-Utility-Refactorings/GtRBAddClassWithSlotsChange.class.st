@@ -1,11 +1,11 @@
 Class {
-	#name : #RBAddClassWithSlotsChange,
+	#name : #GtRBAddClassWithSlotsChange,
 	#superclass : #RBAddClassChange,
 	#category : #'GToolkit-Utility-Refactorings-Changes'
 }
 
 { #category : #private }
-RBAddClassWithSlotsChange class >> definitionPatterns [
+GtRBAddClassWithSlotsChange class >> definitionPatterns [
 	^ #('`@superclass subclass: `#className uses: `@traitExpression slots: `@slotsExpression classVariables: `@classVariableSlots poolDictionaries: `#poolDictionaries package: `#category'
 	'`@superclass subclass: `#className slots: `@slotsExpression classVariables: `@classVariableSlots poolDictionaries: `#poolDictionaries package: `#category'
 	'`@superclass subclass: `#className uses: `@traitExpression slots: `@slotsExpression classVariables: `@classVariableSlots package: `#category'

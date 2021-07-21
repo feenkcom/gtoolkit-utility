@@ -1,5 +1,5 @@
 Class {
-	#name : #RBTraitRefactoring,
+	#name : #GtRBTraitRefactoring,
 	#superclass : #RBRefactoring,
 	#instVars : [
 		'class',
@@ -9,21 +9,21 @@ Class {
 }
 
 { #category : #'instance creation' }
-RBTraitRefactoring class >> traitName: aString class: aClass [
+GtRBTraitRefactoring class >> traitName: aString class: aClass [
 	^ self new
 		class: aClass traitName: aString;
 		yourself
 ]
 
 { #category : #'initialize-release' }
-RBTraitRefactoring >> class: aClass traitName: aString [
+GtRBTraitRefactoring >> class: aClass traitName: aString [
 	class := self model classFor: aClass.
 	class gtRemoveSlotsFromTraits.
 	traitName := aString
 ]
 
 { #category : #private }
-RBTraitRefactoring >> includesTrait: aString in: aRBClass [
+GtRBTraitRefactoring >> includesTrait: aString in: aRBClass [
 	| expression |
 	aRBClass traitExpression isNil
 		ifTrue: [ ^ false ].
@@ -36,7 +36,7 @@ RBTraitRefactoring >> includesTrait: aString in: aRBClass [
 ]
 
 { #category : #preconditions }
-RBTraitRefactoring >> preconditions [
+GtRBTraitRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
 		&
 			(RBCondition
