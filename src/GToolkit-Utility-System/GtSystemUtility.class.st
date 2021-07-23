@@ -1,12 +1,12 @@
 Class {
-	#name : #GtSystemUtility,
-	#superclass : #Object,
+	#name : 'GtSystemUtility',
+	#superclass : 'Object',
 	#traits : 'TGtAssert',
 	#classTraits : 'TGtAssert classTrait',
-	#category : #'GToolkit-Utility-System'
+	#category : 'GToolkit-Utility-System'
 }
 
-{ #category : #'ring definition' }
+{ #category : 'ring definition' }
 GtSystemUtility class >> classDefinitionFromString: aString [
 	"Extract a class name, e.g., MyClass and return a class definition"
 	<return: #RGClassDefinition>
@@ -24,13 +24,13 @@ GtSystemUtility class >> classDefinitionFromString: aString [
 		ifFalse: [ aDefinition ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtSystemUtility class >> isClass: aSubClass sameOrSubclassOf: aSuperClass [
 	<return: #Boolean>
 	^ aSubClass = aSuperClass or: [ aSubClass inheritsFrom: aSuperClass ]
 ]
 
-{ #category : #'ring definition' }
+{ #category : 'ring definition' }
 GtSystemUtility class >> methodDefinitionFromString: aString [
 	"Extract a method definition, e.g., MyClass>>#methodOne and return method definition"
 	<return: #RGMethodDefinition>
@@ -52,7 +52,7 @@ GtSystemUtility class >> methodDefinitionFromString: aString [
 		selector: aMethodName asSymbol) asActive.
 ]
 
-{ #category : #'ring definition' }
+{ #category : 'ring definition' }
 GtSystemUtility class >> packageDefinitionFromString: aString [
 	"Extract a package name, e.g., MyPackage and return a package definition"
 	<return: #RGPackage>

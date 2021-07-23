@@ -1,6 +1,6 @@
-Extension { #name : #ZipArchiveMember }
+Extension { #name : 'ZipArchiveMember' }
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 ZipArchiveMember >> gtBytes [
 	<return: #ByteArray>
 	| aStream |
@@ -9,7 +9,7 @@ ZipArchiveMember >> gtBytes [
 	^ aStream contents
 ]
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 ZipArchiveMember >> gtContents [
 	<return: #String or: #ByteArray>
 	"Answer my contents as a string."
