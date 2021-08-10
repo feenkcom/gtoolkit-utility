@@ -231,7 +231,8 @@ GtUnixSubprocess >> removeLD_LIBRARY_PATH [
 	Unset LD_LIBRARY_PATH."
 
 	self process addAllEnvVariablesFromParentWithoutOverride.
-	self process envVariables removeKey: 'LD_LIBRARY_PATH'.
+	self process envVariables removeKey: 'LD_LIBRARY_PATH' ifAbsent: 
+		[ "No need to do anything if LD_LIBRARY_PATH is absent" ].
 ]
 
 { #category : 'running' }
