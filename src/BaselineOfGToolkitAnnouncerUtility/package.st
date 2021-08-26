@@ -1,1 +1,1 @@
-Package { #name : #BaselineOfGToolkitAnnouncerUtility }
+Package { #name : 'BaselineOfGToolkitAnnouncerUtility' }
