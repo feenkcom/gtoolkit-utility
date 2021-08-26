@@ -1,6 +1,6 @@
-Extension { #name : #MemoryFileWriteStream }
+Extension { #name : 'MemoryFileWriteStream' }
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 MemoryFileWriteStream >> next: count putAll: collection startingAt: offset [
 	"Write count characters from collection starting at offset."
 	

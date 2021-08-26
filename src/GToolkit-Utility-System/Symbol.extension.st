@@ -1,6 +1,6 @@
-Extension { #name : #Symbol }
+Extension { #name : 'Symbol' }
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 Symbol >> gtAsReader [
 	"The opposite of #asMutator"
 	
@@ -11,7 +11,7 @@ Symbol >> gtAsReader [
 				ifFalse: [ each ]) ] ]) asSymbol
 ]
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 Symbol >> gtValueWithArgs: anArray [
 	anArray size < 1
 		ifTrue: [ ^ nil ].

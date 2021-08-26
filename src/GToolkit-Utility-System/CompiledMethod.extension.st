@@ -1,6 +1,6 @@
-Extension { #name : #CompiledMethod }
+Extension { #name : 'CompiledMethod' }
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 CompiledMethod >> gtIsOverridingUpTo: aSuperclass [
 
 	^ (self origin allSuperclassesIncluding: aSuperclass)

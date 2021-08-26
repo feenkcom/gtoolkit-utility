@@ -1,6 +1,6 @@
-Extension { #name : #BlockClosure }
+Extension { #name : 'BlockClosure' }
 
-{ #category : #'*GToolkit-Utility-System' }
+{ #category : '*GToolkit-Utility-System' }
 BlockClosure >> gtValueWithArgs: anArray [
 	self numArgs = 0
 		ifTrue: [ ^ self value ].
