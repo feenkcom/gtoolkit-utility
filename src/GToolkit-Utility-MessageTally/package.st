@@ -1,1 +1,1 @@
-Package { #name : #'GToolkit-Utility-MessageTally' }
+Package { #name : 'GToolkit-Utility-MessageTally' }

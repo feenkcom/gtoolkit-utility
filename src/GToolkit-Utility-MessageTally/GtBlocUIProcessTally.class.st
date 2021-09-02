@@ -1,13 +1,13 @@
 Class {
-	#name : #GtBlocUIProcessTally,
-	#superclass : #GtMessageTallyWrapper,
+	#name : 'GtBlocUIProcessTally',
+	#superclass : 'GtMessageTallyWrapper',
 	#instVars : [
 		'framePhaseTallies'
 	],
-	#category : #'GToolkit-Utility-MessageTally'
+	#category : 'GToolkit-Utility-MessageTally'
 }
 
-{ #category : #opening }
+{ #category : 'opening' }
 GtBlocUIProcessTally class >> inspectTally: aRootMessageTally [
 	"Find a tally for a new process that has as child the bloc UI process"
 	aRootMessageTally children
@@ -24,13 +24,13 @@ GtBlocUIProcessTally class >> inspectTally: aRootMessageTally [
 			GtInspector openOn: aRootMessageTally ].
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 GtBlocUIProcessTally class >> isTallyForBlocUIProcess: aMessageTally [
 	^ (aMessageTally method selector = #createLoopTask) and: [ 
 			aMessageTally theClass = BlHostPulseLoop ] 
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtBlocUIProcessTally >> gtViewFramePhasesListFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -47,7 +47,7 @@ GtBlocUIProcessTally >> gtViewFramePhasesListFor: aView [
 			width: 100
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtBlocUIProcessTally >> gtViewFullMessagesTreeIn: aView [
 	<gtView>
 	^ rootMessageTally 
@@ -57,7 +57,7 @@ GtBlocUIProcessTally >> gtViewFullMessagesTreeIn: aView [
 			priority: 50 ]
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtBlocUIProcessTally >> gtViewFullTextReportIn: aView [
 	<gtView>
 	^ rootMessageTally 
@@ -67,7 +67,7 @@ GtBlocUIProcessTally >> gtViewFullTextReportIn: aView [
 			priority: 60 ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtBlocUIProcessTally >> initializeForUIProcessTally: aUIMessageTally withRoot: aRootMessageTally [
 	| allTallies runPhase currentFramePhase |
 	messageTally := aUIMessageTally.
