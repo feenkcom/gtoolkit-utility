@@ -1,34 +1,34 @@
 Class {
-	#name : #GtRecordingSpaceListener,
-	#superclass : #Object,
+	#name : 'GtRecordingSpaceListener',
+	#superclass : 'Object',
 	#instVars : [
 		'pulseListener',
 		'eventHandlers',
 		'space',
 		'spaceEvents'
 	],
-	#category : #'GToolkit-Utility-MessageTally'
+	#category : 'GToolkit-Utility-MessageTally'
 }
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtRecordingSpaceListener >> gtViewSpaceEventIn: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Space events';
 		items: [ spaceEvents ];
-		column: 'Type' format: [ :aSpaceEvent | aSpaceEvent blocEvent class name ];
-		column: 'Start' format: [ :aSpaceEvent | aSpaceEvent blocEvent start asTime ];
-		column: 'Duration' format: [ :aSpaceEvent | aSpaceEvent duration ]
+		column: 'Type' text: [ :aSpaceEvent | aSpaceEvent blocEvent class name ];
+		column: 'Start' text: [ :aSpaceEvent | aSpaceEvent blocEvent start asTime ];
+		column: 'Duration' text: [ :aSpaceEvent | aSpaceEvent duration ]
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtRecordingSpaceListener >> initialize [
 	super initialize.
 	eventHandlers := OrderedCollection new.
 	spaceEvents := OrderedCollection new.
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtRecordingSpaceListener >> listenForEvent: eventType inSpace: aSpace [
 	| eventHandler |
 	eventHandler := (BlEventHandler on: eventType do: [ :evt | 
@@ -37,12 +37,12 @@ GtRecordingSpaceListener >> listenForEvent: eventType inSpace: aSpace [
 	aSpace eventDispatcher addEventHandler: eventHandler.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRecordingSpaceListener >> pulseListener: aPulseListener [
 	pulseListener := aPulseListener
 ]
 
-{ #category : #recording }
+{ #category : 'recording' }
 GtRecordingSpaceListener >> recordEvent: aBlocSpaceEvent [
 	| spaceEvent |
 	spaceEvent := GtRecordingSpaceFrameEvent new
@@ -55,7 +55,7 @@ GtRecordingSpaceListener >> recordEvent: aBlocSpaceEvent [
 	spaceEvents add: spaceEvent.
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtRecordingSpaceListener >> registerSpace: aSpace [
 	self assert: [ space isNil ]  description: 'Already listening for events in a space.'.
 	space := aSpace.
@@ -65,12 +65,12 @@ GtRecordingSpaceListener >> registerSpace: aSpace [
 	self listenForEvent: BlSpaceTasksEndEvent inSpace: aSpace.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRecordingSpaceListener >> space [
 	^ space
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 GtRecordingSpaceListener >> unregister [
 	eventHandlers do: [ :anEventHandler |
 		space eventDispatcher removeEventHandler: anEventHandler ].

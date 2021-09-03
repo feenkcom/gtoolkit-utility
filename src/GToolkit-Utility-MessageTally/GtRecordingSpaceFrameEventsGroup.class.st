@@ -1,29 +1,29 @@
 Class {
-	#name : #GtRecordingSpaceFrameEventsGroup,
-	#superclass : #Object,
+	#name : 'GtRecordingSpaceFrameEventsGroup',
+	#superclass : 'Object',
 	#instVars : [
 		'events'
 	],
-	#category : #'GToolkit-Utility-MessageTally'
+	#category : 'GToolkit-Utility-MessageTally'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 GtRecordingSpaceFrameEventsGroup >> addEvent: anEvent [
 	self events add: anEvent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRecordingSpaceFrameEventsGroup >> events [
 	^ events ifNil: [ events := OrderedCollection new ] 
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtRecordingSpaceFrameEventsGroup >> gtViewEventIn: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Space frame events';
 		items: [ events ];
-		column: 'Type' format: [ :aSpaceEvent | aSpaceEvent blocEvent class name ];
-		column: 'Start' format: [ :aSpaceEvent | aSpaceEvent blocEvent start asTime ];
-		column: 'Duration' format: [ :aSpaceEvent | aSpaceEvent duration ]
+		column: 'Type' text: [ :aSpaceEvent | aSpaceEvent blocEvent class name ];
+		column: 'Start' text: [ :aSpaceEvent | aSpaceEvent blocEvent start asTime ];
+		column: 'Duration' text: [ :aSpaceEvent | aSpaceEvent duration ]
 ]

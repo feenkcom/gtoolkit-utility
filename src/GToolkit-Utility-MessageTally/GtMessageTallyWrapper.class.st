@@ -1,14 +1,14 @@
 Class {
-	#name : #GtMessageTallyWrapper,
-	#superclass : #Object,
+	#name : 'GtMessageTallyWrapper',
+	#superclass : 'Object',
 	#instVars : [
 		'rootMessageTally',
 		'messageTally'
 	],
-	#category : #'GToolkit-Utility-MessageTally'
+	#category : 'GToolkit-Utility-MessageTally'
 }
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtMessageTallyWrapper >> gtMessagesTreeIn: aView [
 	<gtView>
 	^ messageTally 
@@ -17,7 +17,7 @@ GtMessageTallyWrapper >> gtMessagesTreeIn: aView [
 			priority: 10 ]
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtMessageTallyWrapper >> gtSourceFor: aView [
 	<gtView>
 	^ messageTally 
@@ -26,7 +26,7 @@ GtMessageTallyWrapper >> gtSourceFor: aView [
 			priority: 20 ]
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtMessageTallyWrapper >> gtTextReportFor: aView [
 	<gtView>
 	^ messageTally 
@@ -35,12 +35,12 @@ GtMessageTallyWrapper >> gtTextReportFor: aView [
 			priority: 30 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMessageTallyWrapper >> messageTally: aMessageTally [
 	messageTally := aMessageTally
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtMessageTallyWrapper >> printOn: aStream [
 	| aSelector aClass |
 	super printOn: aStream.
@@ -56,12 +56,12 @@ GtMessageTallyWrapper >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMessageTallyWrapper >> rootMessageTally: aMessageTally [
 	rootMessageTally := aMessageTally
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtMessageTallyWrapper >> selectorDescription [
 	| aSelector aClass |
 	aSelector := messageTally method selector.
@@ -75,17 +75,17 @@ GtMessageTallyWrapper >> selectorDescription [
 			nextPutAll: aSelector ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMessageTallyWrapper >> tallyPercentage [
 	^ messageTally tally asFloat / rootMessageTally tally * 100.0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMessageTallyWrapper >> theClass [
 	^ messageTally theClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtMessageTallyWrapper >> timeInMilliseconds [
 	^ (self tallyPercentage * rootMessageTally time / 100) rounded
 ]

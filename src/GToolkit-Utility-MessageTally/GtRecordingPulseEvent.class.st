@@ -1,24 +1,24 @@
 Class {
-	#name : #GtRecordingPulseEvent,
-	#superclass : #Object,
+	#name : 'GtRecordingPulseEvent',
+	#superclass : 'Object',
 	#instVars : [
 		'blocEvent',
 		'spaceEvents'
 	],
-	#category : #'GToolkit-Utility-MessageTally'
+	#category : 'GToolkit-Utility-MessageTally'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRecordingPulseEvent >> blocEvent [
 	^ blocEvent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRecordingPulseEvent >> blocEvent: aBlocEvent [
 	blocEvent := aBlocEvent
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 GtRecordingPulseEvent >> gtViewSpacesIn: aView [
 	<gtView>
 	^ aView list 
@@ -28,13 +28,13 @@ GtRecordingPulseEvent >> gtViewSpacesIn: aView [
 		send: [ :assoc | assoc value ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 GtRecordingPulseEvent >> initialize [
 	super initialize.
 	spaceEvents := OrderedDictionary new.
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtRecordingPulseEvent >> printOn: aStream [
 	super printOn: aStream.
 	aStream
@@ -43,7 +43,7 @@ GtRecordingPulseEvent >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 GtRecordingPulseEvent >> printTimeIncludingSeconds [
 	^ String streamContents: [:s | 
 		self timestamp printYMDOn: s.
@@ -51,7 +51,7 @@ GtRecordingPulseEvent >> printTimeIncludingSeconds [
 		self timestamp printHMSOn: s ]
 ]
 
-{ #category : #recording }
+{ #category : 'recording' }
 GtRecordingPulseEvent >> recordSpaceEvent: aSpaceEvent [ 
 	| currentSpaceEvents |
 	currentSpaceEvents := spaceEvents 
@@ -60,7 +60,7 @@ GtRecordingPulseEvent >> recordSpaceEvent: aSpaceEvent [
 	currentSpaceEvents addEvent: aSpaceEvent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtRecordingPulseEvent >> timestamp [
 	^ self blocEvent timestamp
 ]
