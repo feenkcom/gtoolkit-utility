@@ -58,6 +58,7 @@ GtPropertiesFile >> at: propertyName put: aJSONObject [
 	(properties at: propertyName ifAbsent: [nil]) = aJSONObject ifTrue: [ ^ self ].
 	properties at: propertyName put: aJSONObject.
 	self saveProperties.
+	^ aJSONObject
 ]
 
 { #category : 'accessing' }
