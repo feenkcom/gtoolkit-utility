@@ -1,0 +1,46 @@
+Class {
+	#name : 'GtPropertiesFileExamples',
+	#superclass : 'Object',
+	#traits : 'TAssertable',
+	#classTraits : 'TAssertable classTrait',
+	#category : 'GToolkit-Utility-Properties-Examples'
+}
+
+{ #category : 'examples' }
+GtPropertiesFileExamples >> emptyPropertiesFile [
+	"Answer an empty properties file using a memory file for storage"
+	<gtExample>
+	| properties |
+
+	properties := GtPropertiesFile file: FileSystem memory root / 'gemstone.properties'.
+	self deny: properties file exists.
+	self assert: properties size equals: 0.
+	^ properties
+]
+
+{ #category : 'examples' }
+GtPropertiesFileExamples >> populatedPropertiesFile [
+	<gtExample>
+	| properties dictionary fileDictionary readProperties |
+
+	properties := self emptyPropertiesFile.
+	properties at: #aFile put: FileLocator home / 'file.txt'.
+
+	self assert: properties size equals: 1.
+	self assert: properties file exists.
+
+	dictionary := STONJSON fromString: properties file contents.
+
+	self assert: dictionary size equals: 2.
+	fileDictionary := dictionary at: #aFile.
+	self assert: fileDictionary size equals: 2.
+	self assert: (fileDictionary at: #__type) equals: #fileLocator.
+	self assert: (fileDictionary at: #filename) equals: '{home}/file.txt'.
+
+	readProperties := GtPropertiesFile file: properties file.
+	self assert: readProperties size equals: 1.
+	self assert: readProperties file exists.
+	self assert: (readProperties at: #aFile) equals: (FileLocator home / 'file.txt').
+
+	^ properties
+]
