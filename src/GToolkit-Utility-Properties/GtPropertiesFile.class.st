@@ -123,7 +123,6 @@ GtPropertiesFile >> initialize [
 GtPropertiesFile >> loadProperties [
 
 	file exists ifFalse: [ ^ self ].
-	self halt.
 	properties := file readStreamDo: [ :stream |
 		LeJsonV4 default deserialize: stream ].
 
