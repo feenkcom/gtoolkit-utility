@@ -75,44 +75,6 @@ GtPropertiesFile >> file: aFileReference [
 	self loadProperties.
 ]
 
-{ #category : 'private' }
-GtPropertiesFile >> fileReferenceFrom: aString [
-	"Answer a FileReference or FileLocator from the supplied string.
-	FileLocator origins are available as formatted strings, e.g.
-		{home}/lepiter
-	is the equivalent of
-		FileLocator home / 'lepiter'"
-	| namedDirectories regex name path |
-
-	namedDirectories := (FileLocator supportedOrigins collect: [ :origin | 
-		origin -> (FileLocator origin: origin) ]) asDictionary.
-	regex := '\{([a-zA-Z]+)\}(.*)' asRegex.
-	^ (regex matches: aString) ifTrue: 
-		[ name := regex subexpression: 2.
-		path := regex subexpression: 3.
-		namedDirectories at: name
-			ifPresent: [ :locator | locator resolve: path allButFirst ]
-			ifAbsent: [ self error: 'Unknown directory: ', name printString ] ]
-	ifFalse:
-	 	[ aString asFileReference ].
-]
-
-{ #category : 'private' }
-GtPropertiesFile >> fileReferenceString: aFileReferenceStringOrNil [
-	"Answer the string form of the supplied reference"
-
-	aFileReferenceStringOrNil ifNil: [ ^ nil ].
-	^ aFileReferenceStringOrNil ifNotNil: 
-			[ aFileReferenceStringOrNil isString ifTrue:
-				[ aFileReferenceStringOrNil ]
-			ifFalse: [ aFileReferenceStringOrNil class = FileLocator
-				ifTrue: [ aFileReferenceStringOrNil asString ]
-				ifFalse: [ String streamContents: [ :stream | 
-						aFileReferenceStringOrNil fileSystem 
-							printPath: aFileReferenceStringOrNil path 
-							on: stream ] ] ] ]
-]
-
 { #category : 'initialization' }
 GtPropertiesFile >> initialize [ 
 
@@ -127,6 +89,18 @@ GtPropertiesFile >> loadProperties [
 	properties := file readStreamDo: [ :stream |
 		LeJsonV4 default deserialize: stream ].
 
+]
+
+{ #category : 'printing' }
+GtPropertiesFile >> printOn: aStream [
+
+	file
+		ifNil: [ super printOn: aStream ]
+		ifNotNil: 
+			[ aStream 
+				<< file basename;
+				<< ' @ ';
+				<< file parent fullName ]
 ]
 
 { #category : 'private' }
