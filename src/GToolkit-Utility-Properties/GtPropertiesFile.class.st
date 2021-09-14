@@ -12,9 +12,12 @@ GtJsonPropertiesFile is an abstract class that facilitates the use of properties
 Class {
 	#name : 'GtPropertiesFile',
 	#superclass : 'Object',
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'file',
-		'properties'
+		'properties',
+		'announcer'
 	],
 	#category : 'GToolkit-Utility-Properties'
 }
@@ -24,6 +27,12 @@ GtPropertiesFile class >> file: aFileReference [
 	"Answer a new instance of the receiver with the specified properties file"
 
 	^ self new file: aFileReference
+]
+
+{ #category : 'accessing' }
+GtPropertiesFile >> announcer [
+
+	^ announcer
 ]
 
 { #category : 'accessing - properties' }
@@ -79,6 +88,7 @@ GtPropertiesFile >> file: aFileReference [
 GtPropertiesFile >> initialize [ 
 
 	super initialize.
+	announcer := Announcer new.
 	properties := Dictionary new.
 ]
 
