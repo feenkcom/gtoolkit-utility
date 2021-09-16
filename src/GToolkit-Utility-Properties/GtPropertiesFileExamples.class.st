@@ -21,10 +21,11 @@ GtPropertiesFileExamples >> emptyPropertiesFile [
 { #category : 'examples' }
 GtPropertiesFileExamples >> populatedPropertiesFile [
 	<gtExample>
-	| properties dictionary fileDictionary readProperties |
+	| properties fileLocator dictionary fileDictionary readProperties |
 
 	properties := self emptyPropertiesFile.
-	properties at: #aFile put: FileLocator home / 'file.txt'.
+	fileLocator := FileLocator home / 'file.txt'.
+	properties at: #aFile put: fileLocator.
 
 	self assert: properties size equals: 1.
 	self assert: properties file exists.
@@ -35,7 +36,7 @@ GtPropertiesFileExamples >> populatedPropertiesFile [
 	fileDictionary := dictionary at: #aFile.
 	self assert: fileDictionary size equals: 2.
 	self assert: (fileDictionary at: #__type) equals: #fileLocator.
-	self assert: (fileDictionary at: #filename) equals: '{home}/file.txt'.
+	self assert: (fileDictionary at: #filename) equals: fileLocator printString.
 
 	readProperties := GtPropertiesFile file: properties file.
 	self assert: readProperties size equals: 1.

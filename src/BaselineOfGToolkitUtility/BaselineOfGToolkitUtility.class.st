@@ -13,27 +13,23 @@ Class {
 BaselineOfGToolkitUtility >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
-		spec
+		spec 
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.69/src' ].
-		spec
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitAnnouncerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.69/src' ].
-		spec
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.69/src' ].
-		spec
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitFileUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.69/src' ].
-		spec
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.69/src' ].
-		spec
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitRefactoringsUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.69/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ].
+		spec 
+			package: 'GToolkit-Utility-MessageTally';
+			package: 'GToolkit-Utility-Tests' with: [
+				spec requires: #('GToolkitFileUtility' ). ];
+			package: 'GToolkit-Utility-Properties'. ].
 
-		spec package: 'GToolkit-Utility-MessageTally'.
-		spec package: 'GToolkit-Utility-Tests' with: [
-			spec requires: #('GToolkitFileUtility') ].
-	]
 ]
