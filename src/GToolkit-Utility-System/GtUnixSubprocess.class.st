@@ -69,6 +69,17 @@ GtUnixSubprocess class >> command: cmd arguments: args [
 		arguments: args.
 ]
 
+{ #category : 'instance creation' }
+GtUnixSubprocess class >> waitOnCommand: aString arguments: anArray [
+	| proc |
+
+	proc := self command: aString arguments: anArray.
+	proc runAndWait.
+	proc isSuccess ifFalse:
+		[ self error: 'Completed with Error: ', aString ].
+	^ proc
+]
+
 { #category : 'adding' }
 GtUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
 

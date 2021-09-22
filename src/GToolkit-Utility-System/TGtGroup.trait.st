@@ -12,6 +12,11 @@ TGtGroup >> asArray [
 ]
 
 { #category : 'accessing' }
+TGtGroup >> asBrItemsProvider [
+	^ BrListSequenceableCollectionItemsProvider forCollection: self
+]
+
+{ #category : 'accessing' }
 TGtGroup >> asOrderedCollection [
 	^ self items asOrderedCollection
 ]
