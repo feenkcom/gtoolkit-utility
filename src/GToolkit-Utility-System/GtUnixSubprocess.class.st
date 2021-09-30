@@ -45,8 +45,8 @@ Public API and Key Messages
 
 "
 Class {
-	#name : 'GtUnixSubprocess',
-	#superclass : 'Object',
+	#name : #GtUnixSubprocess,
+	#superclass : #Object,
 	#instVars : [
 		'command',
 		'arguments',
@@ -61,7 +61,7 @@ Class {
 	#category : 'GToolkit-Utility-System'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtUnixSubprocess class >> command: cmd arguments: args [
 
 	^self new
@@ -69,7 +69,7 @@ GtUnixSubprocess class >> command: cmd arguments: args [
 		arguments: args.
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtUnixSubprocess class >> waitOnCommand: aString arguments: anArray [
 	| proc |
 
@@ -80,62 +80,62 @@ GtUnixSubprocess class >> waitOnCommand: aString arguments: anArray [
 	^ proc
 ]
 
-{ #category : 'adding' }
+{ #category : #adding }
 GtUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
 
 	self process addAllEnvVariablesFromParentWithoutOverride
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> arguments [
 	^ arguments
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> arguments: anObject [
 	arguments := anObject
 ]
 
-{ #category : 'cleaning' }
+{ #category : #cleaning }
 GtUnixSubprocess >> closeAndCleanStreams [
 
 	process ifNil: [ ^ self ].
 	process closeAndCleanStreams.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> command [
 	^ command
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> command: anObject [
 	command := anObject
 ]
 
-{ #category : 'env building' }
+{ #category : #'env building' }
 GtUnixSubprocess >> envVariables [
 
 	^ process envVariables
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> environmentAt: key put: value [
 
 	^ self process environmentAt: key put: value
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> errorBlock [
 	^ errorBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> errorBlock: anObject [
 	errorBlock := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> exitCode [ 
 	"Answer the interpretted exit status, or nil if not available"
 
@@ -143,19 +143,19 @@ GtUnixSubprocess >> exitCode [
 	^ process exitStatusInterpreter exitStatus
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> exitStatus [ 
 
 	^ process exitStatus
 ]
 
-{ #category : 'status' }
+{ #category : #status }
 GtUnixSubprocess >> exitStatusInterpreter [
 
 	^ process exitStatusInterpreter
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtUnixSubprocess >> gtStderrFor: aView [
 	<gtView>
 
@@ -168,7 +168,7 @@ GtUnixSubprocess >> gtStderrFor: aView [
 
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtUnixSubprocess >> gtStdoutFor: aView [
 	<gtView>
 
@@ -181,27 +181,27 @@ GtUnixSubprocess >> gtStdoutFor: aView [
 
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtUnixSubprocess >> hasProcess [
 	"Answer a boolean indicating whether the receiver has a process object"
 
 	^ process isNotNil
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtUnixSubprocess >> initialize [
 
 	super initialize.
 	arguments := #().
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtUnixSubprocess >> isRunning [ 
 
 	^ self process isRunning
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> isSuccess [
 	"Answer whether the command completed successfully.
 	Only valid after the command has completed."
@@ -209,7 +209,7 @@ GtUnixSubprocess >> isSuccess [
 	^process exitStatusInterpreter isSuccess
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtUnixSubprocess >> printOn: aStream [
 
 	process ifNil: [ ^super printOn: aStream ].
@@ -224,19 +224,19 @@ GtUnixSubprocess >> printOn: aStream [
 				[ aStream nextPutAll: 'an Unsuccessfull GtUnixSubprocess' ] ] ].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> process [
 
 	^ process ifNil: [ process := OSSUnixSubprocess new ]
 ]
 
-{ #category : 'status' }
+{ #category : #status }
 GtUnixSubprocess >> queryExitStatus [
 
 	^ process queryExitStatus
 ]
 
-{ #category : 'removing' }
+{ #category : #removing }
 GtUnixSubprocess >> removeLD_LIBRARY_PATH [
 	"The script for running pharo sets LD_LIBRARY_PATH to the VM directory, which contains non-standard libraries.
 	Unset LD_LIBRARY_PATH."
@@ -246,7 +246,7 @@ GtUnixSubprocess >> removeLD_LIBRARY_PATH [
 		[ "No need to do anything if LD_LIBRARY_PATH is absent" ].
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 GtUnixSubprocess >> run [
 	"Run the command without waiting"
 
@@ -254,7 +254,7 @@ GtUnixSubprocess >> run [
 	^self runProcess
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 GtUnixSubprocess >> runAndWait [
 	"Run the command and wait for completion"
 
@@ -265,7 +265,7 @@ GtUnixSubprocess >> runAndWait [
 		ifTrue: [ errorBlock value: self ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtUnixSubprocess >> runProcess [
 	"Run the requested command as a separate process"
 
@@ -294,7 +294,7 @@ GtUnixSubprocess >> runProcess [
 
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtUnixSubprocess >> setCommand [
 	"Set the command or shell command in the process.
 	Either may be specified, but not both :-)"
@@ -313,51 +313,51 @@ GtUnixSubprocess >> setCommand [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> shellCommand [
 	^ shellCommand
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> shellCommand: anObject [
 	shellCommand := anObject
 ]
 
-{ #category : 'OS signal sending' }
+{ #category : #'OS signal sending' }
 GtUnixSubprocess >> sigterm [
 	"Ask the external process to terminate"
 
 	^process sigterm
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> stderr [
 	^ stderrStream contents
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> stdout [
 	^ stdoutStream contents
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtUnixSubprocess >> terminate [
 
 	process terminate
 ]
 
-{ #category : 'system startup & shutdown' }
+{ #category : #'system startup & shutdown' }
 GtUnixSubprocess >> terminateOnShutdown [
 
 	self process terminateOnShutdown
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> workingDirectory [
 	^ workingDirectory
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> workingDirectory: aFileReference [
 
 	workingDirectory := aFileReference asFileReference

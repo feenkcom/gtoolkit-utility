@@ -1,6 +1,6 @@
-Extension { #name : 'String' }
+Extension { #name : #String }
 
-{ #category : '*GToolkit-Utility-System' }
+{ #category : #'*GToolkit-Utility-System' }
 String >> gtPiecesCutWhereCamelCase [
 	"Breaks apart words written in camel case.
 	
@@ -32,14 +32,14 @@ String >> gtPiecesCutWhereCamelCase [
 	^pieces
 ]
 
-{ #category : '*GToolkit-Utility-System' }
+{ #category : #'*GToolkit-Utility-System' }
 String >> gtRemovePrefix: prefix [
 	"Remove the given prefix, if present."
 
 	^(self beginsWith: prefix) ifTrue: [ self copyFrom: 1 + prefix size to: self size ] ifFalse: [ self ]
 ]
 
-{ #category : '*GToolkit-Utility-System' }
+{ #category : #'*GToolkit-Utility-System' }
 String >> gtRemoveSuffix: suffix [
 	"Remove the given suffix, if present."
 

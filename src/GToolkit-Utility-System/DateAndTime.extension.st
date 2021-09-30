@@ -1,6 +1,6 @@
-Extension { #name : 'DateAndTime' }
+Extension { #name : #DateAndTime }
 
-{ #category : '*GToolkit-Utility-System' }
+{ #category : #'*GToolkit-Utility-System' }
 DateAndTime >> asIso8601 [
 	"Answer the receiver in ISO 8601 format"
 	| utc |
@@ -14,7 +14,7 @@ DateAndTime >> asIso8601 [
 
 ]
 
-{ #category : '*GToolkit-Utility-System' }
+{ #category : #'*GToolkit-Utility-System' }
 DateAndTime class >> gtIsISO8601: aString [
 	"Answer a boolean indicating whether the supplied string matches ISO8601 format"
 
