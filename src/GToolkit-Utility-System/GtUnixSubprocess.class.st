@@ -45,23 +45,26 @@ Public API and Key Messages
 
 "
 Class {
-	#name : 'GtUnixSubprocess',
-	#superclass : 'Object',
+	#name : #GtUnixSubprocess,
+	#superclass : #Object,
 	#instVars : [
-		'command',
-		'arguments',
+		'builder',
 		'shellCommand',
 		'process',
-		'semaphore',
 		'errorBlock',
-		'workingDirectory',
+		'command',
+		'envVariables',
+		'semaphore',
 		'stdoutStream',
-		'stderrStream'
+		'stderrStream',
+		'stdoutBuffer',
+		'stderrBuffer',
+		'outputPoll'
 	],
-	#category : 'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System'
 }
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtUnixSubprocess class >> command: cmd arguments: args [
 
 	^self new
@@ -69,7 +72,7 @@ GtUnixSubprocess class >> command: cmd arguments: args [
 		arguments: args.
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtUnixSubprocess class >> waitOnCommand: aString arguments: anArray [
 	| proc |
 
@@ -80,142 +83,170 @@ GtUnixSubprocess class >> waitOnCommand: aString arguments: anArray [
 	^ proc
 ]
 
-{ #category : 'adding' }
+{ #category : #adding }
 GtUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
+	"The user may have done an explicit set of a variable via #environmentAt:put: in which case
+	we do not want to override it with the inherit one.
+	This method allows to set all but overriden variables inherit from parent."
 
-	self process addAllEnvVariablesFromParentWithoutOverride
+	"Ensure the dictionary has been set"
+	self envVariables.
+	Smalltalk os environment asDictionary keysAndValuesDo: [ :key :value |
+		envVariables at: key ifAbsentPut: value ].
+
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> arguments [
-	^ arguments
+
+	^ builder arguments
 ]
 
-{ #category : 'accessing' }
-GtUnixSubprocess >> arguments: anObject [
-	arguments := anObject
+{ #category : #accessing }
+GtUnixSubprocess >> arguments: aCollection [
+
+	builder args: aCollection
 ]
 
-{ #category : 'cleaning' }
+{ #category : #cleaning }
 GtUnixSubprocess >> closeAndCleanStreams [
-
-	process ifNil: [ ^ self ].
-	process closeAndCleanStreams.
+	"This is now a no-op - the library takes care of stream maintenance"
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> command [
-	^ command
+
+	^ builder command
 ]
 
-{ #category : 'accessing' }
-GtUnixSubprocess >> command: anObject [
-	command := anObject
+{ #category : #accessing }
+GtUnixSubprocess >> command: aString [
+
+	builder command: aString
 ]
 
-{ #category : 'env building' }
+{ #category : #'env building' }
 GtUnixSubprocess >> envVariables [
+	"Answer the dictionary of environment variables that will be passed to the sub-process.
+	If nil, they are inherited from the parent process (Gt)"
 
-	^ process envVariables
+	^ envVariables ifNil: [ envVariables := Dictionary new ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> environmentAt: key put: value [
 
-	^ self process environmentAt: key put: value
+	self envVariables at: key put: value.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> errorBlock [
 	^ errorBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> errorBlock: anObject [
 	errorBlock := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> exitCode [ 
 	"Answer the interpretted exit status, or nil if not available"
 
-	(process isNil or: [ process isRunning ]) ifTrue: [ ^ nil ].
-	^ process exitStatusInterpreter exitStatus
+	^ process tryWait ifNotNil: [ :status | status code ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> exitStatus [ 
 
-	^ process exitStatus
+	^ self exitCode
 ]
 
-{ #category : 'status' }
+{ #category : #status }
 GtUnixSubprocess >> exitStatusInterpreter [
 
-	^ process exitStatusInterpreter
+	^ process tryWait
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtUnixSubprocess >> gtStderrFor: aView [
 	<gtView>
 
-	stderrStream ifNil: [ ^ aView empty ].
+	self stderr ifNil: [ ^ aView empty ].
 	^ aView textEditor 
 		title: 'stderr';
 		priority: 20;
-		text: [ stderrStream contents asRopedText glamorousCodeFont ];
+		text: [ self stderr asRopedText glamorousCodeFont ];
 		actionUpdateButtonTooltip: 'Update stderr'
 
 ]
 
-{ #category : 'ui' }
+{ #category : #ui }
 GtUnixSubprocess >> gtStdoutFor: aView [
 	<gtView>
 
-	stdoutStream ifNil: [ ^ aView empty ].
+	self stdout ifNil: [ ^ aView empty ].
 	^ aView textEditor 
 		title: 'stdout';
 		priority: 20;
-		text: [ stdoutStream contents asRopedText glamorousCodeFont ];
+		text: [ self stdout asRopedText glamorousCodeFont ];
 		actionUpdateButtonTooltip: 'Update stdout'
 
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 GtUnixSubprocess >> hasProcess [
 	"Answer a boolean indicating whether the receiver has a process object"
 
 	^ process isNotNil
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtUnixSubprocess >> initialize [
 
 	super initialize.
-	arguments := #().
+	builder := GtExternalProcessBuilder new.
+
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
+GtUnixSubprocess >> isComplete [
+
+	^ self hasProcess and: 
+		[ process isNull not and: 
+		[ process isTerminated ] ]
+]
+
+{ #category : #testing }
 GtUnixSubprocess >> isRunning [ 
 
-	^ self process isRunning
+	^ self hasProcess and: 
+		[ process isNull not and: 
+		[ process isTerminated not ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #testing }
 GtUnixSubprocess >> isSuccess [
 	"Answer whether the command completed successfully.
 	Only valid after the command has completed."
-	
-	^process exitStatusInterpreter isSuccess
+
+	self isComplete ifFalse: [ self error: 'Process not yet complete' ].
+	^ self exitStatusInterpreter isSuccess
 ]
 
-{ #category : 'printing' }
+{ #category : #actions }
+GtUnixSubprocess >> kill [
+
+	process kill
+]
+
+{ #category : #printing }
 GtUnixSubprocess >> printOn: aStream [
 
 	process ifNil: [ ^super printOn: aStream ].
-	process isRunning ifTrue:
+	self isRunning ifTrue:
 		[ aStream nextPutAll: 'a Running GtUnixSubprocess' ]
-	ifFalse: [ process isComplete ifFalse:
+	ifFalse: [ self isComplete ifFalse:
 		[ aStream nextPutAll: 'an Incomplete GtUnixSubprocess' ]
 	ifTrue:
 		[ self isSuccess ifTrue: 
@@ -224,37 +255,37 @@ GtUnixSubprocess >> printOn: aStream [
 				[ aStream nextPutAll: 'an Unsuccessfull GtUnixSubprocess' ] ] ].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> process [
 
-	^ process ifNil: [ process := OSSUnixSubprocess new ]
+	^ process
 ]
 
-{ #category : 'status' }
+{ #category : #status }
 GtUnixSubprocess >> queryExitStatus [
 
 	^ process queryExitStatus
 ]
 
-{ #category : 'removing' }
+{ #category : #removing }
 GtUnixSubprocess >> removeLD_LIBRARY_PATH [
 	"The script for running pharo sets LD_LIBRARY_PATH to the VM directory, which contains non-standard libraries.
 	Unset LD_LIBRARY_PATH."
 
-	self process addAllEnvVariablesFromParentWithoutOverride.
-	self process envVariables removeKey: 'LD_LIBRARY_PATH' ifAbsent: 
+	self addAllEnvVariablesFromParentWithoutOverride.
+	self envVariables removeKey: 'LD_LIBRARY_PATH' ifAbsent: 
 		[ "No need to do anything if LD_LIBRARY_PATH is absent" ].
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 GtUnixSubprocess >> run [
 	"Run the command without waiting"
 
 	semaphore := nil.
-	^self runProcess
+	^ self runProcess
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 GtUnixSubprocess >> runAndWait [
 	"Run the command and wait for completion"
 
@@ -265,100 +296,111 @@ GtUnixSubprocess >> runAndWait [
 		ifTrue: [ errorBlock value: self ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtUnixSubprocess >> runProcess [
 	"Run the requested command as a separate process"
 
 	self setCommand.
+	command := builder createNativeCommand.
+	command 
+		pipeStdout;
+		pipeStderr.
+	envVariables ifNotNil: 
+		[ command clearEnv.
+		envVariables keysAndValuesDo: [ :key :value |
+			command setEnv: key value: value ] ].
+	process := command spawn.
 	stdoutStream := String new writeStream.
 	stderrStream := String new writeStream.
-	self process
-		redirectStdout;
-		redirectStderr.
-	workingDirectory ifNotNil: 
-		[ self process workingDirectory: workingDirectory fullName ].
-	self process run.
+	stdoutBuffer := process asynchronousStdout.
+	stderrBuffer := process asynchronousStderr.
 
-	[ self process
-		waitForExitPollingEvery: (Delay forMilliseconds: 500)
-		doing: [ :proc :outStream :errStream | 
-			stdoutStream nextPutAll: outStream upToEnd.
-			stderrStream nextPutAll: errStream upToEnd ].
-	self process closeAndCleanStreams.
-	"Async processes have errors signalled here.
-	If waiting, raise the error after signalling the semaphore (in #runAndWait)"
-	semaphore
-		ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
-				ifTrue: [ errorBlock value: self ] ]
-		ifNotNil: [ semaphore signal ] ] fork.
+	outputPoll := 
+		[ process waitForExitDoing: 
+				[ stdoutStream nextPutAll: stdoutBuffer pollString.
+				stderrStream nextPutAll: stderrBuffer pollString ].
+		"Async processes have errors signalled here.
+		If waiting, raise the error after signalling the semaphore (in #runAndWait)"
+		semaphore
+			ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
+					ifTrue: [ errorBlock value: self ] ]
+			ifNotNil: [ semaphore signalAll ] ] fork.
 
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtUnixSubprocess >> setCommand [
 	"Set the command or shell command in the process.
 	Either may be specified, but not both :-)"
 
-	(command isNil and: [ shellCommand isNil ]) ifTrue: 
+	(self command isNil and: [ shellCommand isNil ]) ifTrue: 
 		[ self error: 'No command supplied' ].
-	(command isNotNil and: [ shellCommand isNotNil ]) ifTrue: 
+	(self command isNotNil and: [ shellCommand isNotNil ]) ifTrue: 
 		[ self error: 'Only one of a command or shell command may be supplied' ].
 
-	command ifNil: 
-		[ self process shellCommand: shellCommand ]
-	ifNotNil:
-		[ self process
-			command: command;
-			arguments: arguments ].
+	self command ifNil: 
+		[ self 
+			command:'/bin/sh';
+			arguments: { '-c'. shellCommand. } ]
 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> shellCommand [
 	^ shellCommand
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> shellCommand: anObject [
 	shellCommand := anObject
 ]
 
-{ #category : 'OS signal sending' }
+{ #category : #'OS signal sending' }
 GtUnixSubprocess >> sigterm [
-	"Ask the external process to terminate"
+	"Ask the external process to exit cleanly"
 
-	^process sigterm
+	self flag: 'WARNING: this is killing the process, so no exit handlers!!!'.
+	"^process sigterm"
+
+	^ process kill
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> stderr [
+
 	^ stderrStream contents
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> stdout [
+
 	^ stdoutStream contents
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 GtUnixSubprocess >> terminate [
+	"A conflict of terminology here.
+	Pharo process #terminate means kill the process immediately.
+	Unix SIGTERM (terminate) means ask the process to exit, running any exit handlers.
+	Use the Pharo definition here."
 
-	process terminate
+	process kill
 ]
 
-{ #category : 'system startup & shutdown' }
+{ #category : #'system startup & shutdown' }
 GtUnixSubprocess >> terminateOnShutdown [
 
 	self process terminateOnShutdown
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> workingDirectory [
-	^ workingDirectory
+
+	^ builder workingDirectory
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtUnixSubprocess >> workingDirectory: aFileReference [
 
-	workingDirectory := aFileReference asFileReference
+	builder workingDirectory: aFileReference
 ]

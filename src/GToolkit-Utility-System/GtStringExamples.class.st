@@ -1,10 +1,10 @@
 Class {
-	#name : 'GtStringExamples',
-	#superclass : 'Object',
+	#name : #GtStringExamples,
+	#superclass : #Object,
 	#category : 'GToolkit-Utility-System-Examples'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtStringExamples >> removeEmptyLinesFromEmptyString [
 	<gtExample>
 	| string |
@@ -12,7 +12,7 @@ GtStringExamples >> removeEmptyLinesFromEmptyString [
 	self assert: string gtRemoveEmptyLines isEmpty.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtStringExamples >> removeEmptyLinesFromStringWithEmptyLineAtTheBeginning [
 	<gtExample>
 	| string |
@@ -20,7 +20,7 @@ GtStringExamples >> removeEmptyLinesFromStringWithEmptyLineAtTheBeginning [
 	self assert: string gtRemoveEmptyLines = ('a', String cr, 'b').
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtStringExamples >> removeEmptyLinesFromStringWithEmptyLineAtTheEnd [
 	<gtExample>
 	| string |
@@ -28,7 +28,7 @@ GtStringExamples >> removeEmptyLinesFromStringWithEmptyLineAtTheEnd [
 	self assert: string gtRemoveEmptyLines = ('a', String cr, 'b').
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtStringExamples >> removeEmptyLinesFromStringWithEmptyLineInTheMiddle [
 	<gtExample>
 	| string |
@@ -36,7 +36,7 @@ GtStringExamples >> removeEmptyLinesFromStringWithEmptyLineInTheMiddle [
 	self assert: string gtRemoveEmptyLines = ('a', String cr, 'b').
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtStringExamples >> removeEmptyLinesFromStringWithEmptyLines [
 	<gtExample>
 	| string |
@@ -44,7 +44,7 @@ GtStringExamples >> removeEmptyLinesFromStringWithEmptyLines [
 	self assert: string gtRemoveEmptyLines = string.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtStringExamples >> removeEmptyLinesFromStringWithMultipleEmptyLines [
 	<gtExample>
 	| string |

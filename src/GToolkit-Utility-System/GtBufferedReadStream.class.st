@@ -15,12 +15,12 @@ No other changes are made to {{gtClass:ZnBufferedReadStream}}, the interface is 
 
 "
 Class {
-	#name : 'GtBufferedReadStream',
-	#superclass : 'ZnBufferedReadStream',
+	#name : #GtBufferedReadStream,
+	#superclass : #ZnBufferedReadStream,
 	#category : 'GToolkit-Utility-System'
 }
 
-{ #category : 'enumerating' }
+{ #category : #enumerating }
 GtBufferedReadStream >> savingPositionDo: block [
 	"Execute block so that any reading from me in it has no effect afterwards. I remember the current #position and move back to it using #position: after evaluating block. My buffer size limits how long the excursion can be. A SubscriptOutOfBounds exception will be signalled in case this operation cannot be completed."
 	
@@ -29,7 +29,7 @@ GtBufferedReadStream >> savingPositionDo: block [
 	^ block ensure: [ self position: savedPosition ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtBufferedReadStream >> upToEnd [
 	"Read elements until the stream is atEnd and return them as a collection."
 
