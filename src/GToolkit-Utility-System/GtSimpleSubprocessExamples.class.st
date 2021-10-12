@@ -110,7 +110,7 @@ GtSimpleSubprocessExamples >> kill [
 	<gtExample>
 	| script process tryCount |
 
-	script := FileLocator localDirectory / 'iceberg/feenkcom/gtoolkit-external-process/tests/scripts/exithandler.sh'.
+	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
 	self assert: script exists.
 
 	process := GtUnixSubprocess new
@@ -130,6 +130,7 @@ GtSimpleSubprocessExamples >> kill [
 		[ 100 milliSeconds wait.
 		tryCount := tryCount - 1 ].
 	process kill.
+	tryCount := 10.
 	[ tryCount > 0 and: [ process isComplete not ] ] whileTrue:
 		[ 50 milliSeconds wait.
 		tryCount := tryCount - 1 ].
@@ -149,6 +150,39 @@ GtSimpleSubprocessExamples >> shellCommand [
 		shellCommand: 'echo "hello"';
 		runAndWait.
 	self assert: process stdout trimBoth equals: 'hello'.
+
+]
+
+{ #category : #examples }
+GtSimpleSubprocessExamples >> sigterm [
+	"Demonstrate use #sigterm and confirm that the exit handlers are run"
+	<gtExample>
+	| script process tryCount |
+
+	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
+	self assert: script exists.
+
+	process := GtUnixSubprocess new
+		command: script fullName.
+	process runAndWait.
+	self assert: process isSuccess.
+	self assert: (process stdout indexOfSubCollection: #quitting) > 0.
+	self assert: (process stdout indexOfSubCollection: #exiting) > 0.
+
+	process := GtUnixSubprocess new
+		command: script fullName;
+		arguments: #('300').
+	process runAndSignal.
+	"Give the OS time to run the process"
+	tryCount := 10.
+	[ 50 milliSeconds wait.
+	tryCount > 0 and: [ process isRunning not ] ] whileTrue:
+		[ tryCount := tryCount - 1 ].
+	process sigterm.
+	process wait.
+	self assert: (process stdout indexOfSubCollection: #quitting) equals: 0.
+	self assert: (process stdout indexOfSubCollection: #exiting) > 0.
+
 
 ]
 

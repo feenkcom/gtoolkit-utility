@@ -61,6 +61,9 @@ Class {
 		'stderrBuffer',
 		'outputPoll'
 	],
+	#pools : [
+		'LibCSignalSharedPool'
+	],
 	#category : #'GToolkit-Utility-System'
 }
 
@@ -286,14 +289,20 @@ GtUnixSubprocess >> run [
 ]
 
 { #category : #running }
+GtUnixSubprocess >> runAndSignal [
+	"Run the command without waiting, but signal the semaphore when done"
+
+	semaphore := Semaphore new.
+	self runProcess
+]
+
+{ #category : #running }
 GtUnixSubprocess >> runAndWait [
 	"Run the command and wait for completion"
 
-	semaphore := Semaphore new.
-	self runProcess.
-	semaphore wait.
-	(errorBlock isNotNil and: [ self isSuccess not ])
-		ifTrue: [ errorBlock value: self ]
+	self runAndSignal.
+	self wait.
+
 ]
 
 { #category : #private }
@@ -324,7 +333,7 @@ GtUnixSubprocess >> runProcess [
 		semaphore
 			ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
 					ifTrue: [ errorBlock value: self ] ]
-			ifNotNil: [ semaphore signalAll ] ] fork.
+			ifNotNil: [ semaphore signalAll ] ] forkAt: Processor activeProcess priority + 1.
 
 ]
 
@@ -359,10 +368,7 @@ GtUnixSubprocess >> shellCommand: anObject [
 GtUnixSubprocess >> sigterm [
 	"Ask the external process to exit cleanly"
 
-	self flag: 'WARNING: this is killing the process, so no exit handlers!!!'.
-	"^process sigterm"
-
-	^ process kill
+	^ process signal: SIGTERM
 ]
 
 { #category : #accessing }
@@ -391,6 +397,16 @@ GtUnixSubprocess >> terminate [
 GtUnixSubprocess >> terminateOnShutdown [
 
 	self process terminateOnShutdown
+]
+
+{ #category : #'api - future' }
+GtUnixSubprocess >> wait [ 
+	"Wait for the receiver to finish.
+	Only valid when the process was started with #runAndSignal."
+
+	semaphore wait.
+	(errorBlock isNotNil and: [ self isSuccess not ])
+		ifTrue: [ errorBlock value: self ]
 ]
 
 { #category : #accessing }
