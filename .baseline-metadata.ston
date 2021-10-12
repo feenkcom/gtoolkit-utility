@@ -1,1 +1,1 @@
-{	"repositories" : { }}
+{	"repositories" : {		"github://pharo-contributions/FFICHeaderExtractor/repository" : "v1.0.2"	}}
