@@ -10,6 +10,7 @@ Class {
 GtSimpleSubprocessExamples >> envVariable [
 	"Demonstrate setting an environment variable"
 	<gtExample>
+	<noTest>
 	| process |
 
 	process := GtUnixSubprocess new.
@@ -26,6 +27,7 @@ GtSimpleSubprocessExamples >> envVariable [
 GtSimpleSubprocessExamples >> hasProcess [
 	"Demonstrate use of the #hasProcess test"
 	<gtExample>
+	<noTest>
 	| process |
 
 	process := GtUnixSubprocess new
@@ -45,6 +47,7 @@ GtSimpleSubprocessExamples >> hasProcess [
 GtSimpleSubprocessExamples >> isRunning [ 
 	"Demonstrate use of the #isRunning test"
 	<gtExample>
+	<noTest>
 	| process tryCount |
 
 	process := GtUnixSubprocess new
@@ -72,6 +75,7 @@ GtSimpleSubprocessExamples >> isRunning [
 GtSimpleSubprocessExamples >> isSuccess [
 	"Demonstrate use of the #isSuccess test"
 	<gtExample>
+	<noTest>
 	| process tryCount |
 
 	process := GtUnixSubprocess new
@@ -112,10 +116,12 @@ GtSimpleSubprocessExamples >> isSuccess [
 GtSimpleSubprocessExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
+	<noTest>
 	| script process tryCount |
 
 	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
-	self assert: script exists.
+	self assert: script exists
+		description: script fullName, ' doesn''t exist'.
 
 	process := GtUnixSubprocess new
 		command: script fullName.
@@ -153,6 +159,7 @@ GtSimpleSubprocessExamples >> kill [
 GtSimpleSubprocessExamples >> shellCommand [
 	"Demonstrate using a shell command"
 	<gtExample>
+	<noTest>
 	| process |
 
 	process := GtUnixSubprocess new
@@ -166,10 +173,12 @@ GtSimpleSubprocessExamples >> shellCommand [
 GtSimpleSubprocessExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
+	<noTest>
 	| script process tryCount |
 
 	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
-	self assert: script exists.
+	self assert: script exists
+		description: script fullName, ' doesn''t exist'.
 
 	process := GtUnixSubprocess new
 		command: script fullName.
@@ -204,6 +213,7 @@ GtSimpleSubprocessExamples >> sigterm [
 GtSimpleSubprocessExamples >> workingDirectory [
 	"Demonstrate setting a working directory"
 	<gtExample>
+	<noTest>
 	| process workingDirectory |
 
 	workingDirectory := 'pharo-local' asFileReference.
