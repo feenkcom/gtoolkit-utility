@@ -77,12 +77,14 @@ GtSimpleSubprocessExamples >> isSuccess [
 	process := GtUnixSubprocess new
 		command: 'true'.
 	process runAndWait.
-	self assert: process isSuccess.
+	self assert: process isSuccess
+		description: 'Expected process success'.
 
 	process := GtUnixSubprocess new
 		command: 'false'.
 	process runAndWait.
-	self deny: process isSuccess.
+	self deny: process isSuccess
+		description: 'Expected process failure'.
 
 	process := GtUnixSubprocess new
 		command: 'sleep';
@@ -93,7 +95,8 @@ GtSimpleSubprocessExamples >> isSuccess [
 	[ tryCount > 0 and: [ process isRunning not ] ] whileTrue:
 		[ 50 milliSeconds wait.
 		tryCount := tryCount - 1 ].
-	self assert: process isRunning.
+	self assert: process isRunning
+		description: 'Process didn''t start running'.
 	process terminate.
 	"Give the OS time to register the process termination"
 	tryCount := 10.
@@ -101,7 +104,8 @@ GtSimpleSubprocessExamples >> isSuccess [
 		[ 50 milliSeconds wait.
 		tryCount := tryCount - 1 ].
 
-	self deny: process isSuccess.
+	self deny: process isSuccess
+		description: 'Process didn''t terminate'.
 ]
 
 { #category : #examples }
@@ -116,9 +120,12 @@ GtSimpleSubprocessExamples >> kill [
 	process := GtUnixSubprocess new
 		command: script fullName.
 	process runAndWait.
-	self assert: process isSuccess.
-	self assert: (process stdout indexOfSubCollection: #quitting) > 0.
-	self assert: (process stdout indexOfSubCollection: #exiting) > 0.
+	self assert: process isSuccess
+		description: 'Expected process success'.
+	self assert: (process stdout indexOfSubCollection: #quitting) > 0
+		description: 'Expected quitting message'.
+	self assert: (process stdout indexOfSubCollection: #exiting) > 0
+		description: 'Expected exiting message'.
 
 	process := GtUnixSubprocess new
 		command: script fullName;
@@ -134,8 +141,10 @@ GtSimpleSubprocessExamples >> kill [
 	[ tryCount > 0 and: [ process isComplete not ] ] whileTrue:
 		[ 50 milliSeconds wait.
 		tryCount := tryCount - 1 ].
-	self assert: (process stdout indexOfSubCollection: #quitting) equals: 0.
-	self assert: (process stdout indexOfSubCollection: #exiting) equals: 0.
+	self assert: (process stdout indexOfSubCollection: #quitting) = 0
+		description: 'Unexpectedly found quitting message'.
+	self assert: (process stdout indexOfSubCollection: #exiting) = 0
+		description: 'Unexpectedly found exiting message'.
 
 
 ]
@@ -165,9 +174,12 @@ GtSimpleSubprocessExamples >> sigterm [
 	process := GtUnixSubprocess new
 		command: script fullName.
 	process runAndWait.
-	self assert: process isSuccess.
-	self assert: (process stdout indexOfSubCollection: #quitting) > 0.
-	self assert: (process stdout indexOfSubCollection: #exiting) > 0.
+	self assert: process isSuccess
+		description: 'Expected process success'.
+	self assert: (process stdout indexOfSubCollection: #quitting) > 0
+		description: 'Expected quitting message'.
+	self assert: (process stdout indexOfSubCollection: #exiting) > 0
+		description: 'Expected exiting message'.
 
 	process := GtUnixSubprocess new
 		command: script fullName;
@@ -180,8 +192,10 @@ GtSimpleSubprocessExamples >> sigterm [
 		[ tryCount := tryCount - 1 ].
 	process sigterm.
 	process wait.
-	self assert: (process stdout indexOfSubCollection: #quitting) equals: 0.
-	self assert: (process stdout indexOfSubCollection: #exiting) > 0.
+	self assert: (process stdout indexOfSubCollection: #quitting) = 0
+		description: 'Unexpectedly found quitting message'.
+	self assert: (process stdout indexOfSubCollection: #exiting) > 0
+		description: 'Expected exiting message'.
 
 
 ]
