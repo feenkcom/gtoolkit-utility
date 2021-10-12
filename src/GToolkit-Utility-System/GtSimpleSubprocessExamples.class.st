@@ -23,6 +23,20 @@ GtSimpleSubprocessExamples >> envVariable [
 
 ]
 
+{ #category : #private }
+GtSimpleSubprocessExamples >> exitHandlerScript [
+	"Answer a FileReference pointing to exithandler.sh"
+	<return: #FileReference>
+	| script |
+
+	{ 
+	FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts'.
+	GtResourcesUtilityConstants localGtDirectory / 'gtoolkit-external-process' / 'tests' / 'scripts'.
+	} do: [ :each |
+		(script := each / 'exithandler.sh') exists ifTrue:
+			[ ^ script ] ].
+]
+
 { #category : #examples }
 GtSimpleSubprocessExamples >> hasProcess [
 	"Demonstrate use of the #hasProcess test"
@@ -119,7 +133,7 @@ GtSimpleSubprocessExamples >> kill [
 	<noTest>
 	| script process tryCount |
 
-	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
+	script := self exitHandlerScript.
 	self assert: script exists
 		description: script fullName, ' doesn''t exist'.
 
