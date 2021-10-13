@@ -1,0 +1,36 @@
+Class {
+	#name : #GtExternalProcessExamplesUnixCommands,
+	#superclass : #GtExternalProcessExamplesCommands,
+	#category : #'GToolkit-Utility-System-Examples'
+}
+
+{ #category : #private }
+GtExternalProcessExamplesUnixCommands >> echoTestEnvScript [
+	"Answer the command to be used for echoing the test environment variable."
+	<return: #FileReference>
+
+	^ self findScript: 'echotestenv.sh'.
+]
+
+{ #category : #private }
+GtExternalProcessExamplesUnixCommands >> exitHandlerScript [
+	"Answer a FileReference pointing to exithandler.sh"
+	<return: #FileReference>
+
+	^ self findScript: 'exithandler.sh'.
+]
+
+{ #category : #private }
+GtExternalProcessExamplesUnixCommands >> pwdCommand [
+	"Answer the command to be used for printing the working directory."
+
+	^ 'pwd'
+]
+
+{ #category : #'as yet unclassified' }
+GtExternalProcessExamplesUnixCommands >> sleepProcess [
+	"Answer a partially configured process tp sleep the specified time"
+
+	^ GtUnixSubprocess new
+		command: 'sleep'
+]

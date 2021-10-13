@@ -3,66 +3,35 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
+	#instVars : [
+		'commands'
+	],
 	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #private }
-GtSimpleSubprocessExamples >> echoTestEnvScript [
-	"Answer the command to be used for echoing the test environment variable."
-	| scriptName |
+GtSimpleSubprocessExamples >> commands [
 
-	scriptName := OSPlatform current isWindows ifTrue:
-		[ 'echotestenv.bat' ]
-	ifFalse:
-		[ 'echotestenv.sh' ].
-
-	^ self findScript: scriptName.
+	^ commands ifNil: [ commands := OSPlatform current isWindows
+		ifTrue: [ GtExternalProcessExamplesWindowsCommands new ]
+		ifFalse: [ GtExternalProcessExamplesUnixCommands new ] ]
 ]
 
 { #category : #examples }
 GtSimpleSubprocessExamples >> envVariable [
 	"Demonstrate setting an environment variable"
 	<gtExample>
+	<noTest>
 	| process |
 
 	process := GtUnixSubprocess new.
 	self deny: (process envVariables includesKey: #GT_TEST_ENV_VAR).
 	process environmentAt: #GT_TEST_ENV_VAR asString put: 'hello'.
 	process
-		command: self echoTestEnvScript fullName;
+		command: self commands echoTestEnvScript fullName;
 		runAndWait.
 	self assert: process stdout trimBoth equals: 'hello'.
 
-]
-
-{ #category : #private }
-GtSimpleSubprocessExamples >> exitHandlerScript [
-	"Answer a FileReference pointing to exithandler.sh"
-	<return: #FileReference>
-	| scriptName |
-
-	scriptName := OSPlatform current isWindows ifTrue:
-		[ 'exithandler.bat' ]
-	ifFalse:
-		[ 'exithandler.sh' ].
-
-	^ self findScript: scriptName.
-]
-
-{ #category : #private }
-GtSimpleSubprocessExamples >> findScript: scriptName [
-	"Answer the script with the supplied name"
-	<return: #FileReference>
-	| script |
-
-	{ 
-		FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts'	.
-		GtResourcesUtilityConstants localGtDirectory / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts'.
-	} do: [ :each |
-			(script := each / scriptName) exists ifTrue:
-				[ ^ script ] ].
-
-	self error: scriptName, ' not found'.
 ]
 
 { #category : #examples }
@@ -72,7 +41,7 @@ GtSimpleSubprocessExamples >> hasProcess [
 	| process |
 
 	process := GtUnixSubprocess new
-		command: self sleepCommand;
+		command: self commands sleepCommand;
 		arguments: #('1').
 	self 
 		deny: process hasProcess
@@ -91,7 +60,7 @@ GtSimpleSubprocessExamples >> isRunning [
 	| process tryCount |
 
 	process := GtUnixSubprocess new
-		command: self sleepCommand;
+		command: self commands sleepCommand;
 		arguments: #('300').
 	self 
 		deny: process isRunning
@@ -115,24 +84,25 @@ GtSimpleSubprocessExamples >> isRunning [
 GtSimpleSubprocessExamples >> isSuccess [
 	"Demonstrate use of the #isSuccess test"
 	<gtExample>
+	<noTest>
 	| process tryCount |
 
 	process := GtUnixSubprocess new
-		command: self sleepCommand;
+		command: self commands sleepCommand;
 		arguments: #('0').
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
 
 	process := GtUnixSubprocess new
-		command: self sleepCommand;
+		command: self commands sleepCommand;
 		arguments: #('-1').
 	process runAndWait.
 	self deny: process isSuccess
 		description: 'Expected process failure'.
 
 	process := GtUnixSubprocess new
-		command: self sleepCommand;
+		command: self commands sleepCommand;
 		arguments: #('300').
 	process run.
 	"Give the OS time to register the process startup"
@@ -157,9 +127,10 @@ GtSimpleSubprocessExamples >> isSuccess [
 GtSimpleSubprocessExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
+	<noTest>
 	| script process tryCount |
 
-	script := self exitHandlerScript.
+	script := self commands exitHandlerScript.
 	self assert: script exists
 		description: script fullName, ' doesn''t exist'.
 
@@ -195,15 +166,6 @@ GtSimpleSubprocessExamples >> kill [
 
 ]
 
-{ #category : #private }
-GtSimpleSubprocessExamples >> pwdCommand [
-	"Answer the command to be used for printing the working directory."
-
-	OSPlatform current isWindows ifFalse: [ ^ 'pwd' ].
-
-	^ (self findScript: 'pwd.bat') fullName
-]
-
 { #category : #examples }
 GtSimpleSubprocessExamples >> shellCommand [
 	"Demonstrate using a shell command"
@@ -224,12 +186,13 @@ GtSimpleSubprocessExamples >> shellCommand [
 GtSimpleSubprocessExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
+	<noTest>
 	| script process tryCount |
 
 	"sigterm is only supported on Unix"
 	OSPlatform current isWindows ifTrue: [ ^ self ].
 
-	script := self exitHandlerScript.
+	script := self commands exitHandlerScript.
 	self assert: script exists
 		description: script fullName, ' doesn''t exist'.
 
@@ -262,16 +225,6 @@ GtSimpleSubprocessExamples >> sigterm [
 
 ]
 
-{ #category : #private }
-GtSimpleSubprocessExamples >> sleepCommand [
-	"Answer the command to be used for sleeping the specified time.
-	On Windows the exitHandlerScript provides the required functionality"
-
-	^ OSPlatform current isWindows
-		ifTrue: [ self exitHandlerScript fullName ]
-		ifFalse: [ 'sleep' ]
-]
-
 { #category : #examples }
 GtSimpleSubprocessExamples >> workingDirectory [
 	"Demonstrate setting a working directory"
@@ -282,12 +235,12 @@ GtSimpleSubprocessExamples >> workingDirectory [
 	self assert: workingDirectory isDirectory.
 
 	process := GtUnixSubprocess new
-		command: self pwdCommand;
+		command: self commands pwdCommand;
 		runAndWait.
 	self assert: process stdout trimBoth equals: FileLocator workingDirectory resolve fullName.
 
 	process := GtUnixSubprocess new
-		command: self pwdCommand;
+		command: self commands pwdCommand;
 		workingDirectory: workingDirectory;
 		runAndWait.
 	self assert: process stdout trimBoth equals: workingDirectory fullName.
