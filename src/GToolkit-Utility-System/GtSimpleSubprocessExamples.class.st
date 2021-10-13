@@ -3,50 +3,41 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
+	#instVars : [
+		'commands'
+	],
 	#category : #'GToolkit-Utility-System-Examples'
 }
+
+{ #category : #private }
+GtSimpleSubprocessExamples >> commands [
+
+	^ commands ifNil: [ commands := OSPlatform current isWindows
+		ifTrue: [ GtExternalProcessExamplesWindowsCommands new ]
+		ifFalse: [ GtExternalProcessExamplesUnixCommands new ] ]
+]
 
 { #category : #examples }
 GtSimpleSubprocessExamples >> envVariable [
 	"Demonstrate setting an environment variable"
 	<gtExample>
-	<noTest>
 	| process |
 
-	process := GtUnixSubprocess new.
+	process := self commands echoTestEnvProcess.
 	self deny: (process envVariables includesKey: #GT_TEST_ENV_VAR).
 	process environmentAt: #GT_TEST_ENV_VAR asString put: 'hello'.
-	process
-		shellCommand: 'echo "$GT_TEST_ENV_VAR"';
-		runAndWait.
+	process runAndWait.
 	self assert: process stdout trimBoth equals: 'hello'.
 
-]
-
-{ #category : #private }
-GtSimpleSubprocessExamples >> exitHandlerScript [
-	"Answer a FileReference pointing to exithandler.sh"
-	<return: #FileReference>
-	| script |
-
-	{ 
-	FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts'.
-	GtResourcesUtilityConstants localGtDirectory / 'gtoolkit-external-process' / 'tests' / 'scripts'.
-	} do: [ :each |
-		(script := each / 'exithandler.sh') exists ifTrue:
-			[ ^ script ] ].
 ]
 
 { #category : #examples }
 GtSimpleSubprocessExamples >> hasProcess [
 	"Demonstrate use of the #hasProcess test"
 	<gtExample>
-	<noTest>
 	| process |
 
-	process := GtUnixSubprocess new
-		command: 'sleep';
-		arguments: #('1').
+	process := self commands sleepProcess arguments: #('300').
 	self 
 		deny: process hasProcess
 		description: 'Process has a sub-process before being started'.
@@ -61,12 +52,9 @@ GtSimpleSubprocessExamples >> hasProcess [
 GtSimpleSubprocessExamples >> isRunning [ 
 	"Demonstrate use of the #isRunning test"
 	<gtExample>
-	<noTest>
 	| process tryCount |
 
-	process := GtUnixSubprocess new
-		command: 'sleep';
-		arguments: #('300').
+	process := self commands sleepProcess arguments: #('300').
 	self 
 		deny: process isRunning
 		description: 'Process is running before being started'.
@@ -89,24 +77,19 @@ GtSimpleSubprocessExamples >> isRunning [
 GtSimpleSubprocessExamples >> isSuccess [
 	"Demonstrate use of the #isSuccess test"
 	<gtExample>
-	<noTest>
 	| process tryCount |
 
-	process := GtUnixSubprocess new
-		command: 'true'.
+	process := self commands successProcess.
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
 
-	process := GtUnixSubprocess new
-		command: 'false'.
+	process := self commands failProcess.
 	process runAndWait.
 	self deny: process isSuccess
 		description: 'Expected process failure'.
 
-	process := GtUnixSubprocess new
-		command: 'sleep';
-		arguments: #('300').
+	process := self commands sleepProcess arguments: #('300').
 	process run.
 	"Give the OS time to register the process startup"
 	tryCount := 10.
@@ -130,15 +113,9 @@ GtSimpleSubprocessExamples >> isSuccess [
 GtSimpleSubprocessExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
-	<noTest>
-	| script process tryCount |
+	| process tryCount |
 
-	script := self exitHandlerScript.
-	self assert: script exists
-		description: script fullName, ' doesn''t exist'.
-
-	process := GtUnixSubprocess new
-		command: script fullName.
+	process := self commands exitHandlerProcess: nil.
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
@@ -147,9 +124,7 @@ GtSimpleSubprocessExamples >> kill [
 	self assert: (process stdout indexOfSubCollection: #exiting) > 0
 		description: 'Expected exiting message'.
 
-	process := GtUnixSubprocess new
-		command: script fullName;
-		arguments: #('300').
+	process := self commands exitHandlerProcess: '300'.
 	process run.
 	"Give the OS time to run the process"
 	tryCount := 10.
@@ -173,8 +148,10 @@ GtSimpleSubprocessExamples >> kill [
 GtSimpleSubprocessExamples >> shellCommand [
 	"Demonstrate using a shell command"
 	<gtExample>
-	<noTest>
 	| process |
+
+	"Isn't valid on Windows"
+	OSPlatform current isWindows ifTrue: [ ^ self ].
 
 	process := GtUnixSubprocess new
 		shellCommand: 'echo "hello"';
@@ -187,15 +164,12 @@ GtSimpleSubprocessExamples >> shellCommand [
 GtSimpleSubprocessExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
-	<noTest>
-	| script process tryCount |
+	| process tryCount |
 
-	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
-	self assert: script exists
-		description: script fullName, ' doesn''t exist'.
+	"sigterm is only supported on Unix"
+	OSPlatform current isWindows ifTrue: [ ^ self ].
 
-	process := GtUnixSubprocess new
-		command: script fullName.
+	process := self commands exitHandlerProcess: nil.
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
@@ -204,9 +178,7 @@ GtSimpleSubprocessExamples >> sigterm [
 	self assert: (process stdout indexOfSubCollection: #exiting) > 0
 		description: 'Expected exiting message'.
 
-	process := GtUnixSubprocess new
-		command: script fullName;
-		arguments: #('300').
+	process := self commands exitHandlerProcess: '300'.
 	process runAndSignal.
 	"Give the OS time to run the process"
 	tryCount := 10.
@@ -227,19 +199,20 @@ GtSimpleSubprocessExamples >> sigterm [
 GtSimpleSubprocessExamples >> workingDirectory [
 	"Demonstrate setting a working directory"
 	<gtExample>
-	<noTest>
 	| process workingDirectory |
 
 	workingDirectory := 'pharo-local' asFileReference.
 	self assert: workingDirectory isDirectory.
 
 	process := GtUnixSubprocess new
-		command: 'pwd';
+		command: self commands pwdCommand;
+		errorBlock: [ :proc | self error: 'Failed to run pwd' ];
 		runAndWait.
 	self assert: process stdout trimBoth equals: FileLocator workingDirectory resolve fullName.
 
 	process := GtUnixSubprocess new
-		command: 'pwd';
+		command: self commands pwdCommand;
+		errorBlock: [ :proc | self error: 'Failed to run pwd' ];
 		workingDirectory: workingDirectory;
 		runAndWait.
 	self assert: process stdout trimBoth equals: workingDirectory fullName.
