@@ -26,7 +26,7 @@ GtExternalProcessExamplesWindowsCommands >> exitHandlerProcess: aTimeout [
 
 	process := GtUnixSubprocess new
 		command: self exitHandlerScript fullName.
-	aTimeout ifNotNil: [ process arg: aTimeout asString ].
+	aTimeout ifNotNil: [ process addArgument: aTimeout asString ].
 	^ process
 ]
 
