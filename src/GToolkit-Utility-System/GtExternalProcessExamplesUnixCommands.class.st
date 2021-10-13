@@ -5,11 +5,33 @@ Class {
 }
 
 { #category : #private }
+GtExternalProcessExamplesUnixCommands >> echoTestEnvProcess [
+
+	^ GtUnixSubprocess new
+		command: 'bash';
+		arguments: { '-c'. self echoTestEnvScript fullName }
+
+]
+
+{ #category : #private }
 GtExternalProcessExamplesUnixCommands >> echoTestEnvScript [
 	"Answer the command to be used for echoing the test environment variable."
 	<return: #FileReference>
 
 	^ self findScript: 'echotestenv.sh'.
+]
+
+{ #category : #private }
+GtExternalProcessExamplesUnixCommands >> exitHandlerProcess: aTimeout [
+	| cmd |
+
+	cmd := aTimeout
+		ifNil: [ self exitHandlerScript fullName ]
+		ifNotNil: [ self exitHandlerScript fullName, ' ', aTimeout asString ].
+	^ GtUnixSubprocess new
+		command: 'bash';
+		arguments: { '-c'. cmd. }
+
 ]
 
 { #category : #private }
@@ -35,7 +57,7 @@ GtExternalProcessExamplesUnixCommands >> pwdCommand [
 	^ 'pwd'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtExternalProcessExamplesUnixCommands >> sleepProcess [
 	"Answer a partially configured process tp sleep the specified time"
 

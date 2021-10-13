@@ -5,11 +5,29 @@ Class {
 }
 
 { #category : #private }
+GtExternalProcessExamplesWindowsCommands >> echoTestEnvProcess [
+
+	^ GtUnixSubprocess new
+		command: self echoTestEnvScript fullName.
+
+]
+
+{ #category : #private }
 GtExternalProcessExamplesWindowsCommands >> echoTestEnvScript [
 	"Answer the command to be used for echoing the test environment variable."
 	<return: #FileReference>
 
 	^ self findScript: 'echotestenv.bat'.
+]
+
+{ #category : #private }
+GtExternalProcessExamplesWindowsCommands >> exitHandlerProcess: aTimeout [
+	| process |
+
+	process := GtUnixSubprocess new
+		command: self exitHandlerScript fullName.
+	aTimeout ifNotNil: [ process arg: aTimeout asString ].
+	^ process
 ]
 
 { #category : #private }

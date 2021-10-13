@@ -100,6 +100,13 @@ GtUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
 ]
 
 { #category : #accessing }
+GtUnixSubprocess >> addArgument: aString [
+	"Append the supplied argument to the receiver's collection"
+
+	builder arg: aString
+]
+
+{ #category : #accessing }
 GtUnixSubprocess >> arguments [
 
 	^ builder arguments

@@ -23,12 +23,10 @@ GtSimpleSubprocessExamples >> envVariable [
 	<gtExample>
 	| process |
 
-	process := GtUnixSubprocess new.
+	process := self commands echoTestEnvProcess.
 	self deny: (process envVariables includesKey: #GT_TEST_ENV_VAR).
 	process environmentAt: #GT_TEST_ENV_VAR asString put: 'hello'.
-	process
-		command: self commands echoTestEnvScript fullName;
-		runAndWait.
+	process runAndWait.
 	self assert: process stdout trimBoth equals: 'hello'.
 
 ]
@@ -115,14 +113,9 @@ GtSimpleSubprocessExamples >> isSuccess [
 GtSimpleSubprocessExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
-	| script process tryCount |
+	| process tryCount |
 
-	script := self commands exitHandlerScript.
-	self assert: script exists
-		description: script fullName, ' doesn''t exist'.
-
-	process := GtUnixSubprocess new
-		command: script fullName.
+	process := self commands exitHandlerProcess: nil.
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
@@ -131,9 +124,7 @@ GtSimpleSubprocessExamples >> kill [
 	self assert: (process stdout indexOfSubCollection: #exiting) > 0
 		description: 'Expected exiting message'.
 
-	process := GtUnixSubprocess new
-		command: script fullName;
-		arguments: #('300').
+	process := self commands exitHandlerProcess: '300'.
 	process run.
 	"Give the OS time to run the process"
 	tryCount := 10.
@@ -173,17 +164,12 @@ GtSimpleSubprocessExamples >> shellCommand [
 GtSimpleSubprocessExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
-	| script process tryCount |
+	| process tryCount |
 
 	"sigterm is only supported on Unix"
 	OSPlatform current isWindows ifTrue: [ ^ self ].
 
-	script := self commands exitHandlerScript.
-	self assert: script exists
-		description: script fullName, ' doesn''t exist'.
-
-	process := GtUnixSubprocess new
-		command: script fullName.
+	process := self commands exitHandlerProcess: nil.
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
@@ -192,9 +178,7 @@ GtSimpleSubprocessExamples >> sigterm [
 	self assert: (process stdout indexOfSubCollection: #exiting) > 0
 		description: 'Expected exiting message'.
 
-	process := GtUnixSubprocess new
-		command: script fullName;
-		arguments: #('300').
+	process := self commands exitHandlerProcess: '300'.
 	process runAndSignal.
 	"Give the OS time to run the process"
 	tryCount := 10.
