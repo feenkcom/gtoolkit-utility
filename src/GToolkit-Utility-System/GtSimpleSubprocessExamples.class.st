@@ -130,7 +130,6 @@ GtSimpleSubprocessExamples >> isSuccess [
 GtSimpleSubprocessExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
-	<noTest>
 	| script process tryCount |
 
 	script := self exitHandlerScript.
@@ -187,7 +186,6 @@ GtSimpleSubprocessExamples >> shellCommand [
 GtSimpleSubprocessExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
-	<noTest>
 	| script process tryCount |
 
 	script := FileLocator localDirectory / 'iceberg' / 'feenkcom' / 'gtoolkit-external-process' / 'tests' / 'scripts/exithandler.sh'.
