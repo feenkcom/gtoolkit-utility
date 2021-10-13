@@ -21,16 +21,6 @@ GtExternalProcessExamplesWindowsCommands >> echoTestEnvScript [
 ]
 
 { #category : #private }
-GtExternalProcessExamplesWindowsCommands >> exitHandlerProcess: aTimeout [
-	| process |
-
-	process := GtUnixSubprocess new
-		command: self exitHandlerScript fullName.
-	aTimeout ifNotNil: [ process addArgument: aTimeout asString ].
-	^ process
-]
-
-{ #category : #private }
 GtExternalProcessExamplesWindowsCommands >> exitHandlerScript [
 	"Answer a FileReference pointing to exithandler.sh"
 	<return: #FileReference>

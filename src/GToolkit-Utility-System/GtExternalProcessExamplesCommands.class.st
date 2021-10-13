@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #private }
+GtExternalProcessExamplesCommands >> exitHandlerProcess: aTimeout [
+	| process |
+
+	process := GtUnixSubprocess new
+		command: self exitHandlerScript fullName.
+	aTimeout ifNotNil: [ process addArgument: aTimeout asString ].
+	^ process
+]
+
+{ #category : #private }
 GtExternalProcessExamplesCommands >> findScript: scriptName [
 	"Answer the script with the supplied name"
 	<return: #FileReference>

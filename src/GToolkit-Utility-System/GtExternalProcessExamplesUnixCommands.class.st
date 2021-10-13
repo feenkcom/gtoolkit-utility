@@ -8,8 +8,7 @@ Class {
 GtExternalProcessExamplesUnixCommands >> echoTestEnvProcess [
 
 	^ GtUnixSubprocess new
-		command: 'bash';
-		arguments: { '-c'. self echoTestEnvScript fullName }
+		command: self echoTestEnvScript fullName
 
 ]
 
@@ -19,19 +18,6 @@ GtExternalProcessExamplesUnixCommands >> echoTestEnvScript [
 	<return: #FileReference>
 
 	^ self findScript: 'echotestenv.sh'.
-]
-
-{ #category : #private }
-GtExternalProcessExamplesUnixCommands >> exitHandlerProcess: aTimeout [
-	| cmd |
-
-	cmd := aTimeout
-		ifNil: [ self exitHandlerScript fullName ]
-		ifNotNil: [ self exitHandlerScript fullName, ' ', aTimeout asString ].
-	^ GtUnixSubprocess new
-		command: 'bash';
-		arguments: { '-c'. cmd. }
-
 ]
 
 { #category : #private }
@@ -48,6 +34,18 @@ GtExternalProcessExamplesUnixCommands >> failProcess [
 
 	^ GtUnixSubprocess new
 		command: 'false'
+]
+
+{ #category : #initialization }
+GtExternalProcessExamplesUnixCommands >> initialize [ 
+	| scriptDir |
+
+	super initialize.
+	scriptDir := self exitHandlerScript parent.
+	GtUnixSubprocess new
+		shellCommand: 'chmod +x ', scriptDir fullName, '/*.sh';
+		errorBlock: [ :proc | self error: 'Failed to set executable bit' ];
+		runAndWait.
 ]
 
 { #category : #private }
