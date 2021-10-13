@@ -233,7 +233,11 @@ GtUnixSubprocess >> isSuccess [
 	"Answer whether the command completed successfully.
 	Only valid after the command has completed."
 
-	self isComplete ifFalse: [ self error: 'Process not yet complete' ].
+	self isComplete ifFalse: 
+		[ self hasProcess ifFalse: [ self error: 'Process not yet started' ].
+		process isNull ifTrue: [ self error: 'Process is null' ].
+		process isTerminated ifTrue: [ self error: 'Process not terminated' ].
+		self error: 'Process not yet complete' ].
 	^ self exitStatusInterpreter isSuccess
 ]
 
