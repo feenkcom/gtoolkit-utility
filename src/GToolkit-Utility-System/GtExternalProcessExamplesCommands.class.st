@@ -5,13 +5,39 @@ Class {
 }
 
 { #category : #private }
+GtExternalProcessExamplesCommands >> echoTestEnvProcess [
+	<return: #GtUnixSubprocess>
+
+	^ GtUnixSubprocess new
+		command: self echoTestEnvScript fullName;
+		errorBlock: [ :process | self error: 'Failed to echo env var' ].
+
+]
+
+{ #category : #private }
+GtExternalProcessExamplesCommands >> echoTestEnvScript [
+	<return: #FileReference>
+
+	^ self subclassResponsibility 
+]
+
+{ #category : #private }
 GtExternalProcessExamplesCommands >> exitHandlerProcess: aTimeout [
+	<return: #GtUnixSubprocess>
 	| process |
 
 	process := GtUnixSubprocess new
 		command: self exitHandlerScript fullName.
 	aTimeout ifNotNil: [ process addArgument: aTimeout asString ].
 	^ process
+]
+
+{ #category : #private }
+GtExternalProcessExamplesCommands >> exitHandlerScript [
+	"Answer a FileReference pointing to the exithandler script"
+	<return: #FileReference>
+
+	^ self subclassResponsibility 
 ]
 
 { #category : #private }

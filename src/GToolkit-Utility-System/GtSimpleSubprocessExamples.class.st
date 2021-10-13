@@ -206,11 +206,13 @@ GtSimpleSubprocessExamples >> workingDirectory [
 
 	process := GtUnixSubprocess new
 		command: self commands pwdCommand;
+		errorBlock: [ :proc | self error: 'Failed to run pwd' ];
 		runAndWait.
 	self assert: process stdout trimBoth equals: FileLocator workingDirectory resolve fullName.
 
 	process := GtUnixSubprocess new
 		command: self commands pwdCommand;
+		errorBlock: [ :proc | self error: 'Failed to run pwd' ];
 		workingDirectory: workingDirectory;
 		runAndWait.
 	self assert: process stdout trimBoth equals: workingDirectory fullName.

@@ -5,14 +5,6 @@ Class {
 }
 
 { #category : #private }
-GtExternalProcessExamplesWindowsCommands >> echoTestEnvProcess [
-
-	^ GtUnixSubprocess new
-		command: self echoTestEnvScript fullName.
-
-]
-
-{ #category : #private }
 GtExternalProcessExamplesWindowsCommands >> echoTestEnvScript [
 	"Answer the command to be used for echoing the test environment variable."
 	<return: #FileReference>
