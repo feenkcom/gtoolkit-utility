@@ -21,6 +21,14 @@ GtExternalProcessExamplesUnixCommands >> exitHandlerScript [
 ]
 
 { #category : #private }
+GtExternalProcessExamplesUnixCommands >> failProcess [
+	"Answer a command that returns failure, i.e. exit code ~= 0"
+
+	^ GtUnixSubprocess new
+		command: 'false'
+]
+
+{ #category : #private }
 GtExternalProcessExamplesUnixCommands >> pwdCommand [
 	"Answer the command to be used for printing the working directory."
 
@@ -33,4 +41,12 @@ GtExternalProcessExamplesUnixCommands >> sleepProcess [
 
 	^ GtUnixSubprocess new
 		command: 'sleep'
+]
+
+{ #category : #private }
+GtExternalProcessExamplesUnixCommands >> successProcess [
+	"Answer a command that returns success, i.e. exit code = 0"
+
+	^ GtUnixSubprocess new
+		command: 'true'
 ]

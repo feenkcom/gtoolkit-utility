@@ -21,6 +21,13 @@ GtExternalProcessExamplesWindowsCommands >> exitHandlerScript [
 ]
 
 { #category : #private }
+GtExternalProcessExamplesWindowsCommands >> failProcess [
+	"Answer a command that returns failure, i.e. exit code ~= 0"
+
+	^ self sleepProcess arguments: #('-1')
+]
+
+{ #category : #private }
 GtExternalProcessExamplesWindowsCommands >> pwdCommand [
 	"Answer the command to be used for printing the working directory."
 
@@ -33,4 +40,19 @@ GtExternalProcessExamplesWindowsCommands >> sleepCommand [
 	On Windows the exitHandlerScript provides the required functionality"
 
 	^ self exitHandlerScript fullName
+]
+
+{ #category : #private }
+GtExternalProcessExamplesWindowsCommands >> sleepProcess [
+	"Answer a partially configured process tp sleep the specified time"
+
+	^ GtUnixSubprocess new
+		command: self sleepCommand
+]
+
+{ #category : #private }
+GtExternalProcessExamplesWindowsCommands >> successProcess [
+	"Answer a command that returns failure, i.e. exit code = 0"
+
+	^ self sleepProcess
 ]

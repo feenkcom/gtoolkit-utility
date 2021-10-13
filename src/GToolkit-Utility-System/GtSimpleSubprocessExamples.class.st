@@ -21,7 +21,6 @@ GtSimpleSubprocessExamples >> commands [
 GtSimpleSubprocessExamples >> envVariable [
 	"Demonstrate setting an environment variable"
 	<gtExample>
-	<noTest>
 	| process |
 
 	process := GtUnixSubprocess new.
@@ -40,9 +39,7 @@ GtSimpleSubprocessExamples >> hasProcess [
 	<gtExample>
 	| process |
 
-	process := GtUnixSubprocess new
-		command: self commands sleepCommand;
-		arguments: #('1').
+	process := self commands sleepProcess arguments: #('300').
 	self 
 		deny: process hasProcess
 		description: 'Process has a sub-process before being started'.
@@ -59,9 +56,7 @@ GtSimpleSubprocessExamples >> isRunning [
 	<gtExample>
 	| process tryCount |
 
-	process := GtUnixSubprocess new
-		command: self commands sleepCommand;
-		arguments: #('300').
+	process := self commands sleepProcess arguments: #('300').
 	self 
 		deny: process isRunning
 		description: 'Process is running before being started'.
@@ -84,26 +79,19 @@ GtSimpleSubprocessExamples >> isRunning [
 GtSimpleSubprocessExamples >> isSuccess [
 	"Demonstrate use of the #isSuccess test"
 	<gtExample>
-	<noTest>
 	| process tryCount |
 
-	process := GtUnixSubprocess new
-		command: self commands sleepCommand;
-		arguments: #('0').
+	process := self commands successProcess.
 	process runAndWait.
 	self assert: process isSuccess
 		description: 'Expected process success'.
 
-	process := GtUnixSubprocess new
-		command: self commands sleepCommand;
-		arguments: #('-1').
+	process := self commands failProcess.
 	process runAndWait.
 	self deny: process isSuccess
 		description: 'Expected process failure'.
 
-	process := GtUnixSubprocess new
-		command: self commands sleepCommand;
-		arguments: #('300').
+	process := self commands sleepProcess arguments: #('300').
 	process run.
 	"Give the OS time to register the process startup"
 	tryCount := 10.
@@ -127,7 +115,6 @@ GtSimpleSubprocessExamples >> isSuccess [
 GtSimpleSubprocessExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
-	<noTest>
 	| script process tryCount |
 
 	script := self commands exitHandlerScript.
@@ -186,7 +173,6 @@ GtSimpleSubprocessExamples >> shellCommand [
 GtSimpleSubprocessExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
-	<noTest>
 	| script process tryCount |
 
 	"sigterm is only supported on Unix"
