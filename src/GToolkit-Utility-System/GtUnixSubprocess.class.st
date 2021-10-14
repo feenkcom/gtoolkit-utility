@@ -344,7 +344,7 @@ GtUnixSubprocess >> runProcess [
 		semaphore
 			ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
 					ifTrue: [ errorBlock value: self ] ]
-			ifNotNil: [ semaphore signalAll ] ] forkAt: Processor activeProcess priority + 1.
+			ifNotNil: [ semaphore signal ] ] forkAt: Processor activeProcess priority + 1.
 
 ]
 
