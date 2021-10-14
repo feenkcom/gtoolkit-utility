@@ -1,5 +1,5 @@
 "
-GtUnixSubprocessss is a convenience wrapper around OSSUnixSubprocess for the common case of executing a command and capturing stdout and stderr, which are strings and are larger than one OS buffer, but small enough to fit in RAM.
+GtUnixSubprocessss is a convenience wrapper around GToolkit-ExternalProcess for the common case of executing a command and capturing stdout and stderr, which are strings that are possibly larger than one OS buffer, but small enough to fit in RAM.
 
 Typical usage is: 
 
@@ -11,6 +11,12 @@ proc stdout
 ```
 
 If no error block is supplied the completion status should be checked with `#isSuccess`.
+
+Processes are started with one of three messages:
+
+- `#runAndWait` - Run the process and wait for completion, blocking the caller.
+- `#runAndSignal` - Run the process and return immediately.  The caller can then wait for completion at a later time.
+- `#run` - Run the process without any completion notification.
 
 
 Public API and Key Messages
@@ -24,24 +30,6 @@ Public API and Key Messages
 - runAndWait: 			Execute the command and wait for completion.
 - isSuccess 				Answer a boolean indicating if the command completed successfully.
 - stdout, stderr: 		The output strings.
-
- 
-## Internal Representation and Key Implementation Points.
-
-
-### Instance Variables
-
-	arguments:		<Array>
-	command:			<String>
-	errorBlock:		<BlockClosure>
-	process:			<OSSUnixSubprocess>
-	semaphore:		<Semaphore>
-	stderrStream:	<WriteStream on: String>
-	stdoutStream:	<WriteStream on: String>
-
-
-### Implementation Points
-
 
 "
 Class {
