@@ -6,9 +6,9 @@ Class {
 
 { #category : #private }
 GtExternalProcessExamplesCommands >> echoTestEnvProcess [
-	<return: #GtUnixSubprocess>
+	<return: #GtSubprocessWithInMemoryOutput>
 
-	^ GtUnixSubprocess new
+	^ GtSubprocessWithInMemoryOutput new
 		command: self echoTestEnvScript fullName;
 		errorBlock: [ :process | self error: 'Failed to echo env var' ].
 
@@ -23,10 +23,10 @@ GtExternalProcessExamplesCommands >> echoTestEnvScript [
 
 { #category : #private }
 GtExternalProcessExamplesCommands >> exitHandlerProcess: aTimeout [
-	<return: #GtUnixSubprocess>
+	<return: #GtSubprocessWithInMemoryOutput>
 	| process |
 
-	process := GtUnixSubprocess new
+	process := GtSubprocessWithInMemoryOutput new
 		command: self exitHandlerScript fullName.
 	aTimeout ifNotNil: [ process addArgument: aTimeout asString ].
 	^ process

@@ -24,7 +24,7 @@ GtExternalProcessExamplesUnixCommands >> exitHandlerScript [
 GtExternalProcessExamplesUnixCommands >> failProcess [
 	"Answer a command that returns failure, i.e. exit code ~= 0"
 
-	^ GtUnixSubprocess new
+	^ GtSubprocessWithInMemoryOutput new
 		command: 'false'
 ]
 
@@ -34,7 +34,7 @@ GtExternalProcessExamplesUnixCommands >> initialize [
 
 	super initialize.
 	scriptDir := self exitHandlerScript parent.
-	GtUnixSubprocess new
+	GtSubprocessWithInMemoryOutput new
 		shellCommand: 'chmod +x ', scriptDir fullName, '/*.sh';
 		errorBlock: [ :proc | self error: 'Failed to set executable bit' ];
 		runAndWait.
@@ -51,7 +51,7 @@ GtExternalProcessExamplesUnixCommands >> pwdCommand [
 GtExternalProcessExamplesUnixCommands >> sleepProcess [
 	"Answer a partially configured process tp sleep the specified time"
 
-	^ GtUnixSubprocess new
+	^ GtSubprocessWithInMemoryOutput new
 		command: 'sleep'
 ]
 
@@ -59,6 +59,6 @@ GtExternalProcessExamplesUnixCommands >> sleepProcess [
 GtExternalProcessExamplesUnixCommands >> successProcess [
 	"Answer a command that returns success, i.e. exit code = 0"
 
-	^ GtUnixSubprocess new
+	^ GtSubprocessWithInMemoryOutput new
 		command: 'true'
 ]
