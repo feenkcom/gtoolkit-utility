@@ -1,5 +1,5 @@
 Class {
-	#name : #GtSimpleSubprocessExamples,
+	#name : #GtSubprocessWithInMemoryOutputExamples,
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #private }
-GtSimpleSubprocessExamples >> commands [
+GtSubprocessWithInMemoryOutputExamples >> commands [
 
 	^ commands ifNil: [ commands := OSPlatform current isWindows
 		ifTrue: [ GtExternalProcessExamplesWindowsCommands new ]
@@ -18,7 +18,7 @@ GtSimpleSubprocessExamples >> commands [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> envVariable [
+GtSubprocessWithInMemoryOutputExamples >> envVariable [
 	"Demonstrate setting an environment variable"
 	<gtExample>
 	| process |
@@ -32,7 +32,7 @@ GtSimpleSubprocessExamples >> envVariable [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> hasProcess [
+GtSubprocessWithInMemoryOutputExamples >> hasProcess [
 	"Demonstrate use of the #hasProcess test"
 	<gtExample>
 	| process |
@@ -49,7 +49,7 @@ GtSimpleSubprocessExamples >> hasProcess [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> isRunning [ 
+GtSubprocessWithInMemoryOutputExamples >> isRunning [ 
 	"Demonstrate use of the #isRunning test"
 	<gtExample>
 	| process tryCount |
@@ -74,7 +74,7 @@ GtSimpleSubprocessExamples >> isRunning [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> isSuccess [
+GtSubprocessWithInMemoryOutputExamples >> isSuccess [
 	"Demonstrate use of the #isSuccess test"
 	<gtExample>
 	| process tryCount |
@@ -110,7 +110,7 @@ GtSimpleSubprocessExamples >> isSuccess [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> kill [
+GtSubprocessWithInMemoryOutputExamples >> kill [
 	"Demonstrate use #terminate and confirm that the exit handlers aren't run"
 	<gtExample>
 	| process tryCount |
@@ -145,7 +145,7 @@ GtSimpleSubprocessExamples >> kill [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> shellCommand [
+GtSubprocessWithInMemoryOutputExamples >> shellCommand [
 	"Demonstrate using a shell command"
 	<gtExample>
 	| process |
@@ -153,7 +153,7 @@ GtSimpleSubprocessExamples >> shellCommand [
 	"Isn't valid on Windows"
 	OSPlatform current isWindows ifTrue: [ ^ self ].
 
-	process := GtUnixSubprocess new
+	process := GtSubprocessWithInMemoryOutput new
 		shellCommand: 'echo "hello"';
 		runAndWait.
 	self assert: process stdout trimBoth equals: 'hello'.
@@ -161,7 +161,7 @@ GtSimpleSubprocessExamples >> shellCommand [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> sigterm [
+GtSubprocessWithInMemoryOutputExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
 	| process tryCount |
@@ -196,7 +196,7 @@ GtSimpleSubprocessExamples >> sigterm [
 ]
 
 { #category : #examples }
-GtSimpleSubprocessExamples >> workingDirectory [
+GtSubprocessWithInMemoryOutputExamples >> workingDirectory [
 	"Demonstrate setting a working directory"
 	<gtExample>
 	| process workingDirectory |
@@ -204,13 +204,13 @@ GtSimpleSubprocessExamples >> workingDirectory [
 	workingDirectory := 'pharo-local' asFileReference.
 	self assert: workingDirectory isDirectory.
 
-	process := GtUnixSubprocess new
+	process := GtSubprocessWithInMemoryOutput new
 		command: self commands pwdCommand;
 		errorBlock: [ :proc | self error: 'Failed to run pwd' ];
 		runAndWait.
 	self assert: process stdout trimBoth equals: FileLocator workingDirectory resolve fullName.
 
-	process := GtUnixSubprocess new
+	process := GtSubprocessWithInMemoryOutput new
 		command: self commands pwdCommand;
 		errorBlock: [ :proc | self error: 'Failed to run pwd' ];
 		workingDirectory: workingDirectory;

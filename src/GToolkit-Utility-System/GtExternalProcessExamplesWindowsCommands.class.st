@@ -46,7 +46,7 @@ GtExternalProcessExamplesWindowsCommands >> sleepCommand [
 GtExternalProcessExamplesWindowsCommands >> sleepProcess [
 	"Answer a partially configured process tp sleep the specified time"
 
-	^ GtUnixSubprocess new
+	^ GtSubprocessWithInMemoryOutput new
 		command: self sleepCommand
 ]
 
