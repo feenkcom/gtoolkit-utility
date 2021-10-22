@@ -4,7 +4,7 @@ Extension { #name : #MemoryFileWriteStream }
 MemoryFileWriteStream >> next: count putAll: collection startingAt: offset [
 	"Write count characters from collection starting at offset."
 	
-	stream 
+	self stream 
 		next: count 
 		putAll: collection 
 		startingAt: offset
