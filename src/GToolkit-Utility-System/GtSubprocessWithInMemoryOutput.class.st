@@ -212,7 +212,7 @@ GtSubprocessWithInMemoryOutput >> initialize [
 GtSubprocessWithInMemoryOutput >> isComplete [
 
 	^ self hasProcess and: 
-		[ process isNull not and: 
+		[ process isNull or: 
 		[ process isTerminated ] ]
 ]
 
@@ -234,7 +234,9 @@ GtSubprocessWithInMemoryOutput >> isSuccess [
 		process isNull ifTrue: [ self error: 'Process is null' ].
 		process isTerminated ifTrue: [ self error: 'Process not terminated' ].
 		self error: 'Process not yet complete' ].
-	^ self exitStatusInterpreter isSuccess
+	^ self exitStatusInterpreter 
+		ifNil: [ false ]
+		ifNotNil: [ :interpreter | interpreter isSuccess ]
 ]
 
 { #category : #actions }
@@ -248,14 +250,14 @@ GtSubprocessWithInMemoryOutput >> printOn: aStream [
 
 	process ifNil: [ ^super printOn: aStream ].
 	self isRunning ifTrue:
-		[ aStream nextPutAll: 'a Running GtUnixSubprocess' ]
+		[ aStream nextPutAll: 'a Running GtSubprocessWithInMemoryOutput' ]
 	ifFalse: [ self isComplete ifFalse:
-		[ aStream nextPutAll: 'an Incomplete GtUnixSubprocess' ]
+		[ aStream nextPutAll: 'an Incomplete GtSubprocessWithInMemoryOutput' ]
 	ifTrue:
 		[ self isSuccess ifTrue: 
-				[ aStream nextPutAll: 'a Successfull GtUnixSubprocess' ]
+				[ aStream nextPutAll: 'a Successfull GtSubprocessWithInMemoryOutput' ]
 			ifFalse:
-				[ aStream nextPutAll: 'an Unsuccessfull GtUnixSubprocess' ] ] ].
+				[ aStream nextPutAll: 'an Unsuccessfull GtSubprocessWithInMemoryOutput' ] ] ].
 ]
 
 { #category : #accessing }
