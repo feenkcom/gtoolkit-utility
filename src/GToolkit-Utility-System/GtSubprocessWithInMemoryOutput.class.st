@@ -269,7 +269,7 @@ GtSubprocessWithInMemoryOutput >> process [
 { #category : #status }
 GtSubprocessWithInMemoryOutput >> queryExitStatus [
 
-	^ process queryExitStatus
+	^ self exitStatus
 ]
 
 { #category : #removing }
