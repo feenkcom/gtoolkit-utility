@@ -145,6 +145,10 @@ GtSubprocessWithInMemoryOutput >> errorBlock [
 
 { #category : #accessing }
 GtSubprocessWithInMemoryOutput >> errorBlock: anObject [
+	"A zero, one or two argument block to be evaluated when the subprocess exits with an error.
+	Arguments:
+	- self (a GtSubprocessWithInMemoryOutput)
+	- timedOut - a Boolean indicating whether the sub-process timed out"
 	errorBlock := anObject
 ]
 
@@ -335,7 +339,7 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 		If waiting, raise the error after signalling the semaphore (in #runAndWait)"
 		semaphore
 			ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
-					ifTrue: [ errorBlock value: self ] ]
+					ifTrue: [ errorBlock cull: self cull: false ] ]
 			ifNotNil: [ semaphore signal ] ] forkAt: Processor activeProcess priority + 1.
 
 ]
@@ -411,7 +415,7 @@ GtSubprocessWithInMemoryOutput >> wait [
 
 	semaphore wait.
 	(errorBlock isNotNil and: [ self isSuccess not ])
-		ifTrue: [ errorBlock cull: self ]
+		ifTrue: [ errorBlock cull: self cull: false ]
 ]
 
 { #category : #'api - future' }
