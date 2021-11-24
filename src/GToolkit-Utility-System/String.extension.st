@@ -1,6 +1,12 @@
 Extension { #name : #String }
 
 { #category : #'*GToolkit-Utility-System' }
+String >> gtAsReader [
+
+	^ self asSymbol gtAsReader
+]
+
+{ #category : #'*GToolkit-Utility-System' }
 String >> gtPiecesCutWhereCamelCase [
 	"Breaks apart words written in camel case.
 	
