@@ -3,7 +3,7 @@ This is a trait for defining basic utilities to be added to a typed group (a cla
 "
 Trait {
 	#name : #TGtGroup,
-	#category : 'GToolkit-Utility-System-GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System-GToolkit-Utility-System'
 }
 
 { #category : #accessing }
@@ -49,6 +49,18 @@ TGtGroup >> groupedBy: aBlock [
 { #category : #accessing }
 TGtGroup >> isCollection [
 	^ true
+]
+
+{ #category : #testing }
+TGtGroup >> isEmpty [
+
+	^ self items isEmpty
+]
+
+{ #category : #testing }
+TGtGroup >> isNotEmpty [
+
+	^ self items isNotEmpty
 ]
 
 { #category : #accessing }
