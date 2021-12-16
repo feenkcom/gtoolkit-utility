@@ -17,6 +17,9 @@ GtMutualExclusionSemaphore >> critical: aBlock [
 	"Evaluate the block as in the superclass, but record the owning process"
 	| blockValue |
 
+	(process isNotNil and: [ process = Processor activeProcess ]) ifTrue:
+		[ self error: 'About to deadlock mutual exclusion semaphore' ].
+
 	super critical:
 		[ process := Processor activeProcess.
 		blockValue := aBlock value.
