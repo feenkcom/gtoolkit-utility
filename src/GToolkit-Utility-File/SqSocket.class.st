@@ -36,6 +36,9 @@ SqSocket >> getCloseOnExec [
 	"Get the CLOEXEC bit for the receiver"
 	| result |
 
+	"Windows doesn't transfer open file descriptors"
+	OSPlatform current isWindows ifTrue: [ ^ true ].
+
 	result := LibC uniqueInstance
 		fcntl: self fileDescriptor 
 		_: 1 "F_GETFD".
@@ -72,6 +75,9 @@ SqSocket >> sessionID: anObject [
 SqSocket >> setCloseOnExec: aBoolean [
 	"Set/Clear the CLOEXEC bit on the receiver"
 	| status |
+
+	"Ignore on Windows: sockets aren't transferred to subprocesses"
+	OSPlatform current isWindows ifTrue: [ ^ self ].
 
 	status := LibC uniqueInstance
 		fcntl: self fileDescriptor 

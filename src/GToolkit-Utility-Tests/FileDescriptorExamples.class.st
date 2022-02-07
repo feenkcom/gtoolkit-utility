@@ -23,9 +23,6 @@ FileDescriptorExamples >> fileCloseOnExecFlag [
 	<gtExample>
 	| binaryStream originalValue |
 
-	"CLOEXEC is unix specific"
-	OSPlatform current isWindows ifTrue: [ ^ self ].
-
 	SourceFiles sourcesFileStream path asFileReference binaryReadStreamDo: [ :stream |
 		binaryStream := stream.
 		[ binaryStream wrappedStream ] whileNotNil:
@@ -43,9 +40,6 @@ FileDescriptorExamples >> socketCloseOnExecFlag [
 	"Demonstrate reading and setting the CLOEXEC flag for a file"
 	<gtExample>
 	<after: #closeSocket>
-
-	"CLOEXEC is unix specific"
-	OSPlatform current isWindows ifTrue: [ ^ self ].
 
 	self assert: socket isNil.
 	socket := Socket tcpCreateIfFail: [ self error: 'Unable to create socket' ].
