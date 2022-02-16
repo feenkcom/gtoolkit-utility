@@ -139,12 +139,6 @@ GtResourceReference >> contains: anObject [
 	^ self fileReference contains: anObject
 ]
 
-{ #category : #comparing }
-GtResourceReference >> containsReference: aReference [
-
-	^ self fileReference containsReference: aReference
-]
-
 { #category : #accessing }
 GtResourceReference >> contents [
 	^ self fileReference contents
@@ -386,12 +380,6 @@ GtResourceReference >> openWritable: aBoolean [
 ]
 
 { #category : #accessing }
-GtResourceReference >> parent [
-
-	^ self fileReference parent
-]
-
-{ #category : #accessing }
 GtResourceReference >> path [
 	^ path ifNil: [ path := Path * '.' ]
 ]
@@ -458,19 +446,12 @@ GtResourceReference >> resolve [
 
 { #category : #navigating }
 GtResourceReference >> resolve: anObject [
-
 	<return: #FileReference>
-	| aResolution |
-	aResolution := anObject asResolvedBy: self.
-	^ aResolution class = self class
-		  ifTrue: [ aResolution fileReference ]
-		  ifFalse: [ aResolution ]
+	^ self fileReference resolve: anObject
 ]
 
 { #category : #navigating }
 GtResourceReference >> resolvePath: anObject [
-
-	<return: #GtResourceReference>
 	^ self withPath: (self path resolve: anObject)
 ]
 
@@ -478,7 +459,6 @@ GtResourceReference >> resolvePath: anObject [
 GtResourceReference >> resolveReference: aReference [
 	
 	| aFileSystem |
-	<return: #GtResourceReference or: #FileReference>
 	aFileSystem := self fileSystem.
 	
 	^ (aFileSystem = aReference fileSystem or: [ aReference isRelative ])
@@ -488,8 +468,6 @@ GtResourceReference >> resolveReference: aReference [
 
 { #category : #navigating }
 GtResourceReference >> resolveString: aString [
-
-	<return: #GtResourceReference>
 	| filesystem thePath |
 	filesystem := self fileSystem.
 	thePath := filesystem pathFromString: aString.
