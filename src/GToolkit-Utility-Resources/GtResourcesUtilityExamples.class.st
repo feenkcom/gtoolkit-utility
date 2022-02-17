@@ -287,6 +287,62 @@ GtResourcesUtilityExamples >> notExistingPath [
 	^ aPath
 ]
 
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals [
+
+	<gtExample>
+	| aResourceOne aResourceTwo |
+	aResourceOne := GtResourceReference path: Path * 'file1.txt'.
+	aResourceTwo := GtResourceReference path: Path * 'file1.txt'.
+
+	self assert: aResourceOne equals: aResourceTwo.
+	self assert: aResourceTwo equals: aResourceOne.
+
+	^ aResourceOne
+]
+
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals_AnyObject [
+
+	<gtExample>
+	| aResource anObject |
+	aResource := GtResourceReference path: Path * 'file1.txt'.
+	anObject := Object new.
+
+	self assert: (aResource = anObject) not.
+	self assert: (anObject = aResource) not.
+
+	^ aResource
+]
+
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals_FileLocator [
+
+	<gtExample>
+	| aResource aFile |
+	aResource := GtResourceReference path: Path * 'file1.txt'.
+	aFile := FileLocator gtResource / 'file1.txt'.
+
+	self assert: aResource equals: aFile.
+	self assert: (aFile = aResource) not.
+
+	^ aResource
+]
+
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals_FileReference [
+
+	<gtExample>
+	| aResource aFile |
+	aResource := GtResourceReference path: Path * 'file1.txt'.
+	aFile := aResource fileReference.
+
+	self assert: aResource equals: aFile.
+	self assert: (aFile = aResource) not.
+
+	^ aResource
+]
+
 { #category : #'examples - resolve' }
 GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations [
 

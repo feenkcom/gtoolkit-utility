@@ -54,6 +54,9 @@ GtResourceReference >> / aString [
 { #category : #comparing }
 GtResourceReference >> = anObject [
 
+	(anObject respondsTo: #isEqualToResourceReference:) ifFalse: [ 
+		^ false ].
+
 	^ anObject isEqualToResourceReference: self
 ]
 
@@ -312,7 +315,8 @@ GtResourceReference >> hasFiles [
 
 { #category : #comparing }
 GtResourceReference >> hash [
-	^ self path hash
+
+	^ self path hash bitXor: self utility hash
 ]
 
 { #category : #accessing }
