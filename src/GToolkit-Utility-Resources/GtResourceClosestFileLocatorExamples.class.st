@@ -187,19 +187,28 @@ GtResourceClosestFileLocatorExamples >> locator_FileLocator_vmDirectory [
 
 { #category : #'examples - locator' }
 GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResourceChild [
+
 	<gtExample>
 	| aLocator anOriginaFileReference aTransformedFileLocator |
 	aLocator := self basicLocator.
-	anOriginaFileReference := (FileLocator gtResource / 'dir1' / 'file1.txt') asFileReference.
-	aTransformedFileLocator := aLocator 
-		file: anOriginaFileReference; 
-		transform.
-	
-	self 
+	anOriginaFileReference := (FileLocator gtResource / 'dir1'
+	                           / 'file1.txt') asFileReference.
+	aTransformedFileLocator := aLocator
+		                           file: anOriginaFileReference;
+		                           transform.
+
+	self
 		assert: aTransformedFileLocator asFileReference
 		equals: anOriginaFileReference asFileReference.
-		
-	self 
+
+	self
+		assert: aTransformedFileLocator asFileReference
+		equals: anOriginaFileReference asFileReference fileReference.
+
+	self assert: (aTransformedFileLocator asFileReference fileReference
+		 = anOriginaFileReference asFileReference) not.
+
+	self
 		assert: (aTransformedFileLocator isKindOf: FileLocator)
 		description: 'The transformed file must be a FileLocator'.
 

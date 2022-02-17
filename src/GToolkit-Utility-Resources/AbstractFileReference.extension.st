@@ -8,6 +8,12 @@ AbstractFileReference >> gtWithClosestFileLocatorParent [
 ]
 
 { #category : #'*GToolkit-Utility-Resources' }
+AbstractFileReference >> isEqualToResourceReference: aGtResourceReference [
+
+	^ self asFileReference = aGtResourceReference fileReference
+]
+
+{ #category : #'*GToolkit-Utility-Resources' }
 AbstractFileReference >> resolveResourceReference: aResource [
 
 	<return: #AbstractFileReference>

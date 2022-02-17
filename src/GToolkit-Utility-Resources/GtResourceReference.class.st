@@ -51,6 +51,12 @@ GtResourceReference >> / aString [
 	^ self copyWithPath: self path / aString
 ]
 
+{ #category : #comparing }
+GtResourceReference >> = anObject [
+
+	^ anObject isEqualToResourceReference: self
+]
+
 { #category : #accessing }
 GtResourceReference >> absolutePath [
 	^ self fileReference absolutePath
@@ -149,6 +155,13 @@ GtResourceReference >> contains: anObject [
 GtResourceReference >> containsReference: aReference [
 
 	^ self fileReference containsReference: aReference
+]
+
+{ #category : #comparing }
+GtResourceReference >> containsResourceReference: aGtResourceReference [
+
+	^ aGtResourceReference fileSystem = self fileSystem and: [ 
+		  self path contains: aGtResourceReference path ]
 ]
 
 { #category : #accessing }
@@ -273,6 +286,12 @@ GtResourceReference >> fullName [
 	^ self fileReference fullName
 ]
 
+{ #category : #accessing }
+GtResourceReference >> fullPath [
+
+	^ self fileReference fullPath
+]
+
 { #category : #testing }
 GtResourceReference >> hasChildren [
 	<return: #Boolean>
@@ -289,6 +308,11 @@ GtResourceReference >> hasDirectories [
 GtResourceReference >> hasFiles [
 	<return: #Boolean>
 	^ self fileReference hasFiles
+]
+
+{ #category : #comparing }
+GtResourceReference >> hash [
+	^ self path hash
 ]
 
 { #category : #accessing }
@@ -314,10 +338,22 @@ GtResourceReference >> isChildOf: anObject [
 	^ self fileReference isChildOf: anObject
 ]
 
+{ #category : #comparing }
+GtResourceReference >> isContainedBy: anObject [
+
+	^ anObject containsResourceReference: self
+]
+
 { #category : #testing }
 GtResourceReference >> isDirectory [
 	<return: #Boolean>
 	^ self fileReference isDirectory
+]
+
+{ #category : #comparing }
+GtResourceReference >> isEqualToResourceReference: aGtResourceReference [
+
+	^ self fileReference = aGtResourceReference fileReference
 ]
 
 { #category : #testing }
@@ -449,6 +485,25 @@ GtResourceReference >> readStreamEncoded: anEncoding do: aBlock [
 { #category : #streams }
 GtResourceReference >> readStreamIfAbsent: absentBlock [
 	^ self fileReference readStreamIfAbsent: absentBlock
+]
+
+{ #category : #navigating }
+GtResourceReference >> relativeTo: anObject [
+
+	^ anObject makeRelative: self
+]
+
+{ #category : #navigating }
+GtResourceReference >> relativeToPath: landmarkPath [ 
+	
+	^ self fullPath relativeTo: landmarkPath
+]
+
+{ #category : #navigating }
+GtResourceReference >> relativeToReference: aFileReference [ 
+	"Return the path of the receiver relative to landmarkReference."
+	
+	^ self fullPath relativeTo: aFileReference path
 ]
 
 { #category : #operations }
