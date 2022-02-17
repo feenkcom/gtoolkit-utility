@@ -186,13 +186,14 @@ GtResourceClosestFileLocatorExamples >> locator_FileLocator_vmDirectory [
 ]
 
 { #category : #'examples - locator' }
-GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResourceChild [
+GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResource_FileReferenceChild [
 
 	<gtExample>
 	| aLocator anOriginaFileReference aTransformedFileLocator |
 	aLocator := self basicLocator.
 	anOriginaFileReference := (FileLocator gtResource / 'dir1'
-	                           / 'file1.txt') asFileReference.
+	                           / 'file1.txt') asFileReference
+		                          fileReference.
 	aTransformedFileLocator := aLocator
 		                           file: anOriginaFileReference;
 		                           transform.
@@ -202,11 +203,46 @@ GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResourceChild [
 		equals: anOriginaFileReference asFileReference.
 
 	self
+		assert: anOriginaFileReference asFileReference
+		equals: aTransformedFileLocator asFileReference fileReference.
+
+	self
+		assert: aTransformedFileLocator asFileReference fileReference
+		equals: anOriginaFileReference asFileReference.
+
+	self
+		assert: (aTransformedFileLocator isKindOf: FileLocator)
+		description: 'The transformed file must be a FileLocator'.
+
+	^ aLocator
+]
+
+{ #category : #'examples - locator' }
+GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResource_ResourceReferenceChild [
+
+	<gtExample>
+	| aLocator anOriginalResourceFile aTransformedFileLocator |
+	aLocator := self basicLocator.
+	anOriginalResourceFile := (FileLocator gtResource / 'dir1'
+	                           / 'file1.txt') asFileReference.
+	aTransformedFileLocator := aLocator
+		                           file: anOriginalResourceFile;
+		                           transform.
+
+	self
 		assert: aTransformedFileLocator asFileReference
-		equals: anOriginaFileReference asFileReference fileReference.
+		equals: anOriginalResourceFile asFileReference.
+
+	self
+		assert: anOriginalResourceFile asFileReference
+		equals: aTransformedFileLocator asFileReference.
+
+	self
+		assert: aTransformedFileLocator asFileReference
+		equals: anOriginalResourceFile asFileReference fileReference.
 
 	self assert: (aTransformedFileLocator asFileReference fileReference
-		 = anOriginaFileReference asFileReference) not.
+		 = anOriginalResourceFile asFileReference) not.
 
 	self
 		assert: (aTransformedFileLocator isKindOf: FileLocator)

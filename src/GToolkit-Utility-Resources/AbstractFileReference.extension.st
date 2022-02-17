@@ -19,6 +19,6 @@ AbstractFileReference >> resolveResourceReference: aResource [
 	<return: #AbstractFileReference>
 	^ self fileSystem = aResource fileSystem
 		  ifTrue: [ 
-		  	self copyWithPath: (self path resolvePath: aResource path) ]
+		  	self copyWithPath: (self path resolvePath: aResource relativePath) ]
 		  ifFalse: [ aResource ]
 ]

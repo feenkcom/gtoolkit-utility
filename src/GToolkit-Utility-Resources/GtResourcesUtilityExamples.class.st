@@ -89,7 +89,8 @@ GtResourcesUtilityExamples >> fileLocator_asFileReference [
 	aFileReference := aLocator asFileReference.
 	
 	self assert: aFileReference class equals: GtResourceReference.
-	self assert: aFileReference path isAbsolute not.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
 	
 	^ aFileReference
 ]
@@ -102,7 +103,8 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 	aFileReference := aLocator resolve.
 	
 	self assert: aFileReference class equals: GtResourceReference.
-	self assert: aFileReference path isAbsolute not.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
 	
 	^ aFileReference
 ]
@@ -120,7 +122,8 @@ GtResourcesUtilityExamples >> fileLocator_withSlash [
 
 	self assert: aParentResource class equals: GtResourceReference.
 	self assert: aChildResource class equals: GtResourceReference.
-	self assert: aChildResource path isAbsolute not.
+	self assert: aChildResource relativePath isAbsolute not.
+	self assert: aChildResource path isAbsolute.
 	self assert: aChildResource parent equals: aParentResource.
 	self assert: aParentResource equals: aChildResource parent.
 	self
@@ -134,22 +137,25 @@ GtResourcesUtilityExamples >> fileLocator_withSlash [
 GtResourcesUtilityExamples >> fileLocator_withSlashes [
 
 	<gtExample>
-	| aLocator aFileReference aNewLocator aNewFileReference |
-	aLocator := self fileLocator.
-	aNewLocator := aLocator / 'feenkcom/gtoolkit/doc'.
+	| aParentLocator aParentResource aChildLocator aChildResource |
+	aParentLocator := self fileLocator.
+	aChildLocator := aParentLocator / 'feenkcom/gtoolkit/doc'.
 
-	aFileReference := aLocator asFileReference.
-	aNewFileReference := aNewLocator asFileReference.
+	aParentResource := aParentLocator asFileReference.
+	aChildResource := aChildLocator asFileReference.
 
-	self assert: aNewFileReference class equals: GtResourceReference.
-	self assert: aNewFileReference path isAbsolute not.
-	self assert:
-		(aNewFileReference parent parent parent = aFileReference) not.
+	self assert: aParentResource class equals: GtResourceReference.
+	self assert: aChildResource class equals: GtResourceReference.
+	self assert: aChildResource relativePath isAbsolute not.
+	self assert: aChildResource path isAbsolute.
 	self
-		assert: aNewFileReference parent parent parent
-		equals: aFileReference fileReference.
+		assert: aChildResource parent parent parent
+		equals: aParentResource.
+	self
+		assert: aChildResource parent parent parent
+		equals: aParentResource fileReference.
 
-	^ aNewLocator
+	^ aChildLocator
 ]
 
 { #category : #'examples - locations' }

@@ -42,13 +42,14 @@ GtResourceReference class >> path: aPath [
 
 { #category : #navigating }
 GtResourceReference >> , anExtension [
-	^ self copy path: self path , anExtension
+
+	^ self copy path: self relativePath , anExtension
 ]
 
 { #category : #navigating }
 GtResourceReference >> / aString [ 
 	"Return new instance"
-	^ self copyWithPath: self path / aString
+	^ self copyWithPath: self relativePath / aString
 ]
 
 { #category : #comparing }
@@ -164,7 +165,7 @@ GtResourceReference >> containsReference: aReference [
 GtResourceReference >> containsResourceReference: aGtResourceReference [
 
 	^ aGtResourceReference fileSystem = self fileSystem and: [ 
-		  self path contains: aGtResourceReference path ]
+		  self relativePath contains: aGtResourceReference relativePath ]
 ]
 
 { #category : #accessing }
@@ -270,7 +271,7 @@ GtResourceReference >> exists [
 { #category : #accessing }
 GtResourceReference >> fileReference [
 	<return: #FileReference>
-	^ self utility resourceAtPath: self path
+	^ self utility resourceAtPath: self relativePath
 ]
 
 { #category : #accessing }
@@ -316,7 +317,7 @@ GtResourceReference >> hasFiles [
 { #category : #comparing }
 GtResourceReference >> hash [
 
-	^ self path hash bitXor: self utility hash
+	^ self relativePath hash bitXor: self utility hash
 ]
 
 { #category : #accessing }
@@ -332,8 +333,9 @@ GtResourceReference >> ifFile: fBlock ifDirectory: dBlock ifAbsent: aBlock [
 
 { #category : #testing }
 GtResourceReference >> isAbsolute [
+
 	<return: #Boolean>
-	^ self path isAbsolute
+	^ self relativePath isAbsolute
 ]
 
 { #category : #testing }
@@ -387,7 +389,7 @@ GtResourceReference >> isReadable [
 { #category : #testing }
 GtResourceReference >> isRelative [
 	<return: #Boolean>
-	^ self path isRelative
+	^ self relativePath isRelative
 ]
 
 { #category : #testing }
@@ -441,7 +443,7 @@ GtResourceReference >> parent [
 
 { #category : #accessing }
 GtResourceReference >> path [
-	^ path ifNil: [ path := Path * '.' ]
+	^ self fileReference path
 ]
 
 { #category : #accessing }
@@ -499,7 +501,7 @@ GtResourceReference >> readStreamIfAbsent: absentBlock [
 { #category : #private }
 GtResourceReference >> relativePath [
 
-	^ path
+	^ path ifNil: [ path := Path * '.' ]
 ]
 
 { #category : #navigating }
@@ -544,7 +546,7 @@ GtResourceReference >> resolve: anObject [
 GtResourceReference >> resolvePath: anObject [
 
 	<return: #GtResourceReference>
-	^ self withPath: (self path resolve: anObject)
+	^ self withPath: (self relativePath resolve: anObject)
 ]
 
 { #category : #navigating }
@@ -556,7 +558,7 @@ GtResourceReference >> resolveReference: aReference [
 
 	^ (aFileSystem = aReference fileSystem or: [ aReference isRelative ])
 		  ifTrue: [ 
-		  	self copyWithPath: (self path resolvePath: aReference path) ]
+		  	self copyWithPath: (self relativePath resolvePath: aReference path) ]
 		  ifFalse: [ aReference ]
 ]
 
@@ -566,7 +568,8 @@ GtResourceReference >> resolveResourceReference: aResource [
 	<return: #GtResourceReference>
 	^ self fileSystem = aResource fileSystem
 		  ifTrue: [ 
-		  self copyWithPath: (self path resolvePath: aResource path) ]
+			  self copyWithPath:
+				  (self relativePath resolvePath: aResource relativePath) ]
 		  ifFalse: [ aResource ]
 ]
 
@@ -583,7 +586,7 @@ GtResourceReference >> resolveString: aString [
 { #category : #accessing }
 GtResourceReference >> results [
 	<return: #Array of: #GtResourcesUtilityResultContext>
-	^ self utility locationsAtPath: self path
+	^ self utility locationsAtPath: self relativePath
 ]
 
 { #category : #accessing }
@@ -611,9 +614,9 @@ GtResourceReference >> utility: anObject [
 { #category : #navigating }
 GtResourceReference >> withExtension: aString [
 	| aNewPath |
-	aNewPath := self path withExtension: aString.
-	(self path == aNewPath) ifTrue: [ ^ self ].
-	^ self copy path: aNewPath
+	aNewPath := self relativePath withExtension: aString.
+	(self relativePath == aNewPath) ifTrue: [ ^ self ].
+	^ self copyWithPath: aNewPath
 ]
 
 { #category : #accessing }
@@ -624,7 +627,7 @@ GtResourceReference >> withParents [
 
 { #category : #navigating }
 GtResourceReference >> withPath: newPath [
-	^ self path == newPath
+	^ self relativePath == newPath
 		ifTrue: [ self ] 
 		ifFalse: [ self copyWithPath: newPath ]
 ]
