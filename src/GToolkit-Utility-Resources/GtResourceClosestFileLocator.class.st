@@ -56,16 +56,21 @@ GtResourceClosestFileLocator >> file: anObject [
 
 { #category : #'api - search' }
 GtResourceClosestFileLocator >> transform [
-	| aClosestParent aPath aTransformedFile |
+
+	| aClosestParent aPath aTransformedFile aClosestFileReference |
 	aClosestParent := self closestParent.
-	
+
 	aClosestParent ifNil: [ ^ self file ].
-	
-	aClosestParent asFileReference = self file asFileReference 
-		ifTrue: [ ^ aClosestParent ].
-		
-	aPath := self file relativeTo: aClosestParent.
+
+	aClosestFileReference := aClosestParent asFileReference.
+	aClosestFileReference class = GtResourceReference ifTrue: [ 
+		aClosestFileReference := aClosestFileReference fileReference ].
+
+	aClosestFileReference = self file asFileReference ifTrue: [ 
+		^ aClosestParent ].
+
+	aPath := self file relativeTo: aClosestFileReference.
 	aTransformedFile := aClosestParent withPath: aPath.
-	
+
 	^ aTransformedFile
 ]
