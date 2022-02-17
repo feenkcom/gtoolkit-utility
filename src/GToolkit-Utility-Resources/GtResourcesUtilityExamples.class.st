@@ -111,21 +111,23 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 GtResourcesUtilityExamples >> fileLocator_withSlash [
 
 	<gtExample>
-	| aLocator aFileReference aNewLocator aNewFileReference |
-	aLocator := self fileLocator.
-	aNewLocator := aLocator / 'something'.
+	| aParentLocator aParentResource aChildLocator aChildResource |
+	aParentLocator := self fileLocator.
+	aChildLocator := aParentLocator / 'something'.
 
-	aFileReference := aLocator asFileReference.
-	aNewFileReference := aNewLocator asFileReference.
+	aParentResource := aParentLocator asFileReference.
+	aChildResource := aChildLocator asFileReference.
 
-	self assert: aNewFileReference class equals: GtResourceReference.
-	self assert: aNewFileReference path isAbsolute not.
-	self assert: (aNewFileReference parent = aFileReference) not.
+	self assert: aParentResource class equals: GtResourceReference.
+	self assert: aChildResource class equals: GtResourceReference.
+	self assert: aChildResource path isAbsolute not.
+	self assert: aChildResource parent equals: aParentResource.
+	self assert: aParentResource equals: aChildResource parent.
 	self
-		assert: aNewFileReference parent
-		equals: aFileReference fileReference.
+		assert: aChildResource parent
+		equals: aParentResource fileReference.
 
-	^ aNewLocator
+	^ aChildLocator
 ]
 
 { #category : #'examples - file locator' }

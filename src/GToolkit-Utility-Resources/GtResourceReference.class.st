@@ -433,7 +433,10 @@ GtResourceReference >> openWritable: aBoolean [
 
 { #category : #accessing }
 GtResourceReference >> parent [
-	^ self fileReference parent
+
+	^ self relativePath segments
+		  ifEmpty: [ self fileReference parent ]
+		  ifNotEmpty: [ self copyWithPath: self relativePath parent ]
 ]
 
 { #category : #accessing }
@@ -458,6 +461,8 @@ GtResourceReference >> path: aStringOrPath [
 
 { #category : #printing }
 GtResourceReference >> printOn: aStream [
+
+	aStream nextPutAll: 'Resource '.
 	self fileReference printOn: aStream
 ]
 
@@ -489,6 +494,12 @@ GtResourceReference >> readStreamEncoded: anEncoding do: aBlock [
 { #category : #streams }
 GtResourceReference >> readStreamIfAbsent: absentBlock [
 	^ self fileReference readStreamIfAbsent: absentBlock
+]
+
+{ #category : #private }
+GtResourceReference >> relativePath [
+
+	^ path
 ]
 
 { #category : #navigating }
