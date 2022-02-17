@@ -76,6 +76,12 @@ GtResourceReference >> asPath [
 	^ self path
 ]
 
+{ #category : #navigating }
+GtResourceReference >> asResolvedBy: anObject [
+
+	^ anObject resolveResourceReference: self
+]
+
 { #category : #accessing }
 GtResourceReference >> base [
 	"Returns the base of the basename, i.e. /foo/gloops.taz base is 'gloops'"
@@ -137,6 +143,12 @@ GtResourceReference >> childrenMatching: patterns [
 GtResourceReference >> contains: anObject [
 	"Return true if anObject is in a subfolder of me"
 	^ self fileReference contains: anObject
+]
+
+{ #category : #comparing }
+GtResourceReference >> containsReference: aReference [
+
+	^ self fileReference containsReference: aReference
 ]
 
 { #category : #accessing }
@@ -380,6 +392,11 @@ GtResourceReference >> openWritable: aBoolean [
 ]
 
 { #category : #accessing }
+GtResourceReference >> parent [
+	^ self fileReference parent
+]
+
+{ #category : #accessing }
 GtResourceReference >> path [
 	^ path ifNil: [ path := Path * '.' ]
 ]
@@ -441,33 +458,52 @@ GtResourceReference >> renameTo: newBasename [
 
 { #category : #navigating }
 GtResourceReference >> resolve [
+
+	<return: #GtResourceReference>
 	^ self
 ]
 
 { #category : #navigating }
 GtResourceReference >> resolve: anObject [
-	<return: #FileReference>
-	^ self fileReference resolve: anObject
+
+	<return: #GtResourceReference or: #FileReference>
+	^ anObject asResolvedBy: self
 ]
 
 { #category : #navigating }
 GtResourceReference >> resolvePath: anObject [
+
+	<return: #GtResourceReference>
 	^ self withPath: (self path resolve: anObject)
 ]
 
 { #category : #navigating }
 GtResourceReference >> resolveReference: aReference [
-	
+
+	<return: #GtResourceReference or: #FileReference>
 	| aFileSystem |
 	aFileSystem := self fileSystem.
-	
+
 	^ (aFileSystem = aReference fileSystem or: [ aReference isRelative ])
-		ifTrue: [ self copyWithPath: (self path resolvePath: aReference path) ]
-		ifFalse: [ aReference ]
+		  ifTrue: [ 
+		  	self copyWithPath: (self path resolvePath: aReference path) ]
+		  ifFalse: [ aReference ]
+]
+
+{ #category : #navigating }
+GtResourceReference >> resolveResourceReference: aResource [
+
+	<return: #GtResourceReference>
+	^ self fileSystem = aResource fileSystem
+		  ifTrue: [ 
+		  self copyWithPath: (self path resolvePath: aResource path) ]
+		  ifFalse: [ aResource ]
 ]
 
 { #category : #navigating }
 GtResourceReference >> resolveString: aString [
+
+	<return: #GtResourceReference>
 	| filesystem thePath |
 	filesystem := self fileSystem.
 	thePath := filesystem pathFromString: aString.
