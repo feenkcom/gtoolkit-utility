@@ -10,7 +10,7 @@ The following example shows an original file reference transformed to {{gtMethod
 1. # Resource Directory Example
 
 Similarly we can transform a file reference into a {{gtMethod:FileLocator class>>#gtResource|label=#selector}}:
-{{gtExample:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResourceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}}
+{{gtExample:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResource_FileReferenceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}}
 
 
 "
