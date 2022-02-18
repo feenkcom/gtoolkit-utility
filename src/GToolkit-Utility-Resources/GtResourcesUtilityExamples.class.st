@@ -88,7 +88,8 @@ GtResourcesUtilityExamples >> fileLocator_asFileReference [
 	aLocator := self fileLocator.
 	aFileReference := aLocator asFileReference.
 	
-	self assert: aFileReference class equals: FileReference.
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
 	self assert: aFileReference path isAbsolute.
 	
 	^ aFileReference
@@ -101,7 +102,8 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 	aLocator := self fileLocator.
 	aFileReference := aLocator resolve.
 	
-	self assert: aFileReference class equals: FileReference.
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
 	self assert: aFileReference path isAbsolute.
 	
 	^ aFileReference
@@ -109,36 +111,51 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 
 { #category : #'examples - file locator' }
 GtResourcesUtilityExamples >> fileLocator_withSlash [
+
 	<gtExample>
-	| aLocator aFileReference aNewLocator aNewFileReference |
-	aLocator := self fileLocator.
-	aNewLocator := aLocator / 'something'.
-	
-	aFileReference := aLocator asFileReference.
-	aNewFileReference := aNewLocator asFileReference.
-	
-	self assert: aNewFileReference class equals: FileReference.
-	self assert: aNewFileReference path isAbsolute.
-	self assert: aNewFileReference parent equals: aFileReference.
-	
-	^ aNewLocator
+	| aParentLocator aParentResource aChildLocator aChildResource |
+	aParentLocator := self fileLocator.
+	aChildLocator := aParentLocator / 'something'.
+
+	aParentResource := aParentLocator asFileReference.
+	aChildResource := aChildLocator asFileReference.
+
+	self assert: aParentResource class equals: GtResourceReference.
+	self assert: aChildResource class equals: GtResourceReference.
+	self assert: aChildResource relativePath isAbsolute not.
+	self assert: aChildResource path isAbsolute.
+	self assert: aChildResource parent equals: aParentResource.
+	self assert: aParentResource equals: aChildResource parent.
+	self
+		assert: aChildResource parent
+		equals: aParentResource fileReference.
+
+	^ aChildLocator
 ]
 
 { #category : #'examples - file locator' }
 GtResourcesUtilityExamples >> fileLocator_withSlashes [
+
 	<gtExample>
-	| aLocator aFileReference aNewLocator aNewFileReference |
-	aLocator := self fileLocator.
-	aNewLocator := aLocator / 'feenkcom/gtoolkit/doc'.
-	
-	aFileReference := aLocator asFileReference.
-	aNewFileReference := aNewLocator asFileReference.
-	
-	self assert: aNewFileReference class equals: FileReference.
-	self assert: aNewFileReference path isAbsolute.
-	self assert: aNewFileReference parent parent parent equals: aFileReference.
-	
-	^ aNewLocator
+	| aParentLocator aParentResource aChildLocator aChildResource |
+	aParentLocator := self fileLocator.
+	aChildLocator := aParentLocator / 'feenkcom/gtoolkit/doc'.
+
+	aParentResource := aParentLocator asFileReference.
+	aChildResource := aChildLocator asFileReference.
+
+	self assert: aParentResource class equals: GtResourceReference.
+	self assert: aChildResource class equals: GtResourceReference.
+	self assert: aChildResource relativePath isAbsolute not.
+	self assert: aChildResource path isAbsolute.
+	self
+		assert: aChildResource parent parent parent
+		equals: aParentResource.
+	self
+		assert: aChildResource parent parent parent
+		equals: aParentResource fileReference.
+
+	^ aChildLocator
 ]
 
 { #category : #'examples - locations' }
@@ -278,6 +295,209 @@ GtResourcesUtilityExamples >> notExistingPath [
 	^ aPath
 ]
 
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals [
+
+	<gtExample>
+	| aResourceOne aResourceTwo |
+	aResourceOne := GtResourceReference path: Path * 'file1.txt'.
+	aResourceTwo := GtResourceReference path: Path * 'file1.txt'.
+
+	self assert: aResourceOne equals: aResourceTwo.
+	self assert: aResourceTwo equals: aResourceOne.
+
+	^ aResourceOne
+]
+
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals_AnyObject [
+
+	<gtExample>
+	| aResource anObject |
+	aResource := GtResourceReference path: Path * 'file1.txt'.
+	anObject := Object new.
+
+	self assert: (aResource = anObject) not.
+	self assert: (anObject = aResource) not.
+
+	^ aResource
+]
+
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals_FileLocator [
+
+	<gtExample>
+	| aResource aFile |
+	aResource := GtResourceReference path: Path * 'file1.txt'.
+	aFile := FileLocator gtResource / 'file1.txt'.
+
+	self assert: aResource equals: aFile.
+	self assert: (aFile = aResource) not.
+
+	^ aResource
+]
+
+{ #category : #'examples - comparison' }
+GtResourcesUtilityExamples >> resourceReferenceEquals_FileReference [
+
+	<gtExample>
+	| aResource aFile |
+	aResource := GtResourceReference path: Path * 'file1.txt'.
+	aFile := aResource fileReference.
+
+	self assert: aResource equals: aFile.
+	self assert: (aFile = aResource) not.
+
+	^ aResource
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations [
+
+	<gtExample>
+	| anUtility aReference |
+	anUtility := self resourceUtilityWithThreeLocations.
+	aReference := GtResourceReference new utility: anUtility.
+
+	self assert: aReference utility equals: anUtility.
+
+	^ aReference
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_FileReferenceResolveResourceReference [
+
+	<gtExample>
+	| aReference aData aText aTextTwo aFile aFileData |
+	aReference := self resourceReferenceWithThreeLocations.
+	aFile := aReference fileReference.
+	aFileData := aFile / 'data'.
+	aData := aReference / 'data'.
+	aText := aReference / 'data/text.txt'.
+	aTextTwo := aReference / 'text.txt'.
+
+	self assert: aFile exists description: [ 'resource file must exist' ].
+	self
+		assert: aFileData exists not
+		description: [ 'data resource file must not exist' ].
+	self
+		assert: (aFile resolve: aText) exists not
+		description: [ 'data/text.txt resource must exist' ].
+	self
+		assert: (aFileData resolve: aTextTwo) exists not
+		description: [ 'data / text.txt resource must exist' ].
+
+	^ aFileData resolve: aTextTwo
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_RelativePathResolveResourceReference [
+
+	<gtExample>
+	| aReference aData aText aTextTwo aPath aPathData |
+	aReference := self resourceReferenceWithThreeLocations.
+	aPath := Path * 'data'.
+	aPathData := aPath / 'data'.
+	aData := aReference / 'data'.
+	aText := aReference / 'data/text.txt'.
+	aTextTwo := aReference / 'text.txt'.
+
+	self
+		assert: (aPath resolve: aText) exists
+		description: [ 'data/text.txt resource must exist' ].
+	self
+		assert: (aPathData resolve: aTextTwo) exists not
+		description: [ 'data / text.txt resource must exist' ].
+
+	^ aPath resolve: aText
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_ResolveRelativeFileReference [
+
+	<gtExample>
+	| aReference |
+	aReference := self resourceReferenceWithThreeLocations.
+
+	self
+		assert: (aReference resolve: 'data' asFileReference) exists
+		description: [ 'data resource must exist' ].
+	self
+		assert: (aReference resolve: 'data/text.txt' asFileReference) exists
+		description: [ 'data/text.txt resource must exist' ].
+	self
+		assert: ((aReference resolve: 'data' asFileReference) resolve:
+				 'text.txt' asFileReference) exists
+		description: [ 'data / text.txt resource must exist' ].
+
+	^ aReference resolve: 'data/text.txt' asFileReference
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_ResolveRelativePath [
+
+	<gtExample>
+	| aReference |
+	aReference := self resourceReferenceWithThreeLocations.
+
+	self
+		assert: (aReference resolve: Path * 'data') exists
+		description: [ 'data resource must exist' ].
+	self
+		assert: (aReference resolve: Path * 'data/text.txt') exists
+		description: [ 'data/text.txt resource must exist' ].
+	self
+		assert:
+			((aReference resolve: Path * 'data') resolve: Path * 'text.txt')
+				exists
+		description: [ 'data / text.txt resource must exist' ].
+
+	^ aReference resolve: Path * 'data/text.txt'
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_ResolveResourceReference [
+
+	<gtExample>
+	| aReference aData aText aTextTwo |
+	aReference := self resourceReferenceWithThreeLocations.
+	aData := aReference / 'data'.
+	aText := aReference / 'data/text.txt'.
+	aTextTwo := aReference / 'data' / 'text.txt'.
+
+	self
+		assert: (aReference resolve: aData) exists
+		description: [ 'data resource must exist' ].
+	self
+		assert: (aReference resolve: aText) exists
+		description: [ 'data/text.txt resource must exist' ].
+	self
+		assert: aTextTwo exists
+		description: [ 'data / text.txt resource must exist' ].
+
+	^ aReference resolve: aText
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_ResolveString [
+
+	<gtExample>
+	| aReference |
+	aReference := self resourceReferenceWithThreeLocations.
+
+	self
+		assert: (aReference resolve: 'data') exists
+		description: [ 'data resource must exist' ].
+	self
+		assert: (aReference resolve: 'data/text.txt') exists
+		description: [ 'data/text.txt resource must exist' ].
+	self
+		assert: ((aReference resolve: 'data') resolve: 'text.txt') exists
+		description: [ 'data / text.txt resource must exist' ].
+
+	^ aReference resolve: 'data/text.txt'
+]
+
 { #category : #'examples - basic' }
 GtResourcesUtilityExamples >> resourceUtility [
 	<gtExample>
@@ -292,4 +512,39 @@ GtResourcesUtilityExamples >> resourceUtility [
 	self assert: anIcebergPosition < anGtExtraPosition.
 	self assert: anGtExtraPosition < anMacOSPosition.
 	^ anUtility	
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceUtilityWithThreeLocations [
+
+	<gtExample>
+	| anUtility aRootDir aDirOne aDirTwo aDirThree aLocationOne aLocationTwo aLocationThree |
+	anUtility := GtResourcesUtility new.
+	aRootDir := FileSystem memory workingDirectory.
+
+	aDirOne := (aRootDir / 'resource1') ensureCreateDirectory.
+	aDirTwo := (aRootDir / 'resource2') ensureCreateDirectory.
+	aDirThree := (aRootDir / 'resource3') ensureCreateDirectory.
+
+	(aDirTwo / 'data') ensureCreateDirectory.
+	(aDirThree / 'data') ensureCreateDirectory.
+	aDirThree / 'data' / 'text.txt'
+		writeStreamEncoded: #utf8
+		do: [ :aStream | 
+		aStream nextPutAll: 'I am a data/text.txt resource.' ].
+
+
+	aLocationOne := GtResourcesUtilityPluggableLocation new directory:
+		                aDirOne.
+	aLocationTwo := GtResourcesUtilityPluggableLocation new directory:
+		                aDirTwo.
+	aLocationThree := GtResourcesUtilityPluggableLocation new directory:
+		                  aDirThree.
+
+	anUtility locations: { 
+			aLocationOne.
+			aLocationTwo.
+			aLocationThree }.
+
+	^ anUtility
 ]

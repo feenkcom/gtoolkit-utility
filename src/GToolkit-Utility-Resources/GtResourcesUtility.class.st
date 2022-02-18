@@ -82,13 +82,19 @@ GtResourcesUtility >> localGtDirectory [
 ]
 
 { #category : #accessing }
+GtResourcesUtility >> location: aLocation [
+
+	self locations: (self locations copyWith: aLocation)
+]
+
+{ #category : #accessing }
 GtResourcesUtility >> locations [
 	^ locations
 ]
 
 { #category : #accessing }
-GtResourcesUtility >> locations: anObject [
-	locations := anObject
+GtResourcesUtility >> locations: aCollection [
+	locations := aCollection
 ]
 
 { #category : #accessing }

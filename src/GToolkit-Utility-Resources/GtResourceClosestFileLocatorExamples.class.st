@@ -186,20 +186,84 @@ GtResourceClosestFileLocatorExamples >> locator_FileLocator_vmDirectory [
 ]
 
 { #category : #'examples - locator' }
-GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResourceChild [
+GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResource_FileReferenceChild [
+
 	<gtExample>
 	| aLocator anOriginaFileReference aTransformedFileLocator |
 	aLocator := self basicLocator.
-	anOriginaFileReference := (FileLocator gtResource / 'dir1' / 'file1.txt') asFileReference.
-	aTransformedFileLocator := aLocator 
-		file: anOriginaFileReference; 
-		transform.
-	
-	self 
+	anOriginaFileReference := (FileLocator gtResource / 'dir1'
+	                           / 'file1.txt') asFileReference
+		                          fileReference.
+	aTransformedFileLocator := aLocator
+		                           file: anOriginaFileReference;
+		                           transform.
+
+	self
 		assert: aTransformedFileLocator asFileReference
 		equals: anOriginaFileReference asFileReference.
-		
-	self 
+
+	self
+		assert: (anOriginaFileReference asFileReference
+			 = aTransformedFileLocator asFileReference or: [ 
+				 anOriginaFileReference asFileReference
+				 = aTransformedFileLocator asFileReference fileReference ])
+		description: [ 
+			'Original file reference ' , anOriginaFileReference fullPrintString
+			, ' must be equal to transformed file locator '
+			, aTransformedFileLocator fullPrintString ].
+
+	self
+		assert: (aTransformedFileLocator asFileReference
+			 = anOriginaFileReference asFileReference or: [ 
+				 aTransformedFileLocator asFileReference fileReference
+				 = anOriginaFileReference asFileReference ])
+		description: [ 
+			'Transformed file locator '
+			, aTransformedFileLocator fullPrintString
+			, ' must be equal to original file reference '
+			, anOriginaFileReference fullPrintString ].
+
+	self
+		assert: (aTransformedFileLocator isKindOf: FileLocator)
+		description: 'The transformed file must be a FileLocator'.
+
+	^ aLocator
+]
+
+{ #category : #'examples - locator' }
+GtResourceClosestFileLocatorExamples >> locator_FileReference_gtResource_ResourceReferenceChild [
+
+	<gtExample>
+	| aLocator anOriginalResourceFile aTransformedFileLocator |
+	aLocator := self basicLocator.
+	anOriginalResourceFile := (FileLocator gtResource / 'dir1'
+	                           / 'file1.txt') asFileReference.
+	aTransformedFileLocator := aLocator
+		                           file: anOriginalResourceFile;
+		                           transform.
+
+	self
+		assert: anOriginalResourceFile asFileReference
+		equals: aTransformedFileLocator asFileReference.
+
+	self
+		assert: anOriginalResourceFile asFileReference
+		equals: aTransformedFileLocator asFileReference.
+
+	self
+		assert: aTransformedFileLocator asFileReference
+		equals: anOriginalResourceFile asFileReference fileReference.
+
+	aTransformedFileLocator asFileReference class = FileReference
+		ifTrue: [ 
+			self assert: (aTransformedFileLocator asFileReference
+				 = anOriginalResourceFile asFileReference) not ]
+		ifFalse: [ 
+			self
+				assert: aTransformedFileLocator asFileReference
+				equals: anOriginalResourceFile asFileReference ].
+
+	self
 		assert: (aTransformedFileLocator isKindOf: FileLocator)
 		description: 'The transformed file must be a FileLocator'.
 

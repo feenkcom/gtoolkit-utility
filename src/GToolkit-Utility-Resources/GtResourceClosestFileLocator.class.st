@@ -10,7 +10,7 @@ The following example shows an original file reference transformed to {{gtMethod
 1. # Resource Directory Example
 
 Similarly we can transform a file reference into a {{gtMethod:FileLocator class>>#gtResource|label=#selector}}:
-{{gtExample:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResourceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}}
+{{gtExample:GtResourceClosestFileLocatorExamples>>#locator_FileReference_gtResource_FileReferenceChild|previewExpanded=true|codeExpanded=false|previewHeight=200}}
 
 
 "
@@ -56,16 +56,24 @@ GtResourceClosestFileLocator >> file: anObject [
 
 { #category : #'api - search' }
 GtResourceClosestFileLocator >> transform [
-	| aClosestParent aPath aTransformedFile |
+
+	| aClosestParent aPath aTransformedFile aClosestParentFile aChildFile |
 	aClosestParent := self closestParent.
-	
+
 	aClosestParent ifNil: [ ^ self file ].
-	
-	aClosestParent asFileReference = self file asFileReference 
-		ifTrue: [ ^ aClosestParent ].
-		
-	aPath := self file relativeTo: aClosestParent.
+
+	aClosestParentFile := aClosestParent asFileReference.
+	aClosestParentFile class = GtResourceReference ifTrue: [ 
+		aClosestParentFile := aClosestParentFile fileReference ].
+
+	aChildFile := self file asFileReference.
+	aChildFile class = GtResourceReference ifTrue: [ 
+		aChildFile := aChildFile fileReference ].
+
+	aClosestParentFile = aChildFile ifTrue: [ ^ aClosestParent ].
+
+	aPath := self file relativeTo: aClosestParentFile.
 	aTransformedFile := aClosestParent withPath: aPath.
-	
+
 	^ aTransformedFile
 ]
