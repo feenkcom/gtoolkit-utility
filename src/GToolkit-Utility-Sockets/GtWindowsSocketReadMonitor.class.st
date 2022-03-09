@@ -103,10 +103,7 @@ GtWindowsSocketReadMonitor >> setLogOnly [
 
 { #category : #'start-stop' }
 GtWindowsSocketReadMonitor >> start [
-	"Start the read monitor.
-	Valid only on Windows."
-
-	OSPlatform currentPlatformName = #Win32 ifFalse: [ ^ self ].
+	"Start the read monitor"
 
 	process ifNotNil:
 		[ self error: 'Monitor process already started' ].
