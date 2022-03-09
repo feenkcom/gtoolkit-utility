@@ -2,7 +2,6 @@ Class {
 	#name : #SocketLoadServer,
 	#superclass : #SocketLoadObject,
 	#instVars : [
-		'socket',
 		'listenProcess',
 		'connections',
 		'localPort'

@@ -2,10 +2,23 @@ Class {
 	#name : #SocketLoadPacketSentAnnouncement,
 	#superclass : #SocketLoadSignal,
 	#instVars : [
-		'packetSize'
+		'packetSize',
+		'packetCount'
 	],
 	#category : #'GToolkit-Utility-Sockets'
 }
+
+{ #category : #accessing }
+SocketLoadPacketSentAnnouncement >> packetCount [
+
+	^ packetCount
+]
+
+{ #category : #accessing }
+SocketLoadPacketSentAnnouncement >> packetCount: anObject [
+
+	packetCount := anObject
+]
 
 { #category : #accessing }
 SocketLoadPacketSentAnnouncement >> packetSize [
@@ -25,5 +38,7 @@ SocketLoadPacketSentAnnouncement >> printOneLineContentsOn: aStream [
 	super printOneLineContentsOn: aStream.
 	aStream
 		<< ' sent: ';
-		print: packetSize.
+		print: packetSize;
+		<< ' count: ';
+		print: packetCount.
 ]

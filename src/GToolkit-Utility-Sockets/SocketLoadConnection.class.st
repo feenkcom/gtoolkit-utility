@@ -2,12 +2,12 @@ Class {
 	#name : #SocketLoadConnection,
 	#superclass : #SocketLoadObject,
 	#instVars : [
-		'socket',
 		'listenProcess',
 		'localPort',
 		'remoteAddress',
 		'server',
-		'stream'
+		'stream',
+		'loopIndex'
 	],
 	#category : #'GToolkit-Utility-Sockets'
 }
@@ -31,6 +31,7 @@ SocketLoadConnection >> initializeServer: aSocketLoadServer socket: aSocket [
 	SocketLoadConnectedAnnouncement new
 		connection: self;
 		emit.
+	loopIndex := 0.
 	self start.
 ]
 
@@ -45,20 +46,17 @@ SocketLoadConnection >> readCycle [
 	| sendDataLength receivedDataLengthString receivedDataLength buffer sendDataLengthString |
 
 	receivedDataLengthString := stream next: 10.
-	self assert: (receivedDataLengthString allSatisfy: [ :ch |
-		ch isDigit or: [ ch = Character space ] ]).
-	receivedDataLength := receivedDataLengthString asNumber.
+	receivedDataLength := self numberFrom: receivedDataLengthString.
 	self assert: (receivedDataLength between: 11 and: 20011).
 	buffer := stream next: receivedDataLength.
 	SocketLoadPacketReceivedAnnouncement new
 		connection: self;
 		packetSize: buffer size;
+		packetCount: loopIndex;
 		emit.
 
 	sendDataLengthString := buffer copyFrom: 1 to: 10.
-	self assert: (sendDataLengthString allSatisfy: [ :ch |
-		ch isDigit or: [ ch = Character space ] ]).
-	sendDataLength := sendDataLengthString asNumber.
+	sendDataLength := self numberFrom: sendDataLengthString.
 	self assert: (sendDataLength between: 1 and: 20000).
 
 	buffer := String streamContents: [ :stringStream |
@@ -70,6 +68,7 @@ SocketLoadConnection >> readCycle [
 	SocketLoadPacketSentAnnouncement new
 		connection: self;
 		packetSize: sendDataLength;
+		packetCount: loopIndex;
 		emit.
 
 ]
