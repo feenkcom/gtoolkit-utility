@@ -45,6 +45,7 @@ SocketLoadConnection >> localPort [
 SocketLoadConnection >> readCycle [
 	| sendDataLength receivedDataLengthString receivedDataLength buffer sendDataLengthString |
 
+	loopIndex := loopIndex + 1.
 	receivedDataLengthString := stream next: 10.
 	receivedDataLength := self numberFrom: receivedDataLengthString.
 	self assert: (receivedDataLength between: 11 and: 20011).
