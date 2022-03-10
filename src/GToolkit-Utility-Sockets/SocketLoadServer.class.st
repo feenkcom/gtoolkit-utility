@@ -1,3 +1,30 @@
+"
+SocketLoadServer accepts multiple SocketLoadClient connections, reads packets from each client and responds with the requested amount of random data.
+
+To start the server, create a file called `socketloadserver.st` with the following contents:
+
+```
+| readMonitor |
+
+""Start the socket read semaphore workaround and the runner.""
+readMonitor := GtWindowsSocketReadMonitor new
+        setLogOnly;
+        start.
+
+TranscriptLogger start.
+SocketLoadServer new
+        localPort: 7000;
+        start.
+Semaphore new wait.
+```
+
+Then start the server from a PowerShell with:
+
+```PowerShell
+pharo-vm\PharoConsole.exe --headless .\Pharo.image st .\socketloadserver.st
+```
+
+"
 Class {
 	#name : #SocketLoadServer,
 	#superclass : #SocketLoadObject,
@@ -36,20 +63,6 @@ SocketLoadServer class >> socketBufferSize [
 	"Size in bytes for Sockets and SocketStream IO buffers"
 
 	^ 4096
-]
-
-{ #category : #'as yet unclassified' }
-SocketLoadServer class >> startWithLoggingOn: aPortNumber [
-	| signals |
-
-	signals := BeaconSignal excludingNormalOperationSignals
-		addExclusion: PharoLinkEvalSignal;
-		yourself.
-	RestartingStreamLogger stdout startFor: signals.
-
-	self new
-		localPort: aPortNumber;
-		start.
 ]
 
 { #category : #private }

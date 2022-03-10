@@ -1,3 +1,35 @@
+"
+SocketLoadClient connects to a SocketLoadServer and sends packets of random length, requesting a random length packet back from the server.
+
+The number of requests is controlled by loopCount.
+
+To start a client, create a file called `socketloadclient.st` with the following contents:
+
+```
+| readMonitor client signals |
+
+""Start the socket read semaphore workaround and the runner.""
+readMonitor := GtWindowsSocketReadMonitor new
+        setLogOnly;
+        start.
+
+TranscriptLogger start.
+
+SocketLoadClient new
+        remoteAddress: '7000';
+        loopCount: 10000;
+        startAndWait.
+```
+
+Then start the client from a PowerShell with:
+
+```bash
+pharo-vm\PharoConsole.exe --headless .\Pharo.image st .\socketloadclient.st --quit
+```
+
+Starting 4 clients simultaneously is normally enough to trigger the failure prior to 10,000 packets being sent.
+
+"
 Class {
 	#name : #SocketLoadClient,
 	#superclass : #SocketLoadObject,
@@ -105,8 +137,7 @@ SocketLoadClient >> remoteAddress: aString [
 SocketLoadClient >> runLoop [
 
 	loopCount timesRepeat: 
-		[ self sendReceiveCycle.
-		(1 to: 100) atRandom milliSeconds wait ].
+		[ self sendReceiveCycle ].
 ]
 
 { #category : #private }
