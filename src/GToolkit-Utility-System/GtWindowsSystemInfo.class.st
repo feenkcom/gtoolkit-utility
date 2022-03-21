@@ -20,7 +20,7 @@ GtWindowsSystemInfo >> freeMemory [
 		arguments: #('(Get-WmiObject Win32_OperatingSystem).FreePhysicalMemory'))
 			errorBlock: [ :ex | self error: 'Unable to retrieve free memory' ];
 			runAndWait.
-	^ proc stdout asNumber.
+	^ proc stdout asNumber * 1024.
 ]
 
 { #category : #'cpu info' }

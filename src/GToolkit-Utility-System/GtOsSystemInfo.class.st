@@ -33,7 +33,7 @@ GtOsSystemInfo >> colonSeparatedGet: key from: filename [
 
 { #category : #'cpu info' }
 GtOsSystemInfo >> freeMemory [
-	"Answer the free RAM of the host"
+	"Answer the free RAM of the host in bytes"
 
 	^ self subclassResponsibility 
 ]
@@ -47,7 +47,7 @@ GtOsSystemInfo >> numberOfCores [
 
 { #category : #'cpu info' }
 GtOsSystemInfo >> physicalMemory [
-	"Answer the RAM capacity of the host"
+	"Answer the RAM capacity of the host in bytes"
 
 	^ self subclassResponsibility 
 ]
