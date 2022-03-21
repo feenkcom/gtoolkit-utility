@@ -14,19 +14,19 @@ GtLinuxSystemInfo class >> platformName [
 GtLinuxSystemInfo >> freeMemory [
 	"Answer the free RAM of the host"
 
-	^ (self colonSeparatedGet: 'MemFree' from: '/proc/meminfo') asNumber * 1024
+	^ (self colonSeparatedGet: 'MemFree' fromFile: '/proc/meminfo') asNumber * 1024
 ]
 
 { #category : #'cpu info' }
 GtLinuxSystemInfo >> numberOfCores [
 	"Answer the number of cores on the host"
 
-	^ (self colonSeparatedGet: 'cpu cores' from: '/proc/cpuinfo') asNumber
+	^ (self colonSeparatedGet: 'cpu cores' fromFile: '/proc/cpuinfo') asNumber
 ]
 
 { #category : #'cpu info' }
 GtLinuxSystemInfo >> physicalMemory [
 	"Answer the RAM capacity of the host in bytes"
 
-	^ (self colonSeparatedGet: 'MemTotal' from: '/proc/meminfo') asNumber * 1024
+	^ (self colonSeparatedGet: 'MemTotal' fromFile: '/proc/meminfo') asNumber * 1024
 ]

@@ -18,7 +18,7 @@ GtOsSystemInfo class >> current [
 ]
 
 { #category : #private }
-GtOsSystemInfo >> colonSeparatedGet: key from: filename [
+GtOsSystemInfo >> colonSeparatedGet: key fromFile: filename [
 	"Answer the specified key from the colon separated file"
 	| line fields |
 
@@ -28,6 +28,18 @@ GtOsSystemInfo >> colonSeparatedGet: key from: filename [
 			fields := $: split: line.
 			fields first trimBoth = key ifTrue:
 				[ ^ fields second trimBoth ] ] ].
+	^ KeyNotFound signalFor: key
+]
+
+{ #category : #private }
+GtOsSystemInfo >> colonSeparatedGet: key fromString: aString [
+	"Answer the specified key from the colon separated string"
+	| fields |
+
+	aString lines do: [ :line |
+		fields := $: split: line.
+		fields first trimBoth = key ifTrue:
+			[ ^ fields second trimBoth ] ].
 	^ KeyNotFound signalFor: key
 ]
 
