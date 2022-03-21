@@ -81,7 +81,7 @@ GtOsSystemInfo >> summaryAttributes [
 
 	^ { 
 	#NumberOfCores -> self numberOfCores.
-	#PhysicalMemory -> self physicalMemory humanReadableSIByteSize.
-	#FreeMemory -> self freeMemory humanReadableSIByteSize.
+	#PhysicalMemory -> self physicalMemory humanReadableIsqByteSize.
+	#FreeMemory -> self freeMemory humanReadableIsqByteSize.
 	 }
 ]
