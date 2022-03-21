@@ -38,6 +38,18 @@ GtOsSystemInfo >> freeMemory [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #ui }
+GtOsSystemInfo >> gtSummaryFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		  title: 'Summary';
+		  priority: 10;
+		  items: [ self summaryAttributes ];
+		  column: #Attribute text: [ :item | item key ];
+		  column: #Value text: [ :item | item value ].
+]
+
 { #category : #'cpu info' }
 GtOsSystemInfo >> numberOfCores [
 	"Answer the number of cores on the host"
@@ -50,4 +62,14 @@ GtOsSystemInfo >> physicalMemory [
 	"Answer the RAM capacity of the host in bytes"
 
 	^ self subclassResponsibility 
+]
+
+{ #category : #ui }
+GtOsSystemInfo >> summaryAttributes [
+
+	^ { 
+	#NumberOfCores -> self numberOfCores.
+	#PhysicalMemory -> self physicalMemory humanReadableSIByteSize.
+	#FreeMemory -> self freeMemory humanReadableSIByteSize.
+	 }
 ]
