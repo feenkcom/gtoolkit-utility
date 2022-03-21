@@ -33,7 +33,7 @@ GtMacSystemInfo >> numberOfCores [
 		arguments: #('-a' 'machdep.cpu.core_count'))
 			errorBlock: [ :ex | self error: 'Unable to retrieve number of cores' ];
 			runAndWait.
-	^ proc stdout asNumber.
+	^ (self colonSeparatedGet: 'machdep.cpu.core_count' fromString: proc stdout) asNumber.
 ]
 
 { #category : #'cpu info' }
@@ -46,5 +46,5 @@ GtMacSystemInfo >> physicalMemory [
 		arguments: #('-a' 'hw.memsize'))
 			errorBlock: [ :ex | self error: 'Unable to retrieve physical memory' ];
 			runAndWait.
-	^ proc stdout asNumber.
+	^ (self colonSeparatedGet: 'hw.memsize' fromString: proc stdout) asNumber.
 ]
