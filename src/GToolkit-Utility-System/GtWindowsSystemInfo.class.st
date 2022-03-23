@@ -10,6 +10,12 @@ GtWindowsSystemInfo class >> platformName [
 	^ #Win32
 ]
 
+{ #category : #'process info' }
+GtWindowsSystemInfo >> currentProcessId [
+
+	^ self ffiCall: #(#uint #GetCurrentProcessId #()) module: 'Kernel32.dll'
+]
+
 { #category : #'cpu info' }
 GtWindowsSystemInfo >> freeMemory [
 	"Answer the free RAM of the host"

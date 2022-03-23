@@ -10,6 +10,12 @@ GtMacSystemInfo class >> platformName [
 	^ #'Mac OS'
 ]
 
+{ #category : #'process info' }
+GtMacSystemInfo >> currentProcessId [
+
+	^ LibC uniqueInstance currentProcessId
+]
+
 { #category : #'cpu info' }
 GtMacSystemInfo >> freeMemory [
 	"Answer the free RAM of the host in bytes"

@@ -10,6 +10,12 @@ GtLinuxSystemInfo class >> platformName [
 	^ #unix
 ]
 
+{ #category : #'process info' }
+GtLinuxSystemInfo >> currentProcessId [
+
+	^ LibC uniqueInstance currentProcessId
+]
+
 { #category : #'cpu info' }
 GtLinuxSystemInfo >> freeMemory [
 	"Answer the free RAM of the host"
