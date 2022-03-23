@@ -43,6 +43,13 @@ GtOsSystemInfo >> colonSeparatedGet: key fromString: aString [
 	^ KeyNotFound signalFor: key
 ]
 
+{ #category : #'process info' }
+GtOsSystemInfo >> currentProcessId [
+	"Answer the OS PID of the current process"
+
+	^ self subclassResponsibility 
+]
+
 { #category : #'cpu info' }
 GtOsSystemInfo >> freeMemory [
 	"Answer the free RAM of the host in bytes"
