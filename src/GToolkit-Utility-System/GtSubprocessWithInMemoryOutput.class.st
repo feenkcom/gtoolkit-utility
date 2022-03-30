@@ -14,9 +14,9 @@ If no error block is supplied the completion status should be checked with `#isS
 
 Processes are started with one of three messages:
 
-- `#runAndWait` - Run the process and wait for completion, blocking the caller.
-- `#runAndSignal` - Run the process and return immediately.  The caller can then wait for completion at a later time.
-- `#run` - Run the process without any completion notification.
+- {{gtMethod:GtSubprocessWithInMemoryOutput>>#runAndWait|label=#selector}} - Run the process and wait for completion, blocking the caller.
+- {{gtMethod:GtSubprocessWithInMemoryOutput>>#runAndSignal|label=#selector}} - Run the process and return immediately.  The caller can then wait for completion at a later time.
+- {{gtMethod:GtSubprocessWithInMemoryOutput>>#run|label=#selector}} - Run the process without any completion notification.
 
 
 Public API and Key Messages
