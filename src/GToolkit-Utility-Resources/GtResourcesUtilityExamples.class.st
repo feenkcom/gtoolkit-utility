@@ -110,6 +110,22 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 ]
 
 { #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_withParents [
+
+	<gtExample>
+	| aLocator aCollection |
+	aLocator := self fileLocator.
+	aCollection := aLocator withParents.
+
+	self assert: aCollection isCollection.
+	self assert: aCollection isNotEmpty.
+	self assert: (aCollection allSatisfy: #isAbsolute).
+	self assert: aCollection last equals: aLocator asFileReference fileReference.
+
+	^ aCollection
+]
+
+{ #category : #'examples - file locator' }
 GtResourcesUtilityExamples >> fileLocator_withSlash [
 
 	<gtExample>

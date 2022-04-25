@@ -316,10 +316,12 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 	"Run the requested command as a separate process"
 
 	self setCommand.
-	command := builder createNativeCommand.
-	command 
+	
+	builder
 		pipeStdout;
 		pipeStderr.
+
+	command := builder createNativeCommand.
 	envVariables ifNotNil: 
 		[ command clearEnv.
 		envVariables keysAndValuesDo: [ :key :value |
