@@ -4,12 +4,12 @@ A set of utilities.
 
 "
 Class {
-	#name : 'BaselineOfGToolkitUtility',
-	#superclass : 'BaselineOf',
-	#category : 'BaselineOfGToolkitUtility'
+	#name : #BaselineOfGToolkitUtility,
+	#superclass : #BaselineOf,
+	#category : #BaselineOfGToolkitUtility
 }
 
-{ #category : 'baseline' }
+{ #category : #baseline }
 BaselineOfGToolkitUtility >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
@@ -30,6 +30,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-MessageTally';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #('GToolkitFileUtility' ). ];
-			package: 'GToolkit-Utility-Properties'. ].
+			package: 'GToolkit-Utility-Properties';
+			package: 'GToolkit-Utility-ClassLoader' ].
 
 ]
