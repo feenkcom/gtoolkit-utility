@@ -12,6 +12,7 @@ GtBulkShiftClassInstaller class >> finishBulkInstaller [
 	| todo |
 	todo := Instances.
 	Instances := nil.
+	
 	ProtoObject class removeSelector: #classInstaller.
 	((todo collect: [ :each | each builder newClass ]) groupedBy: #superclass)
 		keysAndValuesDo: [ :key :value | key notNil ifTrue: [ key subclasses: key subclasses , value asArray ] ].
@@ -22,7 +23,7 @@ GtBulkShiftClassInstaller class >> finishBulkInstaller [
 					[ :each | 
 					{each builder category.
 						each builder newClass name} ]).
-	ProtoObject class compile: 'category ^self basicCategory'.
+	
 	todo do: [ :each | SystemAnnouncer uniqueInstance classAdded: each builder newClass inCategory: each builder category ].
 	todo do: [ :each | each notifyChanges ].
 	ProtoObject class removeSelector: #category
@@ -31,7 +32,9 @@ GtBulkShiftClassInstaller class >> finishBulkInstaller [
 { #category : #installing }
 GtBulkShiftClassInstaller class >> startBulkInstaller [
 	Instances := OrderedCollection new.
-	ProtoObject class compile: 'classInstaller ^' , self name
+	
+	ProtoObject class compile: 'classInstaller ^' , self name.
+	ProtoObject class compile: 'category ^self basicCategory'.
 ]
 
 { #category : #building }
