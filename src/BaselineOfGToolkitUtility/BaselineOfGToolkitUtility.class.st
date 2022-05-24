@@ -28,6 +28,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ].
 		spec 
 			package: 'GToolkit-Utility-MessageTally';
+			package: 'GToolkit-Utility-SpaceTally';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #('GToolkitFileUtility' ). ];
 			package: 'GToolkit-Utility-Properties';
