@@ -11,6 +11,17 @@ Class {
 }
 
 { #category : #'gt - extensions' }
+GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
+	<gtView>
+	spaceTally ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Tallies (by package)';
+		object: [ spaceTally ];
+		view: #gtViewPackageTalliesFor:
+]
+
+{ #category : #'gt - extensions' }
 GtSpaceTallyVersion >> gtViewTallyItemsFor: aView [
 	<gtView>
 	spaceTally ifNil: [ ^ aView empty ].
@@ -63,7 +74,7 @@ GtSpaceTallyVersion >> recordSystemWideData [
 GtSpaceTallyVersion >> recordySystemWideSpaceTally [
 	Smalltalk garbageCollect.
 	
-	spaceTally := SpaceTally new.
+	spaceTally := GtSpaceTally new.
 	spaceTally systemWideSpaceTally.
 ]
 
@@ -86,11 +97,19 @@ GtSpaceTallyVersion >> spaceTally: aSpaceTally [
 ]
 
 { #category : #accessing }
-GtSpaceTallyVersion >> spaceTallyItemVersions [
+GtSpaceTallyVersion >> spaceTallyClassVersions [
 	^ self spaceTally results items collect: [ :aTallyResult |
-		GtSpaceTallyItemVersion new
+		GtSpaceTallyClassTallyVersion new
 			tallyVersion: self;
 			tallyItem: aTallyResult ]
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> spaceTallyPackageVersions [
+	^ self spaceTally packageTallies collect: [ :aPackageTally |
+		GtSpaceTallyPackageTallyVersion new
+			tallyVersion: self;
+			tallyItem: aPackageTally ]
 ]
 
 { #category : #accessing }
