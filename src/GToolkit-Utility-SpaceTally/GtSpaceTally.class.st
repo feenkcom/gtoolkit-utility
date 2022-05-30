@@ -1,0 +1,53 @@
+"
+I extend {{gtClass:SpaceTally}} with extra information by using for tally items {{gtClass:GtSpaceTallyItem}}.
+"
+Class {
+	#name : #GtSpaceTally,
+	#superclass : #SpaceTally,
+	#category : #'GToolkit-Utility-SpaceTally'
+}
+
+{ #category : #fileout }
+GtSpaceTally >> computeSpaceUsageResultsForClassesInstancesAssociations: aCollectionOfClasses [
+	results := SpaceTallyResult new: aCollectionOfClasses size.
+	aCollectionOfClasses associations
+		do: [ :assoc | 
+			| instances class |
+			instances := assoc value.
+			class := assoc key.
+			class isMeta
+				ifFalse: [ results
+						addItem:
+							((GtSpaceTallyItem
+								analyzedClassName: class name
+								codeSize: class spaceUsed
+								instanceCount: instances size
+								spaceForInstances: (instances sum: #sizeInMemory))
+									analyzedPackageName: class package name) ] ]
+]
+
+{ #category : #accessing }
+GtSpaceTally >> gtViewPackageTalliesFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Tallies (by package)';
+		items:  [ self packageTallies 
+			sorted: [ :aPackageTally | aPackageTally totalInstSpace ] descending ];
+		column: 'Package Name' text: [ :aPackageTally | 
+			aPackageTally analyzedPackageName ];
+		column: 'Instance count' text: [ :aPackageTally | 
+			aPackageTally totalInstCount ];
+		column: 'Instances Size' text: [ :aPackageTally | 
+			aPackageTally totalInstSpace humanReadableIsqByteSize ]
+]
+
+{ #category : #accessing }
+GtSpaceTally >> packageTallies [ 
+	^ (self results items groupedBy: [ :aTally |
+			aTally analyzedPackageName ]) associations 
+				collect: [ :assoc |
+					GtSpaceTallyPackageTally new
+						analyzedPackageName: assoc key; 
+						addClassTallies: assoc value ]
+]

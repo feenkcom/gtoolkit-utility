@@ -1,5 +1,5 @@
 Class {
-	#name : #GtSpaceTallyItemVersion,
+	#name : #GtSpaceTallyItemTallyVersion,
 	#superclass : #Object,
 	#instVars : [
 		'tallyVersion',
@@ -8,26 +8,16 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
-{ #category : #accessing }
-GtSpaceTallyItemVersion >> analyzedClassName [
-	^ self tallyItem analyzedClassName
-]
-
 { #category : #printing }
-GtSpaceTallyItemVersion >> descriptionOn: aStream [
+GtSpaceTallyItemTallyVersion >> descriptionOn: aStream [
 	aStream 
 		print:  self tallyVersion index;
 		nextPutAll: ', '.
 	self tallyItem gtDescriptionOn: aStream
 ]
 
-{ #category : #accessing }
-GtSpaceTallyItemVersion >> instanceCount [
-	^ self tallyItem instanceCount
-]
-
 { #category : #printing }
-GtSpaceTallyItemVersion >> printOn: aStream [
+GtSpaceTallyItemTallyVersion >> printOn: aStream [
 	super printOn: aStream.
 	aStream nextPutAll: '('.
 	self descriptionOn: aStream.
@@ -35,30 +25,40 @@ GtSpaceTallyItemVersion >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtSpaceTallyItemVersion >> spaceForInstances [
+GtSpaceTallyItemTallyVersion >> spaceForInstances [
 	^ self tallyItem spaceForInstances
 ]
 
 { #category : #accessing }
-GtSpaceTallyItemVersion >> tallyItem [
+GtSpaceTallyItemTallyVersion >> tallyItem [
 
 	^ tallyItem
 ]
 
 { #category : #accessing }
-GtSpaceTallyItemVersion >> tallyItem: anObject [
+GtSpaceTallyItemTallyVersion >> tallyItem: anObject [
 
 	tallyItem := anObject
 ]
 
 { #category : #accessing }
-GtSpaceTallyItemVersion >> tallyVersion [
+GtSpaceTallyItemTallyVersion >> tallyVersion [
 
 	^ tallyVersion
 ]
 
 { #category : #accessing }
-GtSpaceTallyItemVersion >> tallyVersion: anObject [
+GtSpaceTallyItemTallyVersion >> tallyVersion: anObject [
 
 	tallyVersion := anObject
+]
+
+{ #category : #accessing }
+GtSpaceTallyItemTallyVersion >> totalInstCount [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtSpaceTallyItemTallyVersion >> totalInstSpace [
+	self subclassResponsibility
 ]
