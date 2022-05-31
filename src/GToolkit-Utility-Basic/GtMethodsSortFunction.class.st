@@ -17,33 +17,24 @@ GtMethodsSortFunction >> = anObject [
 GtMethodsSortFunction >> belongsToClass: aMethodOrName [
 	"Return true if a given object that represents a method (compiled method, example or some abstract method definition, or even a selector)
 	belongs to any class, false otherwise. This is needed so tht we can compare methods based on the class names too"
+
 	<return: #Boolean>
 	
-	aMethodOrName
-		ifNil: [ ^ false ].
+	aMethodOrName ifNil: [ ^ false ].
 
-	^ (aMethodOrName respondsTo: self messageToAskForClass)
-		and: [ (aMethodOrName perform: self messageToAskForClass) notNil ]
+	^ [ aMethodOrName methodClass notNil ] on: Error do: [ :ex | ex return: false ]
 ]
 
 { #category : #'private - comparison' }
 GtMethodsSortFunction >> classNameOf: aMethodOrName [
 	<return: #Symbol>
-	| aMethodClass |
-
-	self
-		assert: [ self belongsToClass: aMethodOrName ]
-		description: [ 'Only methods that belong to a class are allowed' ].
-		
-	aMethodClass := aMethodOrName perform: self messageToAskForClass.
 	
-	self
-		assert: [ aMethodClass notNil ]
-		description: [ 'Method class must not be nil here (is had to belong to a class)' ].
-		
+	| aMethodClass |
+	aMethodClass := aMethodOrName methodClass.
+
 	^ (aMethodClass isString or: [ aMethodClass isSymbol ])
 		ifTrue: [ aMethodClass ]
-		ifFalse: [ aMethodClass perform: self messageToAskForClassName ]
+		ifFalse: [ aMethodClass name ]
 ]
 
 { #category : #evaluating }
@@ -54,40 +45,28 @@ GtMethodsSortFunction >> collate: anObject1 with: anObject2 [
 	1 if anObject1 > anObject2
 	This assumes a total order in accordance with the mathematical law of trichotomy.
 	See also:  http://en.wikipedia.org/wiki/Three-way_comparison"
-	
-	^ (self isMethodOrName: anObject1 fromTheSameClassAs: anObject2)
+
+	| classResult |
+	classResult := self compareClassNameOf: anObject1 withClassNameOf: anObject2.
+	^ classResult = 0
 		ifTrue: [ self compareMethodNameOf: anObject1 withMethodNameOf: anObject2 ]
-		ifFalse: [
-			"if they are not from the same class we should compare based on the class name"
-			self compareClassNameOf: anObject1 withClassNameOf: anObject2 ]
+		ifFalse: [ classResult ]
 ]
 
 { #category : #'private - comparison' }
 GtMethodsSortFunction >> compareClassNameOf: aMethodOrName1 withClassNameOf: aMethodOrName2 [
 	| firstMethodBelongsToClass secondMethodBelongsToClass |
-	
 	firstMethodBelongsToClass := self belongsToClass: aMethodOrName1.
-	secondMethodBelongsToClass := self belongsToClass: aMethodOrName2.
-	
-	self
-		assert: [ firstMethodBelongsToClass or: [ secondMethodBelongsToClass ] ]
-		description: [ 'At least one method should belong to a class' ].
-	
-	"class of the same object is the same"
-	aMethodOrName1 = aMethodOrName2
-		ifTrue: [ ^ 0 ].
-	
-	"nil object end up at the end of the list"
-	aMethodOrName1
-		ifNil: [ ^ 1 ].
+	secondMethodBelongsToClass := self belongsToClass: aMethodOrName2.	"class of the same object is the same"
+	aMethodOrName1 == aMethodOrName2 ifTrue: [ ^ 0 ].	"nil object end up at the end of the list"
+	aMethodOrName1 ifNil: [ ^ 1 ].
 
-	aMethodOrName2
-		ifNil: [ ^ -1 ].
-
-	"both belong to some class, compare class names"
+	aMethodOrName2 ifNil: [ ^ -1 ].	"both belong to some class, compare class names"
 	(firstMethodBelongsToClass and: [ secondMethodBelongsToClass ])
-		ifTrue: [ ^ (self classNameOf: aMethodOrName1) threeWayCompareTo: (self classNameOf: aMethodOrName2) ].
-		
+		ifTrue: [ ^ (self classNameOf: aMethodOrName1)
+				threeWayCompareTo: (self classNameOf: aMethodOrName2) ].
+
+	firstMethodBelongsToClass = secondMethodBelongsToClass ifTrue: [ ^ 0 ].
 	^ (firstMethodBelongsToClass and: [ secondMethodBelongsToClass not ])
 		ifTrue: [ -1 ]
 		ifFalse: [ 1 ]
@@ -96,7 +75,7 @@ GtMethodsSortFunction >> compareClassNameOf: aMethodOrName1 withClassNameOf: aMe
 { #category : #'private - comparison' }
 GtMethodsSortFunction >> compareMethodNameOf: aMethodOrName1 withMethodNameOf: aMethodOrName2 [
 	| methodName1 methodName2 |
-	aMethodOrName1 = aMethodOrName2
+	aMethodOrName1 == aMethodOrName2
 		ifTrue: [ ^ 0 ].
 	
 	"nil object end up at the end of the list"
@@ -138,17 +117,14 @@ GtMethodsSortFunction >> compareMethodNameOf: aMethodOrName1 withMethodNameOf: a
 { #category : #'private - comparison' }
 GtMethodsSortFunction >> hasMethodNameOf: aMethodOrName [
 	<return: #Symbol>
+	
+	aMethodOrName ifNil: [ ^ false ].
 
-	aMethodOrName
-		ifNil: [ ^ false ].
-		
 	(aMethodOrName isString
-		or: [ aMethodOrName isSymbol
-			or: [ aMethodOrName isText ] ])
+		or: [ aMethodOrName isSymbol or: [ aMethodOrName isText ] ])
 		ifTrue: [ ^ true ].
 
-	^ (aMethodOrName respondsTo: self messageToAskForMethodName)
-		and: [ (aMethodOrName perform: self messageToAskForMethodName) notNil ]
+	^ [ aMethodOrName selector notNil ] on: Error do: [ :ex | ex return: false ]
 ]
 
 { #category : #comparing }
@@ -157,54 +133,10 @@ GtMethodsSortFunction >> hash [
 ]
 
 { #category : #'private - comparison' }
-GtMethodsSortFunction >> isMethodOrName: aMethodOrName1 fromTheSameClassAs: aMethodOrName2 [
-	| firstMethodBelongsToClass secondMethodBelongsToClass |
-	
-	firstMethodBelongsToClass := self belongsToClass: aMethodOrName1.
-	secondMethodBelongsToClass := self belongsToClass: aMethodOrName2.
-	
-	"if both do not belong to any class we consider them as if they belong to the same one"
-	(firstMethodBelongsToClass not and: [ secondMethodBelongsToClass not ])
-		ifTrue: [ ^ true ].
-		
-	"if just one of the methods belongs to a class, then we consider them from different classes"
-	(firstMethodBelongsToClass and: [ secondMethodBelongsToClass not ])
-		ifTrue: [ ^ false ].
-	
-	"if just one of the methods belongs to a class, then we consider them from different classes"
-	(firstMethodBelongsToClass not and: [ secondMethodBelongsToClass ])
-		ifTrue: [ ^ false ].
-		
-	"at this point both belong to some class, are they the same classes?"
-	^ (self classNameOf: aMethodOrName1) = (self classNameOf: aMethodOrName2)
-]
-
-{ #category : #'private - comparison' }
-GtMethodsSortFunction >> messageToAskForClass [
-	"Return a message that we should use to ask for a class of a method"
-
-	^ #methodClass
-]
-
-{ #category : #'private - comparison' }
-GtMethodsSortFunction >> messageToAskForClassName [
-	"Return a message that we should use to ask for a class name"
-
-	^ #name
-]
-
-{ #category : #'private - comparison' }
-GtMethodsSortFunction >> messageToAskForMethodName [
-	"Return a message that we should use to ask for a method name"
-
-	^ #selector
-]
-
-{ #category : #'private - comparison' }
 GtMethodsSortFunction >> methodNameOf: aMethodOrName [
 	<return: #Symbol>
 		
 	^ (aMethodOrName isString or: [ aMethodOrName isSymbol ])
 		ifTrue: [ aMethodOrName ]
-		ifFalse: [ aMethodOrName perform: self messageToAskForMethodName ]
+		ifFalse: [ aMethodOrName selector ]
 ]
