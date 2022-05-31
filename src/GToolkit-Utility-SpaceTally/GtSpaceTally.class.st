@@ -26,7 +26,7 @@ GtSpaceTally >> computeSpaceUsageResultsForClassesInstancesAssociations: aCollec
 									analyzedPackageName: class package name) ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtSpaceTally >> gtViewPackageTalliesFor: aView [
 	<gtView>
 
@@ -42,6 +42,22 @@ GtSpaceTally >> gtViewPackageTalliesFor: aView [
 			aPackageTally totalInstSpace humanReadableIsqByteSize ]
 ]
 
+{ #category : #'gt - extensions' }
+GtSpaceTally >> gtViewRepositoryTalliesFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Tallies (by repository)';
+		items:  [ self repositoryTallies  
+			sorted: [ :aRepositoryTally | aRepositoryTally totalInstSpace ] descending ];
+		column: 'Package Name' text: [ :aRepositoryTally | 
+			aRepositoryTally analyzedRepositoryName ];
+		column: 'Instance count' text: [ :aRepositoryTally | 
+			aRepositoryTally totalInstCount ];
+		column: 'Instances Size' text: [ :aRepositoryTally | 
+			aRepositoryTally totalInstSpace humanReadableIsqByteSize ]
+]
+
 { #category : #accessing }
 GtSpaceTally >> packageTallies [ 
 	^ (self results items groupedBy: [ :aTally |
@@ -50,4 +66,19 @@ GtSpaceTally >> packageTallies [
 					GtSpaceTallyPackageTally new
 						analyzedPackageName: assoc key; 
 						addClassTallies: assoc value ]
+]
+
+{ #category : #accessing }
+GtSpaceTally >> repositoryTallies [ 
+	^ (self packageTallies groupedBy: [ :aPackageTally |
+			IceRepository registry 
+				detect: [ :aRepository | 
+					aRepository includesPackageNamed: aPackageTally analyzedPackageName ]
+				ifFound: [ :aRepository | aRepository name ]
+				ifNone: [ '<Unknown>' ]
+			]) associations 
+				collect: [ :assoc |
+					GtSpaceTallyRepositoryTally new
+						analyzedRepositoryName: assoc key; 
+						addPackageTallies: assoc value ]
 ]

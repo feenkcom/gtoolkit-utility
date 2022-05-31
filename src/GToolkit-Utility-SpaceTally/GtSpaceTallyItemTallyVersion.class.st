@@ -16,6 +16,11 @@ GtSpaceTallyItemTallyVersion >> descriptionOn: aStream [
 	self tallyItem gtDescriptionOn: aStream
 ]
 
+{ #category : #accessing }
+GtSpaceTallyItemTallyVersion >> instanceCount [ 
+	^ self totalInstCount
+]
+
 { #category : #printing }
 GtSpaceTallyItemTallyVersion >> printOn: aStream [
 	super printOn: aStream.
@@ -25,8 +30,8 @@ GtSpaceTallyItemTallyVersion >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtSpaceTallyItemTallyVersion >> spaceForInstances [
-	^ self tallyItem spaceForInstances
+GtSpaceTallyItemTallyVersion >> spaceForInstances [  
+	^ self totalInstSpace 
 ]
 
 { #category : #accessing }
@@ -55,10 +60,10 @@ GtSpaceTallyItemTallyVersion >> tallyVersion: anObject [
 
 { #category : #accessing }
 GtSpaceTallyItemTallyVersion >> totalInstCount [
-	self subclassResponsibility
+	^ self tallyItem instanceCount 
 ]
 
 { #category : #accessing }
 GtSpaceTallyItemTallyVersion >> totalInstSpace [
-	self subclassResponsibility
+	^ self tallyItem spaceForInstances
 ]

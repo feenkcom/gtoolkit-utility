@@ -22,6 +22,17 @@ GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
 ]
 
 { #category : #'gt - extensions' }
+GtSpaceTallyVersion >> gtViewRepositoryTalliesFor: aView [
+	<gtView>
+	spaceTally ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Tallies (by repository)';
+		object: [ spaceTally ];
+		view: #gtViewRepositoryTalliesFor:
+]
+
+{ #category : #'gt - extensions' }
 GtSpaceTallyVersion >> gtViewTallyItemsFor: aView [
 	<gtView>
 	spaceTally ifNil: [ ^ aView empty ].
@@ -110,6 +121,14 @@ GtSpaceTallyVersion >> spaceTallyPackageVersions [
 		GtSpaceTallyPackageTallyVersion new
 			tallyVersion: self;
 			tallyItem: aPackageTally ]
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> spaceTallyRepositoryVersions [
+	^ self spaceTally repositoryTallies collect: [ :aRepositoryTally |
+		GtSpaceTallyRepositoryTallyVersion new
+			tallyVersion: self;
+			tallyItem: aRepositoryTally ]
 ]
 
 { #category : #accessing }
