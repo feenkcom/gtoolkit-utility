@@ -26,7 +26,7 @@ GtSpaceTally >> computeSpaceUsageResultsForClassesInstancesAssociations: aCollec
 									analyzedPackageName: class package name) ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtSpaceTally >> gtViewPackageTalliesFor: aView [
 	<gtView>
 
@@ -50,4 +50,19 @@ GtSpaceTally >> packageTallies [
 					GtSpaceTallyPackageTally new
 						analyzedPackageName: assoc key; 
 						addClassTallies: assoc value ]
+]
+
+{ #category : #accessing }
+GtSpaceTally >> repositoryTallies [ 
+	^ (self packageTallies groupedBy: [ :aPackageTally |
+			IceRepository registry 
+				detect: [ :aRepository | 
+					aRepository includesPackageNamed: aPackageTally analyzedPackageName ]
+				ifFound: [ :aRepository | aRepository name ]
+				ifNone: [ '<Unknown>' ]
+			]) associations 
+				collect: [ :assoc |
+					GtSpaceTallyRepositoryTally new
+						analyzedRepositoryName: assoc key; 
+						addPackageTallies: assoc value ]
 ]

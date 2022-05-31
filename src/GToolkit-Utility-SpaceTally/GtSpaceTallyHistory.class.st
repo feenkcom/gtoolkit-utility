@@ -5,8 +5,27 @@ Class {
 		'tallyVersions',
 		'tallyItemVersionsByClassName'
 	],
+	#classInstVars : [
+		'defaultInstance'
+	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
+
+{ #category : #accessing }
+GtSpaceTallyHistory class >> default [
+	^ defaultInstance ifNil: [ 
+		defaultInstance := self new ]
+]
+
+{ #category : #accessing }
+GtSpaceTallyHistory class >> recordDefaultSystemWideData [
+	self default recordSystemWideData
+]
+
+{ #category : #initialization }
+GtSpaceTallyHistory class >> reset [
+	defaultInstance := nil
+]
 
 { #category : #adding }
 GtSpaceTallyHistory >> addSpaceTallyVersion: aSpaceTallyVersion [
