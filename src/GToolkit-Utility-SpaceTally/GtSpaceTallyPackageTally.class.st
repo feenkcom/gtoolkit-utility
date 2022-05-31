@@ -79,6 +79,11 @@ GtSpaceTallyPackageTally >> initialize [
 	classTallies := SpaceTallyResult new.
 ]
 
+{ #category : #accessing }
+GtSpaceTallyPackageTally >> instanceCount [ 
+	^ self totalInstCount
+]
+
 { #category : #printing }
 GtSpaceTallyPackageTally >> printOn: aStream [
 	super printOn: aStream.
@@ -86,6 +91,11 @@ GtSpaceTallyPackageTally >> printOn: aStream [
 	aStream << '('.
 	self gtDescriptionOn: aStream.
 	aStream << ')'.
+]
+
+{ #category : #accessing }
+GtSpaceTallyPackageTally >> spaceForInstances [ 
+	^ self totalInstSpace 
 ]
 
 { #category : #accessing }
