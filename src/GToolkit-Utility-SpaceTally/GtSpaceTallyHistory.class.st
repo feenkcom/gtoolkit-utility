@@ -97,13 +97,39 @@ GtSpaceTallyHistory >> gtViewAnalyzedPackagesFor: aView [
 					'-', aPackageHistory instanceSizeChange 
 						negated humanReadableIsqByteSize ]  
 				ifFalse: [ 
-					aPackageHistory instanceSizeChange humanReadableIsqByteSize ])
-			
-			 ];
+					aPackageHistory instanceSizeChange humanReadableIsqByteSize ]) ];
 		column: 'Latest Count' text: [ :aPackageHistory |
 			aPackageHistory tallyItemVersions last totalInstCount ];
 		column: 'Latest Size' text: [ :aPackageHistory |
 			aPackageHistory tallyItemVersions last totalInstSpace humanReadableIsqByteSize ]
+		
+]
+
+{ #category : #'gt - extensions' }
+GtSpaceTallyHistory >> gtViewAnalyzedRepositoriesFor: aView [
+	<gtView>
+	
+	^ aView columnedList 
+		title: 'Repository Changes';
+		items: [ 
+			self repositoryHistories
+				sorted: [ :aRepositoryHistory | 
+					aRepositoryHistory tallyItemVersions last totalInstSpace ] descending ];
+		column: 'Repository Name' text: [ :aRepositoryHistory |
+			aRepositoryHistory analyzedRepositoryName ];
+		column: 'Count chance' text: [ :aRepositoryHistory |
+			aRepositoryHistory instanceCountChange ];
+		column: 'Size chance' text: [ :aRepositoryHistory |
+			((aRepositoryHistory instanceSizeChange < 0)
+				ifTrue: [
+					'-', aRepositoryHistory instanceSizeChange 
+						negated humanReadableIsqByteSize ]  
+				ifFalse: [ 
+					aRepositoryHistory instanceSizeChange humanReadableIsqByteSize ]) ];
+		column: 'Latest Count' text: [ :aRepositoryHistory |
+			aRepositoryHistory tallyItemVersions last totalInstCount ];
+		column: 'Latest Size' text: [ :aRepositoryHistory |
+			aRepositoryHistory tallyItemVersions last totalInstSpace humanReadableIsqByteSize ]
 		
 ]
 
@@ -165,6 +191,21 @@ GtSpaceTallyHistory >> recordSystemWideData [
 	newVersion recordSystemWideData.
 	
 	self addSpaceTallyVersion: newVersion
+]
+
+{ #category : #accessing }
+GtSpaceTallyHistory >> repositoryHistories [
+	| tallyItemVersionsByRepositoryName |
+	tallyItemVersionsByRepositoryName := OrderedDictionary new.
+	self spaceTallyVersions do: [ :aSpaceTallyVersion |
+		aSpaceTallyVersion spaceTallyRepositoryVersions do: [ :aRepositoryTallyVersion |
+			| repositoryHistory |
+			repositoryHistory := tallyItemVersionsByRepositoryName 
+				at: aRepositoryTallyVersion analyzedRepositoryName 
+				ifAbsentPut: [ GtSpaceTallyRepositoryHistory new
+					analyzedRepositoryName: aRepositoryTallyVersion analyzedRepositoryName ].
+			repositoryHistory addTallyItemVersion: aRepositoryTallyVersion ] ].
+	^ tallyItemVersionsByRepositoryName values
 ]
 
 { #category : #accessing }

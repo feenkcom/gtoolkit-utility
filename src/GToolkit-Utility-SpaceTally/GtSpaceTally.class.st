@@ -42,6 +42,22 @@ GtSpaceTally >> gtViewPackageTalliesFor: aView [
 			aPackageTally totalInstSpace humanReadableIsqByteSize ]
 ]
 
+{ #category : #'gt - extensions' }
+GtSpaceTally >> gtViewRepositoryTalliesFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Tallies (by repository)';
+		items:  [ self repositoryTallies  
+			sorted: [ :aRepositoryTally | aRepositoryTally totalInstSpace ] descending ];
+		column: 'Package Name' text: [ :aRepositoryTally | 
+			aRepositoryTally analyzedRepositoryName ];
+		column: 'Instance count' text: [ :aRepositoryTally | 
+			aRepositoryTally totalInstCount ];
+		column: 'Instances Size' text: [ :aRepositoryTally | 
+			aRepositoryTally totalInstSpace humanReadableIsqByteSize ]
+]
+
 { #category : #accessing }
 GtSpaceTally >> packageTallies [ 
 	^ (self results items groupedBy: [ :aTally |

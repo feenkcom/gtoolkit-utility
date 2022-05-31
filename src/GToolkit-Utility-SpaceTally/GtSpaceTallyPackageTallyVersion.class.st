@@ -9,14 +9,6 @@ GtSpaceTallyPackageTallyVersion >> analyzedPackageName [
 	^ self tallyItem analyzedPackageName
 ]
 
-{ #category : #printing }
-GtSpaceTallyPackageTallyVersion >> descriptionOn: aStream [
-	aStream 
-		print:  self tallyVersion index;
-		nextPutAll: ', '.
-	self tallyItem gtDescriptionOn: aStream
-]
-
 { #category : #'gt - extensions' }
 GtSpaceTallyPackageTallyVersion >> gtViewTallyItemsFor: aView [
 	<gtView>
@@ -45,14 +37,4 @@ GtSpaceTallyPackageTallyVersion >> spaceTallyClassVersions [
 		GtSpaceTallyClassTallyVersion new
 			tallyVersion: self tallyVersion;
 			tallyItem: aTallyResult ] 
-]
-
-{ #category : #accessing }
-GtSpaceTallyPackageTallyVersion >> totalInstCount [
-	^ self tallyItem totalInstCount
-]
-
-{ #category : #accessing }
-GtSpaceTallyPackageTallyVersion >> totalInstSpace [
-	^ self tallyItem totalInstSpace
 ]

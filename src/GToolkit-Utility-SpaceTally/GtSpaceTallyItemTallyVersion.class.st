@@ -60,10 +60,10 @@ GtSpaceTallyItemTallyVersion >> tallyVersion: anObject [
 
 { #category : #accessing }
 GtSpaceTallyItemTallyVersion >> totalInstCount [
-	self subclassResponsibility
+	^ self tallyItem instanceCount 
 ]
 
 { #category : #accessing }
 GtSpaceTallyItemTallyVersion >> totalInstSpace [
-	self subclassResponsibility
+	^ self tallyItem spaceForInstances
 ]
