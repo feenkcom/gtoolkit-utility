@@ -56,7 +56,6 @@ GtSpaceTallyHistory >> gtViewAnalyzedClassesFor: aView [
 			aClassHistory tallyItemVersions last totalInstCount ];
 		column: 'Latest Size' text: [ :aClassHistory |
 			aClassHistory tallyItemVersions last totalInstSpace humanReadableIsqByteSize ]
-		
 ]
 
 { #category : #'gt - extensions' }
@@ -66,7 +65,7 @@ GtSpaceTallyHistory >> gtViewAnalyzedPackagesFor: aView [
 	^ aView columnedList 
 		title: 'Package Changes';
 		items: [ 
-			self packageHistoriesWithChanges
+			self packageHistories
 				sorted: [ :aPackageHistory | 
 					aPackageHistory tallyItemVersions last totalInstSpace ] descending ];
 		column: 'Package Name' text: [ :aPackageHistory |
@@ -76,7 +75,8 @@ GtSpaceTallyHistory >> gtViewAnalyzedPackagesFor: aView [
 		column: 'Size chance' text: [ :aPackageHistory |
 			((aPackageHistory instanceSizeChange < 0)
 				ifTrue: [
-					'-', aPackageHistory instanceSizeChange negated humanReadableIsqByteSize ]  
+					'-', aPackageHistory instanceSizeChange 
+						negated humanReadableIsqByteSize ]  
 				ifFalse: [ 
 					aPackageHistory instanceSizeChange humanReadableIsqByteSize ])
 			
