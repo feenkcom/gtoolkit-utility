@@ -36,7 +36,7 @@ GtSpaceTallyPackageTally >> classTallies [
 	^ classTallies
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtSpaceTallyPackageTally >> gtDescriptionOn: aStream [
 
 	aStream print: analyzedPackageName .
@@ -49,6 +49,28 @@ GtSpaceTallyPackageTally >> gtDescriptionOn: aStream [
 		nextPutAll: ' space for instances: ';
 		print: self totalInstSpace.
 	aStream nextPutAll: ')'
+]
+
+{ #category : #accessing }
+GtSpaceTallyPackageTally >> gtViewTallyItemsFor: aView [
+	<gtView>
+	classTallies ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Tallies';
+		object: [ classTallies ];
+		view: #gtViewItemsFor:
+]
+
+{ #category : #accessing }
+GtSpaceTallyPackageTally >> gtViewTallyOverviewFor: aView [
+	<gtView>
+	classTallies ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Overview';
+		object: [ classTallies ];
+		view: #gtViewOverviewFor:
 ]
 
 { #category : #initialization }
