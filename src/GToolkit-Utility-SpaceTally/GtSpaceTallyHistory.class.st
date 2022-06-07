@@ -13,13 +13,19 @@ Class {
 
 { #category : #accessing }
 GtSpaceTallyHistory class >> default [
+	<gtExample>
 	^ defaultInstance ifNil: [ 
 		defaultInstance := self new ]
 ]
 
 { #category : #accessing }
 GtSpaceTallyHistory class >> recordDefaultSystemWideData [
-	self default recordSystemWideData
+	^ self recordDefaultSystemWideDataLabeled: nil
+]
+
+{ #category : #accessing }
+GtSpaceTallyHistory class >> recordDefaultSystemWideDataLabeled: aLabel [
+	self default recordSystemWideDataLabeled: aLabel
 ]
 
 { #category : #initialization }
@@ -83,6 +89,7 @@ GtSpaceTallyHistory >> gtViewAnalyzedPackagesFor: aView [
 	
 	^ aView columnedList 
 		title: 'Package Changes';
+		priority: 15;
 		items: [ 
 			self packageHistories
 				sorted: [ :aPackageHistory | 
@@ -111,6 +118,7 @@ GtSpaceTallyHistory >> gtViewAnalyzedRepositoriesFor: aView [
 	
 	^ aView columnedList 
 		title: 'Repository Changes';
+		priority: 10;
 		items: [ 
 			self repositoryHistories
 				sorted: [ :aRepositoryHistory | 
@@ -140,8 +148,8 @@ GtSpaceTallyHistory >> gtViewVersionsFor: aView [
 	^ aView columnedList 
 		title: 'Tally Versions';
 		items: [ self spaceTallyVersions ];
-		column: 'Index' text: [ :aVersion |
-			aVersion index ];
+		column: 'Version' text: [ :aVersion |
+			aVersion indexWithLabel ];
 		column: 'Instance Count' text: [ :aVersion |
 			aVersion totalInstCount ];
 		column: 'Instances Size' text: [ :aVersion |
@@ -185,12 +193,20 @@ GtSpaceTallyHistory >> packageHistoriesWithChanges [
 
 { #category : #recording }
 GtSpaceTallyHistory >> recordSystemWideData [
+	^ self recordSystemWideDataLabeled: nil
+]
+
+{ #category : #recording }
+GtSpaceTallyHistory >> recordSystemWideDataLabeled: aLabel [
 	| newVersion |
 	
 	newVersion := GtSpaceTallyVersion new.
 	newVersion recordSystemWideData.
+	newVersion label: aLabel.
 	
-	self addSpaceTallyVersion: newVersion
+	self addSpaceTallyVersion: newVersion.
+	
+	^ newVersion
 ]
 
 { #category : #accessing }
