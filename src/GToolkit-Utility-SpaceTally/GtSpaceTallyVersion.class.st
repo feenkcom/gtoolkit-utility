@@ -18,6 +18,7 @@ GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
 	
 	^ aView forward
 		title: 'Tallies (by package)';
+		priority: 15;
 		object: [ spaceTally ];
 		view: #gtViewPackageTalliesFor:
 ]
@@ -29,6 +30,7 @@ GtSpaceTallyVersion >> gtViewRepositoryTalliesFor: aView [
 	
 	^ aView forward
 		title: 'Tallies (by repository)';
+		priority: 10;
 		object: [ spaceTally ];
 		view: #gtViewRepositoryTalliesFor:
 ]

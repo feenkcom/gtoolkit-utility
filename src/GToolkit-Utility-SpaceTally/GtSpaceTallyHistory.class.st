@@ -13,6 +13,7 @@ Class {
 
 { #category : #accessing }
 GtSpaceTallyHistory class >> default [
+	<gtExample>
 	^ defaultInstance ifNil: [ 
 		defaultInstance := self new ]
 ]
@@ -88,6 +89,7 @@ GtSpaceTallyHistory >> gtViewAnalyzedPackagesFor: aView [
 	
 	^ aView columnedList 
 		title: 'Package Changes';
+		priority: 15;
 		items: [ 
 			self packageHistories
 				sorted: [ :aPackageHistory | 
@@ -116,6 +118,7 @@ GtSpaceTallyHistory >> gtViewAnalyzedRepositoriesFor: aView [
 	
 	^ aView columnedList 
 		title: 'Repository Changes';
+		priority: 10;
 		items: [ 
 			self repositoryHistories
 				sorted: [ :aRepositoryHistory | 
