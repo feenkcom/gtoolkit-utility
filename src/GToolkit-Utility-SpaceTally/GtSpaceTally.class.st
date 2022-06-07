@@ -4,6 +4,9 @@ I extend {{gtClass:SpaceTally}} with extra information by using for tally items 
 Class {
 	#name : #GtSpaceTally,
 	#superclass : #SpaceTally,
+	#instVars : [
+		'label'
+	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
@@ -56,6 +59,16 @@ GtSpaceTally >> gtViewRepositoryTalliesFor: aView [
 			aRepositoryTally totalInstCount ];
 		column: 'Instances Size' text: [ :aRepositoryTally | 
 			aRepositoryTally totalInstSpace humanReadableIsqByteSize ]
+]
+
+{ #category : #accessing }
+GtSpaceTally >> label [
+	^ label
+]
+
+{ #category : #accessing }
+GtSpaceTally >> label: aLabel [
+	label := aLabel
 ]
 
 { #category : #accessing }

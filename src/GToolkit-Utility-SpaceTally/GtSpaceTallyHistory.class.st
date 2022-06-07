@@ -19,6 +19,11 @@ GtSpaceTallyHistory class >> default [
 
 { #category : #accessing }
 GtSpaceTallyHistory class >> recordDefaultSystemWideData [
+	^ self recordDefaultSystemWideDataLabeled: nil
+]
+
+{ #category : #accessing }
+GtSpaceTallyHistory class >> recordDefaultSystemWideDataLabeled: aLabel [
 	self default recordSystemWideData
 ]
 
@@ -185,12 +190,20 @@ GtSpaceTallyHistory >> packageHistoriesWithChanges [
 
 { #category : #recording }
 GtSpaceTallyHistory >> recordSystemWideData [
+	^ self recordSystemWideDataLabeled: nil
+]
+
+{ #category : #recording }
+GtSpaceTallyHistory >> recordSystemWideDataLabeled: aLabel [
 	| newVersion |
 	
 	newVersion := GtSpaceTallyVersion new.
 	newVersion recordSystemWideData.
+	newVersion label: aLabel.
 	
-	self addSpaceTallyVersion: newVersion
+	self addSpaceTallyVersion: newVersion.
+	
+	^ newVersion
 ]
 
 { #category : #accessing }

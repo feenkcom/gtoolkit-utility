@@ -3,6 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'index',
+		'label',
 		'timestamp',
 		'spaceTally',
 		'vmMemorySize'
@@ -67,6 +68,18 @@ GtSpaceTallyVersion >> index: anInteger [
 ]
 
 { #category : #accessing }
+GtSpaceTallyVersion >> label [
+	^ label
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> label: aLabel [
+	label := aLabel.
+	self spaceTally ifNotNil: [ :aSpaceTally |
+		aSpaceTally label: aLabel ]
+]
+
+{ #category : #accessing }
 GtSpaceTallyVersion >> overviewData [
 	^ self spaceTally results gtOverviewData, { 
 		'Vm Memory Size' -> self vmMemorySize humanReadableIsqByteSize }
@@ -78,7 +91,7 @@ GtSpaceTallyVersion >> recordSystemWideData [
 	timestamp := DateAndTime now.
 	
 	self recordyVmMemorySize.
-	self recordySystemWideSpaceTally 
+	self recordySystemWideSpaceTally .
 ]
 
 { #category : #recording }
