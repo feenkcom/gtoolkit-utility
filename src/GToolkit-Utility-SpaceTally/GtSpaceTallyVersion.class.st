@@ -70,6 +70,20 @@ GtSpaceTallyVersion >> index: anInteger [
 ]
 
 { #category : #accessing }
+GtSpaceTallyVersion >> indexWithLabel [
+	^ String streamContents:  [ :aStream | 
+		self label 
+			ifNil: [
+				aStream print: self index ]
+			ifNotNil: [
+				aStream 
+					nextPutAll: self label ;
+					nextPutAll: ' (';
+					print: self index;
+					nextPutAll: ')' ] ]
+]
+
+{ #category : #accessing }
 GtSpaceTallyVersion >> label [
 	^ label
 ]

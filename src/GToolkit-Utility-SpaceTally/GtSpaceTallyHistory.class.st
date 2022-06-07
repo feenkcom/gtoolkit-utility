@@ -25,7 +25,7 @@ GtSpaceTallyHistory class >> recordDefaultSystemWideData [
 
 { #category : #accessing }
 GtSpaceTallyHistory class >> recordDefaultSystemWideDataLabeled: aLabel [
-	self default recordSystemWideData
+	self default recordSystemWideDataLabeled: aLabel
 ]
 
 { #category : #initialization }
@@ -148,8 +148,8 @@ GtSpaceTallyHistory >> gtViewVersionsFor: aView [
 	^ aView columnedList 
 		title: 'Tally Versions';
 		items: [ self spaceTallyVersions ];
-		column: 'Index' text: [ :aVersion |
-			aVersion index ];
+		column: 'Version' text: [ :aVersion |
+			aVersion indexWithLabel ];
 		column: 'Instance Count' text: [ :aVersion |
 			aVersion totalInstCount ];
 		column: 'Instances Size' text: [ :aVersion |
