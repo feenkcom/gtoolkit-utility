@@ -112,8 +112,6 @@ GtSpaceTallyVersion >> recordSystemWideData [
 
 { #category : #recording }
 GtSpaceTallyVersion >> recordySystemWideSpaceTally [
-	Smalltalk garbageCollect.
-	
 	spaceTally := GtSpaceTally new.
 	spaceTally systemWideSpaceTally.
 ]
