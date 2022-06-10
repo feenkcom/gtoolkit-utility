@@ -14,6 +14,13 @@ AbstractFileReference >> isEqualToResourceReference: aGtResourceReference [
 ]
 
 { #category : #'*GToolkit-Utility-Resources' }
+AbstractFileReference >> makeRelativeToResourceReference: aGtResourceReference [
+	"Return the path of the receiver relative to landmarkReference."
+
+	^ self fullPath relativeTo: aGtResourceReference fullPath
+]
+
+{ #category : #'*GToolkit-Utility-Resources' }
 AbstractFileReference >> resolveResourceReference: aResource [
 
 	<return: #AbstractFileReference>
