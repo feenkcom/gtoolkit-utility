@@ -412,6 +412,16 @@ GtResourceReference >> isWritable [
 	^ self fileReference isWritable
 ]
 
+{ #category : #navigating }
+GtResourceReference >> makeRelative: anObject [
+	^ anObject makeRelativeToResourceReference: self
+]
+
+{ #category : #navigating }
+GtResourceReference >> makeRelativeToResourceReference: aGtResourceReference [
+	^ self fullPath relativeTo: aGtResourceReference fullPath
+]
+
 { #category : #operations }
 GtResourceReference >> moveTo: aReference [
 	"Move the receiver in the location passed as argument.
