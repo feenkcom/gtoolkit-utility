@@ -3,6 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'index',
+		'label',
 		'timestamp',
 		'spaceTally',
 		'vmMemorySize'
@@ -17,6 +18,7 @@ GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
 	
 	^ aView forward
 		title: 'Tallies (by package)';
+		priority: 15;
 		object: [ spaceTally ];
 		view: #gtViewPackageTalliesFor:
 ]
@@ -28,6 +30,7 @@ GtSpaceTallyVersion >> gtViewRepositoryTalliesFor: aView [
 	
 	^ aView forward
 		title: 'Tallies (by repository)';
+		priority: 10;
 		object: [ spaceTally ];
 		view: #gtViewRepositoryTalliesFor:
 ]
@@ -67,6 +70,32 @@ GtSpaceTallyVersion >> index: anInteger [
 ]
 
 { #category : #accessing }
+GtSpaceTallyVersion >> indexWithLabel [
+	^ String streamContents:  [ :aStream | 
+		self label 
+			ifNil: [
+				aStream print: self index ]
+			ifNotNil: [
+				aStream 
+					nextPutAll: self label ;
+					nextPutAll: ' (';
+					print: self index;
+					nextPutAll: ')' ] ]
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> label [
+	^ label
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> label: aLabel [
+	label := aLabel.
+	self spaceTally ifNotNil: [ :aSpaceTally |
+		aSpaceTally label: aLabel ]
+]
+
+{ #category : #accessing }
 GtSpaceTallyVersion >> overviewData [
 	^ self spaceTally results gtOverviewData, { 
 		'Vm Memory Size' -> self vmMemorySize humanReadableIsqByteSize }
@@ -78,13 +107,11 @@ GtSpaceTallyVersion >> recordSystemWideData [
 	timestamp := DateAndTime now.
 	
 	self recordyVmMemorySize.
-	self recordySystemWideSpaceTally 
+	self recordySystemWideSpaceTally .
 ]
 
 { #category : #recording }
 GtSpaceTallyVersion >> recordySystemWideSpaceTally [
-	Smalltalk garbageCollect.
-	
 	spaceTally := GtSpaceTally new.
 	spaceTally systemWideSpaceTally.
 ]
