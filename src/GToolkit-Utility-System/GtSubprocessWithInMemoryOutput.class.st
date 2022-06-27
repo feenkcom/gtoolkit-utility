@@ -363,6 +363,14 @@ GtSubprocessWithInMemoryOutput >> setCommand [
 
 ]
 
+{ #category : #initialization }
+GtSubprocessWithInMemoryOutput >> setDefaultErrorBlock [
+
+	self errorBlock: [ | error |
+		error := GtSubprocessError new process: self.
+		error signal ]
+]
+
 { #category : #accessing }
 GtSubprocessWithInMemoryOutput >> shellCommand [
 	^ shellCommand
