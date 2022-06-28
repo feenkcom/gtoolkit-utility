@@ -1,6 +1,12 @@
 Extension { #name : #ProtoObject }
 
 { #category : #'*GToolkit-Utility-System' }
+ProtoObject >> asGlamorousArray [ 
+	 
+	^Array with: self
+]
+
+{ #category : #'*GToolkit-Utility-System' }
 ProtoObject >> gtValue: anObject [
 	| args |
 	args := anObject asGlamorousArray.
