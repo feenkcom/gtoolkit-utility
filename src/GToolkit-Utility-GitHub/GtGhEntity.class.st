@@ -10,7 +10,12 @@ Class {
 { #category : #accessing }
 GtGhEntity >> githubClient [
 	^ IceGitHubAPI new
-		beAnonymous
+]
+
+{ #category : #accessing }
+GtGhEntity >> githubGet: anUrlstring [
+	^ self githubClient
+		get: (anUrlstring removePrefix: 'https://api.github.com/')
 ]
 
 { #category : #accessing }

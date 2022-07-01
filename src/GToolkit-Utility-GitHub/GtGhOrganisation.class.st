@@ -34,8 +34,7 @@ GtGhOrganisation >> gtViewRepositoriesFor: aView [
 { #category : #initialization }
 GtGhOrganisation >> initializeForLogin: aLoginName [
 	
-	self rawData: (self githubClient 
-		get: ('orgs/', aLoginName))
+	self rawData: (self githubGet: ('orgs/', aLoginName))
 ]
 
 { #category : #loading }
@@ -55,8 +54,8 @@ GtGhOrganisation >> loadRepositoriesData [
 	reposChunk := nil.
 	
 	[ 
-		reposChunk := self githubClient
-			get: self repositoriesUrl, '?per_page=100&page=', pageCount asString.
+		reposChunk := self githubGet: self repositoriesUrl
+			, '?per_page=100&page=', pageCount asString.
 		pageCount := pageCount +1. 
 		loadedRepositories addAll: reposChunk.
 	] doWhileTrue: [
@@ -90,7 +89,7 @@ GtGhOrganisation >> repositories [
 
 { #category : #accessing }
 GtGhOrganisation >> repositoriesUrl [
-	^ (self rawData at: 'repos_url') removePrefix: 'https://api.github.com/'
+	^ self rawData at: 'repos_url'
 ]
 
 { #category : #querying }
