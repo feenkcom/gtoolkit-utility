@@ -72,7 +72,8 @@ GtGhProjectWithBaseline >> gtViewExternalRepositoriesFor: aView [
 	^ aView list 
 		title: 'External Repositories';
 		priority: 20;
-		items: [ self externalRepositories ]
+		items: [ self externalRepositories ];
+		itemText: [ :aRepository | aRepository loadSpecString ]
 ]
 
 { #category : #'gt - extensions' }
