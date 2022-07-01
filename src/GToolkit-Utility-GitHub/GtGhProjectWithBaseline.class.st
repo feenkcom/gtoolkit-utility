@@ -105,8 +105,7 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 			text: [ :aRepository | aRepository loadedBranchName ]
 			width: 120;
 		column: 'Parent Branch'
-			text: [ :aRepository |
-				aRepository forkDefautBranchName ]
+			text: [ :aRepository | aRepository defautBranchNameInParent ]
 			width: 120;
 		column: 'Status' do: [ :aColumn |
 			aColumn 
@@ -118,7 +117,7 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 						alignCenter ];
 				dataBinder: [ :itemElement :aRepository | 
 					| nodeIcon |
-					nodeIcon := ((#(diverged behind) includes: aRepository branchDiffWithFork reverseStatus)
+					nodeIcon := ((#(diverged behind) includes: aRepository branchDiffFromSelfToParent reverseStatus)
 						ifTrue: [ BrGlamorousIcons redcircle ]
 						ifFalse: [ BrGlamorousIcons greencircle ]).
 					 
@@ -127,12 +126,12 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 						addChild: nodeIcon asElement;
 						addChild: (BrLabel new
 							aptitude: BrGlamorousListLabelAptitude;
-							text: aRepository branchDiffWithFork reverseStatus;
+							text: aRepository branchDiffFromSelfToParent reverseStatus;
 							alignCenterLeft;
 							hMatchParent;
 							vFitContent) ] ];
 		column: 'Branch Change' text: [ :aRepository |
-			aRepository branchDiffWithFork reverseDescription ]		
+			aRepository branchDiffFromSelfToParent reverseDescription ]		
 ]
 
 { #category : #'gt - extensions' }

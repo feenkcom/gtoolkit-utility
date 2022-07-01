@@ -21,13 +21,13 @@ GtGhRepositoryWithBaseline >> baselineRepository: anObject [
 ]
 
 { #category : #accessing }
-GtGhRepositoryWithBaseline >> branchDiffWithFork [
+GtGhRepositoryWithBaseline >> branchDiffFromSelfToParent [
 	^ self gitHubRepository 
-		forkDiffWithLocalBranchNamed: self loadedBranchName
+		diffBetweenParentAndLocalBranchNamed: self loadedBranchName
 ]
 
 { #category : #accessing }
-GtGhRepositoryWithBaseline >> forkDefautBranchName [
+GtGhRepositoryWithBaseline >> defautBranchNameInParent [
 	^ self gitHubRepository forkedRepository defaultBranchName
 ]
 
@@ -48,13 +48,13 @@ GtGhRepositoryWithBaseline >> gitHubRepository: anObject [
 	gitHubRepository := anObject
 ]
 
-{ #category : #accessing }
-GtGhRepositoryWithBaseline >> gtViewBehindCommitsFor: aView [
+{ #category : #'gt - extensions' }
+GtGhRepositoryWithBaseline >> gtViewCommitsBehindParentFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
 		title: 'Behind Commits';
-		items: [ self branchDiffWithFork commits ];
+		items: [ self branchDiffFromSelfToParent commits ];
 		column: 'Timestamp' text: [ :aCommit | aCommit timestamp ] width: 200;
 		column: 'Author' text: [ :aCommit | aCommit authorName ] width: 200;
 		column: 'Messsage' text: [ :aCommit | aCommit message ]
@@ -76,7 +76,7 @@ GtGhRepositoryWithBaseline >> ownerName [
 	^ baselineRepository ownerName
 ]
 
-{ #category : #accessing }
+{ #category : #printing }
 GtGhRepositoryWithBaseline >> printOn: aStream [
 	super printOn: aStream.
 	aStream 

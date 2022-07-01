@@ -51,19 +51,19 @@ GtGhRepository >> description [
 	^ self rawData at: 'description'
 ]
 
+{ #category : #'loading - utils' }
+GtGhRepository >> diffBetweenParentAndLocalBranchNamed:  aLoadedBranchName [
+	self isForked ifFalse: [ ^ self ].
+	
+	^ diffWithRemote ifNil:  [ 
+		diffWithRemote := self loadDiffWithParentForLoadedBranchNamed: aLoadedBranchName ]
+]
+
 { #category : #accessing }
 GtGhRepository >> enureFullRawData [
 	hasFullRawData ifFalse: [ 
 		rawData := self loadFullInformation.
 		hasFullRawData := true ]
-]
-
-{ #category : #'loading - utils' }
-GtGhRepository >> forkDiffWithLocalBranchNamed:  aLoadedBranchName [
-	self isForked ifFalse: [ ^ self ].
-	
-	^ diffWithRemote ifNil:  [ 
-		diffWithRemote := self loadDiffWithRemoveForLoadedBranchNamed: aLoadedBranchName ]
 ]
 
 { #category : #accessing }
@@ -77,13 +77,6 @@ GtGhRepository >> forkedRepository [
 { #category : #'accessing properties' }
 GtGhRepository >> fullName [ 
 	^ self rawData at: 'full_name'
-]
-
-{ #category : #testing }
-GtGhRepository >> hasNewerPushInOrigin [
-	self isForked ifFalse: [ ^ false ].
-	
-	^ self forkedRepository pushedAt > self pushedAt
 ]
 
 { #category : #initialization }
@@ -108,7 +101,7 @@ GtGhRepository >> loadBranchNamed: aBranchName [
 ]
 
 { #category : #'loading - utils' }
-GtGhRepository >> loadDiffWithRemoveForLoadedBranchNamed: aLoadedBranchName [
+GtGhRepository >> loadDiffWithParentForLoadedBranchNamed: aLoadedBranchName [
 	| headSpec rawDiffData |
 	self isForked ifFalse: [ ^ self ].
 	
