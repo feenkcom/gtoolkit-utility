@@ -44,7 +44,6 @@ GtGhOrganisation >> loadRepositories [
 		collect: [ :aRawData |
 			GtGhRepository new 
 				rawData: aRawData ]
-	
 ]
 
 { #category : #loading }
@@ -64,7 +63,6 @@ GtGhOrganisation >> loadRepositoriesData [
 		reposChunk size = 100 ].
 	
 	^ loadedRepositories
-	
 ]
 
 { #category : #accessing }
