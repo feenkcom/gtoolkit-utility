@@ -33,6 +33,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				spec requires: #('GToolkitFileUtility' ). ];
 			package: 'GToolkit-Utility-Properties';
 			package: 'GToolkit-Utility-ClassLoader';
-			package: 'GToolkit-Utility-UndeclaredReferences' ].
+			package: 'GToolkit-Utility-UndeclaredReferences';
+			package: 'GToolkit-Utility-GitHub' ].
 
 ]
