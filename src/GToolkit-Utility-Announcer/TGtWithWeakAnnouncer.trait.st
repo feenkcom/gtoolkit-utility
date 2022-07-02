@@ -6,6 +6,11 @@ Trait {
 	#category : #'GToolkit-Utility-Announcer'
 }
 
+{ #category : #testing }
+TGtWithWeakAnnouncer classSide >> isDeprecated [
+	^ true
+]
+
 { #category : #'announcer - subscription' }
 TGtWithWeakAnnouncer >> unsubscribe: aSubscriber [
 
