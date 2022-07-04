@@ -1,3 +1,8 @@
+"
+{{gtClass:GtGhBranchComparison}} performs a comparison between two branches using the compare url.
+
+The compare url has  the form `/repos/{owner}/{repo}/compare/{base}...{head}`.
+"
 Class {
 	#name : #GtGhBranchComparison,
 	#superclass : #GtGhEntity,

@@ -1,3 +1,6 @@
+"
+{{gtClass:name=GtGhCommit}} models a commit from GitHub.
+"
 Class {
 	#name : #GtGhCommit,
 	#superclass : #GtGhEntity,

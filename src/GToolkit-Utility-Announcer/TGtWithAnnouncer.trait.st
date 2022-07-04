@@ -8,6 +8,11 @@ Trait {
 	#category : #'GToolkit-Utility-Announcer'
 }
 
+{ #category : #testing }
+TGtWithAnnouncer classSide >> isDeprecated [
+	^ true
+]
+
 { #category : #announcer }
 TGtWithAnnouncer >> announcer [
 

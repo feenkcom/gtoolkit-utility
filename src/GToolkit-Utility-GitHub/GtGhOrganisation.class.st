@@ -1,7 +1,16 @@
+"
+{{gtClass:name=GtGhOrganisation}} models a GitHub organization.
+
+It provides support for accessing repositories from the organization:
+	- {{gtMethod:name=GtGhOrganisation>>forkedRepositories|label=#selector}}
+	- {{gtMethod:name=GtGhOrganisation>>ownedRepositories|label=#selector}}
+	
+"
 Class {
 	#name : #GtGhOrganisation,
 	#superclass : #GtGhEntity,
 	#instVars : [
+		'loginName',
 		'repositories'
 	],
 	#category : #'GToolkit-Utility-GitHub'
@@ -9,6 +18,7 @@ Class {
 
 { #category : #'instance creation' }
 GtGhOrganisation class >> forLogin: aLoginName [ 
+	"Create an organization with the given login name."
 	
 	^ self new 
 		initializeForLogin: aLoginName
@@ -33,7 +43,7 @@ GtGhOrganisation >> gtViewRepositoriesFor: aView [
 
 { #category : #initialization }
 GtGhOrganisation >> initializeForLogin: aLoginName [
-	
+	loginName := aLoginName.
 	self rawData: (self githubGet: ('orgs/', aLoginName))
 ]
 
@@ -66,7 +76,7 @@ GtGhOrganisation >> loadRepositoriesData [
 
 { #category : #accessing }
 GtGhOrganisation >> loginName [
-	^ self rawData at: 'login'
+	^ loginName
 ]
 
 { #category : #querying }

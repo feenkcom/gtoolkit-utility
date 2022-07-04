@@ -1,3 +1,12 @@
+"
+{{gtClass:name=GtGhRepository}} models a GitHub repository.
+
+It provides varios information about the repository like:
+	- {{gtMethod:name=GtGhRepository>>forkedRepository|label=#selector}}:  the repository from which this repository was forked, in case the repository is a fork;
+	-  {{gtMethod:name=GtGhRepository>>defaultBranch|label=#selector}}
+	
+It makes requests as needed to the GitHub API to download information.
+"
 Class {
 	#name : #GtGhRepository,
 	#superclass : #GtGhEntity,
@@ -52,8 +61,8 @@ GtGhRepository >> description [
 ]
 
 { #category : #'loading - utils' }
-GtGhRepository >> diffBetweenParentAndLocalBranchNamed:  aLoadedBranchName [
-	self isForked ifFalse: [ ^ self ].
+GtGhRepository >> diffWithParentForLocalBranchNamed:  aLoadedBranchName [
+	self assert: [ self isForked ].
 	
 	^ diffWithRemote ifNil:  [ 
 		diffWithRemote := self loadDiffWithParentForLoadedBranchNamed: aLoadedBranchName ]
@@ -62,8 +71,7 @@ GtGhRepository >> diffBetweenParentAndLocalBranchNamed:  aLoadedBranchName [
 { #category : #accessing }
 GtGhRepository >> enureFullRawData [
 	hasFullRawData ifFalse: [ 
-		rawData := self loadFullInformation.
-		hasFullRawData := true ]
+		self fullRawData: self loadFullInformation ]
 ]
 
 { #category : #accessing }
@@ -77,6 +85,12 @@ GtGhRepository >> forkedRepository [
 { #category : #'accessing properties' }
 GtGhRepository >> fullName [ 
 	^ self rawData at: 'full_name'
+]
+
+{ #category : #accessing }
+GtGhRepository >> fullRawData: aRawData [
+	self rawData: aRawData.
+	hasFullRawData := true 
 ]
 
 { #category : #initialization }
@@ -134,12 +148,12 @@ GtGhRepository >> name [
 	^ self rawData at: 'name'
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing properties' }
 GtGhRepository >> ownerData [
 	^ self rawData at: 'owner'
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing properties' }
 GtGhRepository >> ownerLoginName [
 	^ self ownerData at: 'login'
 ]
