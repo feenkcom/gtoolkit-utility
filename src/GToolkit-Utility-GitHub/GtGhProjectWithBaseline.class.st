@@ -1,3 +1,9 @@
+"
+{{gtClass:name=GtGhProjectWithBaseline}}  is currently the main entry point for exploring repositories loaded by a baseline using GitHub data. 
+
+It can classsify repositories loaded by the project into three main categorties:
+- 
+"
 Class {
 	#name : #GtGhProjectWithBaseline,
 	#superclass : #Object,
@@ -38,12 +44,15 @@ GtGhProjectWithBaseline >> baselineRepositories [
 
 { #category : #'accessing - repositories' }
 GtGhProjectWithBaseline >> externalRepositories [
+	"Loaded repositories external to the organization containing the project."
+	
 	^ self baselineRepositories reject: [ :aRepository | 
 		aRepository ownerName = self gitHubOrganisation loginName ]
 ]
 
 { #category : #'accessing - repositories' }
 GtGhProjectWithBaseline >> forkedRepositories [
+	"Loaded repositories forked in the organization containing the project."
 	| forkedGitHubRepositories |
 
 	forkedGitHubRepositories := self gitHubOrganisation forkedRepositories.
@@ -99,9 +108,9 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 		priority: 25;
 		items: [ self forkedRepositories ];
 		column: 'Repo' text: [ :aRepository |
-			aRepository gitHubRepository fullName ]" width: 250";
+			aRepository gitHubRepository fullName ];
 		column: 'Parent' text: [ :aRepository |
-			aRepository gitHubRepository forkedRepository fullName ]" width: 250";
+			aRepository gitHubRepository forkedRepository fullName ];
 		column: 'Loaded Branch'
 			text: [ :aRepository | aRepository loadedBranchName ]
 			width: 120;
@@ -157,6 +166,7 @@ GtGhProjectWithBaseline >> organizationRepositories [
 
 { #category : #'accessing - repositories' }
 GtGhProjectWithBaseline >> ownedRepositories [
+	"Loaded repositories owned by the organization containing the project."
 	| ownedGitHubRepositories |
 
 	ownedGitHubRepositories := self gitHubOrganisation ownedRepositories.

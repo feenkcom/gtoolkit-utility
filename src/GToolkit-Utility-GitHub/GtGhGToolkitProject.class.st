@@ -1,3 +1,6 @@
+"
+{{gtClass:name=GtGhGToolkitProject}} models the gtoolkit repository from feenk GitHub organisation.
+"
 Class {
 	#name : #GtGhGToolkitProject,
 	#superclass : #GtGhProjectWithBaseline,
