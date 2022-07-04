@@ -1,3 +1,8 @@
+"
+{{gtClass:name=GtGhEntity}} is the superclass of git entities downloaded from GitHub. 
+
+It manages raw GitHub data for the entity, and provides utility methods for making GitHub API requests.
+"
 Class {
 	#name : #GtGhEntity,
 	#superclass : #Object,
@@ -12,13 +17,16 @@ GtGhEntity >> githubClient [
 	^ IceGitHubAPI new
 ]
 
-{ #category : #accessing }
+{ #category : #requests }
 GtGhEntity >> githubGet: anUrlstring [
+	"Remove the url host if present, as the API client expects only the path, 
+	and urls taken from github data contain the full path."
+	
 	^ self githubClient
 		get: (anUrlstring removePrefix: 'https://api.github.com/')
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtGhEntity >> gtRawDataFor: aView [
 	<gtView>
 	

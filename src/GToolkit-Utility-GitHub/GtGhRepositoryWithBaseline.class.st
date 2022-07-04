@@ -1,3 +1,18 @@
+"
+{{gtClass:GtGhRepositoryWithBaseline}}  augments a baseline repository with data about that repository from GitHub.
+
+The baseline repository is an instance of  {{gtClass:name=GtRlRepository}} and models a repository in a Metacello baseline.
+The GitHub repository is an instance of {{gtClass:name=GtGhRepository}} and contains data from GitHub.
+
+By linking the two it can extract information from GitHub based on the load specification of a repository in a Metacello baseline, especially the branch that is specified by the baseline.
+
+Several usefull API methods:
+	- {{gtMethod:name=GtGhRepositoryWithBaseline>>#loadedBranchName|label=#selector}}
+	- {{gtMethod:name=GtGhRepositoryWithBaseline>>#branchDiffFromSelfToParent|label=#selector}}
+
+
+
+"
 Class {
 	#name : #GtGhRepositoryWithBaseline,
 	#superclass : #Object,
@@ -22,8 +37,12 @@ GtGhRepositoryWithBaseline >> baselineRepository: anObject [
 
 { #category : #accessing }
 GtGhRepositoryWithBaseline >> branchDiffFromSelfToParent [
+	"Create a diff between the branch loaded by Metacello from this repository and the default branch of its parent repository. The current repository should be a fork. This uses the current repository as the source when doing the diff." 
+	
+	self assert: [ self gitHubRepository isForked ].
+	
 	^ self gitHubRepository 
-		diffBetweenParentAndLocalBranchNamed: self loadedBranchName
+		diffWithParentForLocalBranchNamed: self loadedBranchName
 ]
 
 { #category : #accessing }
@@ -67,8 +86,10 @@ GtGhRepositoryWithBaseline >> loadSpecString [
 
 { #category : #accessing }
 GtGhRepositoryWithBaseline >> loadedBranchName [
+	"The name of the branch that is going to be loded based on the load specification from the baseline. If bo branch name is specified, 'master' is going to be used."
+	
 	^ self baselineRepository versionStringOrNil
-		ifNil: [ self gitHubRepository defaultBranchName ]
+		ifNil: [ 'master' ]
 ]
 
 { #category : #accessing }

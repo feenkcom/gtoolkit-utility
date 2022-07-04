@@ -1,3 +1,6 @@
+"
+{{gtClass:name=GtGhRepository}} models the feenk GitHub organisation.
+"
 Class {
 	#name : #GtGhFeenkOrganisation,
 	#superclass : #GtGhOrganisation,
@@ -12,9 +15,4 @@ GtGhFeenkOrganisation class >> create [
 { #category : #accessing }
 GtGhFeenkOrganisation class >> loginName [
 	^ 'feenkcom'
-]
-
-{ #category : #accessing }
-GtGhFeenkOrganisation >> glamorousToolkitRepository [ 
-	^ self repositoryNamed: 'gtoolkit'
 ]

@@ -1,3 +1,6 @@
+"
+{{gtClass:name=GtGhRepositoryBranch}} models a repository branch on GitHub.
+"
 Class {
 	#name : #GtGhRepositoryBranch,
 	#superclass : #GtGhEntity,
