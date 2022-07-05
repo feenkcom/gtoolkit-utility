@@ -21,14 +21,16 @@ Class {
 
 { #category : #accessing }
 GtPragmaType class >> all [
-	| pragmas |
-	pragmas := OrderedCollection new.
-	Object withAllSubclassesDo: [ :each | 
-		each pragmasDo: [ :p | pragmas add: p ] ].
-	^ (pragmas groupedBy: #selector) associations collect: [ :association | 
-		  self new
-			  keyword: association key;
-			  pragmas: association value ]
+	| pragmaTypes |
+	pragmaTypes := OrderedCollection new.
+	Pragma pragmaCache
+		keysAndValuesDo: [ :key :value | 
+			pragmaTypes
+				add: (self new
+						keyword: key;
+						pragmas: value asOrderedCollection;
+						yourself) ].
+	^ pragmaTypes
 ]
 
 { #category : #ui }
@@ -51,13 +53,8 @@ GtPragmaType >> keyword: anObject [
 
 { #category : #accessing }
 GtPragmaType >> pragmas [
-	^ pragmas ifNil: [
-		pragmas := OrderedCollection new.
-		SystemNavigation new allBehaviorsDo: [ :each |
-			Pragma withPragmasIn: each do: [ :p |
-				p selector = self selector ifTrue: [ 
-					pragmas add: p ] ] ].
-		pragmas ]
+	^ pragmas
+		ifNil: [ pragmas := (Pragma allNamed: self keyword) asOrderedCollection ]
 ]
 
 { #category : #accessing }
