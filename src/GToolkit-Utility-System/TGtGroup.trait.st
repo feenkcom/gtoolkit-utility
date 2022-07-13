@@ -13,7 +13,7 @@ TGtGroup >> asArray [
 
 { #category : #accessing }
 TGtGroup >> asBrItemsProvider [
-	^ BrListSequenceableCollectionItemsProvider forCollection: self
+	^ BrSequenceableCollectionItemsProvider forCollection: self
 ]
 
 { #category : #accessing }
