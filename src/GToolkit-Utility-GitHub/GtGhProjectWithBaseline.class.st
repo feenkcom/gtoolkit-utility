@@ -1,7 +1,7 @@
 "
 {{gtClass:name=GtGhProjectWithBaseline}}  is currently the main entry point for exploring repositories loaded by a baseline using GitHub data. 
 
-It can classsify repositories loaded by the project into three main categorties:
+It can classify repositories loaded by the project into three main categorties:
 - 
 "
 Class {
