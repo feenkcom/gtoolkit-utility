@@ -73,7 +73,7 @@ GtRBRenameClassWithCommentsRefactoring >> renameClassNameInMethodComments: aRBMe
 GtRBRenameClassWithCommentsRefactoring >> renameMethodComments [
 	self model
 		allClassesDo: [ :cls | 
-			cls selectors
+			cls localSelectors
 				do: [ :sel | 
 					| method |
 					method := cls methodFor: sel.
