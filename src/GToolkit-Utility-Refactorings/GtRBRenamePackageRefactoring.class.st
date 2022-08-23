@@ -36,15 +36,18 @@ GtRBRenamePackageRefactoring >> preconditions [
 GtRBRenamePackageRefactoring >> renameBaselineReferences [
 	| rewriter baselineClass |
 	baselineClass := self model classNamed: #BaselineOf.
-	baselineClass isNil
-		ifTrue: [ ^ self ].
+	baselineClass isNil ifTrue: [ ^ self ].
 	rewriter := RBParseTreeRewriter new.
-	rewriter replace: oldName asString storeString with: newName asString storeString.
-	self model
-		allReferencesTo: oldName asString
-		do: [ :method | 
-			(method modelClass includesClass: baselineClass)
-				ifTrue: [ (rewriter executeTree: method ast)
+	rewriter
+		replace: oldName asString storeString
+		with: newName asString storeString.
+	baselineClass withAllSubclasses
+		do: [ :each | 
+			(each whichSelectorsReferToSymbol: oldName asString)
+				do: [ :sel | 
+					| method |
+					method := each methodFor: sel.
+					(rewriter executeTree: method ast)
 						ifTrue: [ method compileTree: rewriter tree ] ] ]
 ]
 
