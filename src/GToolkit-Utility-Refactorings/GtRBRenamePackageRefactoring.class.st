@@ -41,9 +41,16 @@ GtRBRenamePackageRefactoring >> renameBaselineReferences [
 	rewriter
 		replace: oldName asString storeString
 		with: newName asString storeString.
+	rewriter
+		replace: oldName asSymbol storeString
+		with: newName asSymbol storeString.
 	baselineClass withAllSubclasses
 		do: [ :each | 
-			(each whichSelectorsReferToSymbol: oldName asString)
+			| selectors |
+			selectors := Set
+					withAll: (each whichSelectorsReferToSymbol: oldName asString).
+			selectors addAll: (each whichSelectorsReferToSymbol: oldName asSymbol).
+			selectors
 				do: [ :sel | 
 					| method |
 					method := each methodFor: sel.
