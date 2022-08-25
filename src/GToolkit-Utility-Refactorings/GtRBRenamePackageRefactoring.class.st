@@ -40,10 +40,12 @@ GtRBRenamePackageRefactoring >> renameBaselineReferences [
 	rewriter := RBParseTreeRewriter new.
 	rewriter
 		replace: oldName asString storeString
-		with: newName asString storeString.
+		with: newName asString storeString
+		when: [ :node | node gtIsBaselinePackageName ].
 	rewriter
 		replace: oldName asSymbol storeString
-		with: newName asSymbol storeString.
+		with: newName asSymbol storeString
+		when: [ :node | node gtIsBaselinePackageName ].
 	baselineClass withAllSubclasses
 		do: [ :each | 
 			| selectors |
