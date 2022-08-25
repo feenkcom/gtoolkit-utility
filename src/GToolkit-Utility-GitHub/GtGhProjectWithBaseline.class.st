@@ -20,10 +20,25 @@ GtGhProjectWithBaseline class >> forGitHubOrganization: anOrganization [
 		gitHubOrganisation: anOrganization
 ]
 
+{ #category : #'accessing - repositories' }
+GtGhProjectWithBaseline >> baselineDependencies [
+	^ self baselinePackages flatCollect: #outgoingDependencies
+]
+
 { #category : #accessing }
 GtGhProjectWithBaseline >> baselineModel [
 
 	^ baselineModel
+]
+
+{ #category : #'accessing - repositories' }
+GtGhProjectWithBaseline >> baselinePackages [
+	^ self baselineModel allPackages 
+]
+
+{ #category : #'accessing - repositories' }
+GtGhProjectWithBaseline >> baselineProjects [
+	^ self baselineModel withAllChildProjects 
 ]
 
 { #category : #'accessing - repositories' }

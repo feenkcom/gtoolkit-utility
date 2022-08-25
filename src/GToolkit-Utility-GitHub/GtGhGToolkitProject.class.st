@@ -11,6 +11,30 @@ Class {
 }
 
 { #category : #examples }
+GtGhGToolkitProject class >> baselineDependencies [ 
+	<gtExample>
+	<noTest>
+	
+	^ self default baselineDependencies
+]
+
+{ #category : #examples }
+GtGhGToolkitProject class >> baselinePackages [ 
+	<gtExample>
+	<noTest>
+	
+	^ self default baselinePackages
+]
+
+{ #category : #examples }
+GtGhGToolkitProject class >> baselineProjects [ 
+	<gtExample>
+	<noTest>
+	
+	^ self default baselineProjects
+]
+
+{ #category : #examples }
 GtGhGToolkitProject class >> baselineRepositories [ 
 	<gtExample>
 	<noTest>
