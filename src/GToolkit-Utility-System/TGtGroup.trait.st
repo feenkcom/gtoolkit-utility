@@ -37,6 +37,11 @@ TGtGroup >> collectWithIndex: aBlock [
 ]
 
 { #category : #accessing }
+TGtGroup >> detectIndex: aBlock ifNone: exceptionBlock [
+	^ self items detectIndex: aBlock ifNone: exceptionBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> do: aBlock [
 	^ self items do: aBlock
 ]
