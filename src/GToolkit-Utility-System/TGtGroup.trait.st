@@ -83,6 +83,20 @@ TGtGroup >> last [
 	^ self items last
 ]
 
+{ #category : #printing }
+TGtGroup >> printOn: aStream [
+	super printOn: aStream.
+	
+	aStream 
+		<< ' [';
+		print: self size;
+		<< ' ';
+		<< (self size = 1 
+			ifTrue: [ 'item' ]
+			ifFalse: [ 'items' ]);
+		<< ']'
+]
+
 { #category : #accessing }
 TGtGroup >> reject: aBlock [
 	^ self items reject: aBlock
