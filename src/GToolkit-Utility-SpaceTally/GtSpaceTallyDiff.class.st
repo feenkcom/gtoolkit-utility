@@ -36,9 +36,9 @@ GtSpaceTallyDiff >> gtViewAnalyzedClassesFor: aView [
 					aClassHistory tallyItemVersions last totalInstSpace ] descending ];
 		column: 'Class Name' text: [ :aClassHistory |
 			aClassHistory analyzedClassName ];
-		column: 'Count chance' text: [ :aClassHistory |
+		column: 'Count change' text: [ :aClassHistory |
 			aClassHistory instanceCountChange ];
-		column: 'Size chance' text: [ :aClassHistory |
+		column: 'Size change' text: [ :aClassHistory |
 			((aClassHistory instanceSizeChange < 0)
 				ifTrue: [
 					'-', aClassHistory instanceSizeChange negated humanReadableIsqByteSize ]  
@@ -63,9 +63,9 @@ GtSpaceTallyDiff >> gtViewAnalyzedPackagesFor: aView [
 					aPackageHistory tallyItemVersions last totalInstSpace ] descending ];
 		column: 'Package Name' text: [ :aPackageHistory |
 			aPackageHistory analyzedPackageName ];
-		column: 'Count chance' text: [ :aPackageHistory |
+		column: 'Count change' text: [ :aPackageHistory |
 			aPackageHistory instanceCountChange ];
-		column: 'Size chance' text: [ :aPackageHistory |
+		column: 'Size change' text: [ :aPackageHistory |
 			((aPackageHistory instanceSizeChange < 0)
 				ifTrue: [
 					'-', aPackageHistory instanceSizeChange 
@@ -91,9 +91,9 @@ GtSpaceTallyDiff >> gtViewAnalyzedRepositoriesFor: aView [
 					aRepositoryHistory tallyItemVersions last totalInstSpace ] descending ];
 		column: 'Repository Name' text: [ :aRepositoryHistory |
 			aRepositoryHistory analyzedRepositoryName ];
-		column: 'Count chance' text: [ :aRepositoryHistory |
+		column: 'Count change' text: [ :aRepositoryHistory |
 			aRepositoryHistory instanceCountChange ];
-		column: 'Size chance' text: [ :aRepositoryHistory |
+		column: 'Size change' text: [ :aRepositoryHistory |
 			((aRepositoryHistory instanceSizeChange < 0)
 				ifTrue: [
 					'-', aRepositoryHistory instanceSizeChange 
