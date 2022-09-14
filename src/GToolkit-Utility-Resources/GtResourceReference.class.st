@@ -89,6 +89,12 @@ GtResourceReference >> asResolvedBy: anObject [
 ]
 
 { #category : #accessing }
+GtResourceReference >> asZnUrl [
+	"Convert the receiver in a file:// ZnUrl"
+	^ self fileReference asZnUrl
+]
+
+{ #category : #accessing }
 GtResourceReference >> base [
 	"Returns the base of the basename, i.e. /foo/gloops.taz base is 'gloops'"
 	^ self fileReference base
