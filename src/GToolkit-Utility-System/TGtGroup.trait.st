@@ -32,6 +32,12 @@ TGtGroup >> collect: aBlock [
 ]
 
 { #category : #accessing }
+TGtGroup >> collect: aBlock as: aClass [
+	^ self items 
+		collect: aBlock as: aClass
+]
+
+{ #category : #accessing }
 TGtGroup >> collectWithIndex: aBlock [
 	^ self items collectWithIndex: aBlock
 ]
