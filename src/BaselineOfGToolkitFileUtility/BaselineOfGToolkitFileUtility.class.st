@@ -10,10 +10,10 @@ BaselineOfGToolkitFileUtility >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.140/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.141/src' ].
 		spec
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.140/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.141/src' ].
 		spec
 			baseline: 'FFICHeaderExtractor' with: [
 				spec repository: 'github://pharo-contributions/FFICHeaderExtractor:v1.0.2/repository' ].
