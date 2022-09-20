@@ -31,6 +31,8 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-SpaceTally';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #('GToolkitFileUtility' ). ];
+			package: 'GToolkit-Utility-Logging'  with: [
+				spec requires: #('GToolkitFileUtility' ). ];
 			package: 'GToolkit-Utility-Properties';
 			package: 'GToolkit-Utility-ClassLoader';
 			package: 'GToolkit-Utility-UndeclaredReferences';
