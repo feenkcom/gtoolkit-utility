@@ -56,8 +56,7 @@ GtBeaconEventsGrouper >> gtViewRootEventsFor: aView [
 GtBeaconEventsGrouper >> initialize [
 	super initialize.
 	
-	rootEvents := self createDefaultEventsGroup.
-	eventsStack := Stack new.
+	self reset.
 	shouldNotifyUpdates := false.
 	announcer := Announcer new.
 ]
@@ -119,6 +118,12 @@ GtBeaconEventsGrouper >> processEventSignalFor: aSignal [
 GtBeaconEventsGrouper >> processEventSignalsFor: aCollectionfSignals [
 	aCollectionfSignals do: [ :aSignal |
 		self processEventSignalFor: aSignal ]
+]
+
+{ #category : #actions }
+GtBeaconEventsGrouper >> reset [
+	rootEvents := self createDefaultEventsGroup.
+	eventsStack := Stack new.
 ]
 
 { #category : #accessing }

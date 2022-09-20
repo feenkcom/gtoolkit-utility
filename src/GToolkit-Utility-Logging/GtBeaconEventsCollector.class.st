@@ -5,8 +5,32 @@ Class {
 		'logger',
 		'eventsGrouper'
 	],
+	#classInstVars : [
+		'defaultInstance'
+	],
 	#category : #'GToolkit-Utility-Logging'
 }
+
+{ #category : #accessing }
+GtBeaconEventsCollector class >> defaultInstance [
+	^ defaultInstance ifNil: [ 
+		defaultInstance := self new ]
+]
+
+{ #category : #actions }
+GtBeaconEventsCollector class >> reset [
+	self defaultInstance reset
+]
+
+{ #category : #actions }
+GtBeaconEventsCollector class >> start [
+	^ self defaultInstance start
+]
+
+{ #category : #actions }
+GtBeaconEventsCollector class >> stop [
+	^ self defaultInstance stop
+]
 
 { #category : #callbacks }
 GtBeaconEventsCollector >> actOnRelevantSignalFor: aSignal [
@@ -72,11 +96,17 @@ GtBeaconEventsCollector >> relevantSignalType [
 ]
 
 { #category : #actions }
+GtBeaconEventsCollector >> reset [
+	eventsGrouper reset.
+	logger reset.
+]
+
+{ #category : #actions }
 GtBeaconEventsCollector >> start [
 	logger start
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
 GtBeaconEventsCollector >> stop [
 	logger stop
 ]
