@@ -2,15 +2,41 @@ Class {
 	#name : #GtBeaconEventsCollector,
 	#superclass : #Object,
 	#instVars : [
+		'mutex',
 		'logger',
 		'eventsGrouper'
+	],
+	#classInstVars : [
+		'defaultInstance'
 	],
 	#category : #'GToolkit-Utility-Logging'
 }
 
+{ #category : #accessing }
+GtBeaconEventsCollector class >> defaultInstance [
+	^ defaultInstance ifNil: [ 
+		defaultInstance := self new ]
+]
+
+{ #category : #actions }
+GtBeaconEventsCollector class >> reset [
+	self defaultInstance reset
+]
+
+{ #category : #actions }
+GtBeaconEventsCollector class >> start [
+	^ self defaultInstance start
+]
+
+{ #category : #actions }
+GtBeaconEventsCollector class >> stop [
+	^ self defaultInstance stop
+]
+
 { #category : #callbacks }
 GtBeaconEventsCollector >> actOnRelevantSignalFor: aSignal [
-	eventsGrouper processEventSignalFor: aSignal
+	mutex critical: [
+		eventsGrouper processEventSignalFor: aSignal ]
 ]
 
 { #category : #initialization }
@@ -55,6 +81,8 @@ GtBeaconEventsCollector >> gtViewRootEventsFor: aView [
 GtBeaconEventsCollector >> initialize [
 	super initialize.
 	
+	mutex := Mutex new.
+	
 	eventsGrouper := self createDefaultEventsGrouper.
 	eventsGrouper notifyUpdates.
 	
@@ -72,11 +100,18 @@ GtBeaconEventsCollector >> relevantSignalType [
 ]
 
 { #category : #actions }
+GtBeaconEventsCollector >> reset [
+	mutex critical: [
+		eventsGrouper reset ].
+	logger reset
+]
+
+{ #category : #actions }
 GtBeaconEventsCollector >> start [
 	logger start
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
 GtBeaconEventsCollector >> stop [
 	logger stop
 ]

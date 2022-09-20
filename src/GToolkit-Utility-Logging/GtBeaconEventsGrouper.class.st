@@ -48,7 +48,6 @@ GtBeaconEventsGrouper >> gtViewRootEventsFor: aView [
 	^ aView forward 
 		title: 'Events';
 		priority: 10;
-		updateWhen: Announcement in: [ self announcer ];
 		object: [ self rootEvents ];
 		view: #gtItemsFor:
 ]
@@ -57,8 +56,7 @@ GtBeaconEventsGrouper >> gtViewRootEventsFor: aView [
 GtBeaconEventsGrouper >> initialize [
 	super initialize.
 	
-	rootEvents := self createDefaultEventsGroup.
-	eventsStack := Stack new.
+	self reset.
 	shouldNotifyUpdates := false.
 	announcer := Announcer new.
 ]
@@ -122,6 +120,12 @@ GtBeaconEventsGrouper >> processEventSignalsFor: aCollectionfSignals [
 		self processEventSignalFor: aSignal ]
 ]
 
+{ #category : #actions }
+GtBeaconEventsGrouper >> reset [
+	rootEvents := self createDefaultEventsGroup.
+	eventsStack := Stack new.
+]
+
 { #category : #accessing }
 GtBeaconEventsGrouper >> rootEvents [
 	^ rootEvents
@@ -129,6 +133,7 @@ GtBeaconEventsGrouper >> rootEvents [
 
 { #category : #accessing }
 GtBeaconEventsGrouper >> shouldNotifyUpdates [
+
 	^ shouldNotifyUpdates
 ]
 
@@ -142,6 +147,5 @@ GtBeaconEventsGrouper >> shouldNotifyUpdates: aBoolean [
 GtBeaconEventsGrouper >> totalDuration [
 	
 	^ self rootEvents
-		inject: 0 seconds 
-		into: [ :total  :anEvent | total + anEvent duration ]
+		sumDurations: [ :anEvent | anEvent duration ]
 ]
