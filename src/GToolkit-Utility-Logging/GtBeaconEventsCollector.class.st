@@ -2,6 +2,7 @@ Class {
 	#name : #GtBeaconEventsCollector,
 	#superclass : #Object,
 	#instVars : [
+		'mutex',
 		'logger',
 		'eventsGrouper'
 	],
@@ -34,7 +35,8 @@ GtBeaconEventsCollector class >> stop [
 
 { #category : #callbacks }
 GtBeaconEventsCollector >> actOnRelevantSignalFor: aSignal [
-	eventsGrouper processEventSignalFor: aSignal
+	mutex critical: [
+		eventsGrouper processEventSignalFor: aSignal ]
 ]
 
 { #category : #initialization }
@@ -79,6 +81,8 @@ GtBeaconEventsCollector >> gtViewRootEventsFor: aView [
 GtBeaconEventsCollector >> initialize [
 	super initialize.
 	
+	mutex := Mutex new.
+	
 	eventsGrouper := self createDefaultEventsGrouper.
 	eventsGrouper notifyUpdates.
 	
@@ -97,8 +101,9 @@ GtBeaconEventsCollector >> relevantSignalType [
 
 { #category : #actions }
 GtBeaconEventsCollector >> reset [
-	eventsGrouper reset.
-	logger reset.
+	mutex critical: [
+		eventsGrouper reset ].
+	logger reset
 ]
 
 { #category : #actions }
