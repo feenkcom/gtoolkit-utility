@@ -13,31 +13,33 @@ GtBeaconLogEvent >> addSignal: aSignal [
 ]
 
 { #category : #accessing }
-GtBeaconLogEvent >> addSubEvent: anEvent [
-	self subEvents add: anEvent
-]
+GtBeaconLogEvent >> allSignals [
 
-{ #category : #initialization }
-GtBeaconLogEvent >> createDefaultEventsGroup [
-	^ GtBeaconLogEventsGroup new. 
-]
-
-{ #category : #printing }
-GtBeaconLogEvent >> descriptionOn: aStream [
-	aStream 
-		print: self timestamp;	
-		<< ' announcements,';
-		print: self duration
+	^ GtBeaconSignalsGroup new 
+		add: self eventStartedSignal;
+		addAll: self subEvents allSignals;
+		add: self eventCompletedSignal;
+		yourself
 ]
 
 { #category : #accessing }
 GtBeaconLogEvent >> duration [
-	^ self signalCompletedEvent timestamp - self signalStartedEvent timestamp
+	^ self eventCompletedSignal timestamp - self eventStartedSignal timestamp
 ]
 
 { #category : #accessing }
 GtBeaconLogEvent >> endTimestamp [
-	^ self signalCompletedEvent timestamp
+	^ self eventCompletedSignal timestamp
+]
+
+{ #category : #accessing }
+GtBeaconLogEvent >> eventCompletedSignal [
+	^ self signals last
+]
+
+{ #category : #accessing }
+GtBeaconLogEvent >> eventStartedSignal [
+	^ self signals first
 ]
 
 { #category : #'gt - extensions' }
@@ -45,7 +47,7 @@ GtBeaconLogEvent >> gtViewLocalSignalsFor: aView [
 	<gtView>
 	
 	^ aView forward
-	 	title: 'Signals (local)';
+	 	title: 'Signals';
 	 	priority: 30;
 	 	object: [ self signals ];
 	 	view: #gtItemsFor:
@@ -56,24 +58,6 @@ GtBeaconLogEvent >> initialize [
 	super initialize.
 	
 	signals := GtBeaconSignalsGroup new. 
-	subEvents := self createDefaultEventsGroup.
-]
-
-{ #category : #printing }
-GtBeaconLogEvent >> printOn: aStream [
-	super printOn: aStream.
-	aStream parenthesize: [
-		self descriptionOn: aStream ]
-]
-
-{ #category : #accessing }
-GtBeaconLogEvent >> signalCompletedEvent [
-	^ self signals last
-]
-
-{ #category : #accessing }
-GtBeaconLogEvent >> signalStartedEvent [
-	^ self signals first
 ]
 
 { #category : #acccessing }
@@ -83,15 +67,5 @@ GtBeaconLogEvent >> signals [
 
 { #category : #accessing }
 GtBeaconLogEvent >> startTimestamp [
-	^ self signalStartedEvent timestamp
-]
-
-{ #category : #accessing }
-GtBeaconLogEvent >> subEvents [
-	^ subEvents
-]
-
-{ #category : #accessing }
-GtBeaconLogEvent >> timestamp [
-	^ self startTimestamp
+	^ self eventStartedSignal timestamp
 ]

@@ -6,6 +6,11 @@ Class {
 	#category : #'GToolkit-Utility-Logging'
 }
 
+{ #category : #adding }
+GtBeaconSignalsGroup >> addAll: aCollection [
+	self items addAll: aCollection
+]
+
 { #category : #'gt - extensions' }
 GtBeaconSignalsGroup >> gtItemsFor: aView [
 	<gtView>

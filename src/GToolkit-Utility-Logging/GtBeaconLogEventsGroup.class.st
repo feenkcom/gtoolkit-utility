@@ -14,7 +14,7 @@ GtBeaconLogEventsGroup >> addAll: aCollection [
 { #category : #accessing }
 GtBeaconLogEventsGroup >> allSignals [
 	^ GtBeaconSignalsGroup 
-		withAll: (self  items  flatCollect: #signals)
+		withAll: (self items flatCollect: #allSignals)
 ]
 
 { #category : #'gt - extensions' }
@@ -36,6 +36,14 @@ GtBeaconLogEventsGroup >> gtItemsFor: aView [
 GtBeaconLogEventsGroup >> inject: thisValue into: binaryBlock [
 	^ self items 
 		inject: thisValue into: binaryBlock
+]
+
+{ #category : #'math functions' }
+GtBeaconLogEventsGroup >> sumDurations: aBlock [
+	^ self  
+		inject: 0 seconds 
+		into: [ :total  :anEventsGrouper | 
+			total + (aBlock value: anEventsGrouper) ]
 ]
 
 { #category : #'math functions' }
