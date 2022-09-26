@@ -6,7 +6,8 @@ Class {
 		'label',
 		'timestamp',
 		'spaceTally',
-		'vmMemorySize'
+		'vmMemorySize',
+		'vmStatisticsReport'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
@@ -119,7 +120,10 @@ GtSpaceTallyVersion >> recordySystemWideSpaceTally [
 { #category : #recording }
 GtSpaceTallyVersion >> recordyVmMemorySize [
 	
-	vmMemorySize := Smalltalk vm memorySize
+	vmMemorySize := Smalltalk vm memorySize.
+	
+	vmStatisticsReport := GtVmStatisticsReport new.
+	vmStatisticsReport recordReportStatistics
 ]
 
 { #category : #accessing }
