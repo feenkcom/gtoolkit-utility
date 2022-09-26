@@ -68,3 +68,9 @@ GtVmRuntimeReport >> upTime: anObject [
 
 	upTime := anObject
 ]
+
+{ #category : #printing }
+GtVmRuntimeReport >> upTimeDescription [
+	^ String streamContents: [ :aStream |
+		self printUpTimeOn: aStream ]
+]

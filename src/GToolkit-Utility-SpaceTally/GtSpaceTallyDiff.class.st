@@ -134,10 +134,12 @@ GtSpaceTallyDiff >> gtViewVersionsOverviewFor: aView [
 		items: [ self versionsOverviewData ];
 		column: 'Property' text: [ :assoc |
 			assoc key ];
-		column: 'Source Version' text: [ :assoc |
-			assoc value first ];
-		column: 'Target Version' text: [ :assoc |
-			assoc value second ]
+		column: 'Source Version: ', self sourceVersion description 
+			text: [ :assoc |
+				assoc value first ];
+		column: 'Target Version: ', self targetVersion description 
+			text: [ :assoc |
+				assoc value second ]
 ]
 
 { #category : #accessing }
@@ -153,6 +155,16 @@ GtSpaceTallyDiff >> packageHistories [
 					analyzedPackageName: aPackageTallyVersion analyzedPackageName ].
 			packageHistory addTallyItemVersion: aPackageTallyVersion ] ].
 	^ tallyItemVersionsByPackageName values
+]
+
+{ #category : #printing }
+GtSpaceTallyDiff >> printOn: aStream [
+	super printOn: aStream.
+	
+	aStream parenthesize: [ 
+		self sourceVersion descriptionOn: aStream.
+		aStream << ' - '.
+		self targetVersion descriptionOn: aStream ]
 ]
 
 { #category : #accessing }
@@ -199,4 +211,12 @@ GtSpaceTallyDiff >> versionsOverviewData [
 		'Instances Size' -> {
 			self sourceVersion totalInstSpace humanReadableIsqByteSize.
 			self targetVersion totalInstSpace humanReadableIsqByteSize } }
+]
+
+{ #category : #accessing }
+GtSpaceTallyDiff >> vmStatisticsReportHistory [ 
+	^ GtVmStatisticsReportHistory new
+		addReport: self sourceVersion vmStatisticsReport;
+		addReport: self targetVersion vmStatisticsReport;
+		yourself
 ]

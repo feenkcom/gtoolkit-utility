@@ -23,8 +23,20 @@ GtVmGarbageCollectionReport >> fullGCTime [
 ]
 
 { #category : #accessing }
+GtVmGarbageCollectionReport >> fullGCTime: anObject [
+
+	fullGCTime := anObject
+]
+
+{ #category : #accessing }
 GtVmGarbageCollectionReport >> fullGCs [
 	^ fullGCs
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> fullGCs: anObject [
+
+	fullGCs := anObject
 ]
 
 { #category : #accessing }
@@ -33,8 +45,20 @@ GtVmGarbageCollectionReport >> incrGCTime [
 ]
 
 { #category : #accessing }
+GtVmGarbageCollectionReport >> incrGCTime: anObject [
+
+	incrGCTime := anObject
+]
+
+{ #category : #accessing }
 GtVmGarbageCollectionReport >> incrGCs [
 	^ incrGCs
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> incrGCs: anObject [
+
+	incrGCs := anObject
 ]
 
 { #category : #printing }
@@ -84,4 +108,26 @@ GtVmGarbageCollectionReport >> recordReportStatistics [
 	fullGCTime := vm totalFullGCTime.
 	incrGCs := vm incrementalGCCount.
 	incrGCTime := vm totalIncrementalGCTime.
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> tenureCount [
+
+	^ tenureCount
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> tenureCount: anObject [
+
+	tenureCount := anObject
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> totalGtDuration [
+	^ Duration milliSeconds: self totalGtTime
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> totalGtTime [ 
+	^ self fullGCTime + self incrGCTime
 ]

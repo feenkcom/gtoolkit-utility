@@ -22,13 +22,31 @@ GtVmMemoryStatisticsReport >> freeSize [
 ]
 
 { #category : #accessing }
+GtVmMemoryStatisticsReport >> freeSize: anObject [
+
+	freeSize := anObject
+]
+
+{ #category : #accessing }
 GtVmMemoryStatisticsReport >> memorySize [
 	^ memorySize
 ]
 
 { #category : #accessing }
+GtVmMemoryStatisticsReport >> memorySize: anObject [
+
+	memorySize := anObject
+]
+
+{ #category : #accessing }
 GtVmMemoryStatisticsReport >> oldSpaceSize [
 	^ oldSpaceSize
+]
+
+{ #category : #accessing }
+GtVmMemoryStatisticsReport >> oldSpaceSize: anObject [
+
+	oldSpaceSize := anObject
 ]
 
 { #category : #printings }
@@ -74,6 +92,18 @@ GtVmMemoryStatisticsReport >> tenureCount [
 ]
 
 { #category : #accessing }
+GtVmMemoryStatisticsReport >> tenureCount: anObject [
+
+	tenureCount := anObject
+]
+
+{ #category : #accessing }
 GtVmMemoryStatisticsReport >> youngSpaceSize [
 	^ youngSpaceSize
+]
+
+{ #category : #accessing }
+GtVmMemoryStatisticsReport >> youngSpaceSize: anObject [
+
+	youngSpaceSize := anObject
 ]

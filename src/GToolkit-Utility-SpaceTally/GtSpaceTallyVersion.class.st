@@ -11,6 +11,21 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
+{ #category : #printing }
+GtSpaceTallyVersion >> description [
+	^ String streamContents: [ :aStream |
+		self descriptionOn:  aStream ]
+]
+
+{ #category : #printing }
+GtSpaceTallyVersion >> descriptionOn: aStream [ 
+	
+	aStream print: self index.
+	self label ifNotNil: [ :aLabel | 
+		aStream << ', '.
+		aStream << aLabel ] 
+]
+
 { #category : #'gt - extensions' }
 GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
 	<gtView>
@@ -114,6 +129,14 @@ GtSpaceTallyVersion >> overviewData [
 		'Vm Memory Size' -> self vmMemorySize humanReadableIsqByteSize }
 ]
 
+{ #category : #printing }
+GtSpaceTallyVersion >> printOn: aStream [ 
+	super printOn: aStream .
+	
+	aStream parenthesize:  [
+		self descriptionOn: aStream ]
+]
+
 { #category : #recording }
 GtSpaceTallyVersion >> recordSystemWideData [
 	
@@ -200,5 +223,10 @@ GtSpaceTallyVersion >> totalInstSpace [
 
 { #category : #accessing }
 GtSpaceTallyVersion >> vmMemorySize [
-	^ vmStatisticsReport vmMemorySize
+	^ self vmStatisticsReport vmMemorySize
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> vmStatisticsReport [
+	^ vmStatisticsReport
 ]

@@ -19,6 +19,12 @@ GtVmStatisticsReport >> gargabeCollectionReport [
 	^ gargabeCollectionReport
 ]
 
+{ #category : #accessing }
+GtVmStatisticsReport >> gargabeCollectionReport: anObject [
+
+	gargabeCollectionReport := anObject
+]
+
 { #category : #'gt - extensions' }
 GtVmStatisticsReport >> gtViewReportsFor: aView [
 	<gtView>
@@ -40,6 +46,12 @@ GtVmStatisticsReport >> initialize [
 GtVmStatisticsReport >> memoryStatisticsReport [
 
 	^ memoryStatisticsReport
+]
+
+{ #category : #accessing }
+GtVmStatisticsReport >> memoryStatisticsReport: anObject [
+
+	memoryStatisticsReport := anObject
 ]
 
 { #category : #accessing }
