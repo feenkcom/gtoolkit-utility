@@ -6,10 +6,25 @@ Class {
 		'label',
 		'timestamp',
 		'spaceTally',
-		'vmMemorySize'
+		'vmStatisticsReport'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
+
+{ #category : #printing }
+GtSpaceTallyVersion >> description [
+	^ String streamContents: [ :aStream |
+		self descriptionOn:  aStream ]
+]
+
+{ #category : #printing }
+GtSpaceTallyVersion >> descriptionOn: aStream [ 
+	
+	aStream print: self index.
+	self label ifNotNil: [ :aLabel | 
+		aStream << ', '.
+		aStream << aLabel ] 
+]
 
 { #category : #'gt - extensions' }
 GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
@@ -42,6 +57,7 @@ GtSpaceTallyVersion >> gtViewTallyItemsFor: aView [
 	
 	^ aView forward
 		title: 'Tallies';
+		priority: 20;
 		object: [ spaceTally ];
 		view: #gtViewItemsFor:
 ]
@@ -52,9 +68,21 @@ GtSpaceTallyVersion >> gtViewTallyOverviewFor: aView [
 	
 	^ aView columnedList
 		title: 'Overview';
+		priority: 25;
 		items:  [ self overviewData ];
 		column: 'Name' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ]
+]
+
+{ #category : #'gt - extensions' }
+GtSpaceTallyVersion >> gtVmStatisticsFor: aView [
+	<gtView>
+	
+	^ aView forward
+		title: 'Vm Statistics';
+		priority: 30;
+		object: [ vmStatisticsReport ];
+		view: #gtViewTextualStatisticsFor:
 ]
 
 { #category : #accessing }
@@ -101,6 +129,14 @@ GtSpaceTallyVersion >> overviewData [
 		'Vm Memory Size' -> self vmMemorySize humanReadableIsqByteSize }
 ]
 
+{ #category : #printing }
+GtSpaceTallyVersion >> printOn: aStream [ 
+	super printOn: aStream .
+	
+	aStream parenthesize:  [
+		self descriptionOn: aStream ]
+]
+
 { #category : #recording }
 GtSpaceTallyVersion >> recordSystemWideData [
 	
@@ -118,8 +154,8 @@ GtSpaceTallyVersion >> recordySystemWideSpaceTally [
 
 { #category : #recording }
 GtSpaceTallyVersion >> recordyVmMemorySize [
-	
-	vmMemorySize := Smalltalk vm memorySize
+	vmStatisticsReport := GtVmStatisticsReport new.
+	vmStatisticsReport recordReportStatistics
 ]
 
 { #category : #accessing }
@@ -187,5 +223,10 @@ GtSpaceTallyVersion >> totalInstSpace [
 
 { #category : #accessing }
 GtSpaceTallyVersion >> vmMemorySize [
-	^ vmMemorySize
+	^ self vmStatisticsReport vmMemorySize
+]
+
+{ #category : #accessing }
+GtSpaceTallyVersion >> vmStatisticsReport [
+	^ vmStatisticsReport
 ]
