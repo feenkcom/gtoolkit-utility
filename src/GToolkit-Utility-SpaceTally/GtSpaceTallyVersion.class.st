@@ -6,7 +6,6 @@ Class {
 		'label',
 		'timestamp',
 		'spaceTally',
-		'vmMemorySize',
 		'vmStatisticsReport'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
@@ -43,6 +42,7 @@ GtSpaceTallyVersion >> gtViewTallyItemsFor: aView [
 	
 	^ aView forward
 		title: 'Tallies';
+		priority: 20;
 		object: [ spaceTally ];
 		view: #gtViewItemsFor:
 ]
@@ -53,6 +53,7 @@ GtSpaceTallyVersion >> gtViewTallyOverviewFor: aView [
 	
 	^ aView columnedList
 		title: 'Overview';
+		priority: 25;
 		items:  [ self overviewData ];
 		column: 'Name' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ]
@@ -119,9 +120,6 @@ GtSpaceTallyVersion >> recordySystemWideSpaceTally [
 
 { #category : #recording }
 GtSpaceTallyVersion >> recordyVmMemorySize [
-	
-	vmMemorySize := Smalltalk vm memorySize.
-	
 	vmStatisticsReport := GtVmStatisticsReport new.
 	vmStatisticsReport recordReportStatistics
 ]
@@ -191,5 +189,5 @@ GtSpaceTallyVersion >> totalInstSpace [
 
 { #category : #accessing }
 GtSpaceTallyVersion >> vmMemorySize [
-	^ vmMemorySize
+	^ vmStatisticsReport vmMemorySize
 ]

@@ -66,3 +66,8 @@ GtVmStatisticsReport >> recordReportStatistics [
 GtVmStatisticsReport >> reports [
 	^ { memoryStatisticsReport. gargabeCollectionReport}
 ]
+
+{ #category : #accessing }
+GtVmStatisticsReport >> vmMemorySize [ 
+	^ self memoryStatisticsReport memorySize
+]
