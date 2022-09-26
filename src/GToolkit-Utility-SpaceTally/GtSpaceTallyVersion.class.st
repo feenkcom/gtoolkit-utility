@@ -59,6 +59,17 @@ GtSpaceTallyVersion >> gtViewTallyOverviewFor: aView [
 		column: 'Value' text: [ :assoc | assoc value ]
 ]
 
+{ #category : #'gt - extensions' }
+GtSpaceTallyVersion >> gtVmStatisticsFor: aView [
+	<gtView>
+	
+	^ aView forward
+		title: 'Vm Statistics';
+		priority: 30;
+		object: [ vmStatisticsReport ];
+		view: #gtViewTextualStatisticsFor:
+]
+
 { #category : #accessing }
 GtSpaceTallyVersion >> index [
 
