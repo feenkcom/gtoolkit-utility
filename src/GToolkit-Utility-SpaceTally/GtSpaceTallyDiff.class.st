@@ -108,6 +108,17 @@ GtSpaceTallyDiff >> gtViewAnalyzedRepositoriesFor: aView [
 ]
 
 { #category : #'gt - extensions' }
+GtSpaceTallyDiff >> gtViewGCTextualDiffFor: aView [
+	<gtView>
+	
+	^ aView forward 
+		title: 'GC';
+		priority: 50;
+		object: [ self vmStatisticsReportsDiff ];
+		view: #gtViewTextualDiffFor: 
+]
+
+{ #category : #'gt - extensions' }
 GtSpaceTallyDiff >> gtViewVersionsDiffFor: aView [
 	"<gtView>"
 	
@@ -214,9 +225,9 @@ GtSpaceTallyDiff >> versionsOverviewData [
 ]
 
 { #category : #accessing }
-GtSpaceTallyDiff >> vmStatisticsReportHistory [ 
-	^ GtVmStatisticsReportHistory new
-		addReport: self sourceVersion vmStatisticsReport;
-		addReport: self targetVersion vmStatisticsReport;
+GtSpaceTallyDiff >> vmStatisticsReportsDiff [ 
+	^ GtVmStatisticsReportsDiff new
+		sourceReport: self sourceVersion vmStatisticsReport;
+		targetReport: self targetVersion vmStatisticsReport;
 		yourself
 ]
