@@ -123,11 +123,16 @@ GtVmGarbageCollectionReport >> tenureCount: anObject [
 ]
 
 { #category : #accessing }
-GtVmGarbageCollectionReport >> totalGtDuration [
-	^ Duration milliSeconds: self totalGtTime
+GtVmGarbageCollectionReport >> totalGcCount [
+	^ self fullGCs + self incrGCs
 ]
 
 { #category : #accessing }
-GtVmGarbageCollectionReport >> totalGtTime [ 
+GtVmGarbageCollectionReport >> totalGcDuration [
+	^ Duration milliSeconds: self totalGcTime
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> totalGcTime [ 
 	^ self fullGCTime + self incrGCTime
 ]
