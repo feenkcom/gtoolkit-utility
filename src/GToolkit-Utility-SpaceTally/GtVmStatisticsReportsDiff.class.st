@@ -14,6 +14,20 @@ GtVmStatisticsReportsDiff class >> leJsonV4Name [
 	^ #gtVmStatisticsReportDiff
 ]
 
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> fullGCsDiff [
+
+	^ self targetReport gargabeCollectionReport fullGCs 
+		- self sourceReport gargabeCollectionReport fullGCs.
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> fullGcTimeDiff [
+
+	^ self targetReport gargabeCollectionReport fullGCTime
+		- self sourceReport gargabeCollectionReport fullGCTime.
+]
+
 { #category : #'gt - extensions' }
 GtVmStatisticsReportsDiff >> gtViewReportsFor: aView [ 
 	<gtView>
@@ -37,20 +51,42 @@ GtVmStatisticsReportsDiff >> gtViewTextualDiffFor: aView [
 ]
 
 { #category : #accessing }
+GtVmStatisticsReportsDiff >> incrGCsDiff [
+
+	^ self targetReport gargabeCollectionReport incrGCs
+		- self sourceReport gargabeCollectionReport incrGCs.
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> incrGcTimeDiff [
+
+	^ self targetReport gargabeCollectionReport incrGCTime
+		- self sourceReport gargabeCollectionReport incrGCTime.
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> printOn: aStream [
+	| totalGcTimeDiff |
+
+	(sourceReport isNil or: [ targetReport isNil ]) ifTrue:
+		[ ^ super printOn: aStream ].
+
+	totalGcTimeDiff := self fullGcTimeDiff + self incrGcTimeDiff.
+	aStream
+		print: totalGcTimeDiff;
+		<< 'ms in GC'
+]
+
+{ #category : #printing }
 GtVmStatisticsReportsDiff >> printTextualDiffOn: aStream [
 	| fullGCs2 incrGCs2 upTime2 fullGCTime2 incrGCTime2 tenureCount2 |
 	
-	upTime2 := self targetReport upTime - self sourceReport upTime.
-	fullGCs2 := self targetReport gargabeCollectionReport fullGCs 
-		- self sourceReport gargabeCollectionReport fullGCs.
-	fullGCTime2 := self targetReport gargabeCollectionReport fullGCTime
-		- self sourceReport gargabeCollectionReport fullGCTime.
-	incrGCs2 := self targetReport gargabeCollectionReport incrGCs
-		- self sourceReport gargabeCollectionReport incrGCs.
-	incrGCTime2 := self targetReport gargabeCollectionReport incrGCTime
-		- self sourceReport gargabeCollectionReport incrGCTime.
-	tenureCount2 := self targetReport gargabeCollectionReport tenureCount
-		- self sourceReport gargabeCollectionReport tenureCount.
+	upTime2 := self uptimeDiff.
+	fullGCs2 := self fullGCsDiff.
+	fullGCTime2 := self fullGcTimeDiff.
+	incrGCs2 := self incrGCsDiff.
+	incrGCTime2 := self incrGcTimeDiff.
+	tenureCount2 := self tenureCountDiff.
 	
 	aStream	<<  'GC	'.
 	(fullGCs2 + incrGCs2) printWithCommasOn: aStream.
@@ -114,7 +150,20 @@ GtVmStatisticsReportsDiff >> targetReport: anObject [
 ]
 
 { #category : #accessing }
+GtVmStatisticsReportsDiff >> tenureCountDiff [
+
+	^ self targetReport gargabeCollectionReport tenureCount
+		- self sourceReport gargabeCollectionReport tenureCount.
+]
+
+{ #category : #accessing }
 GtVmStatisticsReportsDiff >> textualDiff [
 	^ String streamContents: [ :aStream |
 		self printTextualDiffOn:  aStream ]
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> uptimeDiff [
+
+	^ self targetReport upTime - self sourceReport upTime
 ]
