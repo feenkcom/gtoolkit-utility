@@ -33,7 +33,7 @@ GtVmStatisticsReportsDiff >> gtViewTextualDiffFor: aView [
 	
 	^ aView textEditor
 		title: 'Difference (textual)';
-		text: [ self textualDiff ]
+		text: [ self textualDiff asRopedText glamorousCodeFont ]
 ]
 
 { #category : #accessing }
