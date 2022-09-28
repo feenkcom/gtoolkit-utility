@@ -8,6 +8,12 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
+{ #category : #accessing }
+GtVmStatisticsReportsDiff class >> leJsonV4Name [
+
+	^ #gtVmStatisticsReportDiff
+]
+
 { #category : #'gt - extensions' }
 GtVmStatisticsReportsDiff >> gtViewReportsFor: aView [ 
 	<gtView>

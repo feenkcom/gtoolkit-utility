@@ -59,6 +59,12 @@ GtVmRuntimeReport >> timestamp [
 ]
 
 { #category : #accessing }
+GtVmRuntimeReport >> timestamp: anObject [
+
+	timestamp := anObject
+]
+
+{ #category : #accessing }
 GtVmRuntimeReport >> upTime [
 	^ upTime
 ]
