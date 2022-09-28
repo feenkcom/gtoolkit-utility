@@ -14,6 +14,11 @@ GtVmStatisticsReportsDiff class >> leJsonV4Name [
 	^ #gtVmStatisticsReportDiff
 ]
 
+{ #category : #initialization }
+GtVmStatisticsReportsDiff >> defaultReportClass [
+	^ GtVmStatisticsReport
+]
+
 { #category : #accessing }
 GtVmStatisticsReportsDiff >> fullGCsDiff [
 
@@ -123,6 +128,16 @@ GtVmStatisticsReportsDiff >> printTextualDiffOn: aStream [
 		[aStream << ' (avg '; print: (incrGCs2 / tenureCount2) asInteger; << ' GCs/tenure)'].
 	aStream	cr.
 	
+]
+
+{ #category : #profiling }
+GtVmStatisticsReportsDiff >> recordSourceReport [
+	^ self sourceReport: self defaultReportClass recordNewReport
+]
+
+{ #category : #profiling }
+GtVmStatisticsReportsDiff >> recordTargetReport [
+	^ self targetReport: self defaultReportClass recordNewReport
 ]
 
 { #category : #accessing }
