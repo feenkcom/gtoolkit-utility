@@ -8,6 +8,11 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
+{ #category : #profiling }
+GtVmRuntimeReport class >> recordNewReport [
+	^ self new recordReportStatistics
+]
+
 { #category : #'gt - extensions' }
 GtVmRuntimeReport >> gtViewTextualStatisticsFor: aView [
 	<gtView>
@@ -56,6 +61,12 @@ GtVmRuntimeReport >> textualStatistics [
 { #category : #accessing }
 GtVmRuntimeReport >> timestamp [
 	^ timestamp
+]
+
+{ #category : #accessing }
+GtVmRuntimeReport >> timestamp: anObject [
+
+	timestamp := anObject
 ]
 
 { #category : #accessing }
