@@ -90,41 +90,46 @@ GtVmStatisticsReportsDiff >> printTextualDiffOn: aStream [
 	incrGCTime2 := self incrGcTimeDiff.
 	tenureCount2 := self tenureCountDiff.
 	
-	aStream	<<  'GC	'.
+	aStream <<  'GC	'.
 	(fullGCs2 + incrGCs2) printWithCommasOn: aStream.
 	fullGCs2 + incrGCs2 > 0 ifTrue: [
 		aStream
 			<< ' ('; 
 			print: ((upTime2 / (fullGCs2 + incrGCs2)) roundTo: 1); 
-			<< 'ms between GCs)'.
-	].
+			<< 'ms between GCs)' ].
 	aStream cr.
-	aStream	<< '	uptime		'; print: ((upTime2 / 1000.0) roundTo: 0.1); << 's'; cr.
-	aStream	<< '	full			';
+	
+	aStream << '	uptime		'; print: ((upTime2 / 1000.0) roundTo: 0.1); << 's'; cr.
+	aStream << '	full			';
 		print: fullGCs2; << ' totalling '.
 	fullGCTime2 printWithCommasOn: aStream.
-	aStream << 'ms (';
-		print: ((fullGCTime2 / upTime2 * 100) roundTo: 0.1);
-		<< '% uptime)'.
-	fullGCs2 = 0 ifFalse:
-		[aStream	<< ', avg '; print: ((fullGCTime2 / fullGCs2) roundTo: 0.1); << 'ms'].
-	aStream	cr.
-	aStream	<< '	incr		';
+	aStream << 'ms ('.
+	upTime2 > 0 ifTrue: [
+		aStream 
+			print: ((fullGCTime2 / upTime2 * 100) roundTo: 0.1);
+			<< '% uptime)' ].
+	fullGCs2 > 0 ifTrue: [ 
+		aStream	<< ', avg '; print: ((fullGCTime2 / fullGCs2) roundTo: 0.1); << 'ms' ].
+	aStream cr.
+	
+	aStream << '	incr		';
 		print: incrGCs2; << ' totalling '.
 	incrGCTime2 printWithCommasOn: aStream.
-	aStream << 'ms (';
-		print: ((incrGCTime2 / upTime2 * 100) roundTo: 0.1);
-		<< '% uptime), avg '.
+	aStream 
+		<< 'ms ('.
+	upTime2 > 0 ifTrue: [
+		aStream
+			print: ((incrGCTime2 / upTime2 * 100) roundTo: 0.1);
+			<< '% uptime), avg ' ].
 	incrGCs2 > 0 ifTrue: [
-		 aStream print: ((incrGCTime2 / incrGCs2) roundTo: 0.1); << 'ms'
-	].
-	aStream cr.
-	aStream	<< '	tenures		'.
-	tenureCount2 printWithCommasOn: aStream.
-	tenureCount2 isZero ifFalse:
-		[aStream << ' (avg '; print: (incrGCs2 / tenureCount2) asInteger; << ' GCs/tenure)'].
-	aStream	cr.
+		 aStream print: ((incrGCTime2 / incrGCs2) roundTo: 0.1); << 'ms' ].
 	
+	aStream cr.
+	aStream << '	tenures		'.
+	tenureCount2 printWithCommasOn: aStream.
+	tenureCount2 > 0 ifTrue: [
+		aStream << ' (avg '; print: (incrGCs2 / tenureCount2) asInteger; << ' GCs/tenure)' ].
+	aStream cr.
 ]
 
 { #category : #profiling }
@@ -183,4 +188,9 @@ GtVmStatisticsReportsDiff >> totalGcTimeDiff [
 GtVmStatisticsReportsDiff >> uptimeDiff [
 
 	^ self targetReport upTime - self sourceReport upTime
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> vmMemorySizeAtEnd [
+	^ self targetReport vmMemorySize
 ]
