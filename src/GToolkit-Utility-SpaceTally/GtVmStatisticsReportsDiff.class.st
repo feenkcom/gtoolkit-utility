@@ -71,14 +71,11 @@ GtVmStatisticsReportsDiff >> incrGcTimeDiff [
 
 { #category : #accessing }
 GtVmStatisticsReportsDiff >> printOn: aStream [
-	| totalGcTimeDiff |
-
 	(sourceReport isNil or: [ targetReport isNil ]) ifTrue:
 		[ ^ super printOn: aStream ].
-
-	totalGcTimeDiff := self fullGcTimeDiff + self incrGcTimeDiff.
+	
 	aStream
-		print: totalGcTimeDiff;
+		print: self totalGcTimeDiff;
 		<< 'ms in GC'
 ]
 
@@ -175,6 +172,11 @@ GtVmStatisticsReportsDiff >> tenureCountDiff [
 GtVmStatisticsReportsDiff >> textualDiff [
 	^ String streamContents: [ :aStream |
 		self printTextualDiffOn:  aStream ]
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> totalGcTimeDiff [ 
+	^ self fullGcTimeDiff + self incrGcTimeDiff.
 ]
 
 { #category : #accessing }
