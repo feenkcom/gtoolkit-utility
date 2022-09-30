@@ -13,6 +13,13 @@ Class {
 }
 
 { #category : #accessing }
+GtBeaconEventsCollector class >> cleanUp [
+	defaultInstance ifNotNil: [ 
+		defaultInstance stop.
+		defaultInstance := nil ]
+]
+
+{ #category : #accessing }
 GtBeaconEventsCollector class >> defaultInstance [
 	^ defaultInstance ifNil: [ 
 		defaultInstance := self new ]

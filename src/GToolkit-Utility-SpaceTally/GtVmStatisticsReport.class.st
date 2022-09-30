@@ -80,6 +80,11 @@ GtVmStatisticsReport >> reports [
 ]
 
 { #category : #accessing }
+GtVmStatisticsReport >> vmFreeMemory [
+	^ self memoryStatisticsReport freeSize
+]
+
+{ #category : #accessing }
 GtVmStatisticsReport >> vmMemorySize [ 
 	^ self memoryStatisticsReport memorySize
 ]

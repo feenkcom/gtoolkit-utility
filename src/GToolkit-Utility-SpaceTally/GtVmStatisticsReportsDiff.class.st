@@ -50,9 +50,16 @@ GtVmStatisticsReportsDiff >> gtViewReportsFor: aView [
 GtVmStatisticsReportsDiff >> gtViewTextualDiffFor: aView [
 	<gtView>
 	
+	self hasReports ifFalse: [ ^ aView empty].
+	
 	^ aView textEditor
 		title: 'Difference (textual)';
 		text: [ self textualDiff asRopedText glamorousCodeFont ]
+]
+
+{ #category : #testing }
+GtVmStatisticsReportsDiff >> hasReports [
+	^ self sourceReport notNil and: [ self targetReport notNil]
 ]
 
 { #category : #accessing }
@@ -188,6 +195,11 @@ GtVmStatisticsReportsDiff >> totalGcTimeDiff [
 GtVmStatisticsReportsDiff >> uptimeDiff [
 
 	^ self targetReport upTime - self sourceReport upTime
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> vmFreeMemoryAtEnd [
+	^ self targetReport vmFreeMemory
 ]
 
 { #category : #accessing }
