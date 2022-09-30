@@ -11,3 +11,20 @@ Collection >> collect: elementBlock separatedBy: separatorBlock [
 
 	^ newCollection as: self species
 ]
+
+{ #category : #'*GToolkit-Utility-Basic' }
+Collection >> gtSumWithNilValues: aBlock [
+	"Perform a sum using '+' on the objects of this collection using aBlock. 
+	aBlock can return nil, values which are ignored.
+	nil is returned for empty collections"
+	
+	^ self 
+		inject: nil "nil indicates there is no value"
+		into: [ :sum :anObject |
+			sum
+				ifNil: [ aBlock value: anObject ] 
+				ifNotNil: [
+					(aBlock value: anObject) 
+						ifNil: [ sum ]
+						ifNotNil: [ :aNewValue | sum + aNewValue ] ] ]
+]
