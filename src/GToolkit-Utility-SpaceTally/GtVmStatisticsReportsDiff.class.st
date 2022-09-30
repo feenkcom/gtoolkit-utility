@@ -198,6 +198,11 @@ GtVmStatisticsReportsDiff >> uptimeDiff [
 ]
 
 { #category : #accessing }
+GtVmStatisticsReportsDiff >> vmFreeMemoryAtEnd [
+	^ self targetReport vmFreeMemory
+]
+
+{ #category : #accessing }
 GtVmStatisticsReportsDiff >> vmMemorySizeAtEnd [
 	^ self targetReport vmMemorySize
 ]
