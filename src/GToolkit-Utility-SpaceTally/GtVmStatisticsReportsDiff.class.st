@@ -19,14 +19,14 @@ GtVmStatisticsReportsDiff >> defaultReportClass [
 	^ GtVmStatisticsReport
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - gc details' }
 GtVmStatisticsReportsDiff >> fullGCsDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCs 
 		- self sourceReport gargabeCollectionReport fullGCs.
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - gc details' }
 GtVmStatisticsReportsDiff >> fullGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCTime
@@ -62,21 +62,21 @@ GtVmStatisticsReportsDiff >> hasReports [
 	^ self sourceReport notNil and: [ self targetReport notNil]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - gc details' }
 GtVmStatisticsReportsDiff >> incrGCsDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCs
 		- self sourceReport gargabeCollectionReport incrGCs.
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - gc details' }
 GtVmStatisticsReportsDiff >> incrGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCTime
 		- self sourceReport gargabeCollectionReport incrGCTime.
 ]
 
-{ #category : #accessing }
+{ #category : #printing }
 GtVmStatisticsReportsDiff >> printOn: aStream [
 	(sourceReport isNil or: [ targetReport isNil ]) ifTrue:
 		[ ^ super printOn: aStream ].
@@ -173,7 +173,7 @@ GtVmStatisticsReportsDiff >> targetReport: anObject [
 	targetReport := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - gc details' }
 GtVmStatisticsReportsDiff >> tenureCountDiff [
 
 	^ self targetReport gargabeCollectionReport tenureCount
@@ -186,7 +186,7 @@ GtVmStatisticsReportsDiff >> textualDiff [
 		self printTextualDiffOn:  aStream ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - gc details' }
 GtVmStatisticsReportsDiff >> totalGcTimeDiff [ 
 	^ self fullGcTimeDiff + self incrGcTimeDiff.
 ]
@@ -197,27 +197,27 @@ GtVmStatisticsReportsDiff >> uptimeDiff [
 	^ self targetReport upTime - self sourceReport upTime
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - vm memory details' }
 GtVmStatisticsReportsDiff >> vmFreeMemoryAtEnd [
 	^ self targetReport vmFreeMemory
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - vm memory details' }
 GtVmStatisticsReportsDiff >> vmMaximumMemorySize [
 	^ self vmMemorySizeAtEnd max: self vmMemorySizeAtEnd
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - vm memory details' }
 GtVmStatisticsReportsDiff >> vmMemorySizeAtEnd [
 	^ self targetReport vmMemorySize
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - vm memory details' }
 GtVmStatisticsReportsDiff >> vmMemorySizeAtStart [
 	^ self sourceReport vmMemorySize
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - vm memory details' }
 GtVmStatisticsReportsDiff >> vmMinimumMemorySize [
 	^ self vmMemorySizeAtEnd min: self vmMemorySizeAtEnd
 ]
