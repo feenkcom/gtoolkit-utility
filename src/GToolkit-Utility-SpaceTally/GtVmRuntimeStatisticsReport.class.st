@@ -10,7 +10,7 @@ Class {
 
 { #category : #serialization }
 GtVmRuntimeStatisticsReport class >> leJsonV4Name [
-	^ #gtVmStatisticsReport
+	^ #gtVmRuntimeStatisticsDiffReport
 ]
 
 { #category : #accessing }

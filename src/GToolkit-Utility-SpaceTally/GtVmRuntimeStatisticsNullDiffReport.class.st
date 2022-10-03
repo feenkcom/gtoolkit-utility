@@ -7,7 +7,7 @@ Class {
 { #category : #serialization }
 GtVmRuntimeStatisticsNullDiffReport class >> leJsonV4Name [
 
-	^ #gtVmStatisticsReportsNullDiff
+	^ #gtVmRuntimeStatisticsNullDiffReport
 ]
 
 { #category : #profiling }

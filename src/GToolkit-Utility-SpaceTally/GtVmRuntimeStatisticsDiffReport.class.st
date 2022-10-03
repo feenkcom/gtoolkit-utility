@@ -8,10 +8,10 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
-{ #category : #accessing }
+{ #category : #serialization }
 GtVmRuntimeStatisticsDiffReport class >> leJsonV4Name [
 
-	^ #gtVmStatisticsReportDiff
+	^ #gtVmRuntimeStatisticsDiffReport
 ]
 
 { #category : #initialization }
