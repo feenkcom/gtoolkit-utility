@@ -203,6 +203,21 @@ GtVmStatisticsReportsDiff >> vmFreeMemoryAtEnd [
 ]
 
 { #category : #accessing }
+GtVmStatisticsReportsDiff >> vmMaximumMemorySize [
+	^ self vmMemorySizeAtEnd max: self vmMemorySizeAtEnd
+]
+
+{ #category : #accessing }
 GtVmStatisticsReportsDiff >> vmMemorySizeAtEnd [
 	^ self targetReport vmMemorySize
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> vmMemorySizeAtStart [
+	^ self sourceReport vmMemorySize
+]
+
+{ #category : #accessing }
+GtVmStatisticsReportsDiff >> vmMinimumMemorySize [
+	^ self vmMemorySizeAtEnd min: self vmMemorySizeAtEnd
 ]
