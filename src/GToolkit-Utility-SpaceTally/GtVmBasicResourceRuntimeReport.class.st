@@ -1,5 +1,5 @@
 Class {
-	#name : #GtVmRuntimeReport,
+	#name : #GtVmBasicResourceRuntimeReport,
 	#superclass : #Object,
 	#instVars : [
 		'timestamp',
@@ -9,12 +9,12 @@ Class {
 }
 
 { #category : #profiling }
-GtVmRuntimeReport class >> recordNewReport [
+GtVmBasicResourceRuntimeReport class >> recordNewReport [
 	^ self new recordReportStatistics
 ]
 
 { #category : #'gt - extensions' }
-GtVmRuntimeReport >> gtViewTextualStatisticsFor: aView [
+GtVmBasicResourceRuntimeReport >> gtViewTextualStatisticsFor: aView [
 	<gtView>
 	
 	^ aView textEditor
@@ -23,7 +23,7 @@ GtVmRuntimeReport >> gtViewTextualStatisticsFor: aView [
 ]
 
 { #category : #printing }
-GtVmRuntimeReport >> printOn: aStream [
+GtVmBasicResourceRuntimeReport >> printOn: aStream [
 	super printOn: aStream .
 	
 	aStream parenthesize: [ 
@@ -33,11 +33,11 @@ GtVmRuntimeReport >> printOn: aStream [
 ]
 
 { #category : #printing }
-GtVmRuntimeReport >> printTextualStatisticsOn: aStream [
+GtVmBasicResourceRuntimeReport >> printTextualStatisticsOn: aStream [
 ]
 
 { #category : #printing }
-GtVmRuntimeReport >> printUpTimeOn: aStream [ 
+GtVmBasicResourceRuntimeReport >> printUpTimeOn: aStream [ 
 
 	aStream	
 		print: (upTime / 1000 / 60 // 60); nextPut: $h;
@@ -46,42 +46,42 @@ GtVmRuntimeReport >> printUpTimeOn: aStream [
 ]
 
 { #category : #profiling }
-GtVmRuntimeReport >> recordReportStatistics [
+GtVmBasicResourceRuntimeReport >> recordReportStatistics [
 	
 	timestamp := DateAndTime now.
 	upTime := Time millisecondClockValue.
 ]
 
 { #category : #printing }
-GtVmRuntimeReport >> textualStatistics [
+GtVmBasicResourceRuntimeReport >> textualStatistics [
 	^ String streamContents: [ :aStream |
 		self printTextualStatisticsOn:  aStream ]
 ]
 
 { #category : #accessing }
-GtVmRuntimeReport >> timestamp [
+GtVmBasicResourceRuntimeReport >> timestamp [
 	^ timestamp
 ]
 
 { #category : #accessing }
-GtVmRuntimeReport >> timestamp: anObject [
+GtVmBasicResourceRuntimeReport >> timestamp: anObject [
 
 	timestamp := anObject
 ]
 
 { #category : #accessing }
-GtVmRuntimeReport >> upTime [
+GtVmBasicResourceRuntimeReport >> upTime [
 	^ upTime
 ]
 
 { #category : #accessing }
-GtVmRuntimeReport >> upTime: anObject [
+GtVmBasicResourceRuntimeReport >> upTime: anObject [
 
 	upTime := anObject
 ]
 
 { #category : #printing }
-GtVmRuntimeReport >> upTimeDescription [
+GtVmBasicResourceRuntimeReport >> upTimeDescription [
 	^ String streamContents: [ :aStream |
 		self printUpTimeOn: aStream ]
 ]

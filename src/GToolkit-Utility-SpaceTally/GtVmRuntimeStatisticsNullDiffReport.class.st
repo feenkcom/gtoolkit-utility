@@ -1,21 +1,21 @@
 Class {
-	#name : #GtVmStatisticsReportsNullDiff,
+	#name : #GtVmRuntimeStatisticsNullDiffReport,
 	#superclass : #Object,
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
 { #category : #serialization }
-GtVmStatisticsReportsNullDiff class >> leJsonV4Name [
+GtVmRuntimeStatisticsNullDiffReport class >> leJsonV4Name [
 
 	^ #gtVmStatisticsReportsNullDiff
 ]
 
 { #category : #profiling }
-GtVmStatisticsReportsNullDiff >> recordSourceReport [
+GtVmRuntimeStatisticsNullDiffReport >> recordSourceReport [
 	"Do nothing"
 ]
 
 { #category : #profiling }
-GtVmStatisticsReportsNullDiff >> recordTargetReport [
+GtVmRuntimeStatisticsNullDiffReport >> recordTargetReport [
 	"Do nothing"
 ]

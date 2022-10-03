@@ -1,6 +1,6 @@
 Class {
-	#name : #GtVmStatisticsReport,
-	#superclass : #GtVmRuntimeReport,
+	#name : #GtVmRuntimeStatisticsReport,
+	#superclass : #GtVmBasicResourceRuntimeReport,
 	#instVars : [
 		'gargabeCollectionReport',
 		'memoryStatisticsReport'
@@ -9,24 +9,24 @@ Class {
 }
 
 { #category : #serialization }
-GtVmStatisticsReport class >> leJsonV4Name [
+GtVmRuntimeStatisticsReport class >> leJsonV4Name [
 	^ #gtVmStatisticsReport
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> gargabeCollectionReport [
+GtVmRuntimeStatisticsReport >> gargabeCollectionReport [
 
 	^ gargabeCollectionReport
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> gargabeCollectionReport: anObject [
+GtVmRuntimeStatisticsReport >> gargabeCollectionReport: anObject [
 
 	gargabeCollectionReport := anObject
 ]
 
 { #category : #'gt - extensions' }
-GtVmStatisticsReport >> gtViewReportsFor: aView [
+GtVmRuntimeStatisticsReport >> gtViewReportsFor: aView [
 	<gtView>
 	
 	^ aView list 
@@ -35,7 +35,7 @@ GtVmStatisticsReport >> gtViewReportsFor: aView [
 ]
 
 { #category : #initialization }
-GtVmStatisticsReport >> initialize [
+GtVmRuntimeStatisticsReport >> initialize [
 	super initialize.
 	
 	gargabeCollectionReport := GtVmGarbageCollectionReport new.
@@ -43,19 +43,19 @@ GtVmStatisticsReport >> initialize [
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> memoryStatisticsReport [
+GtVmRuntimeStatisticsReport >> memoryStatisticsReport [
 
 	^ memoryStatisticsReport
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> memoryStatisticsReport: anObject [
+GtVmRuntimeStatisticsReport >> memoryStatisticsReport: anObject [
 
 	memoryStatisticsReport := anObject
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> printTextualStatisticsOn: aStream [
+GtVmRuntimeStatisticsReport >> printTextualStatisticsOn: aStream [
 	aStream	
 		<< 'uptime			'.
 	self printUpTimeOn:  aStream.
@@ -66,7 +66,7 @@ GtVmStatisticsReport >> printTextualStatisticsOn: aStream [
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> recordReportStatistics [
+GtVmRuntimeStatisticsReport >> recordReportStatistics [
 	super recordReportStatistics.
 	
 	self reports do: [ :aReport |
@@ -75,16 +75,16 @@ GtVmStatisticsReport >> recordReportStatistics [
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> reports [
+GtVmRuntimeStatisticsReport >> reports [
 	^ { memoryStatisticsReport. gargabeCollectionReport}
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> vmFreeMemory [
+GtVmRuntimeStatisticsReport >> vmFreeMemory [
 	^ self memoryStatisticsReport freeSize
 ]
 
 { #category : #accessing }
-GtVmStatisticsReport >> vmMemorySize [ 
+GtVmRuntimeStatisticsReport >> vmMemorySize [ 
 	^ self memoryStatisticsReport memorySize
 ]
