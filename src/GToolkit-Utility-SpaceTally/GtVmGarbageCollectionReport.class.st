@@ -1,6 +1,6 @@
 Class {
 	#name : #GtVmGarbageCollectionReport,
-	#superclass : #GtVmRuntimeReport,
+	#superclass : #GtVmBasicResourceRuntimeReport,
 	#instVars : [
 		'fullGCs',
 		'fullGCTime',

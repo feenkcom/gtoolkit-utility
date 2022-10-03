@@ -154,7 +154,7 @@ GtSpaceTallyVersion >> recordySystemWideSpaceTally [
 
 { #category : #recording }
 GtSpaceTallyVersion >> recordyVmMemorySize [
-	vmStatisticsReport := GtVmStatisticsReport new.
+	vmStatisticsReport := GtVmRuntimeStatisticsReport new.
 	vmStatisticsReport recordReportStatistics
 ]
 

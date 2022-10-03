@@ -1,5 +1,5 @@
 Class {
-	#name : #GtVmStatisticsReportsDiff,
+	#name : #GtVmRuntimeStatisticsDiffReport,
 	#superclass : #Object,
 	#instVars : [
 		'sourceReport',
@@ -8,33 +8,33 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff class >> leJsonV4Name [
+{ #category : #serialization }
+GtVmRuntimeStatisticsDiffReport class >> leJsonV4Name [
 
-	^ #gtVmStatisticsReportDiff
+	^ #gtVmRuntimeStatisticsDiffReport
 ]
 
 { #category : #initialization }
-GtVmStatisticsReportsDiff >> defaultReportClass [
-	^ GtVmStatisticsReport
+GtVmRuntimeStatisticsDiffReport >> defaultReportClass [
+	^ GtVmRuntimeStatisticsReport
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> fullGCsDiff [
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> fullGCsDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCs 
 		- self sourceReport gargabeCollectionReport fullGCs.
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> fullGcTimeDiff [
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> fullGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCTime
 		- self sourceReport gargabeCollectionReport fullGCTime.
 ]
 
 { #category : #'gt - extensions' }
-GtVmStatisticsReportsDiff >> gtViewReportsFor: aView [ 
+GtVmRuntimeStatisticsDiffReport >> gtViewReportsFor: aView [ 
 	<gtView>
 	
 	^ aView columnedList
@@ -47,7 +47,7 @@ GtVmStatisticsReportsDiff >> gtViewReportsFor: aView [
 ]
 
 { #category : #'gt - extensions' }
-GtVmStatisticsReportsDiff >> gtViewTextualDiffFor: aView [
+GtVmRuntimeStatisticsDiffReport >> gtViewTextualDiffFor: aView [
 	<gtView>
 	
 	self hasReports ifFalse: [ ^ aView empty].
@@ -58,26 +58,26 @@ GtVmStatisticsReportsDiff >> gtViewTextualDiffFor: aView [
 ]
 
 { #category : #testing }
-GtVmStatisticsReportsDiff >> hasReports [
+GtVmRuntimeStatisticsDiffReport >> hasReports [
 	^ self sourceReport notNil and: [ self targetReport notNil]
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> incrGCsDiff [
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> incrGCsDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCs
 		- self sourceReport gargabeCollectionReport incrGCs.
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> incrGcTimeDiff [
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> incrGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCTime
 		- self sourceReport gargabeCollectionReport incrGCTime.
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> printOn: aStream [
+{ #category : #printing }
+GtVmRuntimeStatisticsDiffReport >> printOn: aStream [
 	(sourceReport isNil or: [ targetReport isNil ]) ifTrue:
 		[ ^ super printOn: aStream ].
 	
@@ -87,7 +87,7 @@ GtVmStatisticsReportsDiff >> printOn: aStream [
 ]
 
 { #category : #printing }
-GtVmStatisticsReportsDiff >> printTextualDiffOn: aStream [
+GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
 	| fullGCs2 incrGCs2 upTime2 fullGCTime2 incrGCTime2 tenureCount2 |
 	
 	upTime2 := self uptimeDiff.
@@ -140,84 +140,84 @@ GtVmStatisticsReportsDiff >> printTextualDiffOn: aStream [
 ]
 
 { #category : #profiling }
-GtVmStatisticsReportsDiff >> recordSourceReport [
+GtVmRuntimeStatisticsDiffReport >> recordSourceReport [
 	^ self sourceReport: self defaultReportClass recordNewReport
 ]
 
 { #category : #profiling }
-GtVmStatisticsReportsDiff >> recordTargetReport [
+GtVmRuntimeStatisticsDiffReport >> recordTargetReport [
 	^ self targetReport: self defaultReportClass recordNewReport
 ]
 
 { #category : #accessing }
-GtVmStatisticsReportsDiff >> sourceReport [
+GtVmRuntimeStatisticsDiffReport >> sourceReport [
 
 	^ sourceReport
 ]
 
 { #category : #accessing }
-GtVmStatisticsReportsDiff >> sourceReport: anObject [
+GtVmRuntimeStatisticsDiffReport >> sourceReport: anObject [
 
 	sourceReport := anObject
 ]
 
 { #category : #accessing }
-GtVmStatisticsReportsDiff >> targetReport [
+GtVmRuntimeStatisticsDiffReport >> targetReport [
 
 	^ targetReport
 ]
 
 { #category : #accessing }
-GtVmStatisticsReportsDiff >> targetReport: anObject [
+GtVmRuntimeStatisticsDiffReport >> targetReport: anObject [
 
 	targetReport := anObject
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> tenureCountDiff [
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> tenureCountDiff [
 
 	^ self targetReport gargabeCollectionReport tenureCount
 		- self sourceReport gargabeCollectionReport tenureCount.
 ]
 
 { #category : #accessing }
-GtVmStatisticsReportsDiff >> textualDiff [
+GtVmRuntimeStatisticsDiffReport >> textualDiff [
 	^ String streamContents: [ :aStream |
 		self printTextualDiffOn:  aStream ]
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> totalGcTimeDiff [ 
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> totalGcTimeDiff [ 
 	^ self fullGcTimeDiff + self incrGcTimeDiff.
 ]
 
 { #category : #accessing }
-GtVmStatisticsReportsDiff >> uptimeDiff [
+GtVmRuntimeStatisticsDiffReport >> uptimeDiff [
 
 	^ self targetReport upTime - self sourceReport upTime
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> vmFreeMemoryAtEnd [
+{ #category : #'accessing - vm memory details' }
+GtVmRuntimeStatisticsDiffReport >> vmFreeMemoryAtEnd [
 	^ self targetReport vmFreeMemory
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> vmMaximumMemorySize [
+{ #category : #'accessing - vm memory details' }
+GtVmRuntimeStatisticsDiffReport >> vmMaximumMemorySize [
 	^ self vmMemorySizeAtEnd max: self vmMemorySizeAtEnd
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> vmMemorySizeAtEnd [
+{ #category : #'accessing - vm memory details' }
+GtVmRuntimeStatisticsDiffReport >> vmMemorySizeAtEnd [
 	^ self targetReport vmMemorySize
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> vmMemorySizeAtStart [
+{ #category : #'accessing - vm memory details' }
+GtVmRuntimeStatisticsDiffReport >> vmMemorySizeAtStart [
 	^ self sourceReport vmMemorySize
 ]
 
-{ #category : #accessing }
-GtVmStatisticsReportsDiff >> vmMinimumMemorySize [
+{ #category : #'accessing - vm memory details' }
+GtVmRuntimeStatisticsDiffReport >> vmMinimumMemorySize [
 	^ self vmMemorySizeAtEnd min: self vmMemorySizeAtEnd
 ]

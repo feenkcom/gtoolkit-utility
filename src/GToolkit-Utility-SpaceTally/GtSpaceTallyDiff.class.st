@@ -114,7 +114,7 @@ GtSpaceTallyDiff >> gtViewGCTextualDiffFor: aView [
 	^ aView forward 
 		title: 'GC';
 		priority: 50;
-		object: [ self vmStatisticsReportsDiff ];
+		object: [ self vmStatisticsDiffReport ];
 		view: #gtViewTextualDiffFor: 
 ]
 
@@ -225,8 +225,8 @@ GtSpaceTallyDiff >> versionsOverviewData [
 ]
 
 { #category : #accessing }
-GtSpaceTallyDiff >> vmStatisticsReportsDiff [ 
-	^ GtVmStatisticsReportsDiff new
+GtSpaceTallyDiff >> vmStatisticsDiffReport [ 
+	^ GtVmRuntimeStatisticsDiffReport new
 		sourceReport: self sourceVersion vmStatisticsReport;
 		targetReport: self targetVersion vmStatisticsReport;
 		yourself

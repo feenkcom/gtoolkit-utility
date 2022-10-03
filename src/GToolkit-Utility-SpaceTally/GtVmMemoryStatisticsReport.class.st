@@ -1,12 +1,11 @@
 Class {
 	#name : #GtVmMemoryStatisticsReport,
-	#superclass : #GtVmRuntimeReport,
+	#superclass : #GtVmBasicResourceRuntimeReport,
 	#instVars : [
 		'memorySize',
 		'oldSpaceSize',
 		'youngSpaceSize',
-		'freeSize',
-		'tenureCount'
+		'freeSize'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
@@ -72,7 +71,7 @@ GtVmMemoryStatisticsReport >> printTextualStatisticsOn: aStream [
 		print: ((freeSize / memorySize * 100) roundTo: 0.1); << '%)'; cr.
 ]
 
-{ #category : #accessing }
+{ #category : #profiling }
 GtVmMemoryStatisticsReport >> recordReportStatistics [
 	| vm |
 	
@@ -81,20 +80,8 @@ GtVmMemoryStatisticsReport >> recordReportStatistics [
 	
 	oldSpaceSize := vm oldSpace.
 	youngSpaceSize := vm youngSpaceSize.
-	tenureCount := vm tenureCount.
 	memorySize := vm memorySize.
 	freeSize := vm freeSize.
-]
-
-{ #category : #accessing }
-GtVmMemoryStatisticsReport >> tenureCount [
-	^ tenureCount
-]
-
-{ #category : #accessing }
-GtVmMemoryStatisticsReport >> tenureCount: anObject [
-
-	tenureCount := anObject
 ]
 
 { #category : #accessing }
