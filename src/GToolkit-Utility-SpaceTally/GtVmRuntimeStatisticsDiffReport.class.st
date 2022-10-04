@@ -78,8 +78,8 @@ GtVmRuntimeStatisticsDiffReport >> incrGcTimeDiff [
 
 { #category : #printing }
 GtVmRuntimeStatisticsDiffReport >> printOn: aStream [
-	(sourceReport isNil or: [ targetReport isNil ]) ifTrue:
-		[ ^ super printOn: aStream ].
+	self hasReports ifFalse: [ 
+		^ super printOn: aStream ].
 	
 	aStream
 		print: self totalGcTimeDiff;
