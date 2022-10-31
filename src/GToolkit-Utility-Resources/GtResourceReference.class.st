@@ -105,6 +105,12 @@ GtResourceReference >> basename [
 	^ self fileReference basename
 ]
 
+{ #category : #accessing }
+GtResourceReference >> basenameWithoutExtension [
+
+	^ self fileReference basenameWithoutExtension
+]
+
 { #category : #streams }
 GtResourceReference >> binaryReadStream [
 	^ self fileReference binaryReadStream
