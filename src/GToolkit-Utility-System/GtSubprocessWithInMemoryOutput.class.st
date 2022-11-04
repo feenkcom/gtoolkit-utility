@@ -124,6 +124,22 @@ GtSubprocessWithInMemoryOutput >> command: aString [
 	builder command: aString
 ]
 
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> commandLineString [
+	"Answer the equivalent command line command"
+	
+	^ String streamContents: [ :stream |
+		stream 
+			<< builder command;
+			nextPut: Character space.
+		builder arguments 
+			do: [ :arg |
+				stream << ((arg includes: Character space)
+					ifTrue: [ arg printString ]
+					ifFalse: [ arg ]) ]
+			separatedBy: [ stream nextPut: Character space ] ]
+]
+
 { #category : #'env building' }
 GtSubprocessWithInMemoryOutput >> envVariables [
 	"Answer the dictionary of environment variables that will be passed to the sub-process.
@@ -169,6 +185,17 @@ GtSubprocessWithInMemoryOutput >> exitStatus [
 GtSubprocessWithInMemoryOutput >> exitStatusInterpreter [
 
 	^ process tryWait
+]
+
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> gtCommandLineFor: aView [
+	<gtView>
+
+	^ aView textEditor
+		title: 'Command Line';
+		priority: 30;
+		text: [ self commandLineString ];
+		actionUpdateButton
 ]
 
 { #category : #ui }
