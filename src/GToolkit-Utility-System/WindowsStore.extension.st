@@ -8,9 +8,12 @@ WindowsStore >> osCopy: sourcePath to: destinationPath [
 
 	proc := GtSubprocessWithInMemoryOutput
 		command: 'powershell.exe'
-		arguments: { 'Copy-Item'. sourcePath. destinationPath. }.
+		arguments: {
+			'Copy-Item'.
+			String streamContents: [ :stream | sourcePath printOn: stream delimiter: $\ ].
+			String streamContents: [ :stream | destinationPath printOn: stream delimiter: $\ ]}.
 	proc
 		addAllEnvVariablesFromParentWithoutOverride;
 		setDefaultErrorBlock;
-		runAndWait.
+		runAndWait
 ]

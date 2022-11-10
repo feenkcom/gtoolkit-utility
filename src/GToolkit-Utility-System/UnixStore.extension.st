@@ -8,7 +8,10 @@ UnixStore >> osCopy: sourcePath to: destinationPath [
 
 	proc := GtSubprocessWithInMemoryOutput
 		command: 'cp'
-		arguments: { '-p'. sourcePath. destinationPath. }.
+		arguments: {
+			'-p'.
+			sourcePath fullName.
+			destinationPath fullName. }.
 	proc
 		addAllEnvVariablesFromParentWithoutOverride;
 		setDefaultErrorBlock;
