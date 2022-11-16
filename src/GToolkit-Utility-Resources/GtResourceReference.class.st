@@ -187,6 +187,11 @@ GtResourceReference >> copyAllTo: aResolvable [
 	self fileReference copyAllTo: aResolvable
 ]
 
+{ #category : #delegated }
+GtResourceReference >> copyTo: aReference [
+	^ self fileReference copyTo: aReference resolve
+]
+
 { #category : #copying }
 GtResourceReference >> copyWithPath: newPath [
 	^ self copy path: newPath
