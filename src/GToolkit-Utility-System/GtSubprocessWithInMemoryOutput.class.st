@@ -4,9 +4,9 @@ GtSubprocessWithInMemoryOutput is a convenience wrapper around GToolkit-External
 Typical usage is: 
 
 ``` 
-proc := (GtSubprocessWithInMemoryOutput command: 'ls' arguments: #('-lh'))
+proc := (GtSubprocessWithInMemoryOutput command: 'ls' arguments: #('-lh')).
 proc errorBlock: [ :proc | self error: 'External process failed, see proc' ].
-proc runAndWait
+proc runAndWait.
 proc stdout
 ```
 
