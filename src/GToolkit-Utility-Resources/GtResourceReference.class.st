@@ -275,6 +275,12 @@ GtResourceReference >> ensureDeleteAllChildren [
 	self fileReference ensureDeleteAllChildren
 ]
 
+{ #category : #accessing }
+GtResourceReference >> entries [
+
+	^ self fileReference entries
+]
+
 { #category : #testing }
 GtResourceReference >> exists [
 	<return: #String>
