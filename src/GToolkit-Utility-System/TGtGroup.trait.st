@@ -22,6 +22,11 @@ TGtGroup >> asOrderedCollection [
 ]
 
 { #category : #accessing }
+TGtGroup >> asSortedCollection: aBlock [
+	^ self items asSortedCollection: aBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> at: anIndex [
 	^ self items at: anIndex
 ]
