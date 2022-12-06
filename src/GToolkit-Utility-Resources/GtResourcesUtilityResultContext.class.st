@@ -1,6 +1,4 @@
 "
-I am passed as a searched item to a {{gtClass:GtSpotter}} list, see for example the {{gtMethod:GtResourcesUtility>>#spotterStringResourcesAtLocationsFor:}} method.
-
 I keep a {{gtClass:GtResourcesUtilityLocation}} object as a search context (root directory).
 I keep a {{gtClass:GtResourcesUtilityLocationResult}} object as a resource search result.
 
