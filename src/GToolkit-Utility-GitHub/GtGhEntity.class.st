@@ -23,7 +23,7 @@ GtGhEntity >> githubGet: anUrlstring [
 	and urls taken from github data contain the full path."
 	
 	^ self githubClient
-		get: (anUrlstring removePrefix: 'https://api.github.com/')
+		get: (anUrlstring withoutPrefix: 'https://api.github.com/')
 ]
 
 { #category : #'gt - extensions' }
