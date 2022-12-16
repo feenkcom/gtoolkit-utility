@@ -31,6 +31,7 @@ TGtUniqueInstance classSide >> hasUniqueInstance [
 
 { #category : #accessing }
 TGtUniqueInstance classSide >> instance [
+	<gtExample>
 	^ self uniqueInstance
 ]
 
