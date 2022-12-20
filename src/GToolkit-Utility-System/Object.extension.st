@@ -21,7 +21,7 @@ Object >> gtUpToVersion: versionString currentVersion: currentString do: upToBlo
 
 	currentVersion := GtRlSemanticVersionNumber readFromString: currentString.
 	version := GtRlSemanticVersionNumber readFromString: versionString.
-	^ (version <= currentVersion)
+	^ (currentVersion <= version)
 		ifTrue: upToBlock
 		ifFalse: afterBlock.
 ]
@@ -32,9 +32,9 @@ Object >> gtUpToVersion: versionString do: upToBlock after: afterBlock [
 	versionString and currentString are semantic version numbers with an optional leading $v.
 	This is used to help with migration where a target image may not be synchronised with all local changes."
 
-	self
+	^ self
 		gtUpToVersion: versionString 
-		currentVersion: GtVirtualMachine instance bundleVersion
+		currentVersion: GtImage version versionString
 		do: upToBlock 
 		after: afterBlock.
 ]

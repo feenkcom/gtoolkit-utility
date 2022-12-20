@@ -7,6 +7,19 @@ Class {
 }
 
 { #category : #examples }
+GtMigrationUtilityExamples >> currentVersion [
+	"Make a call using the current version."
+	<gtExample>
+	| value |
+
+	value := self 
+		gtUpToVersion: 'v0.8.2290' 
+		do: [ 1 ] 
+		after: [ 2 ].
+	self assert: value equals: 2.
+]
+
+{ #category : #examples }
 GtMigrationUtilityExamples >> versionAfter [
 	"Check that version specific method execution is working as expected."
 	<gtExample>
@@ -17,7 +30,7 @@ GtMigrationUtilityExamples >> versionAfter [
 		currentVersion: 'v0.8.2280' 
 		do: [ 1 ] 
 		after: [ 2 ].
-	self assert: value equals: 2.
+	self assert: value equals: 1.
 ]
 
 { #category : #examples }
@@ -31,7 +44,7 @@ GtMigrationUtilityExamples >> versionEarlier [
 		currentVersion: 'v0.8.2280' 
 		do: [ 1 ] 
 		after: [ 2 ].
-	self assert: value equals: 1.
+	self assert: value equals: 2.
 ]
 
 { #category : #examples }
