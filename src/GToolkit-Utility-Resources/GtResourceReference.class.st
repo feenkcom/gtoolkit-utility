@@ -281,6 +281,11 @@ GtResourceReference >> entries [
 	^ self fileReference entries
 ]
 
+{ #category : #accessing }
+GtResourceReference >> entry [
+	^ self fileReference entry
+]
+
 { #category : #testing }
 GtResourceReference >> exists [
 	<return: #String>
