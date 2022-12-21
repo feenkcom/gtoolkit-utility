@@ -15,22 +15,22 @@ BaselineOfGToolkitUtility >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.166/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.167/src' ].
 		spec
 			baseline: 'GToolkitAnnouncerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.166/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.167/src' ].
 		spec
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.166/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.167/src' ].
 		spec
 			baseline: 'GToolkitFileUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.166/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.167/src' ].
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.166/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.167/src' ].
 		spec
 			baseline: 'GToolkitRefactoringsUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.166/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.167/src' ].
 
 		spec package: 'GToolkit-Utility-MessageTally'.
 		spec package: 'GToolkit-Utility-SpaceTally'.
