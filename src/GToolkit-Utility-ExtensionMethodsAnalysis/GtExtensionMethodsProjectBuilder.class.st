@@ -93,7 +93,7 @@ GtExtensionMethodsProjectBuilder >> repositoryWrappersForProject: aProject withP
 		collect: [ :aRepository |
 			| wrapper |
 			wrapper := GtExtensionMethodsRepositoryWrapper new
-				baselineRepository:  aRepository icebergRepository.
+				baselineRepository:  aRepository.
 			aRepository containedPackages do: [ :aPackage | 
 				packageWrappersByName 
 					at: aPackage name

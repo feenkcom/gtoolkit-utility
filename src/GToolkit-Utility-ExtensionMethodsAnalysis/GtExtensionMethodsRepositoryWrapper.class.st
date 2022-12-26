@@ -92,7 +92,7 @@ GtExtensionMethodsRepositoryWrapper >> initialize [
 
 { #category : #accessing }
 GtExtensionMethodsRepositoryWrapper >> name [
-	^ self baselineRepository name
+	^ self baselineRepository repositoryName
 ]
 
 { #category : #accessing }
