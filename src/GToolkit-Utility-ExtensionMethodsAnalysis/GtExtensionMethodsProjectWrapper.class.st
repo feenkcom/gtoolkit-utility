@@ -25,7 +25,7 @@ GtExtensionMethodsProjectWrapper >> gtViewPackageWrappersFor: aView [
 	 
 	^ aView columnedList 
 		title: 'Packages';
-		priority: 40;
+		priority: 20;
 		items: [ self packageWrappers 
 			sorted: [ :aPackage | 
 				aPackage numberOfExtensions ] descending ];

@@ -5,7 +5,7 @@ Class {
 	#name : #GtExtensionMethodsRepositoryWrapper,
 	#superclass : #Object,
 	#instVars : [
-		'icebergRepository',
+		'baselineRepository',
 		'packageWrappers'
 	],
 	#category : #'GToolkit-Utility-ExtensionMethodsAnalysis'
@@ -14,6 +14,16 @@ Class {
 { #category : #adding }
 GtExtensionMethodsRepositoryWrapper >> addPackageWrapper: aPackageWrapper [
 	self packageWrappers add: aPackageWrapper
+]
+
+{ #category : #accessing }
+GtExtensionMethodsRepositoryWrapper >> baselineRepository [
+	^ baselineRepository
+]
+
+{ #category : #accessing }
+GtExtensionMethodsRepositoryWrapper >> baselineRepository: anObject [
+	baselineRepository := anObject
 ]
 
 { #category : #accessing }
@@ -73,18 +83,6 @@ GtExtensionMethodsRepositoryWrapper >> hasExtensionMethods [
 		aPackageWrapper hasExtensionMethods ] 
 ]
 
-{ #category : #accessing }
-GtExtensionMethodsRepositoryWrapper >> icebergRepository [
-
-	^ icebergRepository
-]
-
-{ #category : #accessing }
-GtExtensionMethodsRepositoryWrapper >> icebergRepository: aRepository [
-
-	icebergRepository := aRepository
-]
-
 { #category : #intialization }
 GtExtensionMethodsRepositoryWrapper >> initialize [
 	super initialize.
@@ -94,7 +92,7 @@ GtExtensionMethodsRepositoryWrapper >> initialize [
 
 { #category : #accessing }
 GtExtensionMethodsRepositoryWrapper >> name [
-	^ self icebergRepository name
+	^ self baselineRepository name
 ]
 
 { #category : #accessing }
