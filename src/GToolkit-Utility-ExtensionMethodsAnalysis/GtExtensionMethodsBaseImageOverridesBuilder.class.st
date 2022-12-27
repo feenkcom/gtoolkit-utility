@@ -55,7 +55,8 @@ GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForProject: aProject 
 GtExtensionMethodsBaseImageOverridesBuilder >> comparisonResultsForAnalysisCode: analysisSourceCode [
 	| command newProcess arguments resultString |
 	
-	command := FileLocator vmBinary resolve fullName.
+	command := GtVirtualMachine instance 
+		headlessExecutable resolve fullName.
 	arguments := { 
 		(self targetFolder / self imageName) resolve fullName.
 		'eval'.
@@ -67,10 +68,6 @@ GtExtensionMethodsBaseImageOverridesBuilder >> comparisonResultsForAnalysisCode:
 		workingDirectory: self targetFolder  resolve fullName;
 		terminateOnShutdown;
 		yourself.
-
-	Smalltalk os environment asDictionary 
-		associationsDo: [ :assoc | 
-			newProcess environmentAt: assoc key put: assoc value ].
 	
 	newProcess	
 		errorBlock: [ :ex | 
