@@ -12,20 +12,16 @@ Class {
 { #category : #analysis }
 GtExtensionMethodsProjectBuilder class >> forGToolkit [
 	<gtExample>
-	| gtProject |
-	gtProject := BaselineOfGToolkitForPharo9 
-		gtRlProjectWithRepository: BaselineOfGToolkit gtoolkitRepositorySpec.
 		
 	^ self new 
-		buildWrapperForProject: gtProject
+		buildWrapperForProject: BaselineOfGToolkit fullBaselineProject
 ]
 
 { #category : #analysis }
 GtExtensionMethodsProjectBuilder class >> forGToolkitMethods: aCollection [
 	| gtProject |
-	gtProject := BaselineOfGToolkitForPharo9 
-		gtRlProjectWithRepository: BaselineOfGToolkit gtoolkitRepositorySpec.
-		
+	gtProject := BaselineOfGToolkit fullBaselineProject.
+	
 	^ self new 
 		buildProjectWrapperForMethods: aCollection 
 		inProject: gtProject
