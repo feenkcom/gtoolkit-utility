@@ -13,12 +13,8 @@ Class {
 
 { #category : #analysis }
 GtExtensionMethodsBaseImageOverridesBuilder class >> forGToolkit [
-	| gtProject |
-	gtProject := BaselineOfGToolkitForPharo9 
-		gtRlProjectWithRepository: BaselineOfGToolkit gtoolkitRepositorySpec.
-		
 	^ self new 
-		buildWrapperForProject: gtProject
+		buildWrapperForProject: BaselineOfGToolkit fullBaselineProject
 ]
 
 { #category : #analysis }
