@@ -1,3 +1,8 @@
+"
+{{gtClass:GtExtensionMethodsGToolkitMetrics}} provides an entry point for getting information about extension methods added from Glamorous Toolkit to the base Pharo image.
+
+This object instantiates a {{gtClass:GtExtensionMethodsProjectWrapper}} for Glamorous Toolkit.
+"
 Class {
 	#name : #GtExtensionMethodsGToolkitMetrics,
 	#superclass : #Object,
@@ -9,6 +14,11 @@ Class {
 	],
 	#category : #'GToolkit-Utility-ExtensionMethodsAnalysis'
 }
+
+{ #category : #accessing }
+GtExtensionMethodsGToolkitMetrics class >> cleanUp [
+	defaultInstance := nil
+]
 
 { #category : #accessing }
 GtExtensionMethodsGToolkitMetrics class >> defaultInstance [
