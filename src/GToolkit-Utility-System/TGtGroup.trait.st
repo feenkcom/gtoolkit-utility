@@ -120,8 +120,7 @@ TGtGroup >> reject: aBlock [
 
 { #category : #accessing }
 TGtGroup >> select: aBlock [
-	^ self species 
-		withAll: (self items select: aBlock)
+	^ self items select: aBlock
 ]
 
 { #category : #accessing }
