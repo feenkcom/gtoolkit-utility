@@ -119,5 +119,5 @@ GtExtensionMethodsRepositoryWrapper >> printOn: aStream [
 			<< ', ';
 			print: extensionsCount;
 			<< ' ';
-			<< ('extension methods' asPluralBasedOn: extensionsCount)]
+			<< ('extension method' asPluralBasedOn: extensionsCount)]
 ]
