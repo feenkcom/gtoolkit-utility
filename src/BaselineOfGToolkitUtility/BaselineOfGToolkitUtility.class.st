@@ -37,6 +37,6 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-ClassLoader';
 			package: 'GToolkit-Utility-UndeclaredReferences';
 			package: 'GToolkit-Utility-GitHub';
-			package: 'GToolkit-Utility-ExtensionMethodsAnalysis' ].
-
+			package: 'GToolkit-Utility-ExtensionMethodsAnalysis';
+			package: 'GToolkit-Utility-Deprecation' ].
 ]
