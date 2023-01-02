@@ -47,9 +47,21 @@ TGtGroup >> collectWithIndex: aBlock [
 	^ self items collectWithIndex: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 TGtGroup >> detect: aBlock [ 
 	^ self items detect: aBlock 
+]
+
+{ #category : #enumerating }
+TGtGroup >> detect: aBlock ifFound: foundBlock ifNone: exceptionBlock [
+	^ self items 
+		detect: aBlock ifFound: foundBlock ifNone: exceptionBlock
+]
+
+{ #category : #enumerating }
+TGtGroup >> detect: aBlock ifNone: exceptionBlock [
+	^ self items 
+		detect: aBlock ifNone: exceptionBlock
 ]
 
 { #category : #accessing }
