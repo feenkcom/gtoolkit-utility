@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : #'gt - extensions' }
-GtGhIssuesGroup >> gtItemFor: aView [
+GtGhIssuesGroup >> gtItemsFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
