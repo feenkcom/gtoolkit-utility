@@ -10,6 +10,17 @@ GtGhIssue >> body [
 ]
 
 { #category : #'gt - extensions' }
+GtGhIssue >> gtActionWebBrowseFor: anAction [
+    <gtAction>
+    ^ anAction explicit stencil: [
+        BrButton new
+            aptitude: BrGlamorousButtonWithIconAptitude;
+            action:  [ WebBrowser openOn: self htmlUrlString asZnUrl ];
+            icon: BrGlamorousIcons go asElement;
+            label: 'Open in Web Browser' translated ]
+]
+
+{ #category : #'gt - extensions' }
 GtGhIssue >> gtViewIssueBodyFor: aView [ 
 	<gtView>
 	
