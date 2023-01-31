@@ -14,6 +14,13 @@ GtRlReleaserSignalsLogReader class >> readFrom: aStream [
 ]
 
 { #category : #api }
+GtRlReleaserSignalsLogReader class >> readFromFile: aFileReference [
+	^ aFileReference readStreamDo: [ :aStream | 
+		self new
+			readFrom: aStream ]
+]
+
+{ #category : #api }
 GtRlReleaserSignalsLogReader >> createDefaultEventsGrouper [
 	^ GtRlReleaserEventsGrouper new
 ]
