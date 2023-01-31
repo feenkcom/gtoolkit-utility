@@ -1,8 +1,8 @@
 Class {
 	#name : #GtBeaconLogEventsGroup,
 	#superclass : #Object,
-	#traits : 'TGtGroup + TGtGroupItems',
-	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
+	#traits : 'TGtGroupWithItems',
+	#classTraits : 'TGtGroupWithItems classTrait',
 	#category : #'GToolkit-Utility-Logging'
 }
 
@@ -49,4 +49,11 @@ GtBeaconLogEventsGroup >> sumDurations: aBlock [
 { #category : #'math functions' }
 GtBeaconLogEventsGroup >> sumNumbers: aBlock [
 	^ self items sumNumbers: aBlock
+]
+
+{ #category : #accessing }
+GtBeaconLogEventsGroup >> totalDuration [
+	
+	^ self
+		sumDurations: [ :anEvent | anEvent duration ]
 ]
