@@ -38,5 +38,8 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-UndeclaredReferences';
 			package: 'GToolkit-Utility-GitHub';
 			package: 'GToolkit-Utility-ExtensionMethodsAnalysis';
-			package: 'GToolkit-Utility-Deprecation' ].
+			package: 'GToolkit-Utility-Deprecation';
+			
+			package: 'GToolkit-Releaser-Logging-Analysis' with: [
+				spec requires: #(''GToolkit-Utility-Logging'' ). ] ].
 ]
