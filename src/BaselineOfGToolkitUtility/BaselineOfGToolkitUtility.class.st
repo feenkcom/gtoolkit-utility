@@ -41,5 +41,5 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-Deprecation';
 			
 			package: 'GToolkit-Releaser-Logging-Analysis' with: [
-				spec requires: #(''GToolkit-Utility-Logging'' ). ] ].
+				spec requires: #('GToolkit-Utility-Logging' ). ] ].
 ]
