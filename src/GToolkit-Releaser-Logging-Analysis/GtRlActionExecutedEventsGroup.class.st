@@ -42,9 +42,10 @@ GtRlActionExecutedEventsGroup >> gtViewGroupedByActionTypeFor: aView [
 	^ aView columnedList
 		title: 'By Action Type';
 		priority: 15;
-		items: [ self groupedByActionType associations ];
+		items: [ self groupedByActionType associations
+			sorted: [ :assoc | assoc value totalDuration ] descending  ];
 		column: 'Action Type' text: [ :assoc | assoc key ];
-		column: 'Count' text: [ :assoc | assoc value size ];
+		column: 'Count' text: [ :assoc | assoc value size ] width: 120;
 		column: 'Duration' text: [ :assoc | assoc value totalDuration ];
 		send: [ :assoc | assoc value ]
 ]
@@ -56,9 +57,10 @@ GtRlActionExecutedEventsGroup >> gtViewGroupedByRepositoryIdFor: aView [
 	^ aView columnedList
 		title: 'By Repository';
 		priority: 20;
-		items: [ self groupedByRepositoryId associations ];
+		items: [ self groupedByRepositoryId associations
+			sorted: [ :assoc | assoc value totalDuration ] descending ];
 		column: 'Repository' text: [ :assoc | assoc key ];
-		column: 'Count' text: [ :assoc | assoc value size ];
+		column: 'Count' text: [ :assoc | assoc value size ] width: 120;
 		column: 'Duration' text: [ :assoc | assoc value totalDuration ];
 		send: [ :assoc | assoc value ]
 ]
