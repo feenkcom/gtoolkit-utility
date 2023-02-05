@@ -27,7 +27,12 @@ GtLinuxSystemInfo >> freeMemory [
 GtLinuxSystemInfo >> numberOfCores [
 	"Answer the number of cores on the host"
 
-	^ (self colonSeparatedGet: 'cpu cores' fromFile: '/proc/cpuinfo') asNumber
+	"/proc/cpuinfo may not contain information about an amount of `cpu cores`.
+	therefore we fallback to 1"
+	^ [ (self
+		colonSeparatedGet: 'cpu cores'
+		fromFile: '/proc/cpuinfo') asNumber ]
+	on: KeyNotFound do: [ :anError | 1 ]
 ]
 
 { #category : #'cpu info' }
