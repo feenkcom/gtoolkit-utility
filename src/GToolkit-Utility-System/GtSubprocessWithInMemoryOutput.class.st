@@ -48,7 +48,8 @@ Class {
 		'stdoutBuffer',
 		'stderrBuffer',
 		'outputPoll',
-		'terminateOnShutdown'
+		'terminateOnShutdown',
+		'stdinStream'
 	],
 	#pools : [
 		'LibCSignalSharedPool'
@@ -346,7 +347,8 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 	
 	builder
 		pipeStdout;
-		pipeStderr.
+		pipeStderr;
+		pipeStdin.
 
 	command := builder createNativeCommand.
 	envVariables ifNotNil: 
@@ -356,6 +358,7 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 	process := command spawn.
 	stdoutStream := String new writeStream.
 	stderrStream := String new writeStream.
+	stdinStream := process stdin.
 	stdoutBuffer := process asynchronousStdout.
 	stderrBuffer := process asynchronousStderr.
 	terminateOnShutdown ifTrue: [ process terminateOnShutdown ].
@@ -419,6 +422,11 @@ GtSubprocessWithInMemoryOutput >> sigterm [
 GtSubprocessWithInMemoryOutput >> stderr [
 
 	^ stderrStream contents
+]
+
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> stdinStream [
+	^ stdinStream
 ]
 
 { #category : #accessing }
