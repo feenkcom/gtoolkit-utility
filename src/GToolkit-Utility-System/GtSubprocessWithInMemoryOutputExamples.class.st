@@ -161,6 +161,28 @@ GtSubprocessWithInMemoryOutputExamples >> shellCommand [
 ]
 
 { #category : #examples }
+GtSubprocessWithInMemoryOutputExamples >> shellCommandWithStdin [
+	"Demonstrate using a shell command and writing to stdin"
+	<gtExample>
+	| process |
+
+	"Isn't valid on Windows"
+	OSPlatform current isWindows ifTrue: [ ^ self ].
+
+	process := GtSubprocessWithInMemoryOutput new
+		shellCommand: 'wc -m';
+		runAndSignal.
+	
+	process stdinStream
+		nextPutAll: 'hello';
+		close.
+		
+	process wait.
+	
+	self assert: process stdout trimBoth equals: '5'.
+]
+
+{ #category : #examples }
 GtSubprocessWithInMemoryOutputExamples >> sigterm [
 	"Demonstrate use #sigterm and confirm that the exit handlers are run"
 	<gtExample>
