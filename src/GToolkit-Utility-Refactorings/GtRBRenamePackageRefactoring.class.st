@@ -21,6 +21,13 @@ GtRBRenamePackageRefactoring >> from: oldPackageName to: newPackageName [
 	newName := newPackageName
 ]
 
+{ #category : #transforming }
+GtRBRenamePackageRefactoring >> manifestClassNameFor: aPackageName [
+	"Returns a symbol representing a suitable name for a Manifest class for the given package"
+	
+	^('Manifest', (aPackageName select: [:each | each isAlphaNumeric ])) asSymbol
+]
+
 { #category : #accessing }
 GtRBRenamePackageRefactoring >> preconditions [
 	^ ((RBCondition
@@ -61,6 +68,18 @@ GtRBRenamePackageRefactoring >> renameBaselineReferences [
 ]
 
 { #category : #transforming }
+GtRBRenamePackageRefactoring >> renameManifestClass [
+	| refactoring manifest |
+	manifest := self model classNamed: (self manifestClassNameFor: oldName).
+	manifest
+		ifNotNil: [ refactoring := GtRBRenameClassRefactoring
+					model: self model
+					rename: manifest name
+					to: (self manifestClassNameFor: newName).
+			self performCompositeRefactoring: refactoring ]
+]
+
+{ #category : #transforming }
 GtRBRenamePackageRefactoring >> renamePackage [
 	self model changes
 		addChange: (GtRBRenamePackageChange from: oldName to: newName)
@@ -69,5 +88,6 @@ GtRBRenamePackageRefactoring >> renamePackage [
 { #category : #transforming }
 GtRBRenamePackageRefactoring >> transform [
 	self renamePackage.
+	self renameManifestClass.
 	self renameBaselineReferences
 ]
