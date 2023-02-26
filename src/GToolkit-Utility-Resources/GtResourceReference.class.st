@@ -54,7 +54,9 @@ GtResourceReference >> / aString [
 
 { #category : #comparing }
 GtResourceReference >> = anObject [
-	^ [ anObject isEqualToResourceReference: self ] onErrorDo: [ :ex | false ]
+	(anObject respondsTo: #isEqualToResourceReference:) ifFalse: [ ^ false ].
+
+	^ anObject isEqualToResourceReference: self
 ]
 
 { #category : #accessing }
