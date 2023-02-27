@@ -7,6 +7,11 @@ Trait {
 }
 
 { #category : #accessing }
+TGtGroup >> anySatisfy: aBlock [
+	^ self items anySatisfy: aBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> asArray [
 	^ self items asArray
 ]
@@ -77,6 +82,11 @@ TGtGroup >> do: aBlock [
 { #category : #accessing }
 TGtGroup >> first [
 	^ self items first
+]
+
+{ #category : #accessing }
+TGtGroup >> flatCollect: aBlock [
+	^ self items flatCollect: aBlock
 ]
 
 { #category : #accessing }
