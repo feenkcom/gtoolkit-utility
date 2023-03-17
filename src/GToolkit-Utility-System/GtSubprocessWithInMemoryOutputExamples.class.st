@@ -145,6 +145,22 @@ GtSubprocessWithInMemoryOutputExamples >> kill [
 ]
 
 { #category : #examples }
+GtSubprocessWithInMemoryOutputExamples >> retryCommand [
+	"Demonstrate use of the retryCount"
+	<gtExample>
+	| fr process |
+
+	fr := 'retryCommand-example.stdout' asFileReference.
+	fr ensureDelete.
+	process := GtSubprocessWithInMemoryOutput new
+		shellCommand: 'echo -n x >> retryCommand-example.stdout; exit 1';
+		retryCount: 3;
+		runAndWait.
+	self assert: fr contents trimBoth equals: 'xxx'.
+	fr ensureDelete.
+]
+
+{ #category : #examples }
 GtSubprocessWithInMemoryOutputExamples >> shellCommand [
 	"Demonstrate using a shell command"
 	<gtExample>
