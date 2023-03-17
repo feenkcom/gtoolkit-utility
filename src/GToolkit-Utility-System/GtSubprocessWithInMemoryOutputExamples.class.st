@@ -150,6 +150,8 @@ GtSubprocessWithInMemoryOutputExamples >> retryCommand [
 	<gtExample>
 	| fr process |
 
+	OSPlatform current isLinux ifFalse: [ ^ self ].
+
 	fr := 'retryCommand-example.stdout' asFileReference.
 	fr ensureDelete.
 	process := GtSubprocessWithInMemoryOutput new
