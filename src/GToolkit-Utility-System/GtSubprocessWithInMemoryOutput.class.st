@@ -49,7 +49,8 @@ Class {
 		'stderrBuffer',
 		'outputPoll',
 		'terminateOnShutdown',
-		'stdinStream'
+		'stdinStream',
+		'retryCount'
 	],
 	#pools : [
 		'LibCSignalSharedPool'
@@ -238,6 +239,7 @@ GtSubprocessWithInMemoryOutput >> initialize [
 	super initialize.
 	builder := GtExternalProcessBuilder new.
 	terminateOnShutdown := false.
+	retryCount := 1.
 ]
 
 { #category : #testing }
@@ -314,6 +316,16 @@ GtSubprocessWithInMemoryOutput >> removeLD_LIBRARY_PATH [
 		[ "No need to do anything if LD_LIBRARY_PATH is absent" ].
 ]
 
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> retryCount [
+	^ retryCount
+]
+
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> retryCount: anObject [
+	retryCount := anObject
+]
+
 { #category : #running }
 GtSubprocessWithInMemoryOutput >> run [
 	"Run the command without waiting"
@@ -340,15 +352,8 @@ GtSubprocessWithInMemoryOutput >> runAndWait [
 ]
 
 { #category : #private }
-GtSubprocessWithInMemoryOutput >> runProcess [
+GtSubprocessWithInMemoryOutput >> runOnce [
 	"Run the requested command as a separate process"
-
-	self setCommand.
-	
-	builder
-		pipeStdout;
-		pipeStderr;
-		pipeStdin.
 
 	command := builder createNativeCommand.
 	envVariables ifNotNil: 
@@ -363,17 +368,47 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 	stderrBuffer := process asynchronousStderr.
 	terminateOnShutdown ifTrue: [ process terminateOnShutdown ].
 
-	outputPoll := 
-		[ process waitForExitDoing: 
-				[ stdoutStream nextPutAll: stdoutBuffer pollString.
-				stderrStream nextPutAll: stderrBuffer pollString ].
-		"Async processes have errors signalled here.
-		If waiting, raise the error after signalling the semaphore (in #runAndWait)"
-		semaphore
-			ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
-					ifTrue: [ errorBlock cull: self cull: false ] ]
-			ifNotNil: [ semaphore signal ] ] forkAt: Processor activeProcess priority + 1.
+	process waitForExitDoing: 
+		[ stdoutStream nextPutAll: stdoutBuffer pollString.
+		stderrStream nextPutAll: stderrBuffer pollString ].
+]
 
+{ #category : #private }
+GtSubprocessWithInMemoryOutput >> runProcess [
+	"Run the requested command as a separate process"
+
+	self setCommand.
+	
+	builder
+		pipeStdout;
+		pipeStderr;
+		pipeStdin.
+
+	outputPoll := 
+		[ [ self runWithRetry ]
+			on: Error
+			do: [ :ex | errorBlock ifNotNil:
+				[ errorBlock cull: self cull: false ] ]
+		] forkAt: Processor activeProcess priority + 1.
+]
+
+{ #category : #private }
+GtSubprocessWithInMemoryOutput >> runWithRetry [
+	"Run the requested command as a separate process"
+	| retriesLeft completed |
+
+	retriesLeft := retryCount.
+	completed := false.
+	[ retriesLeft = 0 or: [ completed ] ] whileFalse:
+		[ self runOnce.
+		retriesLeft := retriesLeft - 1.
+		completed := self isSuccess ].
+	"Async processes have errors signalled here.
+	If waiting, raise the error after signalling the semaphore (in #runAndWait)"
+	semaphore
+		ifNil: [ (errorBlock isNotNil and: [ self isSuccess not ])
+			ifTrue: [ errorBlock cull: self cull: false ] ]
+		ifNotNil: [ semaphore signal ].
 ]
 
 { #category : #private }
