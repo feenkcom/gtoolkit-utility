@@ -19,6 +19,8 @@ GtSubprocessError >> description [
 				print: process arguments; cr;
 			tab; << 'Code: ';
 				print: process exitCode; cr;
+			tab; << 'Retries: ';
+				print: process retryCount; cr;
 			tab; << 'Stdout: ';
 				<< process stdout asString; cr;
 			tab; << 'Stderr: ';
