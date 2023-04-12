@@ -109,6 +109,12 @@ GtSubprocessWithInMemoryOutput >> arguments: aCollection [
 	builder args: aCollection
 ]
 
+{ #category : #initialization }
+GtSubprocessWithInMemoryOutput >> clearErrorBlock [
+
+	errorBlock := nil.
+]
+
 { #category : #cleaning }
 GtSubprocessWithInMemoryOutput >> closeAndCleanStreams [
 	"This is now a no-op - the library takes care of stream maintenance"
