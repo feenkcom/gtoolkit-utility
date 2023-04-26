@@ -180,6 +180,7 @@ GtSubprocessWithInMemoryOutput >> errorBlock: anObject [
 GtSubprocessWithInMemoryOutput >> exitCode [ 
 	"Answer the interpretted exit status, or nil if not available"
 
+	process ifNil: [ ^ nil ].
 	^ process tryWait ifNotNil: [ :status | status code ]
 ]
 
@@ -462,6 +463,7 @@ GtSubprocessWithInMemoryOutput >> sigterm [
 { #category : #accessing }
 GtSubprocessWithInMemoryOutput >> stderr [
 
+	stderrStream ifNil: [ ^ '' ].
 	^ stderrStream contents
 ]
 
@@ -473,6 +475,7 @@ GtSubprocessWithInMemoryOutput >> stdinStream [
 { #category : #accessing }
 GtSubprocessWithInMemoryOutput >> stdout [
 
+	stdoutStream ifNil: [ ^ '' ].
 	^ stdoutStream contents
 ]
 
