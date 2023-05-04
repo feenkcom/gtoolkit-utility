@@ -497,6 +497,11 @@ GtResourceReference >> path: aStringOrPath [
 	path := aPath
 ]
 
+{ #category : #converting }
+GtResourceReference >> pathString [
+	^ self asPath pathString
+]
+
 { #category : #printing }
 GtResourceReference >> printOn: aStream [
 
