@@ -115,7 +115,9 @@ SqFile >> sessionID: anObject [
 
 { #category : #'close on exec' }
 SqFile >> setCloseOnExec: aBoolean [
-	"Set/Clear the CLOEXEC bit on the receiver"
+	"Set/Clear the CLOEXEC bit on the receiver.
+	The code follows a GNU manual recommendation [1].
+	[1] https://www.gnu.org/software/libc/manual/html_node/Descriptor-Flags.html"
 	| old status |
 
 	"Ignore on Windows: sockets aren't transferred to subprocesses"
