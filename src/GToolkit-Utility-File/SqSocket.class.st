@@ -41,7 +41,8 @@ SqSocket >> getCloseOnExec [
 
 	result := LibC uniqueInstance
 		fcntl: self fileDescriptor 
-		_: 1 "F_GETFD".
+		_: 1 "F_GETFD"
+		_: 0.
 	self assert: [ result ~= -1 ]
 		description: 'Unable to retrieve CLOEXEC'.
 	^ (result bitAnd: 1) = 1
@@ -73,17 +74,26 @@ SqSocket >> sessionID: anObject [
 
 { #category : #'close on exec' }
 SqSocket >> setCloseOnExec: aBoolean [
-	"Set/Clear the CLOEXEC bit on the receiver"
-	| status |
+	"Set/Clear the CLOEXEC bit on the receiver.
+	The code follows a GNU manual recommendation [1].
+	[1] https://www.gnu.org/software/libc/manual/html_node/Descriptor-Flags.html"
+	| old status |
 
 	"Ignore on Windows: sockets aren't transferred to subprocesses"
 	OSPlatform current isWindows ifTrue: [ ^ self ].
 
+	old := LibC uniqueInstance
+		fcntl: self fileDescriptor 
+		_: 1 "F_GETFD"
+		_: 0.
+	self assert: [ old >= 0 ]
+		description: 'fcntl() failed'.
+
 	status := LibC uniqueInstance
 		fcntl: self fileDescriptor 
 		_: 2 "F_SETFD"
-		_: (aBoolean ifTrue: [ 1 ] ifFalse: [ 0 ]).
-	self assert: [ status ~= -1 ]
+		_: (old bitAt: 1 put: aBoolean asBit).
+	self assert: [ status >= 0 ]
 		description: 'fcntl() failed'.
 ]
 
