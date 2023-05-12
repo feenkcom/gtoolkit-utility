@@ -48,15 +48,6 @@ FileDescriptorExamples >> socketCloseOnExecFlag [
 	"Demonstrate reading and setting the CLOEXEC flag for a file"
 	<gtExample>
 	<after: #closeSocket>
-	
-	"Disable the example on Apple Silicon machines.
-	See https://github.com/feenkcom/gtoolkit/issues/3258
-	Note: We want to fix it. On other hand, 
-	the fix is not obvious at this moment."
-	(OSPlatform current isMacOS and: [
-		Smalltalk vm architectureName = 'aarch64' ])
-			ifTrue: [ ^ self ].
-	
 
 	self assert: socket isNil.
 	socket := Socket tcpCreateIfFail: [ self error: 'Unable to create socket' ].
@@ -70,7 +61,7 @@ FileDescriptorExamples >> socketCloseOnExecFlag [
 
 	socket setCloseOnExec: false.
 	self deny: socket getCloseOnExec.
+
 	socket setCloseOnExec: true.
 	self assert: socket getCloseOnExec.
-
 ]

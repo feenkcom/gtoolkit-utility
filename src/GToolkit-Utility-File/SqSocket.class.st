@@ -41,8 +41,7 @@ SqSocket >> getCloseOnExec [
 
 	result := LibC uniqueInstance
 		fcntl: self fileDescriptor 
-		_: 1 "F_GETFD"
-		_: 0.
+		_: 1 "F_GETFD".
 	self assert: [ result ~= -1 ]
 		description: 'Unable to retrieve CLOEXEC'.
 	^ (result bitAnd: 1) = 1
@@ -84,8 +83,7 @@ SqSocket >> setCloseOnExec: aBoolean [
 
 	old := LibC uniqueInstance
 		fcntl: self fileDescriptor 
-		_: 1 "F_GETFD"
-		_: 0.
+		_: 1 "F_GETFD".
 	self assert: [ old >= 0 ]
 		description: 'fcntl() failed'.
 
