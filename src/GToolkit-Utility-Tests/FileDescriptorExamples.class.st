@@ -58,9 +58,6 @@ FileDescriptorExamples >> socketCloseOnExecFlag [
 			ifTrue: [ ^ self ].
 	
 
-	"Ignore on Windows: sockets aren't transferred to subprocesses"
-	OSPlatform current isWindows ifTrue: [ ^ self ].
-
 	self assert: socket isNil.
 	socket := Socket tcpCreateIfFail: [ self error: 'Unable to create socket' ].
 
