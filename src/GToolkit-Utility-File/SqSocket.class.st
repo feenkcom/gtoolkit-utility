@@ -84,14 +84,14 @@ SqSocket >> setCloseOnExec: aBoolean [
 	old := LibC uniqueInstance
 		fcntl: self fileDescriptor 
 		_: 1 "F_GETFD".
-	self assert: [ old >= 0 ]
+	self assert: [ old ~= -1 ]
 		description: 'fcntl() failed'.
 
 	status := LibC uniqueInstance
 		fcntl: self fileDescriptor 
 		_: 2 "F_SETFD"
 		_: (old bitAt: 1 put: aBoolean asBit).
-	self assert: [ status >= 0 ]
+	self assert: [ status ~= -1 ]
 		description: 'fcntl() failed'.
 ]
 
