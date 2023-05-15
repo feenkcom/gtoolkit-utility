@@ -45,7 +45,7 @@ FileDescriptorExamples >> fileCloseOnExecFlag [
 
 { #category : #examples }
 FileDescriptorExamples >> socketCloseOnExecFlag [
-	"Demonstrate reading and setting the CLOEXEC flag for a file"
+	"Demonstrate reading and setting the CLOEXEC flag for a socket"
 	<gtExample>
 	<after: #closeSocket>
 
