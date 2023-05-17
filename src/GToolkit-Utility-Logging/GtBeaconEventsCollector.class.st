@@ -67,7 +67,7 @@ GtBeaconEventsCollector >> gtViewBeaconSignalsFor: aView [
 	<gtView>
 	
 	^ aView forward
-		title: 'Beacon Signals';
+		title: 'Beacon signals';
 		priority: 25;
 		object: [ logger ];
 		view: #gtRecordingsFor:

@@ -35,7 +35,7 @@ GtDeprecatedClassRepositoryWrapper >> gtViewDeprecatedClassesByPackageFor: aView
 	<gtView>
 	
 	^ aView forward 
-		title: 'By Package';
+		title: 'By package';
 		priority: 20;
 		object: [ self deprecatedClasses ];
 		view: #gtViewClassesByPackageFor:
@@ -46,7 +46,7 @@ GtDeprecatedClassRepositoryWrapper >> gtViewDeprecatedClassesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Deprecated Classes';
+		title: 'Deprecated classes';
 		priority: 10;
 		object: [ self deprecatedClasses ];
 		view: #gtItemsFor:

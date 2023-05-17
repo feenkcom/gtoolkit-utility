@@ -62,7 +62,7 @@ GtBeaconLogBasicEvent >> gtViewSubEventsFor: aView [
 	<gtView>
 	
 	^ aView forward
-		title: 'Sub Events';
+		title: 'Sub events';
 		priority: 10;
 		object: [ self subEvents ];
 		view: #gtItemsFor:

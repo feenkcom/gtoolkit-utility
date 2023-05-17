@@ -94,7 +94,7 @@ GtGhProjectWithBaseline >> gtViewExternalRepositoriesFor: aView [
 	<gtView>
 	
 	^ aView list 
-		title: 'External Repositories';
+		title: 'External repositories';
 		priority: 20;
 		items: [ self externalRepositories ];
 		itemText: [ :aRepository | aRepository loadSpecString ]
@@ -105,7 +105,7 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Forked Repositories';
+		title: 'Forked repositories';
 		priority: 15;
 		items: [ self forkedRepositories ];
 		column: 'Repo' text: [ :aRepository |
@@ -119,7 +119,7 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Forks Status';
+		title: 'Forks status';
 		priority: 25;
 		items: [ self forkedRepositories ];
 		column: 'Repo' text: [ :aRepository |
@@ -164,7 +164,7 @@ GtGhProjectWithBaseline >> gtViewOwnedRepositoriesFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Owned Repositories';
+		title: 'Owned repositories';
 		priority: 10;
 		items: [ self ownedRepositories ];
 		column: 'Repo' text: [ :aRepository |

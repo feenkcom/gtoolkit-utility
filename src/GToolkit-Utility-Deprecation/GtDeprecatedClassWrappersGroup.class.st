@@ -38,7 +38,7 @@ GtDeprecatedClassWrappersGroup >> gtViewClassesByPackageFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'By Package';
+		title: 'By package';
 		priority: 45;
 		items: [ self groupedByPackage associations 
 			sorted: [ :assoc | assoc value size ] descending ];

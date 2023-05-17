@@ -79,7 +79,7 @@ GtSpaceTallyVersion >> gtVmStatisticsFor: aView [
 	<gtView>
 	
 	^ aView forward
-		title: 'Vm Statistics';
+		title: 'Vm statistics';
 		priority: 30;
 		object: [ vmStatisticsReport ];
 		view: #gtViewTextualStatisticsFor:

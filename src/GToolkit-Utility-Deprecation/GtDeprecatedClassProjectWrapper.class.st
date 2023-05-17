@@ -42,7 +42,7 @@ GtDeprecatedClassProjectWrapper >> gtViewDeprecatedClassesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Deprecated Classes';
+		title: 'Deprecated classes';
 		priority: 20;
 		object: [ self deprecatedClasses ];
 		view: #gtItemsFor:

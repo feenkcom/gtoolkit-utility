@@ -43,7 +43,7 @@ GtExtensionMethodsRepositoryWrapper >> gtViewExtensionMethodsByClassFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'By Class';
+		title: 'By class';
 		priority: 45;
 		items: [ self groupedByClass associations 
 			sorted: [ :assoc | assoc value size ] descending ];
@@ -57,7 +57,7 @@ GtExtensionMethodsRepositoryWrapper >> gtViewExtensionMethodsFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Extension Methods';
+		title: 'Extension methods';
 		priority: 40;
 		object: [ self extensionMethods ];
 		view: #gtItemsFor:

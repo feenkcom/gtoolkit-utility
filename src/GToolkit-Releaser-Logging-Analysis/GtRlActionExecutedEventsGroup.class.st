@@ -40,7 +40,7 @@ GtRlActionExecutedEventsGroup >> gtViewGroupedByActionTypeFor: aView [
 	<gtView>
 	
 	^ aView columnedList
-		title: 'By Action Type';
+		title: 'By action type';
 		priority: 15;
 		items: [ self groupedByActionType associations
 			sorted: [ :assoc | assoc value totalDuration ] descending  ];
@@ -55,7 +55,7 @@ GtRlActionExecutedEventsGroup >> gtViewGroupedByRepositoryIdFor: aView [
 	<gtView>
 	
 	^ aView columnedList
-		title: 'By Repository';
+		title: 'By repository';
 		priority: 20;
 		items: [ self groupedByRepositoryId associations
 			sorted: [ :assoc | assoc value totalDuration ] descending ];
