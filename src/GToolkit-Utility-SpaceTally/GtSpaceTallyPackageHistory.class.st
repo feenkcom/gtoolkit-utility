@@ -46,7 +46,7 @@ GtSpaceTallyPackageHistory >> gtViewAnalyzedClassesFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Class Changes';
+		title: 'Class changes';
 		items: [ 
 			self classHistories
 				sorted: [ :aClassHistory | 

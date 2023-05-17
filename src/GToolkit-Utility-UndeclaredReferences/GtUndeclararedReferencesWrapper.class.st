@@ -34,7 +34,7 @@ GtUndeclararedReferencesWrapper >> gtViewUndeclaredAttributesFor: aView [
 	<gtView>
 	
 	^ aView list
-		title: 'Undeclared Attributes';
+		title: 'Undeclared attributes';
 		items: [ 
 			self bindingsForUndeclaredAttributes
 				sorted: [ :aBinding | aBinding name ] ascending ];
@@ -46,7 +46,7 @@ GtUndeclararedReferencesWrapper >> gtViewUndeclaredClassessFor: aView [
 	<gtView>
 	
 	^ aView list
-		title: 'Undeclared Classes';
+		title: 'Undeclared classes';
 		items: [ self bindingsForUndeclaredClasses
 			sorted: [ :aBinding | aBinding name ] ascending ];
 		itemText: [ :aBinding | aBinding name ]

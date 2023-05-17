@@ -35,7 +35,7 @@ GtGhCommit >> gtViewCommitMessageFor: aView [
 	<gtView>
 	
 	^ aView textEditor
-		title: 'Commit Message';
+		title: 'Commit message';
 		text: [ self message ]
 ]
 

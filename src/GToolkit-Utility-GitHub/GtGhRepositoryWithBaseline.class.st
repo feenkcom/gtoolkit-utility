@@ -72,7 +72,7 @@ GtGhRepositoryWithBaseline >> gtViewCommitsBehindParentFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Behind Commits';
+		title: 'Behind commits';
 		items: [ self branchDiffFromSelfToParent commits ];
 		column: 'Timestamp' text: [ :aCommit | aCommit timestamp ] width: 200;
 		column: 'Author' text: [ :aCommit | aCommit authorName ] width: 200;

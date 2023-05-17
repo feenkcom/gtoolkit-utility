@@ -28,7 +28,7 @@ GtSpaceTallyDiff >> gtViewAnalyzedClassesFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Class Changes';
+		title: 'Class changes';
 		priority: 20;
 		items: [ 
 			self classHistories
@@ -55,7 +55,7 @@ GtSpaceTallyDiff >> gtViewAnalyzedPackagesFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Package Changes';
+		title: 'Package changes';
 		priority: 15;
 		items: [ 
 			self packageHistories
@@ -84,7 +84,7 @@ GtSpaceTallyDiff >> gtViewAnalyzedRepositoriesFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Repository Changes';
+		title: 'Repository changes';
 		items: [ 
 			self repositoryHistories
 				sorted: [ :aRepositoryHistory | 
@@ -140,7 +140,7 @@ GtSpaceTallyDiff >> gtViewVersionsOverviewFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Versions Overview';
+		title: 'Versions overview';
 		priority: 10;
 		items: [ self versionsOverviewData ];
 		column: 'Property' text: [ :assoc |

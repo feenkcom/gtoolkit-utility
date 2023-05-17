@@ -14,7 +14,7 @@ GtRlReleaserEventsCollector >> gtViewGroupedByActionTypeFor:  aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Events by Action  Type';
+		title: 'Events by action type';
 		priority: 15;
 		object: [ eventsGrouper ];
 		view: #gtViewGroupedByActionTypeFor: 
@@ -25,7 +25,7 @@ GtRlReleaserEventsCollector >> gtViewGroupedByRepositoryIdFor:  aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Events by Repository';
+		title: 'Events by repository';
 		priority: 20;
 		object: [ eventsGrouper ];
 		view: #gtViewGroupedByRepositoryIdFor: 
