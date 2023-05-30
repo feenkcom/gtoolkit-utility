@@ -13,3 +13,15 @@ AbstractFileReference >> binaryContents [
 	self binaryReadStreamDo: [ :stream |
 		^ stream contents ]
 ]
+
+{ #category : #'*GToolkit-Utility-File' }
+AbstractFileReference >> isFileLocator [
+
+	^ false
+]
+
+{ #category : #'*GToolkit-Utility-File' }
+AbstractFileReference >> isFileReference [
+
+	^ false
+]
