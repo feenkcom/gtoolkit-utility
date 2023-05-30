@@ -11,3 +11,9 @@ FileReference class >> gtNewTempFileLocatorPrefix: prefix suffix: suffix [
 		(tmpDir / fileName) exists ] whileTrue.
 	^ tmpDir / fileName
 ]
+
+{ #category : #'*GToolkit-Utility-File' }
+FileReference >> isFileReference [
+
+	^ true
+]
