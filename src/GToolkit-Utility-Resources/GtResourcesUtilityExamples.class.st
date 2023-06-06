@@ -120,7 +120,7 @@ GtResourcesUtilityExamples >> fileLocator_withParents [
 	self assert: aCollection isCollection.
 	self assert: aCollection isNotEmpty.
 	self assert: (aCollection allSatisfy: #isAbsolute).
-	self assert: aCollection last equals: aLocator asFileReference fileReference.
+	self assert: aCollection last asFileReference equals: aLocator asFileReference fileReference.
 
 	^ aCollection
 ]
