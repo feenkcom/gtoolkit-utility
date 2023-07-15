@@ -117,7 +117,11 @@ GtSubprocessWithInMemoryOutput >> clearErrorBlock [
 
 { #category : #cleaning }
 GtSubprocessWithInMemoryOutput >> closeAndCleanStreams [
-	"This is now a no-op - the library takes care of stream maintenance"
+	"The GC will do this, but if we want the resources returned faster, we can manually call this method"
+	
+	process asynchronousStdout release.
+	process asynchronousStderr release.
+	process stdin release.
 ]
 
 { #category : #accessing }
