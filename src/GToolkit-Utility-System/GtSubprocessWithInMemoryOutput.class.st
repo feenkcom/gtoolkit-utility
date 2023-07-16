@@ -395,7 +395,8 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 		[ [ self runWithRetry ]
 			on: Error
 			do: [ :ex | errorBlock ifNotNil:
-				[ errorBlock cull: self cull: false ] ]
+				[ errorBlock cull: self cull: false ].
+				semaphore ifNotNil: #signal ]
 		] forkAt: Processor activeProcess priority + 1.
 ]
 
