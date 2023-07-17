@@ -365,6 +365,7 @@ GtSubprocessWithInMemoryOutput >> runAndWait [
 { #category : #private }
 GtSubprocessWithInMemoryOutput >> runOnce [
 	"Run the requested command as a separate process"
+	| pollString |
 
 	command := builder createNativeCommand.
 	envVariables ifNotNil: 
@@ -382,6 +383,13 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 	process waitForExitDoing: 
 		[ stdoutStream nextPutAll: stdoutBuffer pollString.
 		stderrStream nextPutAll: stderrBuffer pollString ].
+
+	"Output can be collected after the process has exited.
+	Ensure the buffers are flushed."
+	[ stdoutStream nextPutAll: (pollString := stdoutBuffer pollString).
+	pollString isNotEmpty ] whileTrue.
+	[ stderrStream nextPutAll: (pollString := stderrBuffer pollString).
+	pollString isNotEmpty ] whileTrue.
 ]
 
 { #category : #private }
