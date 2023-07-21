@@ -50,7 +50,8 @@ Class {
 		'outputPoll',
 		'terminateOnShutdown',
 		'stdinStream',
-		'retryCount'
+		'retryCount',
+		'pollException'
 	],
 	#pools : [
 		'LibCSignalSharedPool'
@@ -274,6 +275,7 @@ GtSubprocessWithInMemoryOutput >> isSuccess [
 	"Answer whether the command completed successfully.
 	Only valid after the command has completed."
 
+	pollException ifNotNil: [ ^ false ].
 	self isComplete ifFalse: 
 		[ self hasProcess ifFalse: [ self error: 'Process not yet started' ].
 		process isNull ifTrue: [ self error: 'Process is null' ].
@@ -380,7 +382,7 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 	stderrBuffer := process asynchronousStderr.
 	terminateOnShutdown ifTrue: [ process terminateOnShutdown ].
 
-	process waitForExitDoing: 
+	[ process waitForExitDoing: 
 		[ stdoutStream nextPutAll: stdoutBuffer pollString.
 		stderrStream nextPutAll: stderrBuffer pollString ].
 
@@ -389,7 +391,11 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 	[ stdoutStream nextPutAll: (pollString := stdoutBuffer pollString).
 	pollString isNotEmpty ] whileTrue.
 	[ stderrStream nextPutAll: (pollString := stderrBuffer pollString).
-	pollString isNotEmpty ] whileTrue.
+	pollString isNotEmpty ] whileTrue ]
+		on: Error
+		do: [ :ex |
+			pollException := ex.
+			semaphore signal ].
 ]
 
 { #category : #private }
