@@ -482,6 +482,7 @@ GtSubprocessWithInMemoryOutput >> sigterm [
 { #category : #accessing }
 GtSubprocessWithInMemoryOutput >> stderr [
 
+	pollException ifNotNil: [ self error: 'Exception while polling: ', pollException printString ].
 	stderrStream ifNil: [ ^ '' ].
 	^ stderrStream contents
 ]
@@ -494,6 +495,7 @@ GtSubprocessWithInMemoryOutput >> stdinStream [
 { #category : #accessing }
 GtSubprocessWithInMemoryOutput >> stdout [
 
+	pollException ifNotNil: [ self error: 'Exception while polling: ', pollException printString ].
 	stdoutStream ifNil: [ ^ '' ].
 	^ stdoutStream contents
 ]
