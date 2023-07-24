@@ -24,16 +24,24 @@ GtTemporaryDirectory >> ensureCreateTemporaryReference [
 					newTempFilePrefix: 'gt-temporary-'
 					suffix: '-directory'.
 			
-			reference ensureCreateDirectory ].
+			reference ensureCreateDirectory.
+			
+			"Remove the directory when the object is not used."
+			self class finalizationRegistry add: self ].
 		
 		reference ]
 ]
 
 { #category : #finalization }
 GtTemporaryDirectory >> finalize [
-	self reference ifNotNil: [ :aDirectory | 
-		reference := nil.
-		aDirectory ensureDeleteAll ].
+	reference
+		ifNotNil: [ :aDirectory | 
+			reference := nil.
+			[ aDirectory ensureDeleteAll. ]
+				on: Error
+				do: [ :anException | 
+					"silently ignore errors"
+					anException emit ] ].
 	super finalize
 ]
 
@@ -43,9 +51,6 @@ GtTemporaryDirectory >> initialize [
 	
 	mutex := Mutex new.
 	reference := nil.
-	
-	"Remove the directory when the object is not used."
-	self class finalizationRegistry add: self
 ]
 
 { #category : #printing }
@@ -82,5 +87,8 @@ GtTemporaryDirectory >> reference: aDirectory [
 			assert: [ reference isNil ]
 			description: [ 'Directory can be set only once' ].
 	
-		reference := aDirectory ]
+		reference := aDirectory.
+		
+		"Remove the directory when the object is not used."
+		self class finalizationRegistry add: self ]
 ]
