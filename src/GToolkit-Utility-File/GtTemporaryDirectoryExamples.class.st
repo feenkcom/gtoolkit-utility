@@ -29,6 +29,23 @@ GtTemporaryDirectoryExamples >> explicitDirectory [
 ]
 
 { #category : #examples }
+GtTemporaryDirectoryExamples >> explicitDirectoryIsGarbageCollected [
+	<gtExample>
+	| directory reference |
+	directory := self explicitDirectory.
+	reference := directory reference.
+	
+	self assert: reference exists.
+	directory := nil.
+	
+	2 timesRepeat: [ Smalltalk garbageCollect ].
+	
+	self assert: reference exists not.
+
+	^ reference
+]
+
+{ #category : #examples }
 GtTemporaryDirectoryExamples >> implicitDirectory [
 	<gtExample>
 	| directory reference |
@@ -41,4 +58,21 @@ GtTemporaryDirectoryExamples >> implicitDirectory [
 	self assert: reference isDirectory.
 
 	^ directory
+]
+
+{ #category : #examples }
+GtTemporaryDirectoryExamples >> implicitDirectoryIsGarbageCollected [
+	<gtExample>
+	| directory reference |
+	directory := self implicitDirectory.
+	reference := directory reference.
+	
+	self assert: reference exists.
+	directory := nil.
+	
+	2 timesRepeat: [ Smalltalk garbageCollect ].
+	
+	self assert: reference exists not.
+
+	^ reference
 ]
