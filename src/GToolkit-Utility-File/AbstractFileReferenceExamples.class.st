@@ -4,6 +4,76 @@ Class {
 	#category : #'GToolkit-Utility-File'
 }
 
+{ #category : #testing }
+AbstractFileReferenceExamples class >> isAbstract [
+	^ self name = #AbstractFileReferenceExamples
+]
+
+{ #category : #accessing }
+AbstractFileReferenceExamples >> rootDirectory [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+AbstractFileReferenceExamples >> rootDirectoryChild [
+	^ self rootDirectory / 'child'
+]
+
+{ #category : #accessing }
+AbstractFileReferenceExamples >> rootDirectoryParent [
+	^ self rootDirectory / '..'
+]
+
+{ #category : #accessing }
+AbstractFileReferenceExamples >> withParents_rootDirectory [
+	<gtExample>
+	| aReference aResult |
+	aReference := self rootDirectory.
+	aResult := aReference withParents.
+
+	self
+		assert: aResult isEmpty not
+		description: [ 'Root directory collection must be non-empty' ].
+		
+	self
+		assert: aResult size = 1
+		description: [ 'Root directory collection must have one item' ].
+
+	^ aResult
+]
+
+{ #category : #accessing }
+AbstractFileReferenceExamples >> withParents_rootDirectoryChild [
+	<gtExample>
+	| aReference aResult |
+	aReference := self rootDirectoryChild.
+	aResult := aReference withParents.
+
+	self
+		assert: aResult isEmpty not
+		description: [ 'Root directory collection must be non-empty' ].
+		
+	self
+		assert: aResult size = 2
+		description: [ 'Root directory collection must have two items' ].
+
+	^ aResult
+]
+
+{ #category : #accessing }
+AbstractFileReferenceExamples >> withParents_rootDirectoryParent [
+	<gtExample>
+	| aReference aResult |
+	aReference := self rootDirectoryParent.
+	aResult := aReference withParents.
+
+	self
+		assert: aResult isEmpty
+		description: [ 'Root directory parent collection must be empty' ].
+
+	^ aResult
+]
+
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_workingDirectory [
 	<gtExample>

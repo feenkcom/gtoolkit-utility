@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #accessing }
+FileReferenceExamples >> rootDirectory [
+	| aReference |
+	aReference := FileLocator root asFileReference.
+
+	self assert: (aReference isKindOf: FileReference).
+
+	^ aReference
+]
+
+{ #category : #accessing }
 FileReferenceExamples >> workingDirectory [
 	| aReference |
 	aReference := FileLocator workingDirectory asFileReference.

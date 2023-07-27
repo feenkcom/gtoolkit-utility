@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+FileLocatorExamples >> rootDirectory [
+	^ FileLocator root
+]
+
+{ #category : #accessing }
 FileLocatorExamples >> workingDirectory [
 	^ FileLocator workingDirectory asFileReference
 ]
