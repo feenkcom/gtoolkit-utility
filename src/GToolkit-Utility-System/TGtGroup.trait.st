@@ -114,6 +114,11 @@ TGtGroup >> ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock [
 	^ self items ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock
 ]
 
+{ #category : #testing }
+TGtGroup >> includes: anObject [
+	^ self items includes: anObject
+]
+
 { #category : #accessing }
 TGtGroup >> isCollection [
 	^ true
