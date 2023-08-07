@@ -94,6 +94,26 @@ TGtGroup >> groupedBy: aBlock [
 	^ self items groupedBy: aBlock
 ]
 
+{ #category : #testing }
+TGtGroup >> ifEmpty: aBlock [
+	^ self items ifEmpty: aBlock
+]
+
+{ #category : #testing }
+TGtGroup >> ifEmpty: emptyBlock ifNotEmpty: notEmptyBlock [
+	^ self items ifEmpty: emptyBlock ifNotEmpty: notEmptyBlock
+]
+
+{ #category : #testing }
+TGtGroup >> ifNotEmpty: aBlock [
+	^ self items ifNotEmpty: aBlock
+]
+
+{ #category : #testing }
+TGtGroup >> ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock [
+	^ self items ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock
+]
+
 { #category : #accessing }
 TGtGroup >> isCollection [
 	^ true
