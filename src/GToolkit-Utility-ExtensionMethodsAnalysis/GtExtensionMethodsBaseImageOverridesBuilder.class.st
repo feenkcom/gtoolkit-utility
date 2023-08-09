@@ -8,13 +8,17 @@ To perform this:
 Class {
 	#name : #GtExtensionMethodsBaseImageOverridesBuilder,
 	#superclass : #Object,
+	#instVars : [
+		'imageName',
+		'imageUrl',
+		'imageArchiveName'
+	],
 	#category : #'GToolkit-Utility-ExtensionMethodsAnalysis'
 }
 
 { #category : #analysis }
 GtExtensionMethodsBaseImageOverridesBuilder class >> forGToolkit [
-	^ self new 
-		buildWrapperForProject: BaselineOfGToolkit fullBaselineProject
+	^ self new buildWrapperForGToolkit
 ]
 
 { #category : #analysis }
@@ -26,6 +30,11 @@ GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForComparisonResult: 
 	^ GtExtensionMethodsProjectBuilder new 
 		buildProjectWrapperForMethods: targetMethods 
 		inProject: aProject
+]
+
+{ #category : #analysis }
+GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForGToolkit [
+	^ self buildWrapperForProject: BaselineOfGToolkit fullBaselineProject
 ]
 
 { #category : #analysis }
@@ -50,7 +59,7 @@ GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForProject: aProject 
 { #category : #utils }
 GtExtensionMethodsBaseImageOverridesBuilder >> comparisonResultsForAnalysisCode: analysisSourceCode [
 	| command newProcess arguments resultString |
-	
+	self halt.
 	command := GtVirtualMachine instance 
 		headlessExecutable resolve fullName.
 	arguments := { 
@@ -128,17 +137,35 @@ GtExtensionMethodsBaseImageOverridesBuilder >> ensureImageDownloaded [
 
 { #category : #accessing }
 GtExtensionMethodsBaseImageOverridesBuilder >> imageArchiveName [ 
-	^ 'Pharo10-SNAPSHOT.build.521.sha.14f5413.arch.64bit.zip'.
+	^ imageArchiveName ifNil: [
+		'Pharo10-SNAPSHOT.build.521.sha.14f5413.arch.64bit.zip' ]
+]
+
+{ #category : #accessing }
+GtExtensionMethodsBaseImageOverridesBuilder >> imageArchiveName: anArchiveName [
+	imageArchiveName := anArchiveName
 ]
 
 { #category : #accessing }
 GtExtensionMethodsBaseImageOverridesBuilder >> imageName [ 
-	^ 'Pharo10-SNAPSHOT-64bit-14f5413.image'
+	^ imageName ifNil: [
+		'Pharo10-SNAPSHOT-64bit-14f5413.image' ]
+]
+
+{ #category : #accessing }
+GtExtensionMethodsBaseImageOverridesBuilder >> imageName: anImageName [
+	imageName := anImageName
 ]
 
 { #category : #accessing }
 GtExtensionMethodsBaseImageOverridesBuilder >> imageUrl [
-	^ 'https://dl.feenk.com/pharo/', self imageArchiveName
+	^ imageUrl ifNil: [
+		'https://dl.feenk.com/pharo/', self imageArchiveName ]
+]
+
+{ #category : #accessing }
+GtExtensionMethodsBaseImageOverridesBuilder >> imageUrl: anUrlString [
+	imageUrl := anUrlString
 ]
 
 { #category : #accessing }
