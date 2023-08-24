@@ -76,3 +76,36 @@ GtTemporaryDirectoryExamples >> implicitDirectoryIsGarbageCollected [
 
 	^ reference
 ]
+
+{ #category : #examples }
+GtTemporaryDirectoryExamples >> prefixSuffixDirectory [
+	<gtExample>
+	| directory reference |
+	directory := GtTemporaryDirectory new.
+	directory prefix: 'prefix-part' suffix: 'suffix-part'.
+
+	reference := directory reference.
+
+	self assert: reference == directory reference.
+	self assert: reference exists.
+	self assert: reference isDirectory.
+
+	^ directory
+]
+
+{ #category : #examples }
+GtTemporaryDirectoryExamples >> prefixSuffixDirectoryIsGarbageCollected [
+	<gtExample>
+	| directory reference |
+	directory := self prefixSuffixDirectory.
+	reference := directory reference.
+	
+	self assert: reference exists.
+	directory := nil.
+	
+	2 timesRepeat: [ Smalltalk garbageCollect ].
+	
+	self assert: reference exists not.
+
+	^ reference
+]

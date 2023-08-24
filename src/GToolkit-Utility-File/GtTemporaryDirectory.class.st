@@ -53,6 +53,29 @@ GtTemporaryDirectory >> initialize [
 	reference := nil.
 ]
 
+{ #category : #'api - initialization' }
+GtTemporaryDirectory >> prefix: aPrefix suffix: aSuffix [
+	self 
+		assert: [ aPrefix isNotNil ] 
+		description: [ 'Directory prefix must be non-nil' ].
+	self 
+		assert: [ aSuffix isNotNil ] 
+		description: [ 'Directory suffix must be non-nil' ].
+
+	mutex critical: [
+		self
+			assert: [ reference isNil ]
+			description: [ 'Directory can be set only once' ].
+	
+		reference := FileReference
+					newTempFilePrefix: aPrefix
+					suffix: aSuffix.
+		reference ensureCreateDirectory.
+		
+		"Remove the directory when the object is not used."
+		self class finalizationRegistry add: self ]
+]
+
 { #category : #printing }
 GtTemporaryDirectory >> printOn: aStream [
 	super printOn: aStream.
