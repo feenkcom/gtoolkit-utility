@@ -7,6 +7,11 @@ Class {
 	#category : #'GToolkit-Utility-Logging'
 }
 
+{ #category : #accessing }
+GtBeaconLogEvent class >> eventLabel [
+	^ 'Beacon Event'
+]
+
 { #category : #adding }
 GtBeaconLogEvent >> addSignal: aSignal [
 	self signals add: aSignal
