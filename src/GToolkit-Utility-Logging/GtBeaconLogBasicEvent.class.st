@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'subEvents'
 	],
-	#category : #'GToolkit-Utility-Logging'
+	#category : #'GToolkit-Utility-Logging-Core'
 }
 
 { #category : #accessing }

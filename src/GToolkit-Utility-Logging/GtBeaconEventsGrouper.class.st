@@ -7,7 +7,7 @@ Class {
 		'shouldNotifyUpdates',
 		'announcer'
 	],
-	#category : #'GToolkit-Utility-Logging'
+	#category : #'GToolkit-Utility-Logging-Core'
 }
 
 { #category : #adding }
