@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'GToolkit-Utility-Logging'
+	#category : #'GToolkit-Utility-Logging-Core'
 }
 
 { #category : #adding }
