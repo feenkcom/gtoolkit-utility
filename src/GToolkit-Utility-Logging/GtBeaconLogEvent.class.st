@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'signals'
 	],
-	#category : #'GToolkit-Utility-Logging'
+	#category : #'GToolkit-Utility-Logging-Core'
 }
+
+{ #category : #accessing }
+GtBeaconLogEvent class >> eventLabel [
+	^ 'Beacon Event'
+]
 
 { #category : #adding }
 GtBeaconLogEvent >> addSignal: aSignal [

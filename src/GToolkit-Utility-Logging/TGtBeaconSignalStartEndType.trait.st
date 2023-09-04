@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'eventType'
 	],
-	#category : #'GToolkit-Utility-Logging'
+	#category : #'GToolkit-Utility-Logging-Core'
 }
 
 { #category : #testing }
