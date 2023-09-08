@@ -46,18 +46,18 @@ GtInheritedMethodsSortFunction >> collate: anObject1 with: anObject2 [
 	This assumes a total order in accordance with the mathematical law of trichotomy.
 	See also:  http://en.wikipedia.org/wiki/Three-way_comparison"
 
-	| classResult |
-	classResult := self compareClassOf: anObject1 withClassOf: anObject2.
-	^ classResult = 0
-		ifTrue: [ self compareMethodNameOf: anObject1 withMethodNameOf: anObject2 ]
-		ifFalse: [ classResult ]
+	| methodResult |
+	methodResult := self compareMethodNameOf: anObject1 withMethodNameOf: anObject2.
+	^ methodResult = 0
+		ifTrue: [ self compareClassOf: anObject1 withClassOf: anObject2 ]
+		ifFalse: [ methodResult ]
 ]
 
 { #category : #'private - comparison' }
 GtInheritedMethodsSortFunction >> compareClassOf: aMethod1 withClassOf: aMethod2 [
 	aMethod1 methodClass == aMethod2 methodClass ifTrue: [^0].
-	(aMethod1 methodClass inheritsFrom: aMethod2 methodClass) ifTrue: [^-1].
-	(aMethod2 methodClass inheritsFrom: aMethod1 methodClass) ifTrue: [^1].
+	(aMethod1 methodClass inheritsFrom: aMethod2 methodClass) ifTrue: [^1].
+	(aMethod2 methodClass inheritsFrom: aMethod1 methodClass) ifTrue: [^-1].
 	^0
 ]
 
