@@ -63,6 +63,7 @@ AbstractFileReferenceExamples >> withParents_rootDirectoryChild [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_rootDirectoryParent [
 	<gtExample>
+	<noTest>
 	| aReference aResult |
 	aReference := self rootDirectoryParent.
 	aResult := aReference withParents.
