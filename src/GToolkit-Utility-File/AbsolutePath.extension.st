@@ -6,7 +6,7 @@ AbsolutePath class >> removeRedundantSegments: segments [
 	The parent of the root directory is itself."
 	| newSegments |
 
-	newSegments := segments copy.
+	newSegments := segments asOrderedCollection copy.
 	[ newSegments isNotEmpty and: [ newSegments first = '..' ] ] whileTrue:
 		[ newSegments removeFirst ].
 	^ newSegments select:
