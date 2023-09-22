@@ -64,12 +64,14 @@ AbstractFileReferenceExamples >> withParents_rootDirectoryChild [
 AbstractFileReferenceExamples >> withParents_rootDirectoryParent [
 	<gtExample>
 	| aReference aResult |
+
 	aReference := self rootDirectoryParent.
 	aResult := aReference withParents.
 
+	"The parent of the root directory is itself, but we don't want to loop forever, so the result is just the root directory"
 	self
-		assert: aResult isEmpty
-		description: [ 'Root directory parent collection must be empty' ].
+		assert: aResult size
+		equals: 1.
 
 	^ aResult
 ]
@@ -81,9 +83,10 @@ AbstractFileReferenceExamples >> withParents_workingDirectory [
 	aReference := self workingDirectory.
 	aResult := aReference withParents.
 
+	"There should be an entry for each segment in the path + the root directory"
 	self
-		assert: aResult isEmpty not
-		description: [ 'Parents collection must be non-empty' ].
+		assert: aResult size
+		equals: aReference asAbsolute path segments size + 1.
 
 	^ aResult
 ]
