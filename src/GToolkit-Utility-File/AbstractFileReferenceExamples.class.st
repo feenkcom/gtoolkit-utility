@@ -1,6 +1,8 @@
 Class {
 	#name : #AbstractFileReferenceExamples,
 	#superclass : #Object,
+	#traits : 'TAssertable',
+	#classTraits : 'TAssertable classTrait',
 	#category : #'GToolkit-Utility-File'
 }
 
