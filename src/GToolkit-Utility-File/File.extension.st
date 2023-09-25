@@ -31,6 +31,7 @@ symbolic link information
 	16: is symbolic link
 	"
 	"This is a patch to Pharo and should be removed once upstream catches up."
+	<gtPharoPatch: #Pharo12>
 	<primitive: 'primitiveFileAttribute' module: 'FileAttributesPlugin' error: error>
 	"FilePlugin>>primitiveDirectoryEntry would return the symbolic link attributes if the symbolic link was broken.  This was due to the incorrect implementation of attempting to retrieve symbolic link information.
 	If the old behaviour is required, the logic is:

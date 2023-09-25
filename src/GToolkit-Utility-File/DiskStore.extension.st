@@ -4,6 +4,7 @@ Extension { #name : #DiskStore }
 DiskStore >> delete: path [
 	"Delete the supplied path on the receiver"
 	"This is a patch to Pharo and should be removed once upstream catches up."
+	<gtPharoPatch: #Pharo12>
 	| pathString isSymlink |
 
 	isSymlink := self isSymlink: path.
