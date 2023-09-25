@@ -1,54 +1,7 @@
-Class {
-	#name : #FileReferenceExamples,
-	#superclass : #AbstractFileReferenceExamples,
-	#category : #'GToolkit-Utility-File'
-}
+Extension { #name : #FileReferenceTest }
 
-{ #category : #accessing }
-FileReferenceExamples >> rootDirectory [
-	| aReference |
-	aReference := FileLocator root asFileReference.
-
-	self assert: (aReference isKindOf: FileReference).
-
-	^ aReference
-]
-
-{ #category : #examples }
-FileReferenceExamples >> testCanonicalization [
-	<gtExample>
-	| ref |
-
-	ref := 'a/b/c' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'b' 'c').
-
-	ref := '/a/b/c' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'b' 'c').
-
-	ref := '../a/b/c' asFileReference canonicalize.
-	self assert: ref path segments equals: #('..' 'a' 'b' 'c').
-
-	ref := 'a/b/c/..' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'b').
-
-	ref := '/a/b/c/..' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'b').
-
-	ref := 'a/b/../c' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'c').
-
-	ref := '/a/b/../c' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'c').
-
-	ref := '/..' asFileReference canonicalize.
-	self assert: ref path segments isEmpty.
-
-	ref := '/../a/b/../c' asFileReference canonicalize.
-	self assert: ref path segments equals: #('a' 'c')
-]
-
-{ #category : #examples }
-FileReferenceExamples >> testSymbolicLink [
+{ #category : #'*GToolkit-Utility-File' }
+FileReferenceTest >> testSymbolicLink [
 	"The delete visitor should not follow symbolic links and should delete them as a file."
 	| tempDir aDir bDir symbolicLink symlinkCommand status |
 
@@ -68,7 +21,7 @@ FileReferenceExamples >> testSymbolicLink [
 
 	self assert: symbolicLink isSymlink.
 	self assert: symbolicLink isDirectory.
-	self assert: symbolicLink targetFileReference = aDir.
+	self assert: symbolicLink targetFileReference equals: aDir.
 	bDir ensureDeleteAll.
 	self assert: aDir exists.
 	self deny: bDir exists ]
@@ -76,9 +29,10 @@ FileReferenceExamples >> testSymbolicLink [
 
 ]
 
-{ #category : #examples }
-FileReferenceExamples >> testSymbolicLinkTargetPath [
+{ #category : #'*GToolkit-Utility-File' }
+FileReferenceTest >> testSymbolicLinkTargetPath [
 	<gtExample>
+	<gtPharoPatch: #Pharo12>
 	| tempDir dDir symbolicLink symlinkCommand status |
 
 	OSPlatform current isWindows ifTrue: [ ^ self ].
@@ -94,7 +48,6 @@ FileReferenceExamples >> testSymbolicLinkTargetPath [
 	status = 0 ifFalse: [ self error: 'Unable to create symbolic link' ].
 
 	self assert: symbolicLink isSymlink.
-
 	self assert: (tempDir / 'a/sl/../abc') canonicalize path
 		equals: (tempDir / 'a/b/c/abc') path.
 
@@ -105,14 +58,4 @@ FileReferenceExamples >> testSymbolicLinkTargetPath [
 		equals: (tempDir / 'a/b/c/abc') path ]
 			ensure: [ tempDir ensureDeleteAll ].
 
-]
-
-{ #category : #accessing }
-FileReferenceExamples >> workingDirectory [
-	| aReference |
-	aReference := FileLocator workingDirectory asFileReference.
-
-	self assert: (aReference isKindOf: FileReference).
-
-	^ aReference
 ]
