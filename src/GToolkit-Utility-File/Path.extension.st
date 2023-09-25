@@ -14,9 +14,16 @@ Path class >> addElement: element to: result on: filesystem [
 
 { #category : #'*GToolkit-Utility-File' }
 Path class >> addParentElementTo: result on: filesystem [
-	"Since this path is relative we don't know what it will be resolved against.
-	Canonicalize assuming no symbolic links"
+	"The parent directory may be a symbolic link, in which case it must be resolved to its target path before determining the result."
 	<gtPharoPatch: #Pharo12>
+
+	result ifNotEmpty:
+		[ | parentReference entry |
+		parentReference := filesystem referenceTo: (self withAll: result).
+		entry := parentReference symlinkEntry.
+		entry isSymlink ifTrue:
+			[ result removeAll.
+			result addAll: entry targetPath segments ] ].
 
 	(result isEmpty or: [ result last = '..' ])
 		ifTrue: [ result add: '..' ]
