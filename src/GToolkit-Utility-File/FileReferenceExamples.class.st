@@ -94,6 +94,7 @@ FileReferenceExamples >> testSymbolicLinkTargetPath [
 	status = 0 ifFalse: [ self error: 'Unable to create symbolic link' ].
 
 	self assert: symbolicLink isSymlink.
+
 	self assert: (tempDir / 'a/sl/../abc') canonicalize path
 		equals: (tempDir / 'a/b/c/abc') path.
 
