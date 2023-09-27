@@ -294,17 +294,14 @@ GtSubprocessWithInMemoryOutput >> kill [
 
 { #category : #printing }
 GtSubprocessWithInMemoryOutput >> printOn: aStream [
-
-	process ifNil: [ ^super printOn: aStream ].
-	self isRunning ifTrue:
-		[ aStream nextPutAll: 'a Running GtSubprocessWithInMemoryOutput' ]
-	ifFalse: [ self isComplete ifFalse:
-		[ aStream nextPutAll: 'an Incomplete GtSubprocessWithInMemoryOutput' ]
-	ifTrue:
-		[ self isSuccess ifTrue: 
-				[ aStream nextPutAll: 'a Successfull GtSubprocessWithInMemoryOutput' ]
-			ifFalse:
-				[ aStream nextPutAll: 'an Unsuccessfull GtSubprocessWithInMemoryOutput' ] ] ].
+	process ifNil: [ ^ super printOn: aStream ].
+	self isRunning
+		ifTrue: [ aStream nextPutAll: 'a Running GtSubprocessWithInMemoryOutput' ]
+		ifFalse: [ self isComplete
+				ifFalse: [ aStream nextPutAll: 'an Incomplete GtSubprocessWithInMemoryOutput' ]
+				ifTrue: [ self isSuccess
+						ifTrue: [ aStream nextPutAll: 'a Successful GtSubprocessWithInMemoryOutput' ]
+						ifFalse: [ aStream nextPutAll: 'an Unsuccessful GtSubprocessWithInMemoryOutput' ] ] ]
 ]
 
 { #category : #accessing }
