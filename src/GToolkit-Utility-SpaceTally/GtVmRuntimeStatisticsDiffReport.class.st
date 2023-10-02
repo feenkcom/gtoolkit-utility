@@ -1,6 +1,9 @@
 Class {
 	#name : #GtVmRuntimeStatisticsDiffReport,
 	#superclass : #GtVmBasicRuntimeStatisticsDiffReport,
+	#instVars : [
+		'label'
+	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
@@ -97,6 +100,16 @@ GtVmRuntimeStatisticsDiffReport >> incrGcTimeDiff [
 		- self sourceReport gargabeCollectionReport incrGCTime.
 ]
 
+{ #category : #accessing }
+GtVmRuntimeStatisticsDiffReport >> label [
+	^ label
+]
+
+{ #category : #accessing }
+GtVmRuntimeStatisticsDiffReport >> label: aLabel [
+	label := aLabel
+]
+
 { #category : #printing }
 GtVmRuntimeStatisticsDiffReport >> printFullTextualContentOn: aStream [
 	aStream << 'Report Overview'; cr.
@@ -121,7 +134,7 @@ GtVmRuntimeStatisticsDiffReport >> printFullTextualContentOn: aStream [
 		printReportValuesOn: aStream
 		prefix: String tab.
 	
-	aStream cr; cr; << 'Report STON'; cr.
+	aStream cr; cr; << 'Report STON: '.
 	STON put: self onStream: aStream
 ]
 
@@ -190,9 +203,8 @@ GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
 
 { #category : #accessing }
 GtVmRuntimeStatisticsDiffReport >> reportSummaryValues [
-	^ {'Total Time' -> (self targetReport timestamp -
-		self sourceReport timestamp) },
-	self garbageCollectionDiffReport reportSummaryValues
+	^ {'Total Time' -> self totalRunningDuration}
+		, self garbageCollectionDiffReport reportSummaryValues
 ]
 
 { #category : #'accessing - gc details' }
@@ -209,8 +221,18 @@ GtVmRuntimeStatisticsDiffReport >> textualDiff [
 ]
 
 { #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> totalGcDuration [  
+	^ Duration milliSeconds: self totalGcTimeDiff
+]
+
+{ #category : #'accessing - gc details' }
 GtVmRuntimeStatisticsDiffReport >> totalGcTimeDiff [ 
 	^ self fullGcTimeDiff + self incrGcTimeDiff.
+]
+
+{ #category : #accessing }
+GtVmRuntimeStatisticsDiffReport >> totalRunningDuration [
+	^ self targetReport timestamp - self sourceReport timestamp
 ]
 
 { #category : #accessing }
