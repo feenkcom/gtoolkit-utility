@@ -62,6 +62,20 @@ GtVmGarbageCollectionReport >> incrGCs: anObject [
 ]
 
 { #category : #printing }
+GtVmGarbageCollectionReport >> printReportValuesOn: aStream prefix: aPrefix [
+	aStream	
+		<< aPrefix; << 'fullGCs = '; print: fullGCs;
+		cr;
+		<< aPrefix; << 'fullGCTime = '; print: fullGCTime;
+		cr;
+		<< aPrefix; << 'incrGCs = '; print: incrGCs;
+		cr;
+		<< aPrefix; << 'incrGCTime = '; print: incrGCTime;
+		cr;
+		<< aPrefix; << 'tenureCount = '; print: tenureCount.
+]
+
+{ #category : #printing }
 GtVmGarbageCollectionReport >> printTextualStatisticsOn: aStream [
 	aStream << 'GCs				'.
 	(fullGCs + incrGCs) printWithCommasOn: aStream.

@@ -1,10 +1,6 @@
 Class {
 	#name : #GtVmRuntimeStatisticsDiffReport,
-	#superclass : #Object,
-	#instVars : [
-		'sourceReport',
-		'targetReport'
-	],
+	#superclass : #GtVmBasicRuntimeStatisticsDiffReport,
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
@@ -31,6 +27,31 @@ GtVmRuntimeStatisticsDiffReport >> fullGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCTime
 		- self sourceReport gargabeCollectionReport fullGCTime.
+]
+
+{ #category : #accessing }
+GtVmRuntimeStatisticsDiffReport >> fullTextualContent [
+	^ String streamContents: [ :aStream |
+		self printFullTextualContentOn:  aStream ]
+]
+
+{ #category : #accessing }
+GtVmRuntimeStatisticsDiffReport >> garbageCollectionDiffReport [
+	^ GtVmGarbageCollectionDiffReport new
+		sourceReport:  self sourceReport gargabeCollectionReport ;
+		targetReport: self targetReport gargabeCollectionReport
+]
+
+{ #category : #'gt - extensions' }
+GtVmRuntimeStatisticsDiffReport >> gtViewFullTextualDescriptionFor: aView [
+	<gtView>
+	
+	self hasReports ifFalse: [ ^ aView empty].
+	
+	^ aView textEditor
+		title: 'Full textual report';
+		text: [ self fullTextualContent ];
+		actionUpdateButton
 ]
 
 { #category : #'gt - extensions' }
@@ -74,6 +95,35 @@ GtVmRuntimeStatisticsDiffReport >> incrGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCTime
 		- self sourceReport gargabeCollectionReport incrGCTime.
+]
+
+{ #category : #printing }
+GtVmRuntimeStatisticsDiffReport >> printFullTextualContentOn: aStream [
+	aStream << 'Vm Runtime Summary Statistics - Overview'; cr.
+	self printSummaryValuesOn: aStream.
+	
+	aStream cr; << 'Textual Diff Report'; cr.
+	self printTextualDiffOn: aStream.
+	
+	aStream cr; << 'Source Report Details'; cr.
+	self sourceReport printTextualStatisticsOn: aStream.
+	
+	aStream cr; << 'Target Report Details'; cr.
+	self targetReport printTextualStatisticsOn: aStream.
+	
+	aStream cr; << 'Vm Runtime Summary Statistics - Values'; cr.
+	aStream cr; << 'Source Report Values'; cr.
+	self sourceReport 
+		printReportValuesOn: aStream
+		prefix: String tab.
+
+	aStream cr; << 'Target Report Values'; cr.
+	self targetReport 
+		printReportValuesOn: aStream
+		prefix: String tab.
+	
+	aStream cr; cr; << 'Vm Runtime Summary Statistics - STON'; cr.
+	STON put: self onStream: aStream
 ]
 
 { #category : #printing }
@@ -139,38 +189,11 @@ GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
 	aStream cr.
 ]
 
-{ #category : #profiling }
-GtVmRuntimeStatisticsDiffReport >> recordSourceReport [
-	^ self sourceReport: self defaultReportClass recordNewReport
-]
-
-{ #category : #profiling }
-GtVmRuntimeStatisticsDiffReport >> recordTargetReport [
-	^ self targetReport: self defaultReportClass recordNewReport
-]
-
 { #category : #accessing }
-GtVmRuntimeStatisticsDiffReport >> sourceReport [
-
-	^ sourceReport
-]
-
-{ #category : #accessing }
-GtVmRuntimeStatisticsDiffReport >> sourceReport: anObject [
-
-	sourceReport := anObject
-]
-
-{ #category : #accessing }
-GtVmRuntimeStatisticsDiffReport >> targetReport [
-
-	^ targetReport
-]
-
-{ #category : #accessing }
-GtVmRuntimeStatisticsDiffReport >> targetReport: anObject [
-
-	targetReport := anObject
+GtVmRuntimeStatisticsDiffReport >> reportSummaryValues [
+	^ {'Total Time' -> (self targetReport timestamp -
+		self sourceReport timestamp) },
+	self garbageCollectionDiffReport reportSummaryValues
 ]
 
 { #category : #'accessing - gc details' }

@@ -55,6 +55,22 @@ GtVmRuntimeStatisticsReport >> memoryStatisticsReport: anObject [
 ]
 
 { #category : #accessing }
+GtVmRuntimeStatisticsReport >> printReportValuesOn: aStream prefix: aPrefix [
+	aStream << aPrefix; << self class name; cr.
+	
+	aStream	
+		<< aPrefix; tab; << 'uptime = '; print: upTime;
+		cr;
+		<< aPrefix; tab; << 'timestamp = '; print: timestamp.
+	
+	self reports do: [ :aReport |
+		aStream 
+			cr;
+			<< aPrefix; tab; << aReport class name; cr.
+		aReport printReportValuesOn: aStream prefix: aPrefix, String tab, String tab]
+]
+
+{ #category : #accessing }
 GtVmRuntimeStatisticsReport >> printTextualStatisticsOn: aStream [
 	aStream	
 		<< 'uptime			'.

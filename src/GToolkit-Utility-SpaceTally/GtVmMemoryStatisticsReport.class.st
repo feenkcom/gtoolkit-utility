@@ -49,6 +49,18 @@ GtVmMemoryStatisticsReport >> oldSpaceSize: anObject [
 ]
 
 { #category : #printings }
+GtVmMemoryStatisticsReport >> printReportValuesOn: aStream prefix: aPrefix [
+	aStream	
+		<< aPrefix; << 'memorySize = '; print: memorySize;
+		cr;
+		<< aPrefix; << 'oldSpaceSize = '; print: oldSpaceSize;
+		cr;
+		<< aPrefix; << 'youngSpaceSize = '; print: youngSpaceSize;
+		cr;
+		<< aPrefix; << 'freeSize = '; print: freeSize
+]
+
+{ #category : #printings }
 GtVmMemoryStatisticsReport >> printTextualStatisticsOn: aStream [
 	aStream << 'memory			'.
 	memorySize printWithCommasOn: aStream.
