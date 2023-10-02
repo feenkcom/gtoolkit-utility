@@ -16,10 +16,12 @@ GtVmExecutionStatisticsReportLogLoader >> loadReportsFromLogContent: aLogContent
 	reports := GtVmExecutionStatisticsReportsGroup new.
 	
 	aLogContentString linesDo: [ :aLine |
-		(aLine beginsWith: 'Report STON:')
+		| trimmedLine |
+		trimmedLine := aLine trimBoth.
+		(trimmedLine beginsWith: 'Report STON:')
 			ifTrue: [ 
 				| newReport |
-				newReport := STON fromString: (aLine 
+				newReport := STON fromString: (trimmedLine 
 					withoutPrefix: 'Report STON:').
 				reports add: newReport ] ].
 
