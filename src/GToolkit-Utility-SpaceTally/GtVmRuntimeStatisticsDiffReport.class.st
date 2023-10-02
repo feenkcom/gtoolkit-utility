@@ -99,10 +99,10 @@ GtVmRuntimeStatisticsDiffReport >> incrGcTimeDiff [
 
 { #category : #printing }
 GtVmRuntimeStatisticsDiffReport >> printFullTextualContentOn: aStream [
-	aStream << 'Vm Runtime Summary Statistics - Overview'; cr.
+	aStream << 'Report Overview'; cr.
 	self printSummaryValuesOn: aStream.
 	
-	aStream cr; << 'Textual Diff Report'; cr.
+	aStream cr.
 	self printTextualDiffOn: aStream.
 	
 	aStream cr; << 'Source Report Details'; cr.
@@ -111,18 +111,17 @@ GtVmRuntimeStatisticsDiffReport >> printFullTextualContentOn: aStream [
 	aStream cr; << 'Target Report Details'; cr.
 	self targetReport printTextualStatisticsOn: aStream.
 	
-	aStream cr; << 'Vm Runtime Summary Statistics - Values'; cr.
 	aStream cr; << 'Source Report Values'; cr.
 	self sourceReport 
 		printReportValuesOn: aStream
 		prefix: String tab.
 
-	aStream cr; << 'Target Report Values'; cr.
+	aStream cr; cr; << 'Target Report Values'; cr.
 	self targetReport 
 		printReportValuesOn: aStream
 		prefix: String tab.
 	
-	aStream cr; cr; << 'Vm Runtime Summary Statistics - STON'; cr.
+	aStream cr; cr; << 'Report STON'; cr.
 	STON put: self onStream: aStream
 ]
 
@@ -147,7 +146,7 @@ GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
 	incrGCTime2 := self incrGcTimeDiff.
 	tenureCount2 := self tenureCountDiff.
 	
-	aStream <<  'GC	'.
+	aStream <<  'GC Diff	'.
 	(fullGCs2 + incrGCs2) printWithCommasOn: aStream.
 	fullGCs2 + incrGCs2 > 0 ifTrue: [
 		aStream
