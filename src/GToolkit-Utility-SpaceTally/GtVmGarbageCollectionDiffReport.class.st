@@ -56,6 +56,11 @@ GtVmGarbageCollectionDiffReport >> reportSummaryValues [
 	}	  
 ]
 
+{ #category : #'accessing - gc details' }
+GtVmGarbageCollectionDiffReport >> totalGcDuration [  
+	^ Duration milliSeconds: self totalGcTimeDiff
+]
+
 { #category : #accessing }
 GtVmGarbageCollectionDiffReport >> totalGcTimeDiff [ 
 	^ self fullGcTimeDiff + self incrGcTimeDiff.
