@@ -26,6 +26,11 @@ GtVmRuntimeStatisticsDiffReport >> fullGCsDiff [
 ]
 
 { #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> fullGcDuration [  
+	^ Duration milliSeconds: self fullGcTimeDiff
+]
+
+{ #category : #'accessing - gc details' }
 GtVmRuntimeStatisticsDiffReport >> fullGcTimeDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCTime
@@ -91,6 +96,11 @@ GtVmRuntimeStatisticsDiffReport >> incrGCsDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCs
 		- self sourceReport gargabeCollectionReport incrGCs.
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> incrGcDuration [  
+	^ Duration milliSeconds: self incrGcTimeDiff
 ]
 
 { #category : #'accessing - gc details' }

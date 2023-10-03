@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtVmExecutionStatisticsReportsGroup >> gtViewGcStatisticsFor: aView [ 
+GtVmExecutionStatisticsReportsGroup >> gtViewGcStatisticsFor:  aView [ 
 	<gtView>
 	
 	^ aView columnedList 
@@ -13,5 +13,7 @@ GtVmExecutionStatisticsReportsGroup >> gtViewGcStatisticsFor: aView [
 		items: [ self ];
 		column: 'Execution' text: [ :aReport | aReport label ];
 		column: 'Total Time' text: [ :aReport | aReport totalRunningDuration ];
-		column: 'Total GC Time' text: [ :aReport | aReport totalGcDuration ]
+		column: 'Total GC Time' text: [ :aReport | aReport totalGcDuration ];
+		column: 'Full GC Time' text: [ :aReport | aReport fullGcDuration ];
+		column: 'Incremental GC Time' text: [ :aReport | aReport incrGcDuration ]
 ]
