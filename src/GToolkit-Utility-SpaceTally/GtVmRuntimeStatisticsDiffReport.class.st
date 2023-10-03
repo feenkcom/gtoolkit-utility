@@ -50,6 +50,11 @@ GtVmRuntimeStatisticsDiffReport >> garbageCollectionDiffReport [
 		targetReport: self targetReport gargabeCollectionReport
 ]
 
+{ #category : #accessing }
+GtVmRuntimeStatisticsDiffReport >> gcRunningTimePercentage [
+	^ ((self totalGcDuration / self totalRunningDuration ) * 100.0 roundTo: 0.1)
+]
+
 { #category : #'gt - extensions' }
 GtVmRuntimeStatisticsDiffReport >> gtViewFullTextualDescriptionFor: aView [
 	<gtView>
@@ -213,7 +218,10 @@ GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
 
 { #category : #accessing }
 GtVmRuntimeStatisticsDiffReport >> reportSummaryValues [
-	^ {'Total Time' -> self totalRunningDuration}
+	^ {
+		'Total Time' -> self totalRunningDuration.
+		'Total GC Percentage' -> (self gcRunningTimePercentage asString, ' %').
+	}
 		, self garbageCollectionDiffReport reportSummaryValues
 ]
 
