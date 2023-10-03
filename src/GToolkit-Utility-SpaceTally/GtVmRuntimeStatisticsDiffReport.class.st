@@ -220,7 +220,8 @@ GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
 GtVmRuntimeStatisticsDiffReport >> reportSummaryValues [
 	^ {
 		'Total Time' -> self totalRunningDuration.
-		'Total GC Percentage' -> (self gcRunningTimePercentage asString, ' %').
+		'Total GC Percentage' -> ((self gcRunningTimePercentage
+			printShowingDecimalPlaces: 2), ' %').
 	}
 		, self garbageCollectionDiffReport reportSummaryValues
 ]
