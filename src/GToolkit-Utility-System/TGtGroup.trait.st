@@ -48,6 +48,11 @@ TGtGroup >> collect: aBlock as: aClass [
 ]
 
 { #category : #accessing }
+TGtGroup >> collect: collectBlock thenReject: selectBlock [
+	^ self items collect: collectBlock thenReject: selectBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> collectWithIndex: aBlock [
 	^ self items collectWithIndex: aBlock
 ]
@@ -87,6 +92,11 @@ TGtGroup >> first [
 { #category : #accessing }
 TGtGroup >> flatCollect: aBlock [
 	^ self items flatCollect: aBlock
+]
+
+{ #category : #accessing }
+TGtGroup >> flatCollect: aBlock as: aClass [
+	^ self items flatCollect: aBlock as: aClass
 ]
 
 { #category : #accessing }
