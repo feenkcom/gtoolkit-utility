@@ -69,6 +69,16 @@ GtResourceReference >> accessTime [
 	^ self fileReference accessTime
 ]
 
+{ #category : #enumerating }
+GtResourceReference >> allChildren [
+	^ self fileReference allChildren
+]
+
+{ #category : #enumerating }
+GtResourceReference >> allChildrenMatching: aPattern [
+	^ self fileReference allChildrenMatching: aPattern
+]
+
 { #category : #converting }
 GtResourceReference >> asAbsolute [
 	^ self fileReference asAbsolute
