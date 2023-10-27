@@ -35,3 +35,8 @@ TGtGroupWithItems >> select: aBlock [
 	^ self species 
 		withAll: (self items select: aBlock)
 ]
+
+{ #category : #sorting }
+TGtGroupWithItems >> sorted: aPredicate [
+	^ self species withAll: (self items sorted: aPredicate)
+]
