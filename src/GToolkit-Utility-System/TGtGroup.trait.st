@@ -141,6 +141,11 @@ TGtGroup >> isEmpty [
 ]
 
 { #category : #testing }
+TGtGroup >> isEmptyOrNil [
+	^ self items isEmptyOrNil
+]
+
+{ #category : #testing }
 TGtGroup >> isNotEmpty [
 
 	^ self items isNotEmpty
