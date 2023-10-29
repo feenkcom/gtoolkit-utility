@@ -105,6 +105,11 @@ TGtGroup >> groupedBy: aBlock [
 ]
 
 { #category : #testing }
+TGtGroup >> identityIncludes: anObject [
+	^ self items identityIncludes: anObject
+]
+
+{ #category : #testing }
 TGtGroup >> ifEmpty: aBlock [
 	^ self items ifEmpty: aBlock
 ]
