@@ -18,8 +18,18 @@ TGtGroupItems >> add: anItem [
 ]
 
 { #category : #accessing }
+TGtGroupItems >> addAll: aCollection [
+	self items addAll: aCollection
+]
+
+{ #category : #accessing }
 TGtGroupItems >> addItem: anItem [
 	self items add: anItem
+]
+
+{ #category : #accessing }
+TGtGroupItems >> addItems: aCollection [
+	self items addAll: aCollection
 ]
 
 { #category : #initialization }
