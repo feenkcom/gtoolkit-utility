@@ -114,6 +114,11 @@ TGtGroup >> groupedBy: aBlock [
 	^ self items groupedBy: aBlock
 ]
 
+{ #category : #accessing }
+TGtGroup >> groupedBy: aBlock having: conditionBlock [
+	^ self items groupedBy: aBlock having: conditionBlock
+]
+
 { #category : #testing }
 TGtGroup >> identityIncludes: anObject [
 	^ self items identityIncludes: anObject
