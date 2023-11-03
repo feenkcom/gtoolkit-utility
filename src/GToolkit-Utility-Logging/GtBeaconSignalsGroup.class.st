@@ -1,15 +1,10 @@
 Class {
 	#name : #GtBeaconSignalsGroup,
 	#superclass : #Object,
-	#traits : 'TGtGroup + TGtGroupItems',
-	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
+	#traits : 'TGtGroupWithItems',
+	#classTraits : 'TGtGroupWithItems classTrait',
 	#category : #'GToolkit-Utility-Logging-Core'
 }
-
-{ #category : #adding }
-GtBeaconSignalsGroup >> addAll: aCollection [
-	self items addAll: aCollection
-]
 
 { #category : #'gt - extensions' }
 GtBeaconSignalsGroup >> gtItemsFor: aView [
