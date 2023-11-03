@@ -17,6 +17,11 @@ TGtGroup >> asArray [
 ]
 
 { #category : #accessing }
+TGtGroup >> asBag [
+	^ self items asBag
+]
+
+{ #category : #accessing }
 TGtGroup >> asBrItemsProvider [
 	^ BrSequenceableCollectionItemsProvider forCollection: self
 ]
@@ -36,23 +41,28 @@ TGtGroup >> at: anIndex [
 	^ self items at: anIndex
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 TGtGroup >> collect: aBlock [
 	^ self items collect: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 TGtGroup >> collect: aBlock as: aClass [
 	^ self items 
 		collect: aBlock as: aClass
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 TGtGroup >> collect: collectBlock thenReject: selectBlock [
 	^ self items collect: collectBlock thenReject: selectBlock
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
+TGtGroup >> collect: collectBlock thenSelect: selectBlock [
+	^ self items collect: collectBlock thenSelect: selectBlock
+]
+
+{ #category : #enumerating }
 TGtGroup >> collectWithIndex: aBlock [
 	^ self items collectWithIndex: aBlock
 ]
@@ -104,6 +114,11 @@ TGtGroup >> groupedBy: aBlock [
 	^ self items groupedBy: aBlock
 ]
 
+{ #category : #accessing }
+TGtGroup >> groupedBy: aBlock having: conditionBlock [
+	^ self items groupedBy: aBlock having: conditionBlock
+]
+
 { #category : #testing }
 TGtGroup >> identityIncludes: anObject [
 	^ self items identityIncludes: anObject
@@ -132,6 +147,11 @@ TGtGroup >> ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock [
 { #category : #testing }
 TGtGroup >> includes: anObject [
 	^ self items includes: anObject
+]
+
+{ #category : #accessing }
+TGtGroup >> indexOf: aBlock [
+	^ self items indexOf: aBlock
 ]
 
 { #category : #accessing }

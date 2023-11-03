@@ -24,6 +24,14 @@ TGtGroupWithItems >> groupedBy: aBlock [
 	^result
 ]
 
+{ #category : #accessing }
+TGtGroupWithItems >> groupedBy: aBlock having: conditionBlock [ 
+	"Override this method here and not reuse the one in collection
+	because we want the keys to be groups, not simple collections"
+	
+	^ (self groupedBy: aBlock) select: conditionBlock
+]
+
 { #category : #enumerating }
 TGtGroupWithItems >> reject: aBlock [
 	^ self species 
