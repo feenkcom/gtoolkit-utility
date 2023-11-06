@@ -5,6 +5,11 @@ Trait {
 	#category : #'GToolkit-Utility-System'
 }
 
+{ #category : #accessing }
+TGtGroupWithItems >> asSet [
+	^ self items asSet
+]
+
 { #category : #enumerating }
 TGtGroupWithItems >> collect: aBlock [
 	^ self species withAll: (self items collect: aBlock)
