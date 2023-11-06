@@ -214,3 +214,8 @@ TGtGroup >> select: aBlock [
 TGtGroup >> size [
 	^ self items size
 ]
+
+{ #category : #accessing }
+TGtGroup >> sorted: aPredicate [
+	^ self items sorted: aPredicate
+]
