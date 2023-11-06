@@ -6,11 +6,6 @@ Trait {
 }
 
 { #category : #enumerating }
-TGtGroupWithItems >> collect: aBlock [
-	^ self species withAll: (self items collect: aBlock)
-]
-
-{ #category : #enumerating }
 TGtGroupWithItems >> collect: collectBlock thenReject: selectBlock [
 	^ self species
 		withAll: (self items collect: collectBlock thenReject: selectBlock)
@@ -20,11 +15,6 @@ TGtGroupWithItems >> collect: collectBlock thenReject: selectBlock [
 TGtGroupWithItems >> collect: collectBlock thenSelect: selectBlock [
 	^ self species
 		withAll: (self items collect: collectBlock thenSelect: selectBlock)
-]
-
-{ #category : #enumerating }
-TGtGroupWithItems >> collectWithIndex: aBlock [
-	^ self species withAll: (self items collectWithIndex: aBlock)
 ]
 
 { #category : #accessing }
