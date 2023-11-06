@@ -10,28 +10,6 @@ TGtGroupWithItems >> asSet [
 	^ self items asSet
 ]
 
-{ #category : #enumerating }
-TGtGroupWithItems >> collect: aBlock [
-	^ self species withAll: (self items collect: aBlock)
-]
-
-{ #category : #enumerating }
-TGtGroupWithItems >> collect: collectBlock thenReject: selectBlock [
-	^ self species
-		withAll: (self items collect: collectBlock thenReject: selectBlock)
-]
-
-{ #category : #enumerating }
-TGtGroupWithItems >> collect: collectBlock thenSelect: selectBlock [
-	^ self species
-		withAll: (self items collect: collectBlock thenSelect: selectBlock)
-]
-
-{ #category : #enumerating }
-TGtGroupWithItems >> collectWithIndex: aBlock [
-	^ self species withAll: (self items collectWithIndex: aBlock)
-]
-
 { #category : #accessing }
 TGtGroupWithItems >> groupedBy: aBlock [ 
 	"Override this method here and not reuse the one in collection
