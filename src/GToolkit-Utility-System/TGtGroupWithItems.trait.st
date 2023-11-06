@@ -5,18 +5,6 @@ Trait {
 	#category : #'GToolkit-Utility-System'
 }
 
-{ #category : #enumerating }
-TGtGroupWithItems >> collect: collectBlock thenReject: selectBlock [
-	^ self species
-		withAll: (self items collect: collectBlock thenReject: selectBlock)
-]
-
-{ #category : #enumerating }
-TGtGroupWithItems >> collect: collectBlock thenSelect: selectBlock [
-	^ self species
-		withAll: (self items collect: collectBlock thenSelect: selectBlock)
-]
-
 { #category : #accessing }
 TGtGroupWithItems >> groupedBy: aBlock [ 
 	"Override this method here and not reuse the one in collection
