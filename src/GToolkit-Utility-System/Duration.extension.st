@@ -2,6 +2,7 @@ Extension { #name : #Duration }
 
 { #category : #'*GToolkit-Utility-System' }
 Duration >> gtHumanReadableString [
+	self < 0 seconds ifTrue: [ ^ '-', self negated gtHumanReadableString ].
 	self < 1 minute ifTrue: [ ^ self seconds asString, 's' ].
 	self < 1 hour ifTrue: [ ^ self minutes asString , 'm ', self seconds asString, 's' ].
 	self < 1 day ifTrue: [ ^ self hours asString , 'h ', self minutes asString, 'm' ].
