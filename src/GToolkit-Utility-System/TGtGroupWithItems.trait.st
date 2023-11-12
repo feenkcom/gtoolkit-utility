@@ -6,6 +6,11 @@ Trait {
 }
 
 { #category : #accessing }
+TGtGroupWithItems >> asSet [
+	^ self items asSet
+]
+
+{ #category : #accessing }
 TGtGroupWithItems >> groupedBy: aBlock [ 
 	"Override this method here and not reuse the one in collection
 	because we want the keys to be groups, not simple collections"
