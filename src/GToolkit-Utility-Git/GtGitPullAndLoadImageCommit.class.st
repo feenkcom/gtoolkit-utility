@@ -1,3 +1,20 @@
+"
+GtGitPullAndLoadImageCommit will ensure that the repository exists and checkout the image commit.  If the repository is in detached head state and a new branch name has been supplied a new branch at the image commit is created (otherwise the repository is left in detached head state).
+
+Note that this requires that the repository is already registered.  If not, an exception is raised.
+
+Typical usage:
+
+```
+GtGitPullAndLoad new
+	ownerName: 'feenkcom';
+	repositoryName: '<repository name>';
+	mainBranchName: 'main';
+	transport: #git;
+	onDetachedBranchName: '<image commit branch name>';
+	recover.
+```
+"
 Class {
 	#name : #GtGitPullAndLoadImageCommit,
 	#superclass : #GtGitPullAndLoad,
