@@ -208,6 +208,7 @@ GtSubprocessWithInMemoryOutput >> gtCommandLineFor: aView [
 	^ aView textEditor
 		title: 'Command line';
 		priority: 30;
+		aptitude: BrGlamorousCodeEditorAptitude;
 		text: [ self commandLineString ];
 		actionUpdateButton
 ]
