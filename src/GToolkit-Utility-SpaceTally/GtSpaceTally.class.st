@@ -25,7 +25,7 @@ GtSpaceTally >> computeSpaceUsageResultsForClassesInstancesAssociations: aCollec
 								analyzedClassName: class name
 								codeSize: class spaceUsed
 								instanceCount: instances size
-								spaceForInstances: (instances sum: #sizeInMemory))
+								spaceForInstances: (instances sum: [ :each | each sizeInMemory ]))
 									analyzedPackageName: class package name) ] ]
 ]
 
