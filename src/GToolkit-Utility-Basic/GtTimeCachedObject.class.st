@@ -33,6 +33,16 @@ GtTimeCachedObject >> initialize: aBlock timeout: aDuration [
 ]
 
 { #category : #accessing }
+GtTimeCachedObject >> newValue [
+	"Answer the receiver's value, updating it regardless of the timeout"
+
+	^ mutex critical:
+		[ value := getBlock value.
+		cacheTimeout := DateAndTime now + cacheTime.
+		value ].
+]
+
+{ #category : #accessing }
 GtTimeCachedObject >> value [
 	"Answer the receiver's value, updating if the timeout has expired"
 
