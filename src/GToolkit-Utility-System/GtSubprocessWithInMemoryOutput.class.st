@@ -153,18 +153,18 @@ GtSubprocessWithInMemoryOutput >> commandLineString [
 			separatedBy: [ stream nextPut: Character space ] ]
 ]
 
-{ #category : #accessing }
-GtSubprocessWithInMemoryOutput >> environmentAt: key put: value [
-
-	self envVariables at: key put: value.
-]
-
 { #category : #'env building' }
 GtSubprocessWithInMemoryOutput >> envVariables [
 	"Answer the dictionary of environment variables that will be passed to the sub-process.
 	If nil, they are inherited from the parent process (Gt)"
 
 	^ envVariables ifNil: [ envVariables := Dictionary new ]
+]
+
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> environmentAt: key put: value [
+
+	self envVariables at: key put: value.
 ]
 
 { #category : #accessing }
