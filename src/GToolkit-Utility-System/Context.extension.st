@@ -8,3 +8,13 @@ Context >> message [
 		selector: self selector 
 		arguments: self arguments
 ]
+
+{ #category : #'*GToolkit-Utility-System' }
+Context >> stackString [
+
+	^ String streamContents: [ :stream | 
+		self stack do: [ :stackItem | 
+			stream
+				print: stackItem;
+				cr ] ]
+]
