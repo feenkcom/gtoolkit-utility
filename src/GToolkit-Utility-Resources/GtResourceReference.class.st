@@ -509,7 +509,7 @@ GtResourceReference >> path: aStringOrPath [
 
 { #category : #converting }
 GtResourceReference >> pathString [
-	^ self asPath pathString
+	^ self fileReference pathString
 ]
 
 { #category : #printing }
