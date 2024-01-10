@@ -534,7 +534,8 @@ GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
 
 	timedOut := semaphore waitTimeoutMSecs: anInteger.
 	(errorBlock isNotNil and: [ timedOut or: [ self isSuccess not ]])
-		ifTrue: [ errorBlock cull: self cull: timedOut ]
+		ifTrue: [ errorBlock cull: self cull: timedOut ].
+	^ timedOut
 ]
 
 { #category : #accessing }
