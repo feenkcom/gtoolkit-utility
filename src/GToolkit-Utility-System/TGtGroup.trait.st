@@ -7,6 +7,11 @@ Trait {
 }
 
 { #category : #accessing }
+TGtGroup >> anyOne [
+	^ self items anyOne
+]
+
+{ #category : #accessing }
 TGtGroup >> anySatisfy: aBlock [
 	^ self items anySatisfy: aBlock
 ]
@@ -100,6 +105,12 @@ TGtGroup >> first [
 ]
 
 { #category : #accessing }
+TGtGroup >> first: aCount [
+	^ self species 
+		withAll: (self items first: aCount)
+]
+
+{ #category : #accessing }
 TGtGroup >> flatCollect: aBlock [
 	^ self items flatCollect: aBlock
 ]
@@ -155,6 +166,11 @@ TGtGroup >> indexOf: aBlock [
 ]
 
 { #category : #accessing }
+TGtGroup >> inject: anObject into: aBlock [
+	^ self items inject: anObject into: aBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> isCollection [
 	^ true
 ]
@@ -186,6 +202,11 @@ TGtGroup >> last [
 	^ self items last
 ]
 
+{ #category : #accessing }
+TGtGroup >> overlappingPairsDo: aBlock [
+	^ self items overlappingPairsDo: aBlock
+]
+
 { #category : #printing }
 TGtGroup >> printOn: aStream [
 	super printOn: aStream.
@@ -203,6 +224,11 @@ TGtGroup >> printOn: aStream [
 { #category : #accessing }
 TGtGroup >> reject: aBlock [
 	^ self items reject: aBlock
+]
+
+{ #category : #accessing }
+TGtGroup >> remove: anItem [
+	self items remove: anItem
 ]
 
 { #category : #accessing }
