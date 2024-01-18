@@ -25,5 +25,6 @@ SpaceTally >> gtViewOverviewFor: aView [
 { #category : #'*GToolkit-Utility-SpaceTally' }
 SpaceTally >> privateAllObjects [
 	Smalltalk garbageCollect.
-	^ SystemNavigation default allObjects groupedBy: [ :each | each class ]
+	^ SystemNavigation default allObjects 
+		groupedBy: [ :each | each class ]
 ]
