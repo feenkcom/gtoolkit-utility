@@ -508,6 +508,11 @@ GtSubprocessWithInMemoryOutput >> terminate [
 	process kill
 ]
 
+{ #category : #actions }
+GtSubprocessWithInMemoryOutput >> terminateAll [
+	process terminateAll
+]
+
 { #category : #'system startup & shutdown' }
 GtSubprocessWithInMemoryOutput >> terminateOnShutdown [
 	"Flag the process for termination if the image quits"
