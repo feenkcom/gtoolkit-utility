@@ -23,11 +23,13 @@ GtSessionManager class >> install [
 	| newSessionManager |
 	newSessionManager := self new.
 	SessionManager default gtStartupListWithDetails do: [ :each |
+		"make sure to use the category of the new manager"
 		newSessionManager 
 			register: each third 
 			inCategory: (newSessionManager categoryNamed: each first name) 
-			atPriority: each second ]. 
-	newSessionManager installNewSession.
+			atPriority: each second ].
+	"change the class of the current session while keeping its identity"
+	GtWorkingSession adoptInstance: SessionManager default currentSession.
 	SessionManager default: newSessionManager.
 	^ newSessionManager
 ]
@@ -39,11 +41,13 @@ GtSessionManager class >> uninstall [
 	| standardSessionManager |
 	standardSessionManager := SessionManager new.
 	SessionManager default gtStartupListWithDetails do: [ :each |
+		"make sure to use the category of the new manager"
 		standardSessionManager 
 			register: each third 
 			inCategory: (standardSessionManager categoryNamed: each first name) 
 			atPriority: each second ]. 
-	standardSessionManager installNewSession.
+	"change the class of the current session while keeping its identity"
+	WorkingSession adoptInstance: SessionManager default currentSession.
 	SessionManager default: standardSessionManager.
 	^ standardSessionManager
 ]
