@@ -20,7 +20,7 @@ Class {
 GtSessionManager class >> install [
 	"Install an instance of me as a replacement for the normal SessionManager"
 	
-	| newSessionManager |
+	| newSessionManager currentSession|
 	newSessionManager := self new.
 	SessionManager default gtStartupListWithDetails do: [ :each |
 		"make sure to use the category of the new manager"
@@ -29,7 +29,9 @@ GtSessionManager class >> install [
 			inCategory: (newSessionManager categoryNamed: each first name) 
 			atPriority: each second ].
 	"change the class of the current session while keeping its identity"
-	GtWorkingSession adoptInstance: SessionManager default currentSession.
+	currentSession := SessionManager default currentSession.
+	GtWorkingSession adoptInstance: currentSession.
+	newSessionManager installSession: currentSession.
 	SessionManager default: newSessionManager.
 	^ newSessionManager
 ]
@@ -38,7 +40,7 @@ GtSessionManager class >> install [
 GtSessionManager class >> uninstall [
 	"Uninstall me and reinstall the normal SessionManager"
 	
-	| standardSessionManager |
+	| standardSessionManager currentSession|
 	standardSessionManager := SessionManager new.
 	SessionManager default gtStartupListWithDetails do: [ :each |
 		"make sure to use the category of the new manager"
@@ -47,7 +49,9 @@ GtSessionManager class >> uninstall [
 			inCategory: (standardSessionManager categoryNamed: each first name) 
 			atPriority: each second ]. 
 	"change the class of the current session while keeping its identity"
-	WorkingSession adoptInstance: SessionManager default currentSession.
+	currentSession := SessionManager default currentSession.
+	WorkingSession adoptInstance: currentSession.
+	standardSessionManager installSession: currentSession.
 	SessionManager default: standardSessionManager.
 	^ standardSessionManager
 ]
