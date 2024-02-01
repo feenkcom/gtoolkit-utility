@@ -27,6 +27,7 @@ GtWorkingSession >> runShutdown: isImageQuitting [
 			event := GtSessionHandlerEvent new
 				handler: each;
 				action: #shutDown;
+				flag: isImageQuitting;
 				duration: (Time millisecondsSince: initialMillliseconds).
 			manager shutDownEvents add: event ]
 ]
@@ -42,6 +43,7 @@ GtWorkingSession >> runStartup: isImageStarting [
 			event := GtSessionHandlerEvent new
 				handler: each;
 				action: #startUp;
+				flag: isImageStarting;
 				duration: (Time millisecondsSince: initialMillliseconds).
 			manager startUpEvents add: event ]
 ]
