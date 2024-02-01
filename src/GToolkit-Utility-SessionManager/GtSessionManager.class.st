@@ -83,6 +83,8 @@ GtSessionManager >> gtViewShutDownEventsFor: aView [
 			each shutDownMethod methodClass = Behavior
 				ifTrue: [ each shutDownMethod printString asRopedText foreground: Color gray ]
 				ifFalse: [ each shutDownMethod ] ];
+		column: #Flag text: [ :each | 
+			each flag ifTrue: [ each flagDescription ] ifFalse: [ 'running' ] ];
 		column: 'Duration (ms)' text: [ :each |
 			each duration isZero
 				ifTrue: [ 0 asRopedText foreground: Color gray ]

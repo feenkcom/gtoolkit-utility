@@ -9,7 +9,8 @@ Class {
 	#instVars : [
 		'handler',
 		'duration',
-		'action'
+		'action',
+		'flag'
 	],
 	#category : #'GToolkit-Utility-SessionManager-Utilities'
 }
@@ -43,6 +44,23 @@ GtSessionHandlerEvent >> duration: milliseconds [
 ]
 
 { #category : #accessing }
+GtSessionHandlerEvent >> flag [
+	^ flag
+]
+
+{ #category : #accessing }
+GtSessionHandlerEvent >> flag: boolean [
+	flag := boolean
+]
+
+{ #category : #accessing }
+GtSessionHandlerEvent >> flagDescription [
+	^ self action = #startUp
+		ifTrue: [ 'image starting' ]
+		ifFalse: [ 'image quiting' ]
+]
+
+{ #category : #accessing }
 GtSessionHandlerEvent >> gtDetailsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -52,6 +70,7 @@ GtSessionHandlerEvent >> gtDetailsFor: aView [
 			{ #action. self action }.
 			{ #handler. self handler }.
 			{ #method. self actionMethod }.
+			{ self flagDescription. self flag }.
 			{ 'duration (ms)'. self duration } 
 			} ];
 		column: #key text: #first;
