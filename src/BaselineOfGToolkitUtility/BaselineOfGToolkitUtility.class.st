@@ -23,6 +23,8 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			baseline: 'GToolkitFileUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitResourcesUtility' with: [
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
+			baseline: 'GToolkitSessionManagerUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ].
 		spec 
 			package: 'GToolkit-Utility-MessageTally';
