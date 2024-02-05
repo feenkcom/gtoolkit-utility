@@ -81,16 +81,20 @@ GtSessionManager >> gtViewShutDownEventsFor: aView [
 		priority: 35;
 		items: [ self shutDownEvents ];
 		column: #Handler text: #handler;
-		column: #Method text: [ :each | 
-			each shutDownMethod methodClass = Behavior
-				ifTrue: [ each shutDownMethod printString asRopedText foreground: Color gray ]
-				ifFalse: [ each shutDownMethod ] ];
-		column: #Flag text: [ :each | 
-			each flag ifTrue: [ each flagDescription ] ifFalse: [ 'running' ] ];
-		column: 'Duration (ms)' text: [ :each |
-			each duration isZero
-				ifTrue: [ 0 asRopedText foreground: Color gray ]
-				ifFalse: [ each duration ] ] 
+		column: #Method
+			text: [ :each | 
+				each shutDownMethod methodClass = Behavior
+					ifTrue: [ each shutDownMethod printString asRopedText foreground: Color gray ]
+					ifFalse: [ each shutDownMethod ] ];
+		column: #Flag
+			text: [ :each | each flag ifTrue: [ each flagDescription ] ifFalse: [ 'running' ] ]
+			width: 100;
+		column: 'Duration (ms)'
+			text: [ :each | 
+				each duration isZero
+					ifTrue: [ 0 asRopedText foreground: Color gray ]
+					ifFalse: [ each duration ] ]
+			width: 100
 ]
 
 { #category : #accessing }
@@ -102,14 +106,20 @@ GtSessionManager >> gtViewStartUpEventsFor: aView [
 		priority: 30;
 		items: [ self startUpEvents ];
 		column: #Handler text: #handler;
-		column: #Method text: [ :each | 
-			each startUpMethod methodClass = Behavior
-				ifTrue: [ each startUpMethod printString asRopedText foreground: Color gray ]
-				ifFalse: [ each startUpMethod ] ];
-		column: 'Duration (ms)' text: [ :each |
-			each duration isZero
-				ifTrue: [ 0 asRopedText foreground: Color gray ]
-				ifFalse: [ each duration ] ] 
+		column: #Method
+			text: [ :each | 
+				each startUpMethod methodClass = Behavior
+					ifTrue: [ each startUpMethod printString asRopedText foreground: Color gray ]
+					ifFalse: [ each startUpMethod ] ];
+		column: #Flag
+			text: [ :each | each flag ifTrue: [ each flagDescription ] ifFalse: [ 'running' ] ]
+			width: 100;
+		column: 'Duration (ms)'
+			text: [ :each | 
+				each duration isZero
+					ifTrue: [ 0 asRopedText foreground: Color gray ]
+					ifFalse: [ each duration ] ]
+			width: 100
 ]
 
 { #category : #initialization }
