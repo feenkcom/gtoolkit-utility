@@ -32,6 +32,7 @@ GtSessionManager class >> install [
 	currentSession := SessionManager default currentSession.
 	GtWorkingSession adoptInstance: currentSession.
 	newSessionManager installSession: currentSession.
+	currentSession manager: newSessionManager.
 	SessionManager default: newSessionManager.
 	^ newSessionManager
 ]
@@ -52,6 +53,7 @@ GtSessionManager class >> uninstall [
 	currentSession := SessionManager default currentSession.
 	WorkingSession adoptInstance: currentSession.
 	standardSessionManager installSession: currentSession.
+	currentSession manager: standardSessionManager.
 	SessionManager default: standardSessionManager.
 	^ standardSessionManager
 ]
