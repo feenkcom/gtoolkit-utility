@@ -72,7 +72,17 @@ GtSessionManager >> dumpShutdownEvents [
 				nextPutAll: OSPlatform current lineEnding ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'gt extensions' }
+GtSessionManager >> gtViewSessionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Session';
+		priority: 40;
+		object: [ self currentSession ];
+		view: #gtViewDetailsIn:
+]
+
+{ #category : #'gt extensions' }
 GtSessionManager >> gtViewShutDownEventsFor: aView [
 	<gtView>
 	self shutDownEvents isEmpty ifTrue: [ ^ aView empty ].
@@ -97,7 +107,7 @@ GtSessionManager >> gtViewShutDownEventsFor: aView [
 			width: 100
 ]
 
-{ #category : #accessing }
+{ #category : #'gt extensions' }
 GtSessionManager >> gtViewStartUpEventsFor: aView [
 	<gtView>
 	self startUpEvents isEmpty ifTrue: [ ^ aView empty ].
