@@ -10,6 +10,27 @@ Class {
 	#category : #'GToolkit-Utility-SessionManager-Utilities'
 }
 
+{ #category : #'gt-extensions' }
+GtWorkingSession >> gtViewDetailsIn: composite [
+	<gtView>
+	^ composite columnedList
+		title: 'Details';
+		priority: 30;
+		items: [ {
+			{ #self . self }.
+			{ #id . self id printString . self id }.
+			{ #creationTime . self creationTime  }.
+			{ #deferredStartupActions . 
+				deferredStartupActions size. 
+				deferredStartupActions  } 
+		} , 
+		(self properties associations 
+			collect: [ :association | { association key. association value } ]) ];
+		column: #key text: #first weight: 0.5;
+		column: #value text: #second;
+		send: #last
+]
+
 { #category : #printing }
 GtWorkingSession >> printOn: stream [
 	super printOn: stream.
