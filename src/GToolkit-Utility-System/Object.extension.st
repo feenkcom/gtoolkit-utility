@@ -13,6 +13,11 @@ Object >> gtClassOrTraitFrom: aCollection [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
+Object class >> gtGroupType [
+	^ GtBasicGroup
+]
+
+{ #category : #'*GToolkit-Utility-System' }
 Object >> gtUpToVersion: versionString currentVersion: currentString do: upToBlock after: afterBlock [
 	"Evaluate upToBlock if versionString <= currentString, otherwise afterBlock.
 	versionString and currentString are semantic version numbers with an optional leading $v.
