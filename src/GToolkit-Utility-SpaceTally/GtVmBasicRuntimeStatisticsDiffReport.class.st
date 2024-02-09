@@ -18,6 +18,17 @@ GtVmBasicRuntimeStatisticsDiffReport >> defaultReportClass [
 	self subclassResponsibility
 ]
 
+{ #category : #'memory usage' }
+GtVmBasicRuntimeStatisticsDiffReport >> gtSpecificSizeInMemory [
+	^ self sizeInMemory 
+		+ (sourceReport
+			ifNil: [ 0]
+			ifNotNil: [ :aReport | aReport gtSpecificSizeInMemory ])
+		+ (targetReport
+			ifNil: [ 0]
+			ifNotNil: [ :aReport | aReport gtSpecificSizeInMemory ])
+]
+
 { #category : #'gt - extensions' }
 GtVmBasicRuntimeStatisticsDiffReport >> gtViewSummaryValuesFor: aView [
 	<gtView>
