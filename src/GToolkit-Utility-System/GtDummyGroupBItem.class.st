@@ -2,8 +2,8 @@ Class {
 	#name : #GtDummyGroupBItem,
 	#superclass : #GtDummyRootGroupItem,
 	#instVars : [
-		'valueD',
-		'valueE'
+		'valueB1',
+		'valueB2'
 	],
 	#category : #'GToolkit-Utility-System-Examples'
 }
@@ -13,22 +13,36 @@ GtDummyGroupBItem class >> gtGroupType [
 	^ GtDummyItemBGroup
 ]
 
-{ #category : #accessing }
-GtDummyGroupBItem >> valueD [
-	^ valueD
+{ #category : #'instance creation' }
+GtDummyGroupBItem class >> valueY: aValueY valueZ: aValueZ valueB1: aValueB1 valueB2: aValueB2 [
+	^ self new 
+		valueY: aValueY valueZ: aValueZ valueB1: aValueB1 valueB2: aValueB2
+]
+
+{ #category : #printing }
+GtDummyGroupBItem >> descriptionOn: aStream [
+	super descriptionOn: aStream.
+	
+	aStream 
+		<< '; valueB1=';
+		print: valueB1;
+		<< '; valueB2=';
+		print: valueB2
 ]
 
 { #category : #accessing }
-GtDummyGroupBItem >> valueD: anObject [
-	valueD := anObject
+GtDummyGroupBItem >> valueB1 [
+	^ valueB1
 ]
 
 { #category : #accessing }
-GtDummyGroupBItem >> valueE [
-	^ valueE
+GtDummyGroupBItem >> valueB2 [
+	^ valueB2
 ]
 
-{ #category : #accessing }
-GtDummyGroupBItem >> valueE: anObject [
-	valueE := anObject
+{ #category : #initialization }
+GtDummyGroupBItem >> valueY: aValueY valueZ: aValueZ valueB1: aValueB1 valueB2: aValueB2 [
+	self commonValueY: aValueY commonValueZ: aValueZ.
+	valueB1 := aValueB1.
+	valueB2 := aValueB2
 ]
