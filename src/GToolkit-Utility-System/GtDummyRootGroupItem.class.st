@@ -2,8 +2,8 @@ Class {
 	#name : #GtDummyRootGroupItem,
 	#superclass : #Object,
 	#instVars : [
-		'valueA',
-		'valueB'
+		'commonValueY',
+		'commonValueZ'
 	],
 	#category : #'GToolkit-Utility-System-Examples'
 }
@@ -14,21 +14,35 @@ GtDummyRootGroupItem class >> gtGroupType [
 ]
 
 { #category : #accessing }
-GtDummyRootGroupItem >> valueA [
-	^ valueA
+GtDummyRootGroupItem >> commonValueY [
+	^ commonValueY
+]
+
+{ #category : #initialization }
+GtDummyRootGroupItem >> commonValueY: aValueY commonValueZ: aValueZ [
+	commonValueY := aValueY.
+	commonValueZ := aValueZ.
 ]
 
 { #category : #accessing }
-GtDummyRootGroupItem >> valueA: anObject [
-	valueA := anObject
+GtDummyRootGroupItem >> commonValueZ [
+	^ commonValueZ
 ]
 
-{ #category : #accessing }
-GtDummyRootGroupItem >> valueB [
-	^ valueB
+{ #category : #printing }
+GtDummyRootGroupItem >> descriptionOn: aStream [
+	
+	aStream 
+		<< 'commonValueY=';
+		print: commonValueY;
+		<< '; commonValueZ=';
+		print: commonValueZ 
 ]
 
-{ #category : #accessing }
-GtDummyRootGroupItem >> valueB: anObject [
-	valueB := anObject
+{ #category : #printing }
+GtDummyRootGroupItem >> printOn: aStream [
+	super printOn: aStream.
+	
+	aStream parenthesize: [
+		self descriptionOn: aStream ]
 ]
