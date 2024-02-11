@@ -55,6 +55,14 @@ GtVmRuntimeStatisticsDiffReport >> gcRunningTimePercentage [
 	^ ((self totalGcDuration / self totalRunningDuration ) * 100.0 roundTo: 0.1)
 ]
 
+{ #category : #'memory usage' }
+GtVmRuntimeStatisticsDiffReport >> gtSpecificSizeInMemory [
+	^ super gtSpecificSizeInMemory 
+		+ ((label notNil and: [ label isString] )
+			ifTrue: [ label sizeInMemory ]
+			ifFalse: [ 0 ])
+]
+
 { #category : #'gt - extensions' }
 GtVmRuntimeStatisticsDiffReport >> gtViewFullTextualDescriptionFor: aView [
 	<gtView>

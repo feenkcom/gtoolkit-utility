@@ -13,6 +13,13 @@ GtVmBasicResourceRuntimeReport class >> recordNewReport [
 	^ self new recordReportStatistics
 ]
 
+{ #category : #accessing }
+GtVmBasicResourceRuntimeReport >> gtSpecificSizeInMemory [
+	^ self sizeInMemory + (timestamp
+		ifNil: [ 0]
+		ifNotNil: [ :aTimestamp | aTimestamp gtSpecificSizeInMemory ])
+]
+
 { #category : #'gt - extensions' }
 GtVmBasicResourceRuntimeReport >> gtViewTextualStatisticsFor: aView [
 	<gtView>

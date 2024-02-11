@@ -25,6 +25,17 @@ GtVmRuntimeStatisticsReport >> gargabeCollectionReport: anObject [
 	gargabeCollectionReport := anObject
 ]
 
+{ #category : #'memory usage' }
+GtVmRuntimeStatisticsReport >> gtSpecificSizeInMemory [
+	^ super gtSpecificSizeInMemory 
+		+ (gargabeCollectionReport
+			ifNil: [ 0]
+			ifNotNil: [ :aReport | aReport gtSpecificSizeInMemory ])
+		+ (memoryStatisticsReport
+			ifNil: [ 0]
+			ifNotNil: [ :aReport | aReport gtSpecificSizeInMemory ])
+]
+
 { #category : #'gt - extensions' }
 GtVmRuntimeStatisticsReport >> gtViewReportsFor: aView [
 	<gtView>
