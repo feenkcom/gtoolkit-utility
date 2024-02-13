@@ -72,5 +72,5 @@ GtWorkingSession >> runStartup: isImageStarting [
 { #category : #'startup - shutdown' }
 GtWorkingSession >> stop: isImageQuitting [
 	super stop: isImageQuitting.
-	manager dumpShutdownEvents
+	"manager dumpShutdownEvents"
 ]
