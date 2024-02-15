@@ -34,6 +34,13 @@ GtBeaconLogBasicEvent >> createDefaultEventsGroup [
 ]
 
 { #category : #printing }
+GtBeaconLogBasicEvent >> description [
+
+	^ String streamContents: [ :stream |
+		self descriptionOn: stream ]
+]
+
+{ #category : #printing }
 GtBeaconLogBasicEvent >> descriptionOn: aStream [
 	aStream 
 		print: self timestamp;	
