@@ -44,6 +44,12 @@ TGtGroupWithItems >> reject: aBlock [
 ]
 
 { #category : #enumerating }
+TGtGroupWithItems >> reversed [
+	^ self species 
+		withAll: (self items reversed)
+]
+
+{ #category : #enumerating }
 TGtGroupWithItems >> select: aBlock [
 	^ self species 
 		withAll: (self items select: aBlock)

@@ -232,6 +232,11 @@ TGtGroup >> remove: anItem [
 ]
 
 { #category : #accessing }
+TGtGroup >> reversed [
+	^ self items reversed
+]
+
+{ #category : #accessing }
 TGtGroup >> select: aBlock [
 	^ self items select: aBlock
 ]
