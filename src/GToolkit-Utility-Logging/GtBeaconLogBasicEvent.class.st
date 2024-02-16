@@ -24,6 +24,21 @@ GtBeaconLogBasicEvent >> addSubEvents: aCollection [
 ]
 
 { #category : #accessing }
+GtBeaconLogBasicEvent >> allEvents [
+
+	^ Array streamContents: [ :stream |
+		self allEventsOn: stream ]
+]
+
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> allEventsOn: stream [
+
+	stream nextPut: self.
+	subEvents do: [ :each |
+		each allEventsOn: stream ].
+]
+
+{ #category : #accessing }
 GtBeaconLogBasicEvent >> allSignals [
 	^ self subclassResponsibility 
 ]
@@ -31,6 +46,13 @@ GtBeaconLogBasicEvent >> allSignals [
 { #category : #initialization }
 GtBeaconLogBasicEvent >> createDefaultEventsGroup [
 	^ GtBeaconLogEventsGroup new. 
+]
+
+{ #category : #printing }
+GtBeaconLogBasicEvent >> description [
+
+	^ String streamContents: [ :stream |
+		self descriptionOn: stream ]
 ]
 
 { #category : #printing }

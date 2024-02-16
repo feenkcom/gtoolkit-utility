@@ -18,6 +18,12 @@ GtTimeCachedObject class >> get: aBlock timeout: aDuration [
 ]
 
 { #category : #accessing }
+GtTimeCachedObject >> cacheTimeout [
+
+	^ cacheTimeout
+]
+
+{ #category : #accessing }
 GtTimeCachedObject >> initialize [
 
 	super initialize.
