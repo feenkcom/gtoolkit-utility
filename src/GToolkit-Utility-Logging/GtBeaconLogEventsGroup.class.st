@@ -12,6 +12,13 @@ GtBeaconLogEventsGroup >> addAll: aCollection [
 ]
 
 { #category : #accessing }
+GtBeaconLogEventsGroup >> allEvents [
+
+	^ items flatCollect: [ :each |
+		each allEvents ].
+]
+
+{ #category : #accessing }
 GtBeaconLogEventsGroup >> allSignals [
 	^ GtBeaconSignalsGroup 
 		withAll: (self items flatCollect: #allSignals)
