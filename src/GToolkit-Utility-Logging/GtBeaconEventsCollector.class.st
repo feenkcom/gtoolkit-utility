@@ -51,6 +51,11 @@ GtBeaconEventsCollector >> createDefaultEventsGrouper [
 	^ GtBeaconEventsGrouper new
 ]
 
+{ #category : #initialization }
+GtBeaconEventsCollector >> defaultSignalType [
+	^ self relevantSignalType
+]
+
 { #category : #'gt - extensions' }
 GtBeaconEventsCollector >> gtOverviewFor: aView [
 	<gtView>

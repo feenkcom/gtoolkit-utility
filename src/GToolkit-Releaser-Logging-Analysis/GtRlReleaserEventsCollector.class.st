@@ -9,6 +9,11 @@ GtRlReleaserEventsCollector >> createDefaultEventsGrouper [
 	^ GtRlReleaserEventsGrouper new
 ]
 
+{ #category : #accessing }
+GtRlReleaserEventsCollector >> defaultSignalType [
+	^ GtRlActionExecutionSignal
+]
+
 { #category : #'gt - extensions' }
 GtRlReleaserEventsCollector >> gtViewGroupedByActionTypeFor:  aView [
 	<gtView>
