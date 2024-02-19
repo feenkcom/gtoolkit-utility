@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+GtMyExampleBeaconEventsCollector >> defaultSignalType [
+	^ GtMyExampleBeaconStartSignal,
+		GtMyExampleBeaconStopSignal.
+]
+
+{ #category : #accessing }
 GtMyExampleBeaconEventsCollector >> relevantSignalType [
 	^ GtMyExampleBeaconStartSignal,
 		GtMyExampleBeaconStopSignal.
