@@ -68,6 +68,24 @@ GtBeaconLogBasicEvent >> duration [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> eventLabel [
+	self subclassResponsibility
+]
+
+{ #category : #ui }
+GtBeaconLogBasicEvent >> executionTimelineChartItems [
+
+	^ self allEvents collect: [ :each | | item |
+		item := GtRrExecutionChartDataItem new
+			startTime: each startTimestamp;
+			endTime: each endTimestamp;
+			label: each description;
+			appendDurationToLabel.
+		item propertyAt: #source put: each.
+		item ]
+]
+
 { #category : #'gt - extensions' }
 GtBeaconLogBasicEvent >> gtViewAllSignalsFor: aView [
 	<gtView>
@@ -77,6 +95,22 @@ GtBeaconLogBasicEvent >> gtViewAllSignalsFor: aView [
 	 	priority: 33;
 	 	object: [ self allSignals ];
 	 	view: #gtItemsFor:
+]
+
+{ #category : #ui }
+GtBeaconLogBasicEvent >> gtViewExecutionTimelineListFor: aView [
+	<gtView>
+	^self executionTimelineChartItems
+		ifEmpty: [aView empty]
+		ifNotEmpty: [ :currentTimelineData |
+			aView explicit
+				title: 'Job Execution Timeline';
+				priority: 30;
+				stencil: 
+						[(GtRrExecutionHorizontalChartStencil new)
+							executions: currentTimelineData;
+							colorComputation: [ :anItem |
+								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ] ] ]
 ]
 
 { #category : #accessing }
@@ -103,6 +137,18 @@ GtBeaconLogBasicEvent >> printOn: aStream [
 	
 	aStream parenthesize: [
 		self descriptionOn: aStream ]
+]
+
+{ #category : #printing }
+GtBeaconLogBasicEvent >> shortDescription [
+
+	^ String streamContents: [ :stream |
+		self shortDescriptionOn: stream ]
+]
+
+{ #category : #printing }
+GtBeaconLogBasicEvent >> shortDescriptionOn: aStream [
+	self descriptionOn: aStream
 ]
 
 { #category : #accessing }

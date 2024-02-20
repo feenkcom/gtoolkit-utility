@@ -28,12 +28,6 @@ GtBeaconLogEvent >> allSignals [
 ]
 
 { #category : #accessing }
-GtBeaconLogEvent >> descriptionOn: aStream [
-
-	aStream << self signals first signalTypeLabel
-]
-
-{ #category : #accessing }
 GtBeaconLogEvent >> duration [
 	^ self eventCompletedSignal timestamp - self eventStartedSignal timestamp
 ]
@@ -46,6 +40,11 @@ GtBeaconLogEvent >> endTimestamp [
 { #category : #accessing }
 GtBeaconLogEvent >> eventCompletedSignal [
 	^ self signals last
+]
+
+{ #category : #accessing }
+GtBeaconLogEvent >> eventLabel [
+	^ self class eventLabel
 ]
 
 { #category : #accessing }
@@ -119,7 +118,7 @@ GtBeaconLogEvent >> gtBarElementsWithGlobalWeight: aWeight local: aLocalWeight [
 			in: [ :aPane | aWeight > 0.005
 				ifTrue: [ aPane addChild: (BrLabel new
 					aptitude: (BrGlamorousLabelAptitude new fontSize: 10);
-					text: self description) asScalableElement ] ];
+					text: self shortDescription) asScalableElement ] ];
 			yourself);
 		addChild: (BlElement new
 			layout: (BlLinearLayout horizontal alignTopCenter weightSum: 1);
