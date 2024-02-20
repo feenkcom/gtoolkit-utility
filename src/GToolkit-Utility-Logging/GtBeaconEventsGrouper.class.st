@@ -28,6 +28,13 @@ GtBeaconEventsGrouper >> createDefaultEventsGroup [
 	^ GtBeaconLogEventsGroup new
 ]
 
+{ #category : #'events creation' }
+GtBeaconEventsGrouper >> eventForStartSignal: aSignal [ 
+	(aSignal isKindOf: GtBeaconGenericLogSignal) ifTrue: [
+		^ aSignal eventType new ].
+	^ aSignal class eventType new.
+]
+
 { #category : #'gt - extensions' }
 GtBeaconEventsGrouper >> gtOverviewFor: aView [
 	<gtView>
@@ -97,7 +104,7 @@ GtBeaconEventsGrouper >> processEventSignalFor: aSignal [
 	
 	aSignal isStartSignalType ifTrue: [ 
 		| newEvent topEvent |
-		newEvent := aSignal class eventType new.
+		newEvent := self eventForStartSignal: aSignal.
 		topEvent := eventsStack size > 0 
 			ifTrue: [ eventsStack top ]
 			ifFalse: [ nil ] .
