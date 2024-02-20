@@ -25,6 +25,11 @@ GtBeaconLogCompositeEvent >> eventCompletedSignal [
 ]
 
 { #category : #accessing }
+GtBeaconLogCompositeEvent >> eventLabel [
+	^ 'Composite Event'
+]
+
+{ #category : #accessing }
 GtBeaconLogCompositeEvent >> eventStartedSignal [
 	^ self startedEvent eventStartedSignal
 ]

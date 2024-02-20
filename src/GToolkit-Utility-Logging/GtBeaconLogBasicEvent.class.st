@@ -68,6 +68,11 @@ GtBeaconLogBasicEvent >> duration [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> eventLabel [
+	self subclassResponsibility
+]
+
 { #category : #'gt - extensions' }
 GtBeaconLogBasicEvent >> gtViewAllSignalsFor: aView [
 	<gtView>
@@ -103,6 +108,18 @@ GtBeaconLogBasicEvent >> printOn: aStream [
 	
 	aStream parenthesize: [
 		self descriptionOn: aStream ]
+]
+
+{ #category : #printing }
+GtBeaconLogBasicEvent >> shortDescription [
+
+	^ String streamContents: [ :stream |
+		self shortDescriptionOn: stream ]
+]
+
+{ #category : #printing }
+GtBeaconLogBasicEvent >> shortDescriptionOn: aStream [
+	self descriptionOn: aStream
 ]
 
 { #category : #accessing }

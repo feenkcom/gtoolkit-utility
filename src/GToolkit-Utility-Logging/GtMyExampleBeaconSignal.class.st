@@ -16,7 +16,7 @@ GtMyExampleBeaconSignal class >> emit: aString [
 
 { #category : #accessing }
 GtMyExampleBeaconSignal class >> eventType [
-	^ GtBeaconLogEvent
+	^ GtMyExampleBeaconLogEvent
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,9 +44,12 @@ GtMyExampleBeaconSignal >> message: anObject [
 GtMyExampleBeaconSignal >> printOneLineContentsOn: stream [
 	stream 
 		nextPut: $|; space;
-		nextPutAll: 'MySignal';
-		space; nextPut: $|; space;
 		nextPutAll: message;
 		space; nextPut: $|; space;
 		nextPutAll: self processId
+]
+
+{ #category : #accessing }
+GtMyExampleBeaconSignal >> signalLabel [
+	^ message
 ]

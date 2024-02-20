@@ -27,7 +27,9 @@ GtBeaconTypedLogSignal >> printOneLineContentsOn: aStream [
 	super printOneLineContentsOn: aStream.
 	
 	aStream
-		nextPutAll: ' - ';
+		nextPutAll: '| ';
 		nextPutAll: (self eventTypeName 
-			ifNil: [ '<missing type name>' ])
+			ifNil: [ '<missing type name>' ]);
+		nextPutAll: ' | ';
+		nextPutAll:  self processId
 ]

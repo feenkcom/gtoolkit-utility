@@ -17,8 +17,13 @@ GtBeaconGenericLogSignal >> eventType [
 
 { #category : #printing }
 GtBeaconGenericLogSignal >> printOneLineContentsOn: aStream [
+	eventType ifNotNil: [ :aSymbol | 
+		aStream 
+			<< '| ' 
+			print: aSymbol] .
 	self signalLabel ifNotNil: [ :aString |
 		aStream 
+			<< ' | ' 
 			nextPutAll: aString ]
 ]
 

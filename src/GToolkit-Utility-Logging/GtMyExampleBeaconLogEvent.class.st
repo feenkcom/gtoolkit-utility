@@ -9,7 +9,7 @@ GtMyExampleBeaconLogEvent class >> eventLabel [
 	^ 'My Example Event'
 ]
 
-{ #category : #accessing }
-GtMyExampleBeaconLogEvent >> descriptionOn: aStream [
-	aStream << self eventStartedSignal signalLabel
+{ #category : #printing }
+GtMyExampleBeaconLogEvent >> shortDescriptionOn: aStream [
+	aStream nextPutAll: self signals first signalLabel
 ]

@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtBeaconLabelledLogSignal >> eventType [
-	^ GtBeaconLogEvent
+	^ GtBeaconGenericLogEvent
 ]
 
 { #category : #accessing }
@@ -27,9 +27,11 @@ GtBeaconLabelledLogSignal >> printOneLineContentsOn: aStream [
 	super printOneLineContentsOn: aStream.
 	
 	aStream
-		nextPutAll: ' - ';
+		nextPutAll: ' | ';
 		nextPutAll: (self eventTypeLabel 
-			ifNil: [ '<missing type label>' ])
+			ifNil: [ '<missing type label>' ]);
+		nextPutAll: ' | ';
+		nextPutAll:  self processId
 ]
 
 { #category : #accessing }

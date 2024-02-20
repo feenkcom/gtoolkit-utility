@@ -33,10 +33,13 @@ GtBeaconLogEventsGroup >> gtItemsFor: aView [
 		priority: 10;
 		items: [ self ];
 		children: #subEvents;
-		column: 'Event Type' text: [ :anEvent | anEvent class eventLabel ];
+		column: 'Event Type' text: [ :anEvent | anEvent eventLabel ];
 		column: 'Timestamp' text: #timestamp;
 		column: 'Duration' 
 			text: [ :anEvent | anEvent duration ]
+			width: 125;
+		column: 'Short description' 
+			text: [ :anEvent | anEvent shortDescription ]
 ]
 
 { #category : #enumerating }
