@@ -24,6 +24,19 @@ GtBeaconLogEventsGroup >> allSignals [
 		withAll: (self items flatCollect: #allSignals)
 ]
 
+{ #category : #ui }
+GtBeaconLogEventsGroup >> executionTimelineChartItems [
+
+	^ self allEvents collect: [ :each | | item |
+		item := GtRrExecutionChartDataItem new
+			startTime: each startTimestamp;
+			endTime: each endTimestamp;
+			label: each description;
+			appendDurationToLabel.
+		item propertyAt: #source put: each.
+		item ]
+]
+
 { #category : #'gt - extensions' }
 GtBeaconLogEventsGroup >> gtItemsFor: aView [
 	<gtView>
@@ -37,6 +50,22 @@ GtBeaconLogEventsGroup >> gtItemsFor: aView [
 		column: 'Timestamp' text: #timestamp;
 		column: 'Duration' 
 			text: [ :anEvent | anEvent duration ]
+]
+
+{ #category : #ui }
+GtBeaconLogEventsGroup >> gtViewExecutionTimelineListFor: aView [
+	<gtView>
+	^self executionTimelineChartItems
+		ifEmpty: [aView empty]
+		ifNotEmpty: [ :currentTimelineData |
+			aView explicit
+				title: 'Job Execution Timeline';
+				priority: 30;
+				stencil: 
+						[(GtRrExecutionHorizontalChartStencil new)
+							executions: currentTimelineData;
+							colorComputation: [ :anItem |
+								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ] ] ]
 ]
 
 { #category : #enumerating }
