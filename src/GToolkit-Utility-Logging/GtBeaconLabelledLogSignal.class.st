@@ -22,6 +22,16 @@ GtBeaconLabelledLogSignal >> eventTypeLabel: anObject [
 	eventTypeLabel := anObject
 ]
 
+{ #category : #printing }
+GtBeaconLabelledLogSignal >> printOneLineContentsOn: aStream [
+	super printOneLineContentsOn: aStream.
+	
+	aStream
+		nextPutAll: ' - ';
+		nextPutAll: (self eventTypeLabel 
+			ifNil: [ '<missing type label>' ])
+]
+
 { #category : #accessing }
 GtBeaconLabelledLogSignal >> signalTypeLabel [
 	^ self eventTypeLabel

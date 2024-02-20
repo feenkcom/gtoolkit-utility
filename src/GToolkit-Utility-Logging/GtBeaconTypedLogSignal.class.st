@@ -21,3 +21,13 @@ GtBeaconTypedLogSignal >> eventTypeName [
 GtBeaconTypedLogSignal >> eventTypeName: anEventName [
 	eventTypeName := anEventName
 ]
+
+{ #category : #accessing }
+GtBeaconTypedLogSignal >> printOneLineContentsOn: aStream [
+	super printOneLineContentsOn: aStream.
+	
+	aStream
+		nextPutAll: ' - ';
+		nextPutAll: (self eventTypeName 
+			ifNil: [ '<missing type name>' ])
+]

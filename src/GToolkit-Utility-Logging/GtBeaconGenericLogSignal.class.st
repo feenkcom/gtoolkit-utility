@@ -15,6 +15,13 @@ GtBeaconGenericLogSignal >> eventType [
 	self subclassResponsibility
 ]
 
+{ #category : #printing }
+GtBeaconGenericLogSignal >> printOneLineContentsOn: aStream [
+	self signalLabel ifNotNil: [ :aString |
+		aStream 
+			nextPutAll: aString ]
+]
+
 { #category : #accessing }
 GtBeaconGenericLogSignal >> signalLabel [
 	^ signalLabel
