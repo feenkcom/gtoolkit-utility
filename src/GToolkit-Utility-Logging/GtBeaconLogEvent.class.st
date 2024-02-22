@@ -28,6 +28,12 @@ GtBeaconLogEvent >> allSignals [
 ]
 
 { #category : #accessing }
+GtBeaconLogEvent >> descriptionOn: aStream [
+
+	aStream << self eventStartedSignal signalTypeLabel asString
+]
+
+{ #category : #accessing }
 GtBeaconLogEvent >> duration [
 	^ self eventCompletedSignal timestamp - self eventStartedSignal timestamp
 ]

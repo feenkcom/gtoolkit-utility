@@ -78,11 +78,11 @@ GtBeaconLogBasicEvent >> executionTimelineChartItems [
 
 	^ self allEvents collect: [ :each | | item |
 		item := GtRrExecutionChartDataItem new
+			identifier: each;
 			startTime: each startTimestamp;
 			endTime: each endTimestamp;
 			label: each description;
 			appendDurationToLabel.
-		item propertyAt: #source put: each.
 		item ]
 ]
 
@@ -105,7 +105,7 @@ GtBeaconLogBasicEvent >> gtViewExecutionTimelineListFor: aView [
 		ifNotEmpty: [ :currentTimelineData |
 			aView explicit
 				title: 'Job Execution Timeline';
-				priority: 30;
+				priority: 32;
 				stencil: 
 						[(GtRrExecutionHorizontalChartStencil new)
 							executions: currentTimelineData;
@@ -122,6 +122,24 @@ GtBeaconLogBasicEvent >> gtViewSubEventsFor: aView [
 		priority: 10;
 		object: [ self subEvents ];
 		view: #gtItemsFor:
+]
+
+{ #category : #ui }
+GtBeaconLogBasicEvent >> gtViewSubEventTimelineListFor: aView [
+	<gtView>
+
+	^self subEventTimelineChartItems
+		ifEmpty: [aView empty]
+		ifNotEmpty: [ :currentTimelineData |
+			aView explicit
+				title: 'Sub Event Timeline';
+				priority: 30;
+				stencil: 
+						[(GtRrExecutionHorizontalChartStencil new)
+							executions: currentTimelineData;
+							colorComputation: [ :anItem |
+								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ];
+							selectionTransformation: [ :anItem | anItem identifier] ] ]
 ]
 
 { #category : #initialization }
@@ -159,6 +177,19 @@ GtBeaconLogBasicEvent >> startTimestamp [
 { #category : #accessing }
 GtBeaconLogBasicEvent >> subEvents [
 	^ subEvents
+]
+
+{ #category : #ui }
+GtBeaconLogBasicEvent >> subEventTimelineChartItems [
+
+	^ self subEvents collect: [ :each | | item |
+		item := GtRrExecutionChartDataItem new
+			identifier: each;
+			startTime: each startTimestamp;
+			endTime: each endTimestamp;
+			label: each description;
+			appendDurationToLabel.
+		item ]
 ]
 
 { #category : #accessing }
