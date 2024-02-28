@@ -22,6 +22,11 @@ TGtGroup >> asArray [
 ]
 
 { #category : #accessing }
+TGtGroup >> asAsyncStream [
+	^ AsyncSequenceStream forCollection: self
+]
+
+{ #category : #accessing }
 TGtGroup >> asBag [
 	^ self items asBag
 ]
