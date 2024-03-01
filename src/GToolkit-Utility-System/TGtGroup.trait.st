@@ -99,6 +99,16 @@ TGtGroup >> detectIndex: aBlock ifNone: exceptionBlock [
 	^ self items detectIndex: aBlock ifNone: exceptionBlock
 ]
 
+{ #category : #enumerating }
+TGtGroup >> detectMax: aBlock [ 
+	^ self items detectMax: aBlock 
+]
+
+{ #category : #enumerating }
+TGtGroup >> detectMin: aBlock [ 
+	^ self items detectMin: aBlock 
+]
+
 { #category : #accessing }
 TGtGroup >> do: aBlock [
 	^ self items do: aBlock
