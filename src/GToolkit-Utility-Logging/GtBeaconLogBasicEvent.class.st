@@ -86,6 +86,20 @@ GtBeaconLogBasicEvent >> executionTimelineChartItems [
 		item ]
 ]
 
+{ #category : #ui }
+GtBeaconLogBasicEvent >> executionTimelineLeafChartItems [
+
+	^ (self allEvents select: [ :anEvent | anEvent subEvents isEmpty ]) 
+		collect: [ :each | | item |
+		item := GtRrExecutionChartDataItem new
+			identifier: each;
+			startTime: each startTimestamp;
+			endTime: each endTimestamp;
+			label: each description;
+			appendDurationToLabel.
+		item ]
+]
+
 { #category : #'gt - extensions' }
 GtBeaconLogBasicEvent >> gtViewAllSignalsFor: aView [
 	<gtView>
@@ -95,6 +109,23 @@ GtBeaconLogBasicEvent >> gtViewAllSignalsFor: aView [
 	 	priority: 33;
 	 	object: [ self allSignals ];
 	 	view: #gtItemsFor:
+]
+
+{ #category : #ui }
+GtBeaconLogBasicEvent >> gtViewExecutionLeafsTimelineListFor: aView [
+	"<gtView>"
+	^self executionTimelineLeafChartItems
+		ifEmpty: [aView empty]
+		ifNotEmpty: [ :currentTimelineData |
+			aView explicit
+				title: 'Job Execution Timeline';
+				priority: 32;
+				stencil: 
+						[(GtRrExecutionHorizontalChartStencil new)
+							executions: currentTimelineData;
+							configureWithSmallerDetails;
+							colorComputation: [ :anItem |
+								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ] ] ]
 ]
 
 { #category : #ui }
