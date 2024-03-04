@@ -20,6 +20,12 @@ GtBeaconLogCompositeEvent >> duration [
 ]
 
 { #category : #accessing }
+GtBeaconLogCompositeEvent >> endTimestamp [
+	self subEvents ifEmpty: [ ^ nil ].
+	^ self subEvents last endTimestamp
+]
+
+{ #category : #accessing }
 GtBeaconLogCompositeEvent >> eventCompletedSignal [
 	^ self completedEvent eventCompletedSignal
 ]
@@ -41,7 +47,8 @@ GtBeaconLogCompositeEvent >> startedEvent [
 
 { #category : #accessing }
 GtBeaconLogCompositeEvent >> startTimestamp [
-	^ self startedEvent timestamp
+	self subEvents ifEmpty: [ ^ nil ].
+	^ self subEvents first startTimestamp
 ]
 
 { #category : #accessing }
