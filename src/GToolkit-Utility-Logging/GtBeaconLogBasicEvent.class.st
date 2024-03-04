@@ -141,7 +141,9 @@ GtBeaconLogBasicEvent >> gtViewExecutionTimelineListFor: aView [
 						[(GtRrExecutionHorizontalChartStencil new)
 							executions: currentTimelineData;
 							colorComputation: [ :anItem |
-								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ] ] ]
+								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ] ;
+							selectionTransformation: [ :anItem |
+								anItem identifier ] ] ]
 ]
 
 { #category : #ui }
