@@ -53,7 +53,9 @@ GtFlatEventsGrouper >> processEventSignalFor: aSignal [
 			[ ^ self ].
 		completedEvent := aSignal matchingSignalFrom: candidateEvents.
 		completedEvent ifNil:
-			[ self error: 'Unable to find matching event' ].
+			[ strictMode
+				ifTrue: [ self error: 'Unable to find matching event' ]
+				ifFalse: [ ^ self ] ].
 		completedEvent addSignal: aSignal.
 		events add: completedEvent.
 		candidateEvents remove: completedEvent.
