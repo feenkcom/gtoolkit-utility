@@ -212,6 +212,14 @@ GtBeaconLogBasicEvent >> subEvents [
 	^ subEvents
 ]
 
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> subEvents: anEventsGroup [
+	"Overwrite the subEvents.
+	This is only used for post-processing of events."
+
+	subEvents := anEventsGroup
+]
+
 { #category : #ui }
 GtBeaconLogBasicEvent >> subEventTimelineChartItems [
 
