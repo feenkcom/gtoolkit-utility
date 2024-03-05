@@ -255,6 +255,12 @@ GtSubprocessWithInMemoryOutput >> initialize [
 	retryCount := 1.
 ]
 
+{ #category : #private }
+GtSubprocessWithInMemoryOutput >> initializeStdStreams [
+	stdoutStream := String new writeStream.
+	stderrStream := String new writeStream
+]
+
 { #category : #testing }
 GtSubprocessWithInMemoryOutput >> isComplete [
 
@@ -365,35 +371,32 @@ GtSubprocessWithInMemoryOutput >> runAndWait [
 { #category : #private }
 GtSubprocessWithInMemoryOutput >> runOnce [
 	"Run the requested command as a separate process"
-	| pollString |
 
+	| pollString |
+	"Output can be collected after the process has exited.
+	Ensure the buffers are flushed."
 	command := builder createNativeCommand.
-	envVariables ifNotNil: 
-		[ command clearEnv.
-		envVariables keysAndValuesDo: [ :key :value |
-			command setEnv: key value: value ] ].
+	envVariables
+		ifNotNil: [ command clearEnv.
+			envVariables
+				keysAndValuesDo: [ :key :value | command setEnv: key value: value ] ].
 	process := command spawn.
-	stdoutStream := String new writeStream.
-	stderrStream := String new writeStream.
+	self initializeStdStreams.
 	stdinStream := process stdin.
 	stdoutBuffer := process asynchronousStdout.
 	stderrBuffer := process asynchronousStderr.
 	terminateOnShutdown ifTrue: [ process terminateOnShutdown ].
-
-	[ process waitForExitDoing: 
-		[ stdoutStream nextPutAll: stdoutBuffer pollString.
-		stderrStream nextPutAll: stderrBuffer pollString ].
-
-	"Output can be collected after the process has exited.
-	Ensure the buffers are flushed."
+	[ process
+		waitForExitDoing: [ stdoutStream nextPutAll: stdoutBuffer pollString.
+			stderrStream nextPutAll: stderrBuffer pollString ].
 	[ stdoutStream nextPutAll: (pollString := stdoutBuffer pollString).
 	pollString isNotEmpty ] whileTrue.
 	[ stderrStream nextPutAll: (pollString := stderrBuffer pollString).
 	pollString isNotEmpty ] whileTrue ]
 		on: Error
-		do: [ :ex |
+		do: [ :ex | 
 			pollException := ex.
-			semaphore signal ].
+			semaphore signal ]
 ]
 
 { #category : #private }

@@ -55,9 +55,11 @@ GtTimeCachedObject >> value [
 	DateAndTime now <= cacheTimeout ifTrue: [ ^ value ].
 	"The whole point of the cached object is that determining the value is slow, so
 	- ensure that it is only being retrieved once at a time (the mutex), and
-	- update cacheTimeout after it has been retrieved"
+	- update cacheTimeout after it has been retrieved.
+	If the value has been updated while waiting for the mutex, just answer it."
 	^ mutex critical:
-		[ value := getBlock value.
-		cacheTimeout := DateAndTime now + cacheTime.
+		[ DateAndTime now > cacheTimeout ifTrue:
+			[ value := getBlock value.
+			cacheTimeout := DateAndTime now + cacheTime ].
 		value ].
 ]
