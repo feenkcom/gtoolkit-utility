@@ -38,6 +38,11 @@ GtTimeCachedObject >> initialize: aBlock timeout: aDuration [
 	cacheTime := aDuration.
 ]
 
+{ #category : #testing }
+GtTimeCachedObject >> isExpired [
+	^ DateAndTime now > cacheTimeout
+]
+
 { #category : #accessing }
 GtTimeCachedObject >> newValue [
 	"Answer the receiver's value, updating it regardless of the timeout"
@@ -46,6 +51,11 @@ GtTimeCachedObject >> newValue [
 		[ value := getBlock value.
 		cacheTimeout := DateAndTime now + cacheTime.
 		value ].
+]
+
+{ #category : #accessing }
+GtTimeCachedObject >> rawValue [
+	^ value
 ]
 
 { #category : #accessing }
