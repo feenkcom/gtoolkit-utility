@@ -44,6 +44,13 @@ GtTimeCachedObject >> isExpired [
 ]
 
 { #category : #accessing }
+GtTimeCachedObject >> mutexStatus [
+	^ (mutex instVarNamed: #semaphore)
+		critical: [ 'Free' ]
+		ifLocked: [ 'Locked' ]
+]
+
+{ #category : #accessing }
 GtTimeCachedObject >> newValue [
 	"Answer the receiver's value, updating it regardless of the timeout"
 
