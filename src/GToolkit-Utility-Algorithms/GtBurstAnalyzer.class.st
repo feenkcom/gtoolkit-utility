@@ -27,6 +27,15 @@ GtBurstAnalyzer >> ensureCutoff [
 ]
 
 { #category : #accessing }
+GtBurstAnalyzer >> gtViewBurstIntervalsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Burst intervals';
+		priority: 2;
+		items: [ self run ]
+]
+
+{ #category : #accessing }
 GtBurstAnalyzer >> gtViewBurstsFor: aView [
 	<gtView>
 	^ aView explicit
