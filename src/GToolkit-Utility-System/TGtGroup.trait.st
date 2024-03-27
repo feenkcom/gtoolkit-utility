@@ -265,3 +265,8 @@ TGtGroup >> size [
 TGtGroup >> sorted: aPredicate [
 	^ self items sorted: aPredicate
 ]
+
+{ #category : #accessing }
+TGtGroup >> withIndexDo: aBlock [
+	^ self items withIndexDo: aBlock
+]
