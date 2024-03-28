@@ -89,7 +89,7 @@ GtBurstAnalyzer >> run [
 
 					value := timeSeries at: idx ].
 
-			idx > startIdx ifTrue: [ bursts add: (startIdx to: idx) ].
+			idx > startIdx ifTrue: [ bursts add: (startIdx to: idx - 1) ].
 
 			idx := idx + 1 ].
 
