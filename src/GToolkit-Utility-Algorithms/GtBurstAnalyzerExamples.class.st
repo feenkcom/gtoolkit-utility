@@ -8,7 +8,7 @@ Class {
 GtBurstAnalyzerExamples >> burstAnalyzerWithCustomCutoff [
 	<gtExample>
 	| analyzer |
-	analyzer := self simpleBurstAnalyzer cutoff: 40.
+	analyzer := self simpleBurstAnalyzer cutoff: 30.
 	
 	self assert: analyzer run size equals: 2.
 
