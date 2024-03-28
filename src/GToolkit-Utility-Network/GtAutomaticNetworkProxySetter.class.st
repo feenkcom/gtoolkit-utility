@@ -40,8 +40,8 @@ GtAutomaticNetworkProxySetter class >> isEnabled [
 GtAutomaticNetworkProxySetter class >> noProxyVariablePragmas [
 	^ Pragma
 		allNamed: #noProxyVariables:
-		from: GtAutomaticNetworkProxySetter
-		to: self
+		from: self
+		to: GtAutomaticNetworkProxySetter
 		sortedByArgument: 1
 ]
 
@@ -49,8 +49,8 @@ GtAutomaticNetworkProxySetter class >> noProxyVariablePragmas [
 GtAutomaticNetworkProxySetter class >> proxyVariablePragmas [
 	^ Pragma
 		allNamed: #proxyVariables:
-		from: GtAutomaticNetworkProxySetter
-		to: self
+		from: self
+		to: GtAutomaticNetworkProxySetter
 		sortedByArgument: 1
 ]
 
