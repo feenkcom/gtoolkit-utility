@@ -63,7 +63,7 @@ GtBurstAnalyzer >> gtViewBurstsFor: aView [
 										text: aGtPlotterContext originalValue value;
 										aptitude: (BrGlamorousLabelAptitude new padding: (BlInsets all: 1)) ]) ].
 			chart barHeightScale: scale.
-			chart barWidthScale constant: 20.
+			chart barWidthScale constant: 3.
 			chart barHeightData: [ :eachValue | eachValue value ].
 			chart amountOfTicks: 10.
 			chart with: data]
