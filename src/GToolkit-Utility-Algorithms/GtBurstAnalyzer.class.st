@@ -46,7 +46,7 @@ GtBurstAnalyzer >> gtViewBurstsFor: aView [
 					values: (timeSeries collectWithIndex: [ :value :i | i -> value ]).
 			outliers := self run.
 			data := data
-					colored: [ :each | 
+					background: [ :each | 
 						(outliers anySatisfy: [ :anInterval | anInterval includes: each key ])
 							ifTrue: [ Color black ]
 							ifFalse: [ Color veryLightGray ] ].
