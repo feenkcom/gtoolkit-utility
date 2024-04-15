@@ -66,6 +66,13 @@ GtTimeCachedObject >> rawValue [
 ]
 
 { #category : #accessing }
+GtTimeCachedObject >> setExpired [
+	"Force the value to be updated on the next #value request"
+
+	cacheTimeout := DateAndTime now.
+]
+
+{ #category : #accessing }
 GtTimeCachedObject >> value [
 	"Answer the receiver's value, updating if the timeout has expired"
 
