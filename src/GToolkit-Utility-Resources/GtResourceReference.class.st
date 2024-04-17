@@ -101,6 +101,11 @@ GtResourceReference >> asResolvedBy: anObject [
 ]
 
 { #category : #accessing }
+GtResourceReference >> asUrl [
+	^ self asZnUrl
+]
+
+{ #category : #accessing }
 GtResourceReference >> asZnUrl [
 	"Convert the receiver in a file:// ZnUrl"
 	^ self fileReference asZnUrl
