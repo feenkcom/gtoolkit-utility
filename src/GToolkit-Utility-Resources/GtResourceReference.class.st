@@ -101,6 +101,11 @@ GtResourceReference >> asResolvedBy: anObject [
 ]
 
 { #category : #accessing }
+GtResourceReference >> asUrl [
+	^ self asZnUrl
+]
+
+{ #category : #accessing }
 GtResourceReference >> asZnUrl [
 	"Convert the receiver in a file:// ZnUrl"
 	^ self fileReference asZnUrl
@@ -158,6 +163,11 @@ GtResourceReference >> binaryWriteStreamDo: aBlock [
 { #category : #streams }
 GtResourceReference >> binaryWriteStreamDo: doBlock ifPresent: presentBlock [
 	^ self fileReference binaryWriteStreamDo: doBlock ifPresent: presentBlock
+]
+
+{ #category : #accessing }
+GtResourceReference >> changeTime [
+	^ self fileReference changeTime
 ]
 
 { #category : #enumerating }
@@ -332,6 +342,11 @@ GtResourceReference >> fullPath [
 	^ self fileReference fullPath
 ]
 
+{ #category : #accessing }
+GtResourceReference >> gid [
+	^ self fileReference gid
+]
+
 { #category : #testing }
 GtResourceReference >> hasChildren [
 	<return: #Boolean>
@@ -365,6 +380,11 @@ GtResourceReference >> humanReadableSize [
 GtResourceReference >> ifFile: fBlock ifDirectory: dBlock ifAbsent: aBlock [
 	<return: #Boolean>
 	^ self fileReference ifFile: fBlock ifDirectory: dBlock ifAbsent: aBlock
+]
+
+{ #category : #accessing }
+GtResourceReference >> inode [
+	^ self fileReference inode
 ]
 
 { #category : #testing }
@@ -462,6 +482,11 @@ GtResourceReference >> makeRelativeToResourceReference: aGtResourceReference [
 	^ self fullPath relativeTo: aGtResourceReference fullPath
 ]
 
+{ #category : #accessing }
+GtResourceReference >> modificationTime [
+	^ self fileReference modificationTime
+]
+
 { #category : #operations }
 GtResourceReference >> moveTo: aReference [
 	"Move the receiver in the location passed as argument.
@@ -510,6 +535,11 @@ GtResourceReference >> path: aStringOrPath [
 { #category : #converting }
 GtResourceReference >> pathString [
 	^ self fileReference pathString
+]
+
+{ #category : #accessing }
+GtResourceReference >> permissions [
+	^ self fileReference permissions
 ]
 
 { #category : #printing }
@@ -650,6 +680,11 @@ GtResourceReference >> size [
 { #category : #streams }
 GtResourceReference >> streamWritable: writable do: aBlock [
 	^ self fileReference streamWritable: writable do: aBlock
+]
+
+{ #category : #accessing }
+GtResourceReference >> uid [
+	^ self fileReference uid
 ]
 
 { #category : #accessing }
