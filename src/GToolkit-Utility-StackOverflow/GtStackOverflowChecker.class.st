@@ -113,7 +113,7 @@ GtStackOverflowChecker class >> suspendStackOverflowWatchersDuring: block [
 				[globalWasChecking
 					ifTrue: [ GtStackOverflowChecker startStackOverflowWatcher]
 					ifFalse: [ GtStackOverflowChecker stopStackOverflowWatcher].
-				ProcessStackOverflowChecker allInstancesDo: 
+				GtProcessStackOverflowChecker allInstancesDo: 
 						[:each |
 						(runningForCurrent includes: each)
 							ifTrue: [each startStackOverflowWatcher]

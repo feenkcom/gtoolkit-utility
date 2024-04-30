@@ -34,7 +34,7 @@ GtProcessStackOverflowCheckerExamples >> testStackOverflowDisabled [
 			overflowed := false.
 			end := DateAndTime now + 2 seconds.
 			[self recurseUntil: [DateAndTime now > end]] 
-				on: StackOverflowError
+				on: GtStackOverflowError
 				do: [overflowed := true].
 			self assert: overflowed not]
 ]

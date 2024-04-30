@@ -24,7 +24,7 @@ GtProcessStackOverflowChecker class >> checkDuring: aBlock [
 { #category : #accessing }
 GtProcessStackOverflowChecker class >> startForProcess: aProcess [
 	^self startForProcess: aProcess
-		depth: StackOverflowChecker defaultStackOverflowLimit
+		depth: GtStackOverflowChecker defaultStackOverflowLimit
 ]
 
 { #category : #accessing }
