@@ -114,6 +114,21 @@ TGtGroup >> do: aBlock [
 	^ self items do: aBlock
 ]
 
+{ #category : #'compatibility - DeepTraverser' }
+TGtGroup >> dtRawTraverseUsing: aStream [
+	self do: [ :each | aStream traverse: each ]
+]
+
+{ #category : #'compatibility - DeepTraverser' }
+TGtGroup >> dtTraverseStartUsing: aStream [
+	self do: [ :each | each dtTraverseStartUsing: aStream ]
+]
+
+{ #category : #'compatibility - DeepTraverser' }
+TGtGroup >> dtTraverseUsing: aStream [
+	self do: [ :each | each dtTraverseUsing: aStream ]
+]
+
 { #category : #accessing }
 TGtGroup >> first [
 	^ self items first
