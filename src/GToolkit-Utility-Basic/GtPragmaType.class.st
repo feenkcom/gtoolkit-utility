@@ -38,6 +38,7 @@ GtPragmaType >> gtUsersFor: aView [
 	<gtView>
 	^ aView list
 		  title: 'Users';
+		  priority: 10;
 		  items: [ self users sorted: [ :a :b | a selector < b selector ] ]
 ]
 
