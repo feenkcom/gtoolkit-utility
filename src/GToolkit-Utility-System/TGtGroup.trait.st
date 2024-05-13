@@ -95,6 +95,11 @@ TGtGroup >> detect: aBlock ifNone: exceptionBlock [
 ]
 
 { #category : #accessing }
+TGtGroup >> detectIndex: aBlock [
+	^ self items detectIndex: aBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> detectIndex: aBlock ifNone: exceptionBlock [
 	^ self items detectIndex: aBlock ifNone: exceptionBlock
 ]
