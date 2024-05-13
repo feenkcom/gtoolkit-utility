@@ -20,6 +20,18 @@ GtExtensionMethodsProjectWrapper >> extensionMethods [
 ]
 
 { #category : #'gt - extensions' }
+GtExtensionMethodsProjectWrapper >> gtViewExtensionMethodsFor: aView [
+	<gtView>
+	 
+	^ aView columnedList 
+		title: 'Extension Methods';
+		priority: 50;
+		items: [ self extensionMethods ];
+		column: 'Method' text: [ :aMethod | aMethod printString ];
+		column: 'Package' text: [ :aMethod | aMethod package name ]
+]
+
+{ #category : #'gt - extensions' }
 GtExtensionMethodsProjectWrapper >> gtViewPackageWrappersFor: aView [
 	<gtView>
 	 
@@ -58,6 +70,11 @@ GtExtensionMethodsProjectWrapper >> numberOfExtensions [
 	^ self repositoryWrappers 
 		sumNumbers: [ :aPackageWrapper | 
 			aPackageWrapper numberOfExtensions ]
+]
+
+{ #category : #accessing }
+GtExtensionMethodsProjectWrapper >> numberOfPackages [
+	^ self packageWrappers size
 ]
 
 { #category : #accessing }

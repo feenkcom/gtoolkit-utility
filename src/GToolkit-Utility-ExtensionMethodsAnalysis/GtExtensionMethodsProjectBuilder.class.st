@@ -10,6 +10,13 @@ Class {
 }
 
 { #category : #analysis }
+GtExtensionMethodsProjectBuilder class >> forGTPharoPatchMethods [
+	<gtExample>
+		
+	^ self forGToolkitMethods: #gtPharoPatch: gtPragmas contents
+]
+
+{ #category : #analysis }
 GtExtensionMethodsProjectBuilder class >> forGToolkit [
 	<gtExample>
 		
