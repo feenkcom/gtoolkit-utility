@@ -59,7 +59,7 @@ GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForProject: aProject 
 { #category : #utils }
 GtExtensionMethodsBaseImageOverridesBuilder >> comparisonResultsForAnalysisCode: analysisSourceCode [
 	| command newProcess arguments resultString |
-	self halt.
+	
 	command := GtVirtualMachine instance 
 		headlessExecutable resolve fullName.
 	arguments := { 
