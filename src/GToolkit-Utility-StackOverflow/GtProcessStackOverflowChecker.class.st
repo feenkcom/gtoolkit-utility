@@ -6,6 +6,9 @@ Class {
 		'watcherProcess',
 		'depth'
 	],
+	#classVars : [
+		'CurrentCheckerClass'
+	],
 	#category : #'GToolkit-Utility-StackOverflow'
 }
 
@@ -19,6 +22,16 @@ GtProcessStackOverflowChecker class >> checkDuring: aBlock [
 	| checker |
 	checker := self startForProcess: Processor activeProcess.
 	^[aBlock value] ensure: [checker stopStackOverflowWatcher]
+]
+
+{ #category : #accessing }
+GtProcessStackOverflowChecker class >> currentCheckerClass [
+	^ CurrentCheckerClass ifNil: [ self ]
+]
+
+{ #category : #accessing }
+GtProcessStackOverflowChecker class >> currentCheckerClass: anObject [
+	CurrentCheckerClass := anObject
 ]
 
 { #category : #accessing }
