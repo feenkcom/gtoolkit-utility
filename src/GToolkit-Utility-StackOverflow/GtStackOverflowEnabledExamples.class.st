@@ -7,7 +7,6 @@ Class {
 { #category : #accessing }
 GtStackOverflowEnabledExamples >> testRecurse [
 	<gtExample>
-	<noTest>
 	| caught block |
 
 	caught := false.
