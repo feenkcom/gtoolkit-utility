@@ -36,7 +36,7 @@ WeakArray class >> gtSummaryFor: aView [
 		items: [ {
 			'FinalizationProcess' -> (FinalizationProcess isNotNil and: [ FinalizationProcess isTerminated not ]).
 			'FinalizationSemaphore' -> FinalizationSemaphore size.
-			'MournLoopProcess' -> (MournLoopProcess isNotNil and: [ MournLoopProcess isTerminated not ]).
+			'MournLoopProcess' -> MournLoopProcess.
 			'StopRequested' -> StopRequested.
 			'StoppedSemaphore' -> StoppedSemaphore size. } ];
 		column: 'Item' text: #key;
@@ -117,8 +117,10 @@ WeakArray class >> stopFinalizationProcess [
 		[FinalizationProcess terminate.
 		FinalizationProcess := nil].
 
-	MournLoopProcess ifNil: [ ^ self ].
+	(MournLoopProcess isNil or: [ MournLoopProcess isTerminated ])
+		ifTrue: [ ^ self ].
 	self assert: StoppedSemaphore isSignaled not.
 	StopRequested := true.
 	StoppedSemaphore wait.
+
 ]
