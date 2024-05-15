@@ -34,7 +34,7 @@ WeakArray class >> gtSummaryFor: aView [
 		title: 'Summary';
 		priority: 10;
 		items: [ {
-			'FinalizationProcess' -> (FinalizationProcess isNotNil and: [ FinalizationProcess isTerminated not ]).
+			'FinalizationProcess' -> FinalizationProcess.
 			'FinalizationSemaphore' -> FinalizationSemaphore size.
 			'MournLoopProcess' -> MournLoopProcess.
 			'StopRequested' -> StopRequested.
@@ -42,22 +42,6 @@ WeakArray class >> gtSummaryFor: aView [
 		column: 'Item' text: #key;
 		column: 'Value' text: #value;
 		actionUpdateButton.
-]
-
-{ #category : #'*GToolkit-Utility-System' }
-WeakArray class >> initialize [
-	"Do we need to initialize specialObjectsArray?"
-	<gtPharoPatch: #Pharo11>
-
-	Smalltalk specialObjectsArray size < 42
-		ifTrue: [Smalltalk recreateSpecialObjectsArray].
-
-	SessionManager default
-		registerSystemClassNamed: self name.
-
-	FinalizationSemaphore := Smalltalk specialObjectsArray at: 42.
-	StopRequested := false.
-	StoppedSemaphore := Semaphore new.
 ]
 
 { #category : #'*GToolkit-Utility-System' }
@@ -70,8 +54,8 @@ WeakArray class >> mournLoopWith: firstMourner [
 	<gtPharoPatch: #Pharo11>
 	| mourner |
 	mourner := firstMourner.
-	[ StopRequested ifTrue:
-		[ StoppedSemaphore signal.
+	[ self stopRequested ifTrue:
+		[ self stoppedSemaphore signal.
 		MournLoopProcess := nil.
 		^ self ].
 	mourner mourn.
@@ -88,8 +72,6 @@ WeakArray class >> restartFinalizationProcess [
 
 	FinalizationSemaphore := Smalltalk specialObjectsArray at: 42.
 	StopRequested := false.
-	StoppedSemaphore ifNil:
-		[ StoppedSemaphore := Semaphore new ].
 	FinalizationProcess := [self finalizationProcess]
 		forkAt: Processor userInterruptPriority.
 	FinalizationProcess name: 'WeakArray Finalization Process'
@@ -119,8 +101,20 @@ WeakArray class >> stopFinalizationProcess [
 
 	(MournLoopProcess isNil or: [ MournLoopProcess isTerminated ])
 		ifTrue: [ ^ self ].
-	self assert: StoppedSemaphore isSignaled not.
+	self assert: self stoppedSemaphore isSignaled not.
 	StopRequested := true.
 	StoppedSemaphore wait.
 
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+WeakArray class >> stopRequested [
+
+	^ StopRequested ifNil: [ false ]
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+WeakArray class >> stoppedSemaphore [
+
+	^ StoppedSemaphore ifNil: [ StoppedSemaphore := Semaphore new ]
 ]
