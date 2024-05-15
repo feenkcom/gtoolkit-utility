@@ -81,9 +81,7 @@ WeakArray class >> mournLoopWith: firstMourner [
 WeakArray class >> restartFinalizationProcess [
 	"kill any old process, just in case"
 	<gtPharoPatch: #Pharo11>
-	Stdio stdout
-		<< 'WeakArray>>restartFinalizationProcess - restarting';
-		lf.
+
 	self stopFinalizationProcess.
 
 	FinalizationSemaphore := Smalltalk specialObjectsArray at: 42.
@@ -120,11 +118,5 @@ WeakArray class >> stopFinalizationProcess [
 	MournLoopProcess ifNil: [ ^ self ].
 	self assert: StoppedSemaphore isSignaled not.
 	StopRequested := true.
-	Stdio stdout
-		<< 'WeakArray>>stopFinalizationProcess - waiting for process shutdown';
-		lf.
 	StoppedSemaphore wait.
-	Stdio stdout
-		<< 'WeakArray>>stopFinalizationProcess - shutdown complete';
-		lf.
 ]
