@@ -16,9 +16,9 @@ WeakArray class >> finalizationProcess [
 	throttle := Semaphore new.
 	[true] whileTrue: [FinalizationSemaphore wait; initSignals.
 	 "Support the old scheme until things have changed over..."
-	 MournLoopProcess := [firstMourner := self primitiveFetchMourner.
+	 [firstMourner := self primitiveFetchMourner.
 	  firstMourner notNil] whileTrue:
-		[[throttle signal.
+		[MournLoopProcess := [throttle signal.
 		  self mournLoopWith: firstMourner] forkAt: Processor activePriority + 1.
 		 throttle wait]]
 ]
