@@ -20,8 +20,12 @@ WeakArray class >> finalizationProcess [
 	 	forPharo10: [ self doOldFinalization ].
 	 [firstMourner := self primitiveFetchMourner.
 	  firstMourner notNil] whileTrue:
-		[MournLoopProcess := [throttle signal.
-		  self mournLoopWith: firstMourner] forkAt: Processor activePriority + 1.
+		[MournLoopProcess := [
+			[ [ self mournLoopWith: firstMourner]
+				on: Error
+				fork: [ :ex | ex pass ] ]
+					ensure: [ throttle signal ].
+		] forkAt: Processor activePriority + 1.
 		 throttle wait]]
 ]
 
