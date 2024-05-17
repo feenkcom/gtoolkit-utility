@@ -10,6 +10,23 @@ Class {
 }
 
 { #category : #examples }
+GToolkitUtilitySystemExtensionExamples >> gtQuiescentProcesses [
+	"Confirm that ProcessorScheduler>>gtQuiescentProcesses includes the expected processes"
+	<gtExample>
+	| currentPriority proc1 proc2 quiescentProcesses |
+
+	"Attempting to step through this in the debugger is bound to end in tears..."
+	currentPriority := Processor activeProcess priority.
+	proc1 := [ 100 factorial ] forkAt: currentPriority - 1.
+	proc2 := [ 100 factorial ] forkAt: currentPriority - 1.
+	quiescentProcesses := Processor gtQuiescentProcesses.
+	self deny: proc1 isTerminated.
+	self deny: proc2 isTerminated.
+	self assert: (quiescentProcesses includes: proc1).
+	self assert: (quiescentProcesses includes: proc2).
+]
+
+{ #category : #examples }
 GToolkitUtilitySystemExtensionExamples >> osCopyTo [
 	"Demonstrate copying a file using the OS utilities"
 	<gtExample>
