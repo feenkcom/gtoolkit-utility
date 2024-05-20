@@ -6,6 +6,16 @@ Trait {
 }
 
 { #category : #accessing }
+TGtGroupWithItems >> allButFirst [
+	^ self species withAll: self items allButFirst
+]
+
+{ #category : #accessing }
+TGtGroupWithItems >> allButLast [
+	^ self species withAll: self items allButLast
+]
+
+{ #category : #accessing }
 TGtGroupWithItems >> asSet [
 	^ self items asSet
 ]
