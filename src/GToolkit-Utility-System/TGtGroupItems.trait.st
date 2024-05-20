@@ -23,6 +23,11 @@ TGtGroupItems >> addAll: aCollection [
 ]
 
 { #category : #accessing }
+TGtGroupItems >> addFirst: anItem [
+	self items addFirst: anItem
+]
+
+{ #category : #accessing }
 TGtGroupItems >> addItem: anItem [
 	self items add: anItem
 ]
