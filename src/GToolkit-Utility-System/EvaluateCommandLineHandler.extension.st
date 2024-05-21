@@ -2,7 +2,8 @@ Extension { #name : #EvaluateCommandLineHandler }
 
 { #category : #'*GToolkit-Utility-System' }
 EvaluateCommandLineHandler >> argumentString [
-
+	<gtPharoPatch: #Pharo>
+	
 	^ (self filterArguments: self arguments) joinUsing: Character space.
 ]
 

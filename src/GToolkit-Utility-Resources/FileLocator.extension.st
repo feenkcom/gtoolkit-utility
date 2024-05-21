@@ -14,6 +14,8 @@ FileLocator class >> gtResource [
 
 { #category : #'*GToolkit-Utility-Resources' }
 FileLocator >> parent [
+	<gtPharoPatch: #Pharo>
+	
 	^ GtResourceClosestFileLocator new
 		file: self resolve parent;
 		transform

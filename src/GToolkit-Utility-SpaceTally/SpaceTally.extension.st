@@ -24,6 +24,8 @@ SpaceTally >> gtViewOverviewFor: aView [
 
 { #category : #'*GToolkit-Utility-SpaceTally' }
 SpaceTally >> privateAllObjects [
+	<gtPharoPatch: #Pharo>
+	
 	Smalltalk garbageCollect.
 	^ SystemNavigation default allObjects 
 		groupedBy: [ :each | each class ]
