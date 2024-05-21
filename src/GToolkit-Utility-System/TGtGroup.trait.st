@@ -238,6 +238,12 @@ TGtGroup >> last [
 ]
 
 { #category : #accessing }
+TGtGroup >> last: aCount [
+	^ self species 
+		withAll: (self items last: aCount)
+]
+
+{ #category : #accessing }
 TGtGroup >> overlappingPairsDo: aBlock [
 	^ self items overlappingPairsDo: aBlock
 ]
