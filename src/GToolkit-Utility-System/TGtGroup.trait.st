@@ -293,6 +293,11 @@ TGtGroup >> sorted: aPredicate [
 ]
 
 { #category : #accessing }
+TGtGroup >> withIndexCollect: aBlock [
+	^ self items withIndexCollect: aBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> withIndexDo: aBlock [
 	^ self items withIndexDo: aBlock
 ]
