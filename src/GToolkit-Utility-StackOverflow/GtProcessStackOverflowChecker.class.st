@@ -25,6 +25,13 @@ GtProcessStackOverflowChecker class >> checkDuring: aBlock [
 ]
 
 { #category : #accessing }
+GtProcessStackOverflowChecker class >> checkDuring: aBlock depth: anInteger [
+	| checker |
+	checker := self startForProcess: Processor activeProcess depth: anInteger.
+	^[aBlock value] ensure: [checker stopStackOverflowWatcher]
+]
+
+{ #category : #accessing }
 GtProcessStackOverflowChecker class >> currentCheckerClass [
 	^ CurrentCheckerClass ifNil: [ self ]
 ]

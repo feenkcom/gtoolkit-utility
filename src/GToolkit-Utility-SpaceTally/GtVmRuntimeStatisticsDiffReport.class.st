@@ -52,7 +52,12 @@ GtVmRuntimeStatisticsDiffReport >> garbageCollectionDiffReport [
 
 { #category : #accessing }
 GtVmRuntimeStatisticsDiffReport >> gcRunningTimePercentage [
-	^ ((self totalGcDuration / self totalRunningDuration ) * 100.0 roundTo: 0.1)
+	| totalRunningDuration |
+
+	totalRunningDuration := self totalRunningDuration.
+	totalRunningDuration = 0 ifTrue: [ ^ 0 ].
+
+	^ ((self totalGcDuration / totalRunningDuration) * 100.0 roundTo: 0.1)
 ]
 
 { #category : #'memory usage' }
