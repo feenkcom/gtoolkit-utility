@@ -26,10 +26,17 @@ GtProcessesReport >> gtViewAllProcessesFor: aView [
 		items: [ processReports sorted: [ :each | each priority ] descending ];
 		column: 'Name' text: [ :aProcessReport |
 			aProcessReport name ];
-		column: 'Priority' text: [ :aProcessReport |
-			aProcessReport priority ];
-		column: 'Is Quiescent' text: [ :aProcessReport |
-			aProcessReport isQuiescent ]
+		column: 'Priority' 
+			text: [ :aProcessReport | aProcessReport priority ]
+			width: 100;
+		column: 'Is Quiescent'
+			text: [ :aProcessReport | aProcessReport isQuiescent ]
+			width: 100;
+		column: 'Top Context' text: [ :aProcessReport |
+			aProcessReport contextReports 
+				ifNil: ['']
+				ifNotNil: [ :aContext |
+					aContext first contextDescription ] ]
 ]
 
 { #category : #accessing }
