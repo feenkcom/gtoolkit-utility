@@ -14,10 +14,10 @@ GtLoopProcessExample >> analyseLoop [
 
 	process := self forkLoop.
 	analyser := GtProcessLoopAnalyser new process: process.
-	commonStack := analyser run.
+	commonStack := analyser run commonStack.
 
 	self assert: commonStack size equals: 3.
-	self assert: commonStack last selector equals: #doLoop.
+	self assert: commonStack first selector equals: #doLoop.
 ]
 
 { #category : #private }
