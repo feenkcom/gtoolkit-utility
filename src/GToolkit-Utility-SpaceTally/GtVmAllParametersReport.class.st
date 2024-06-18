@@ -18,7 +18,7 @@ GtVmAllParametersReport class >> leJsonV4Name [
 GtVmAllParametersReport >> ephemeronsListSize [
 	^ self extraParameters 
 		at: #ephemeronsListSize 
-		ifPresent: [ :aParameter | aParameter value ]
+		ifPresent: [ :aParameter | aParameter parameterValue ]
 		ifAbsent: [ nil ]
 ]
 
@@ -50,7 +50,9 @@ GtVmAllParametersReport >> gtViewVmParametersFor: aView [
 		title: 'Parameters';
 		items: [ vmParameters ];
 		column: 'Index' text: [ :aVmParameter | aVmParameter index ] width: 75;
-		column: 'Value' text: [ :aVmParameter | aVmParameter parameterValue ] width: 200;
+		column: 'Formatted value' text: [ :aVmParameter | 
+			aVmParameter formattedParameterValue ] width: 200;
+		column: 'Raw value' text: [ :aVmParameter | aVmParameter parameterValue ] width: 200;
 		column: 'Description' text: [ :aVmParameter | aVmParameter description ]
 ]
 
