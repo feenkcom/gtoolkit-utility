@@ -43,7 +43,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-Deprecation';
 			package: 'GToolkit-Utility-Algorithms';
 			package: 'GToolkit-Utility-RB';
-			
+			package: 'GToolkit-Utility-ProcessAnalysis';			
 			package: 'GToolkit-Releaser-Logging-Analysis' with: [
 				spec requires: #('GToolkit-Utility-Logging' ). ];
 			package: 'GToolkit-Utility-ObjectConnections';
