@@ -19,15 +19,15 @@ GtVmRuntimeStatisticsDiffReport >> defaultReportClass [
 ]
 
 { #category : #'accessing - gc details' }
-GtVmRuntimeStatisticsDiffReport >> fullGcDuration [  
-	^ Duration milliSeconds: self fullGcTimeDiff
-]
-
-{ #category : #'accessing - gc details' }
 GtVmRuntimeStatisticsDiffReport >> fullGCsDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCs 
 		- self sourceReport gargabeCollectionReport fullGCs.
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> fullGcDuration [  
+	^ Duration milliSeconds: self fullGcTimeDiff
 ]
 
 { #category : #'accessing - gc details' }
@@ -110,15 +110,15 @@ GtVmRuntimeStatisticsDiffReport >> hasReports [
 ]
 
 { #category : #'accessing - gc details' }
-GtVmRuntimeStatisticsDiffReport >> incrGcDuration [  
-	^ Duration milliSeconds: self incrGcTimeDiff
-]
-
-{ #category : #'accessing - gc details' }
 GtVmRuntimeStatisticsDiffReport >> incrGCsDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCs
 		- self sourceReport gargabeCollectionReport incrGCs.
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> incrGcDuration [  
+	^ Duration milliSeconds: self incrGcTimeDiff
 ]
 
 { #category : #'accessing - gc details' }

@@ -33,15 +33,13 @@ GtProcessReport >> contextReports: anObject [
 ]
 
 { #category : #'gt - extensions' }
-GtProcessReport >> gtViewContextsListFor: aView [ 
+GtProcessReport >> gtViewContextsListFor: aView [
 	<gtView>
-	
-	^ aView list 
+	^ aView list
 		title: 'Contexts';
 		priority: 10;
-		items: [ contextReports ifNil: [#()] ];
-		itemFormat: [ :aContextReport |
-			aContextReport contextDescription ]
+		items: [ contextReports ifNil: [ #() ] ];
+		itemText: [ :aContextReport | aContextReport contextDescription ]
 ]
 
 { #category : #'gt - extensions' }
@@ -83,7 +81,7 @@ GtProcessReport >> initializeFromProcess: aProcess [
 	| ctx |
 	
 	priority := aProcess priority.
-	id := aProcess id. 
+	id := aProcess gtId. 
 	name := aProcess name.
 	
 	ctx := aProcess isActiveProcess 
@@ -120,13 +118,13 @@ GtProcessReport >> printOn: aStream [
 	
 	aStream parenthesize: [
 		self name 
-			ifNil: [ aStream << self id second ]
+			ifNil: [ aStream << self id ]
 			ifNotNil: [
 				aStream << self name.
 				aStream 
-					<< '[';
-					print: self id second;
-					<< ']' ].
+					<< ' (';
+					<< self id;
+					<< ')' ].
 		aStream 
 			nextPutAll: '; priority: '; 
 			print: self priority;
@@ -167,9 +165,15 @@ GtProcessReport >> textualDescription [
 { #category : #printing }
 GtProcessReport >> textualDescriptionOn: aStream [
 	
-	aStream 
-		nextPutAll: 'Process: '; 
-		print: self id second; 
+	aStream nextPutAll: 'Process: '.
+	self name
+		ifNil: [ aStream << self id ]
+		ifNotNil:
+			[ aStream
+				<< self name;
+				<< ' ';
+				parenthesize: [ aStream << self id ] ].
+	aStream
 		nextPutAll: '; priority: '; 
 		print: self priority.
 		
