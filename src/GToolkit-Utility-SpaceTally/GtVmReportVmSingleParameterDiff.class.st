@@ -47,6 +47,11 @@ GtVmReportVmSingleParameterDiff >> index [
 ]
 
 { #category : #accessing }
+GtVmReportVmSingleParameterDiff >> label [
+	^ self currentParameter label
+]
+
+{ #category : #accessing }
 GtVmReportVmSingleParameterDiff >> parameterFormater [
 	^ self currentParameter parameterFormater
 ]

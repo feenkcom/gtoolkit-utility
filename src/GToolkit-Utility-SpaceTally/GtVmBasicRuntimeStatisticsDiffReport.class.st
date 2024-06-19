@@ -34,10 +34,26 @@ GtVmBasicRuntimeStatisticsDiffReport >> gtViewSummaryValuesFor: aView [
 	<gtView>
 	
 	^ aView columnedList
-		title: 'Summary values';
+		title: 'Values';
 		items: [ self reportSummaryValues ];
 		column: 'Name' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ]
+]
+
+{ #category : #'gt - extensions' }
+GtVmBasicRuntimeStatisticsDiffReport >> gtViewTextualDiffFor: aView [
+	<gtView>
+	
+	self hasReports ifFalse: [ ^ aView empty].
+	
+	^ aView textEditor
+		title: 'Difference (textual)';
+		text: [ self textualDiff asRopedText glamorousCodeFont ]
+]
+
+{ #category : #testing }
+GtVmBasicRuntimeStatisticsDiffReport >> hasReports [
+	^ self sourceReport notNil and: [ self targetReport notNil]
 ]
 
 { #category : #accessing }
@@ -90,4 +106,10 @@ GtVmBasicRuntimeStatisticsDiffReport >> targetReport [
 GtVmBasicRuntimeStatisticsDiffReport >> targetReport: anObject [
 
 	targetReport := anObject
+]
+
+{ #category : #accessing }
+GtVmBasicRuntimeStatisticsDiffReport >> uptimeDiff [
+
+	^ self targetReport upTime - self sourceReport upTime
 ]

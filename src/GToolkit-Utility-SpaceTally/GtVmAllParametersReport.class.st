@@ -49,7 +49,8 @@ GtVmAllParametersReport >> gtViewVmParametersFor: aView [
 	^ aView columnedList 
 		title: 'Parameters';
 		items: [ vmParameters ];
-		column: 'Index' text: [ :aVmParameter | aVmParameter index ] width: 75;
+		column: 'Index' text: [ :aVmParameter | aVmParameter index ] width: 45;
+		column: 'Label' text: [ :aVmParameter | aVmParameter label ] width: 250;
 		column: 'Formatted value' text: [ :aVmParameter | 
 			aVmParameter formattedParameterValue ] width: 200;
 		column: 'Raw value' text: [ :aVmParameter | aVmParameter parameterValue ] width: 200;

@@ -16,83 +16,83 @@ GtVmReportVmSingleParameter class >> leJsonV4Name [
 { #category : #accessing }
 GtVmReportVmSingleParameter class >> parameterFormattersPerIndex [
 	^ ({
-		1  -> GtVmReportMemoryParameterFormatter.
-		2  -> GtVmReportMemoryParameterFormatter.
-		3  -> GtVmReportMemoryParameterFormatter.
-		4  -> GtVmReportFixedParameterFormatter.
-		5  -> GtVmReportFixedParameterFormatter.
-		6  -> GtVmReportFixedParameterFormatter.
-		7  -> GtVmReportCountParameterFormatter.
-		8  -> GtVmReportMillisecondsDurationParameterFormatter.
-		9  -> GtVmReportCountParameterFormatter.
-		10 -> GtVmReportMillisecondsDurationParameterFormatter.
-		11  -> GtVmReportCountParameterFormatter.
-		12  -> GtVmReportFixedParameterFormatter.
-		16 -> GtVmReportMicrosecondsDurationParameterFormatter.
-		17  -> GtVmReportFixedParameterFormatter.
-		18 -> GtVmReportMillisecondsDurationParameterFormatter.
-		19  -> GtVmReportFixedParameterFormatter.
-		20  -> nil.
-		21  -> GtVmReportCountParameterFormatter.
-		22  -> GtVmReportCountParameterFormatter.
-		23  -> GtVmReportMemoryParameterFormatter.
-		24  -> GtVmReportMemoryParameterFormatter.
-		25  -> GtVmReportMemoryParameterFormatter.
-		26  -> GtVmReportCountParameterFormatter.
-		27  -> GtVmReportCountParameterFormatter.
-		28  -> GtVmReportCountParameterFormatter.
-		29  -> GtVmReportCountParameterFormatter.
-		30  -> GtVmReportCountParameterFormatter.
-		31  -> GtVmReportCountParameterFormatter.
-		32  -> GtVmReportCountParameterFormatter.
-		33  -> GtVmReportCountParameterFormatter.
-		34  -> GtVmReportMemoryParameterFormatter.
-		35  -> GtVmReportCountParameterFormatter.
-		36  -> nil.
-		37  -> GtVmReportCountParameterFormatter.
-		38  -> nil.
-		39  -> GtVmReportCountParameterFormatter.
-		40  -> GtVmReportFixedParameterFormatter.
-		41  -> GtVmReportFixedParameterFormatter.
-		42  -> GtVmReportFixedParameterFormatter.
-		43  -> GtVmReportFixedParameterFormatter.
-		44  -> GtVmReportFixedMemoryParameterFormatter.
-		45  -> GtVmReportFixedMemoryParameterFormatter.
-		46  -> GtVmReportFixedMemoryParameterFormatter.
-		47  -> GtVmReportFixedParameterFormatter.
-		48  -> GtVmReportFixedParameterFormatter.
-		49  -> GtVmReportFixedParameterFormatter.
-		50  -> GtVmReportFixedParameterFormatter.
-		51  -> GtVmReportFixedParameterFormatter.
-		52  -> GtVmReportCountParameterFormatter.
-		53  -> GtVmReportCountParameterFormatter.
-		54  -> GtVmReportMemoryParameterFormatter.
-		55  -> GtVmReportFixedParameterFormatter.
-		56  -> GtVmReportCountParameterFormatter.
-		57  -> GtVmReportCountParameterFormatter.
-		58  -> GtVmReportCountParameterFormatter.
-		59  -> GtVmReportCountParameterFormatter.
-		60  -> GtVmReportCountParameterFormatter.
-		61  -> GtVmReportCountParameterFormatter.
-		62  -> GtVmReportCountParameterFormatter.
-		63 -> GtVmReportMillisecondsDurationParameterFormatter.
-		64  -> GtVmReportCountParameterFormatter.
-		65  -> GtVmReportFixedParameterFormatter.
-		66  -> GtVmReportFixedMemoryParameterFormatter.
-		67  -> GtVmReportFixedMemoryParameterFormatter.
-		68  -> GtVmReportCountParameterFormatter.
-		69  -> GtVmReportFixedParameterFormatter.
-		70  -> GtVmReportFixedParameterFormatter.
-		71  -> GtVmReportFixedParameterFormatter.
-		72 -> GtVmReportMillisecondsDurationParameterFormatter.
-		73 -> GtVmReportMillisecondsDurationParameterFormatter.
-		74 -> nil.
-		75  -> GtVmReportCountParameterFormatter.
-		76 -> GtVmReportMillisecondsDurationParameterFormatter.
-		77  -> GtVmReportCountParameterFormatter.
-		78  -> GtVmReportMillisecondsDurationParameterFormatter.
-		79  -> GtVmReportFixedParameterFormatter.
-		} collect: [ :assoc | assoc key -> (assoc value 	ifNotNil: [:aClass | aClass new ])]) asOrderedDictionary
+		1  -> (GtVmReportMemoryParameterFormatter labeled: 'Old Space size').
+		2  -> (GtVmReportMemoryParameterFormatter labeled: 'New Space size').
+		3  -> (GtVmReportMemoryParameterFormatter labeled: 'Heap size').
+		4  -> (GtVmReportFixedParameterFormatter labeled: '<not used>').
+		5  -> (GtVmReportFixedParameterFormatter labeled: '<not used>').
+		6  -> (GtVmReportFixedParameterFormatter labeled: 'Survivor count treshold'). 
+		7  -> (GtVmReportCountParameterFormatter labeled: 'Full GGc count').
+		8  -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'Full GCs duration').
+		9  -> (GtVmReportCountParameterFormatter labeled: 'Scavanges count').
+		10 -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'Scavanges Duration').
+		11  -> (GtVmReportCountParameterFormatter labeled: 'Tenures count').
+		12  -> (GtVmReportFixedParameterFormatter labeled: '<not used>').
+		16 -> (GtVmReportMicrosecondsDurationParameterFormatter  labeled: 'Milliseconds at idle').
+		17  -> (GtVmReportFixedParameterFormatter labeled: 'Fraction of code zone').
+		18 -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'Full GG compaction duration').
+		19  -> (GtVmReportFixedParameterFormatter labeled: 'Scavange threshold').
+		20  -> (GtVmReportFixedParameterFormatter labeled: 'Time at startup').
+		21  -> (GtVmReportCountParameterFormatter labeled: 'Root Table size').
+		22  -> (GtVmReportCountParameterFormatter  labeled: 'Root Table overflows').
+		23  -> (GtVmReportMemoryParameterFormatter  labeled: 'Extra VM buffers size').
+		24  -> (GtVmReportMemoryParameterFormatter labeled: 'Memory shrinking threshold').
+		25  -> (GtVmReportMemoryParameterFormatter labeled: 'Memory headroom').
+		26  -> (GtVmReportCountParameterFormatter labeled: 'InterruptChecksEveryNms').
+		27  -> (GtVmReportCountParameterFormatter labeled: 'Mark loop iterations').
+		28  -> (GtVmReportCountParameterFormatter labeled: 'Sweep loop iterations').
+		29  -> (GtVmReportCountParameterFormatter labeled: 'Make Forward loop iterations').
+		30  -> (GtVmReportCountParameterFormatter  labeled: 'Compact Move loop iterations').
+		31  -> (GtVmReportCountParameterFormatter labeled: 'Grow memory requests').
+		32  -> (GtVmReportCountParameterFormatter labeled: 'Shring memory requests').
+		33  -> (GtVmReportCountParameterFormatter labeled: 'Root Table entries').
+		34  -> (GtVmReportMemoryParameterFormatter labeled: 'Allocated meory since startup').
+		35  -> (GtVmReportCountParameterFormatter labeled: 'Survivor objects count').
+		36  -> (GtVmReportFixedParameterFormatter labeled: 'IGF/FGC completion milliseconds clock').
+		37  -> (GtVmReportCountParameterFormatter labeled: 'Marked objects for Roots').
+		38  -> (GtVmReportFixedParameterFormatter labeled: 'Current IGC milliseconds').
+		39  -> (GtVmReportCountParameterFormatter labeled: 'Finalization Signals').
+		40  -> (GtVmReportFixedParameterFormatter labeled: 'Bytes per oop').
+		41  -> (GtVmReportFixedParameterFormatter labeled: 'Image format version').
+		42  -> (GtVmReportFixedParameterFormatter labeled: 'Used stack pages').
+		43  -> (GtVmReportFixedParameterFormatter labeled: 'Desired stack pages').
+		44  -> (GtVmReportFixedMemoryParameterFormatter labeled: 'Eden size').
+		45  -> (GtVmReportFixedMemoryParameterFormatter labeled: 'Desired new space size').
+		46  -> (GtVmReportFixedMemoryParameterFormatter labeled: 'Machine code size').
+		47  -> (GtVmReportFixedMemoryParameterFormatter labeled: 'Desired machine code size').
+		48  -> (GtVmReportFixedParameterFormatter labeled: 'Header flags').
+		49  -> (GtVmReportFixedParameterFormatter labeled: 'Max sxternal semaphore table size').
+		50  -> (GtVmReportFixedParameterFormatter labeled: '<not used>').
+		51  -> (GtVmReportFixedParameterFormatter labeled: '<not used>').
+		52  -> (GtVmReportCountParameterFormatter labeled: 'Root table capacity').
+		53  -> (GtVmReportCountParameterFormatter labeled: 'Number of segments').
+		54  -> (GtVmReportMemoryParameterFormatter labeled: 'Free old space size').
+		55  -> (GtVmReportFixedParameterFormatter labeled: 'Growth ratio').
+		56  -> (GtVmReportCountParameterFormatter labeled: 'Process switches').
+		57  -> (GtVmReportCountParameterFormatter labeled: 'IO process events').
+		58  -> (GtVmReportCountParameterFormatter labeled: 'Force interrupt checks').
+		59  -> (GtVmReportCountParameterFormatter labeled: 'Check event calls').
+		60  -> (GtVmReportCountParameterFormatter labeled: 'Stack page overflows').
+		61  -> (GtVmReportCountParameterFormatter labeled: 'Stack page divorces').
+		62  -> (GtVmReportCountParameterFormatter labeled: 'Compiled code compactions count').
+		63 -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'Compiled code compactions duration').
+		64  -> (GtVmReportCountParameterFormatter labeled: 'Currently jitted methods').
+		65  -> (GtVmReportFixedParameterFormatter labeled: 'VM features flag').
+		66  -> (GtVmReportFixedMemoryParameterFormatter labeled: 'Stack page size').
+		67  -> (GtVmReportFixedMemoryParameterFormatter labeled: 'Old space max allowed size').
+		68  -> (GtVmReportCountParameterFormatter labeled: 'Average live page scans by GC').
+		69  -> (GtVmReportFixedParameterFormatter labeled: 'Maximum live page scans by GC').
+		70  -> (GtVmReportFixedParameterFormatter labeled: 'VM proxy major version').
+		71  -> (GtVmReportFixedParameterFormatter labeled: 'VM proxy minor version').
+		72 -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'GC Mark total duration').
+		73 -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'GC Sweep total duration').
+		74 -> (GtVmReportFixedParameterFormatter labeled: 'Segment allocation maximum pause').
+		75  -> (GtVmReportCountParameterFormatter labeled: 'JIT compiled methods total count').
+		76 -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'JIT compiled methods total duration').
+		77  -> (GtVmReportCountParameterFormatter labeled: 'JIT compiled blocks total count').
+		78  -> (GtVmReportMillisecondsDurationParameterFormatter labeled: 'JIT compiled blocks total duration').
+		79  -> (GtVmReportFixedParameterFormatter labeled: 'Image version').
+		}) asOrderedDictionary
 		
 ]
 
@@ -122,6 +122,14 @@ GtVmReportVmSingleParameter >> index [
 { #category : #accessing }
 GtVmReportVmSingleParameter >> index: anInteger [
 	index := anInteger
+]
+
+{ #category : #accessing }
+GtVmReportVmSingleParameter >> label [
+	^ self parameterFormater 
+		ifNil: [''] 
+		ifNotNil: [ :aFormatter |
+			aFormatter label ifNil: [ '' ] ]
 ]
 
 { #category : #accessing }
