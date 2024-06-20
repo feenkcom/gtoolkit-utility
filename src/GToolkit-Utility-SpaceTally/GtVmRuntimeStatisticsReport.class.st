@@ -66,6 +66,11 @@ GtVmRuntimeStatisticsReport >> memoryStatisticsReport: anObject [
 ]
 
 { #category : #accessing }
+GtVmRuntimeStatisticsReport >> oldSpaceSize [ 
+	^ self memoryStatisticsReport oldSpaceSize
+]
+
+{ #category : #accessing }
 GtVmRuntimeStatisticsReport >> printReportValuesOn: aStream prefix: aPrefix [
 	aStream << aPrefix; << self class name; cr.
 	
@@ -114,4 +119,9 @@ GtVmRuntimeStatisticsReport >> vmFreeMemory [
 { #category : #accessing }
 GtVmRuntimeStatisticsReport >> vmMemorySize [ 
 	^ self memoryStatisticsReport memorySize
+]
+
+{ #category : #accessing }
+GtVmRuntimeStatisticsReport >> youngSpaceSize [ 
+	^ self memoryStatisticsReport youngSpaceSize
 ]

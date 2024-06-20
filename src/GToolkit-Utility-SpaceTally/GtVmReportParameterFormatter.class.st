@@ -1,8 +1,17 @@
 Class {
 	#name : #GtVmReportParameterFormatter,
 	#superclass : #Object,
+	#instVars : [
+		'label'
+	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
+
+{ #category : #accessing }
+GtVmReportParameterFormatter class >> labeled: aString [
+	^ self new 
+		label: aString
+]
 
 { #category : #accessing }
 GtVmReportParameterFormatter >> formatValue: aValue [
@@ -17,4 +26,14 @@ GtVmReportParameterFormatter >> formattedDiffFrom: aPreviousValue to: aCurrentVa
 				<< (self formatValue: aPreviousValue);
 				<< ' | ';
 				<< (self formatValue: aCurrentValue) ])
+]
+
+{ #category : #accessing }
+GtVmReportParameterFormatter >> label [
+	^ label
+]
+
+{ #category : #accessing }
+GtVmReportParameterFormatter >> label: aString [ 
+	label := aString 
 ]
