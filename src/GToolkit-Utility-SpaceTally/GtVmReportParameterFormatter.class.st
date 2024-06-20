@@ -14,6 +14,11 @@ GtVmReportParameterFormatter class >> labeled: aString [
 ]
 
 { #category : #accessing }
+GtVmReportParameterFormatter >> formatValue: aValue [
+	^ aValue printString
+]
+
+{ #category : #accessing }
 GtVmReportParameterFormatter >> formattedDiffFrom: aPreviousValue to: aCurrentValue [
 	^ GtVmReportParametersDiff new 
 		diffDescription: (String streamContents: [ :aStream |
@@ -21,11 +26,6 @@ GtVmReportParameterFormatter >> formattedDiffFrom: aPreviousValue to: aCurrentVa
 				<< (self formatValue: aPreviousValue);
 				<< ' | ';
 				<< (self formatValue: aCurrentValue) ])
-]
-
-{ #category : #accessing }
-GtVmReportParameterFormatter >> formatValue: aValue [
-	^ aValue printString
 ]
 
 { #category : #accessing }

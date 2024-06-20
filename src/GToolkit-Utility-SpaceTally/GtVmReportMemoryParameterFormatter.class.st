@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtVmReportMemoryParameterFormatter >> formatValue: aValue [ 
+	^ aValue humanReadableSISizeString
+]
+
+{ #category : #accessing }
 GtVmReportMemoryParameterFormatter >> formattedDiffFrom: aPreviousValue to: aCurrentValue [
 	^ GtVmReportParametersDiff new 
 		markAsDiff;
@@ -14,9 +19,4 @@ GtVmReportMemoryParameterFormatter >> formattedDiffFrom: aPreviousValue to: aCur
 			difference < 0 ifTrue: [
 				aStream << '-'].
 			aStream << (self formatValue: difference abs)])
-]
-
-{ #category : #accessing }
-GtVmReportMemoryParameterFormatter >> formatValue: aValue [ 
-	^ aValue humanReadableSISizeString
 ]
