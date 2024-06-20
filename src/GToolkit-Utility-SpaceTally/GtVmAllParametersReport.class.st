@@ -88,7 +88,7 @@ GtVmAllParametersReport >> recordReportStatistics [
 	
 	vmParameters := Smalltalk vm parameterLabels 
 		pairsCollect: [:anIndex :aDescription |
-			GtVmReportVmSingleParameter new 
+			GtVmReportVmParameter new 
 				index: anIndex;
 				description: aDescription;
 				parameterValue: (currentParameters at: anIndex) ].

@@ -25,9 +25,9 @@ GtVmReportVmSingleParameterDiff >> description [
 
 { #category : #accessing }
 GtVmReportVmSingleParameterDiff >> diffFormattedValue [
-	^ self parameterFormater 
+	^ self parameterSpecification 
 		ifNil: [ 
-			GtVmReportFixedParameterFormatter new 
+			(GtVmReportParameterSpecification new beGenericFixedValue) 
 				formattedDiffFrom: self previousParameter parameterValue
 				to: self currentParameter parameterValue ] 
 		ifNotNil: [ :aFormatter | 
@@ -52,8 +52,8 @@ GtVmReportVmSingleParameterDiff >> label [
 ]
 
 { #category : #accessing }
-GtVmReportVmSingleParameterDiff >> parameterFormater [
-	^ self currentParameter parameterFormater
+GtVmReportVmSingleParameterDiff >> parameterSpecification [
+	^ self currentParameter parameterSpecification
 ]
 
 { #category : #accessing }
