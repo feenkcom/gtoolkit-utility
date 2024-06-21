@@ -19,15 +19,15 @@ GtVmRuntimeStatisticsDiffReport >> defaultReportClass [
 ]
 
 { #category : #'accessing - gc details' }
-GtVmRuntimeStatisticsDiffReport >> fullGcDuration [  
-	^ Duration milliSeconds: self fullGcTimeDiff
-]
-
-{ #category : #'accessing - gc details' }
 GtVmRuntimeStatisticsDiffReport >> fullGCsDiff [
 
 	^ self targetReport gargabeCollectionReport fullGCs 
 		- self sourceReport gargabeCollectionReport fullGCs.
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> fullGcDuration [  
+	^ Duration milliSeconds: self fullGcTimeDiff
 ]
 
 { #category : #'accessing - gc details' }
@@ -86,6 +86,7 @@ GtVmRuntimeStatisticsDiffReport >> gtViewReportsFor: aView [
 	
 	^ aView columnedList
 		title: 'Reports';
+		priority: 60;
 		items: [ {self sourceReport. self targetReport} ];
 		column: 'Timestamp' text: [ :aReport | aReport timestamp ];
 		column: 'Up Time' text: [ :aReport | aReport upTimeDescription ];
@@ -93,32 +94,16 @@ GtVmRuntimeStatisticsDiffReport >> gtViewReportsFor: aView [
 			aReport vmMemorySize humanReadableIsqByteSize ]
 ]
 
-{ #category : #'gt - extensions' }
-GtVmRuntimeStatisticsDiffReport >> gtViewTextualDiffFor: aView [
-	<gtView>
-	
-	self hasReports ifFalse: [ ^ aView empty].
-	
-	^ aView textEditor
-		title: 'Difference (textual)';
-		text: [ self textualDiff asRopedText glamorousCodeFont ]
-]
-
-{ #category : #testing }
-GtVmRuntimeStatisticsDiffReport >> hasReports [
-	^ self sourceReport notNil and: [ self targetReport notNil]
-]
-
-{ #category : #'accessing - gc details' }
-GtVmRuntimeStatisticsDiffReport >> incrGcDuration [  
-	^ Duration milliSeconds: self incrGcTimeDiff
-]
-
 { #category : #'accessing - gc details' }
 GtVmRuntimeStatisticsDiffReport >> incrGCsDiff [
 
 	^ self targetReport gargabeCollectionReport incrGCs
 		- self sourceReport gargabeCollectionReport incrGCs.
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> incrGcDuration [  
+	^ Duration milliSeconds: self incrGcTimeDiff
 ]
 
 { #category : #'accessing - gc details' }
@@ -136,6 +121,16 @@ GtVmRuntimeStatisticsDiffReport >> label [
 { #category : #accessing }
 GtVmRuntimeStatisticsDiffReport >> label: aLabel [
 	label := aLabel
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> memorySizeDiff [
+	^ self targetReport vmMemorySize - self sourceReport vmMemorySize
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> oldSpaceSizeDiff [
+	^ self targetReport oldSpaceSize - self sourceReport oldSpaceSize
 ]
 
 { #category : #printing }
@@ -167,66 +162,58 @@ GtVmRuntimeStatisticsDiffReport >> printFullTextualContentOn: aStream [
 ]
 
 { #category : #printing }
+GtVmRuntimeStatisticsDiffReport >> printGCTextualDiffOn: aStream [
+	self garbageCollectionDiffReport 
+		printTextualDiffOn: aStream
+]
+
+{ #category : #printing }
+GtVmRuntimeStatisticsDiffReport >> printMemoryTextualDiffOn: aStream [
+	| oldSpaceEnd youngSpaceEnd memoryEnd |
+	oldSpaceEnd := self oldSpaceSizeDiff.
+	youngSpaceEnd := self youngSpaceSizeDiff.
+	memoryEnd := self memorySizeDiff.
+
+	aStream
+		nextPutAll: 'Memory'; cr.
+	aStream
+		nextPutAll:	'	old			';
+		nextPutAll: oldSpaceEnd asStringWithCommasSigned; nextPutAll: ' bytes'; cr.
+	aStream	
+		nextPutAll: '	young		';
+		nextPutAll: (youngSpaceEnd - oldSpaceEnd) asStringWithCommasSigned; nextPutAll: ' bytes';
+		cr.
+	aStream
+		nextPutAll: '	used		';
+		nextPutAll: youngSpaceEnd asStringWithCommasSigned; nextPutAll: ' bytes'; cr.
+	aStream
+		nextPutAll: '	free		';
+		nextPutAll: (memoryEnd - youngSpaceEnd) asStringWithCommasSigned; nextPutAll: ' bytes'; cr.
+]
+
+{ #category : #printing }
 GtVmRuntimeStatisticsDiffReport >> printOn: aStream [
 	self hasReports ifFalse: [ 
 		^ super printOn: aStream ].
 	
 	aStream
 		print: self totalGcTimeDiff;
-		<< 'ms in GC'
+		<< 'ms in GC'.
+		
+	aStream << ', '.
+	
+	self memorySizeDiff < 0 ifTrue: [
+		aStream << '-' ].
+	aStream 
+		<< self memorySizeDiff abs humanReadableSISizeString;
+		<< ' change in total memory'
 ]
 
 { #category : #printing }
 GtVmRuntimeStatisticsDiffReport >> printTextualDiffOn: aStream [
-	| fullGCs2 incrGCs2 upTime2 fullGCTime2 incrGCTime2 tenureCount2 |
-	
-	upTime2 := self uptimeDiff.
-	fullGCs2 := self fullGCsDiff.
-	fullGCTime2 := self fullGcTimeDiff.
-	incrGCs2 := self incrGCsDiff.
-	incrGCTime2 := self incrGcTimeDiff.
-	tenureCount2 := self tenureCountDiff.
-	
-	aStream <<  'GC Diff	'.
-	(fullGCs2 + incrGCs2) printWithCommasOn: aStream.
-	fullGCs2 + incrGCs2 > 0 ifTrue: [
-		aStream
-			<< ' ('; 
-			print: ((upTime2 / (fullGCs2 + incrGCs2)) roundTo: 1); 
-			<< 'ms between GCs)' ].
+	self printMemoryTextualDiffOn: aStream.
 	aStream cr.
-	
-	aStream << '	uptime		'; print: ((upTime2 / 1000.0) roundTo: 0.1); << 's'; cr.
-	aStream << '	full			';
-		print: fullGCs2; << ' totalling '.
-	fullGCTime2 printWithCommasOn: aStream.
-	aStream << 'ms ('.
-	upTime2 > 0 ifTrue: [
-		aStream 
-			print: ((fullGCTime2 / upTime2 * 100) roundTo: 0.1);
-			<< '% uptime)' ].
-	fullGCs2 > 0 ifTrue: [ 
-		aStream	<< ', avg '; print: ((fullGCTime2 / fullGCs2) roundTo: 0.1); << 'ms' ].
-	aStream cr.
-	
-	aStream << '	incr		';
-		print: incrGCs2; << ' totalling '.
-	incrGCTime2 printWithCommasOn: aStream.
-	aStream 
-		<< 'ms ('.
-	upTime2 > 0 ifTrue: [
-		aStream
-			print: ((incrGCTime2 / upTime2 * 100) roundTo: 0.1);
-			<< '% uptime), avg ' ].
-	incrGCs2 > 0 ifTrue: [
-		 aStream print: ((incrGCTime2 / incrGCs2) roundTo: 0.1); << 'ms' ].
-	
-	aStream cr.
-	aStream << '	tenures		'.
-	tenureCount2 printWithCommasOn: aStream.
-	tenureCount2 > 0 ifTrue: [
-		aStream << ' (avg '; print: (incrGCs2 / tenureCount2) asInteger; << ' GCs/tenure)' ].
-	aStream cr.
+	self printGCTextualDiffOn: aStream.
 ]
 
 { #category : #accessing }
@@ -301,4 +288,9 @@ GtVmRuntimeStatisticsDiffReport >> vmMemorySizeAtStart [
 { #category : #'accessing - vm memory details' }
 GtVmRuntimeStatisticsDiffReport >> vmMinimumMemorySize [
 	^ self vmMemorySizeAtEnd min: self vmMemorySizeAtEnd
+]
+
+{ #category : #'accessing - gc details' }
+GtVmRuntimeStatisticsDiffReport >> youngSpaceSizeDiff [
+	^ self targetReport youngSpaceSize - self sourceReport youngSpaceSize
 ]

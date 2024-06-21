@@ -18,7 +18,7 @@ GtVmAllParametersReport class >> leJsonV4Name [
 GtVmAllParametersReport >> ephemeronsListSize [
 	^ self extraParameters 
 		at: #ephemeronsListSize 
-		ifPresent: [ :aParameter | aParameter value ]
+		ifPresent: [ :aParameter | aParameter parameterValue ]
 		ifAbsent: [ nil ]
 ]
 
@@ -48,10 +48,35 @@ GtVmAllParametersReport >> gtViewVmParametersFor: aView [
 	
 	^ aView columnedList 
 		title: 'Parameters';
+		priority: 10;
 		items: [ vmParameters ];
-		column: 'Index' text: [ :aVmParameter | aVmParameter index ] width: 75;
-		column: 'Value' text: [ :aVmParameter | aVmParameter parameterValue ] width: 200;
+		column: 'Index' text: [ :aVmParameter | aVmParameter index ] width: 45;
+		column: 'Label' text: [ :aVmParameter | aVmParameter label ] width: 250;
+		column: 'Formatted value' text: [ :aVmParameter | 
+			aVmParameter formattedParameterValue ] width: 200;
 		column: 'Description' text: [ :aVmParameter | aVmParameter description ]
+]
+
+{ #category : #accessing }
+GtVmAllParametersReport >> gtViewVmParametersFullFor: aView [ 
+	<gtView>
+	
+	^ aView columnedList 
+		title: 'Parameters full';
+		priority: 25;
+		items: [ vmParameters ];
+		column: 'Index' text: [ :aVmParameter | aVmParameter index ] width: 45;
+		column: 'Label' text: [ :aVmParameter | aVmParameter label ] width: 250;
+		column: 'Formatted value' text: [ :aVmParameter | 
+			aVmParameter formattedParameterValue ] width: 200;
+		column: 'Raw value' text: [ :aVmParameter | aVmParameter parameterValue ] width: 200;
+		column: 'Description' text: [ :aVmParameter | aVmParameter description ]
+]
+
+{ #category : #accessing }
+GtVmAllParametersReport >> parametersWithIndexes: aCollection [
+	^ self vmParameters select: [ :each |
+		aCollection includes: each index ].
 ]
 
 { #category : #accessing }
@@ -63,7 +88,7 @@ GtVmAllParametersReport >> recordReportStatistics [
 	
 	vmParameters := Smalltalk vm parameterLabels 
 		pairsCollect: [:anIndex :aDescription |
-			GtVmReportVmSingleParameter new 
+			GtVmReportVmParameter new 
 				index: anIndex;
 				description: aDescription;
 				parameterValue: (currentParameters at: anIndex) ].

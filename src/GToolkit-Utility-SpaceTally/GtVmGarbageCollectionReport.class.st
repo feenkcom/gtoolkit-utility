@@ -18,17 +18,6 @@ GtVmGarbageCollectionReport class >> leJsonV4Name [
 ]
 
 { #category : #accessing }
-GtVmGarbageCollectionReport >> fullGCs [
-	^ fullGCs
-]
-
-{ #category : #accessing }
-GtVmGarbageCollectionReport >> fullGCs: anObject [
-
-	fullGCs := anObject
-]
-
-{ #category : #accessing }
 GtVmGarbageCollectionReport >> fullGCTime [
 	^ fullGCTime
 ]
@@ -40,14 +29,14 @@ GtVmGarbageCollectionReport >> fullGCTime: anObject [
 ]
 
 { #category : #accessing }
-GtVmGarbageCollectionReport >> incrGCs [
-	^ incrGCs
+GtVmGarbageCollectionReport >> fullGCs [
+	^ fullGCs
 ]
 
 { #category : #accessing }
-GtVmGarbageCollectionReport >> incrGCs: anObject [
+GtVmGarbageCollectionReport >> fullGCs: anObject [
 
-	incrGCs := anObject
+	fullGCs := anObject
 ]
 
 { #category : #accessing }
@@ -59,6 +48,17 @@ GtVmGarbageCollectionReport >> incrGCTime [
 GtVmGarbageCollectionReport >> incrGCTime: anObject [
 
 	incrGCTime := anObject
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> incrGCs [
+	^ incrGCs
+]
+
+{ #category : #accessing }
+GtVmGarbageCollectionReport >> incrGCs: anObject [
+
+	incrGCs := anObject
 ]
 
 { #category : #printing }
