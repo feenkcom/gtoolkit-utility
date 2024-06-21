@@ -35,9 +35,9 @@ GtGitPullAndLoad >> ensureRepository [
 				ifTrue: [ ^ repo ]
 				ifFalse: [ self error: 'Repository origin and location mismatch' ] ]
 			ifNone: [] ].
-	iceCreator := IceRepositoryCreator new
-			remote: (IceGitRemote url: self repositoryUrl);
-			location: self repositoryDirectory.
+	iceCreator := IceRepository repositoryClass creatorClass new
+					remote: (IceGitRemote url: self repositoryUrl);
+					location: self repositoryDirectory.
 	newRepository := dirExists ifTrue: 
 		[ iceCreator addLocalRepository ]
 	ifFalse: 
