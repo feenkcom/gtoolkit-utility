@@ -6,8 +6,45 @@ A set of utilities.
 Class {
 	#name : #BaselineOfGToolkitUtility,
 	#superclass : #BaselineOf,
+	#classVars : [
+		'PostLoaded'
+	],
 	#category : #BaselineOfGToolkitUtility
 }
+
+{ #category : #initialization }
+BaselineOfGToolkitUtility class >> firstRunAfterSave [
+
+	self postLoadExternalAddressChanges.
+	SessionManager default unregisterClassNamed: self name.
+]
+
+{ #category : #initialization }
+BaselineOfGToolkitUtility class >> postLoadExternalAddressChanges [
+
+	ExternalAddress compile:
+'copyFrom: startIndex to: endIndex
+	"Answer a ByteArray containing the receiver''s contents from startIndex to endIndex"
+	| result size |
+
+	size := endIndex - startIndex + 1.
+	result := ByteArray new: size.
+	self 
+		primitiveCopyFrom: self
+		at: startIndex
+		to: result
+		at: 1
+		size: size.
+	^ result'
+		classified: 'gt-extensions'
+]
+
+{ #category : #accessing }
+BaselineOfGToolkitUtility class >> startUp: resuming [
+
+	resuming ifTrue:
+	  [ self firstRunAfterSave ].
+]
 
 { #category : #baseline }
 BaselineOfGToolkitUtility >> baseline: spec [
@@ -54,4 +91,14 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec package: 'GToolkit-Utility-ObjectConnections'.
 		spec package: 'GToolkit-Utility-Network'.
 	]
+]
+
+{ #category : #accessing }
+BaselineOfGToolkitUtility >> postLoadChanges: spec [
+	(PostLoaded isNotNil and: [ PostLoaded ])
+		ifTrue: [ ^ self ].
+		
+	PostLoaded := true.
+	SessionManager default
+		registerUserClassNamed: self class name.
 ]
