@@ -307,3 +307,28 @@ GtPrimitiveExamples >> testExternalToByteArrayStartingAt11 [
 	ea free.
 	^ ba
 ]
+
+{ #category : #tests }
+GtPrimitiveExamples >> testReplaceByteArrayToExternalStartingAt11 [
+	<gtExample>
+	| ea ba size |
+	size := 24.
+	ea := ExternalAddress allocate: size+10.
+	ba := ByteArray new: size.
+	1 to: size do: [ :i | 
+		ba byteAt: i put: i \\ 256.
+		ea byteAt: i put: 0 ].
+	ea
+		replaceFrom: 3 
+		to: 12
+		with: ba
+		startingAt: 10.
+	self assert: (self eaCopy: ea from: 1 to: 2)
+		equals: (ByteArray new: 2).
+	self assert: (self eaCopy: ea from: 3 to: 12) 
+		equals: (ba copyFrom: 10 to: 19).
+	self assert: (self eaCopy: ea from: 20 to: size)
+		equals: (ByteArray new: 5).
+	ea free.
+	^ ba
+]
