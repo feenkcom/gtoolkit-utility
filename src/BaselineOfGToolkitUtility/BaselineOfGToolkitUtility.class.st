@@ -36,7 +36,21 @@ BaselineOfGToolkitUtility class >> postLoadExternalAddressChanges [
 		at: 1
 		size: size.
 	^ result'
-		classified: 'gt-extensions'
+		classified: 'gt-extensions'.
+
+	ExternalAddress compile:
+'replaceFrom: start to: stop with: replacement startingAt: repStart
+	"Replace the bytes in the receiver from start to stop with those from replacement, starting at repStart"
+	| repSize |
+
+	repSize := stop - start + 1.
+	self
+		primitiveCopyFrom: replacement
+		at: repStart
+		to: self
+		at: start
+		size: repSize.'
+	classified: 'gt-extensions'.
 ]
 
 { #category : #accessing }
