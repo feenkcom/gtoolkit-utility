@@ -20,11 +20,12 @@ GtCounter >> decrement: aKey [
 { #category : #accessing }
 GtCounter >> gtCountsFor: aView [
 	<gtView>
-	^ aView forward
+	^ aView columnedList
 		title: 'Counts';
 		priority: 1;
-		object: [ counts ];
-		view: #gtLiveFor:
+		items: [ counts associations ];
+		column: 'Key' text: #key;
+		column: 'Value' text: #value width: 100
 ]
 
 { #category : #accessing }
