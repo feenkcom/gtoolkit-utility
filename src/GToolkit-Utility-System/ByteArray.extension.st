@@ -28,10 +28,19 @@ ByteArray >> onHeapGC [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-ByteArray >> primitiveCopyFrom: src at: srcStart to: dest at: destStart size: size [
+ByteArray class >> primitiveCopyFrom: src at: srcStart to: dest at: destStart size: size [
 	"Use memcpy() to copy data between ExternalAddresses and ByteArrays.
 	starting at: is a 1-based index.
 	No buffer overflow checks are done on ExternalAddresses."
 	<primitive: 'primitiveCopyFromAtToAtSize'>
 	^ self primitiveFailed
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+ByteArray >> primitiveCopyFrom: src at: srcStart to: dest at: destStart size: size [
+	"Use memcpy() to copy data between ExternalAddresses and ByteArrays.
+	starting at: is a 1-based index.
+	No buffer overflow checks are done on ExternalAddresses."
+
+	self class primitiveCopyFrom: src at: srcStart to: dest at: destStart size: size
 ]

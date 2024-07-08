@@ -18,6 +18,13 @@ Object class >> gtGroupType [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
+Object >> gtMemcpyAddress [
+	"Answer the object that will be passed to primitiveCopyFromAtToAtSize"
+
+	^ self
+]
+
+{ #category : #'*GToolkit-Utility-System' }
 Object >> gtUpToVersion: versionString currentVersion: currentString do: upToBlock after: afterBlock [
 	"Evaluate upToBlock if versionString <= currentString, otherwise afterBlock.
 	versionString and currentString are semantic version numbers with an optional leading $v.

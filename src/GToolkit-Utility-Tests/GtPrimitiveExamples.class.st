@@ -12,7 +12,7 @@ GtPrimitiveExamples >> eaCopy: anExternalAddress from: startIndex to: endIndex [
 	| result size |
 	size := endIndex - startIndex + 1.
 	result := ByteArray new: size.
-	LibC memCopy: (anExternalAddress + (startIndex - 1)) to: result size: size.
+	LibC uniqueInstance ffiMemCopy: (anExternalAddress + (startIndex - 1)) to: result size: size.
 	^ result
 ]
 
@@ -309,6 +309,31 @@ GtPrimitiveExamples >> testExternalToByteArrayStartingAt11 [
 ]
 
 { #category : #tests }
+GtPrimitiveExamples >> testLibCByteStringToExternalDataAndBack [
+	<gtExample>
+	| string ed size result wsCopy |
+
+	string := 'hello, world'.
+	size := string byteSize.
+	ed := ExternalData
+		fromHandle: (ExternalAddress allocate: size)
+		type: ExternalType string.
+	result := LibC memCopy: string
+			to: ed
+			size: size.
+	self assert: result equals: ed getHandle.
+	wsCopy := ByteString new: string size.
+	result := LibC
+		memCopy: ed
+		to: wsCopy
+		size: size.
+	self assert: result class equals: ExternalAddress.
+	self assert: wsCopy equals: string.
+	ed free.
+	^ ed
+]
+
+{ #category : #tests }
 GtPrimitiveExamples >> testReplaceByteArrayToExternalStartingAt11 [
 	<gtExample>
 	| ea ba size |
@@ -331,4 +356,64 @@ GtPrimitiveExamples >> testReplaceByteArrayToExternalStartingAt11 [
 		equals: (ByteArray new: 5).
 	ea free.
 	^ ba
+]
+
+{ #category : #tests }
+GtPrimitiveExamples >> testWideStringToExternalAddressAndBack [
+	<gtExample>
+	| ws ea size result wsCopy |
+
+	ws := 'Řepy'.
+	self assert: ws isWideString.
+	size := ws byteSize.
+	ea := ExternalAddress allocate: size.
+	result := self
+			primitiveCopyFrom: ws
+			at: 1
+			to: ea
+			at: 1
+			size: size.
+	self assert: result equals: size.
+	wsCopy := WideString new: ws size.
+	result := self
+		primitiveCopyFrom: ea
+		at: 1
+		to: wsCopy
+		at: 1
+		size: size.
+	self assert: result equals: size.
+	self assert: wsCopy equals: ws.
+	ea free.
+	^ ea
+]
+
+{ #category : #tests }
+GtPrimitiveExamples >> testWideStringToExternalDataAndBack [
+	<gtExample>
+	| ws ed size result wsCopy |
+
+	ws := 'Řepy'.
+	self assert: ws isWideString.
+	size := ws byteSize.
+	ed := ExternalData
+		fromHandle: (ExternalAddress allocate: size)
+		type: ExternalType string.
+	result := self
+			primitiveCopyFrom: ws
+			at: 1
+			to: ed gtMemcpyAddress
+			at: 1
+			size: size.
+	self assert: result equals: size.
+	wsCopy := WideString new: ws size.
+	result := self
+		primitiveCopyFrom: ed gtMemcpyAddress
+		at: 1
+		to: wsCopy
+		at: 1
+		size: size.
+	self assert: result equals: size.
+	self assert: wsCopy equals: ws.
+	ed free.
+	^ ed
 ]
