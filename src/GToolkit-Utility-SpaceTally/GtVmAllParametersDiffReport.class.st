@@ -11,6 +11,18 @@ GtVmAllParametersDiffReport class >> leJsonV4Name [
 ]
 
 { #category : #accessing }
+GtVmAllParametersDiffReport class >> on: aBlock [
+	"Answer an instance of the receiver with statistics gathered on aBlock's execution"
+	| report |
+
+	report := self new.
+	report sourceReport: GtVmAllParametersReport recordNewReport.
+	aBlock value.
+	report targetReport: GtVmAllParametersReport recordNewReport.
+	^ report.
+]
+
+{ #category : #accessing }
 GtVmAllParametersDiffReport >> defaultReportClass [
 	^ GtVmAllParametersReport
 ]

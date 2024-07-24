@@ -97,6 +97,12 @@ GtVmAllParametersReport >> recordReportStatistics [
 ]
 
 { #category : #accessing }
+GtVmAllParametersReport >> timestamp [
+
+	^ timestamp
+]
+
+{ #category : #accessing }
 GtVmAllParametersReport >> vmParameters [
 	^ vmParameters
 ]
