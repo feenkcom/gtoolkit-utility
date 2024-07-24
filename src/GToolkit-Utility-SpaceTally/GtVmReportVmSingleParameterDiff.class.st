@@ -65,3 +65,15 @@ GtVmReportVmSingleParameterDiff >> previousParameter [
 GtVmReportVmSingleParameterDiff >> previousParameter: aParameter [
 	previousParameter := aParameter
 ]
+
+{ #category : #accessing }
+GtVmReportVmSingleParameterDiff >> printOn: aStream [
+
+	aStream
+		nextPut: $#;
+		print: self index;
+		<< ': ';
+		<< self diffFormattedValue diffDescription;
+		<< '; ';
+		<< self description.
+]
