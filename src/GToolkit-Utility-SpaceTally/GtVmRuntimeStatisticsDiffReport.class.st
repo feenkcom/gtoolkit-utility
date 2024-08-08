@@ -55,7 +55,7 @@ GtVmRuntimeStatisticsDiffReport >> gcRunningTimePercentage [
 	| totalRunningDuration |
 
 	totalRunningDuration := self totalRunningDuration.
-	totalRunningDuration = 0 ifTrue: [ ^ 0 ].
+	totalRunningDuration isZero ifTrue: [ ^ 0 ].
 
 	^ ((self totalGcDuration / totalRunningDuration) * 100.0 roundTo: 0.1)
 ]
