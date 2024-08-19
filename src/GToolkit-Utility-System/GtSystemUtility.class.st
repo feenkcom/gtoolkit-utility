@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtAssert',
 	#classTraits : 'TGtAssert classTrait',
-	#category : 'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System'
 }
 
 { #category : #'ring definition' }
@@ -22,6 +22,15 @@ GtSystemUtility class >> classDefinitionFromString: aString [
 	^ aDefinition isDefined
 		ifTrue: [ aDefinition realClass asRingDefinition ] 
 		ifFalse: [ aDefinition ]
+]
+
+{ #category : #exceptions }
+GtSystemUtility class >> freeze: anException [
+	| anExceptionCopy |
+	anExceptionCopy := anException copy.
+
+	anExceptionCopy signalContext ifNotNil: [ anExceptionCopy freeze ].
+	^ anExceptionCopy
 ]
 
 { #category : #testing }
