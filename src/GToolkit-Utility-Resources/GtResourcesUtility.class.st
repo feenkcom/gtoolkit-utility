@@ -36,6 +36,11 @@ Class {
 	#category : #'GToolkit-Utility-Resources-Core'
 }
 
+{ #category : #'accessing - files' }
+GtResourcesUtility class >> * aPath [
+	^ self resourceAtPath: Path * aPath
+]
+
 { #category : #cleanup }
 GtResourcesUtility class >> cleanUp [
 	self resetUniqueInstance
