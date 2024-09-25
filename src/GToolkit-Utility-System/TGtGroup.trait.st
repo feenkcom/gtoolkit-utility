@@ -273,6 +273,11 @@ TGtGroup >> remove: anItem [
 ]
 
 { #category : #accessing }
+TGtGroup >> removeAll [
+	self items removeAll
+]
+
+{ #category : #accessing }
 TGtGroup >> reversed [
 	^ self items reversed
 ]
