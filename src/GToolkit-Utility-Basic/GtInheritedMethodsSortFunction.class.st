@@ -103,6 +103,11 @@ GtInheritedMethodsSortFunction >> compareMethodNameOf: aMethodOrName1 withMethod
 		ifFalse: [ methodName2 isBinary threeWayCompareTo: methodName1 isBinary ]
 ]
 
+{ #category : #comparing }
+GtInheritedMethodsSortFunction >> hash [
+	^ self class hash
+]
+
 { #category : #'private - comparison' }
 GtInheritedMethodsSortFunction >> hasMethodNameOf: aMethodOrName [
 	<return: #Symbol>
@@ -114,11 +119,6 @@ GtInheritedMethodsSortFunction >> hasMethodNameOf: aMethodOrName [
 		ifTrue: [ ^ true ].
 
 	^ [ aMethodOrName selector notNil ] on: Error do: [ :ex | ex return: false ]
-]
-
-{ #category : #comparing }
-GtInheritedMethodsSortFunction >> hash [
-	^ self class hash
 ]
 
 { #category : #'private - comparison' }

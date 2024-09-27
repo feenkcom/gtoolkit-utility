@@ -5,8 +5,8 @@ Class {
 		'getBlock',
 		'value',
 		'cacheTime',
-		'cacheTimeout',
-		'mutex'
+		'mutex',
+		'lastRetrieved'
 	],
 	#category : #'GToolkit-Utility-Basic'
 }
@@ -20,7 +20,7 @@ GtTimeCachedObject class >> get: aBlock timeout: aDuration [
 { #category : #accessing }
 GtTimeCachedObject >> cacheTimeout [
 
-	^ cacheTimeout
+	^ lastRetrieved + cacheTime
 ]
 
 { #category : #accessing }
@@ -28,19 +28,21 @@ GtTimeCachedObject >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
-	cacheTimeout := DateAndTime yesterday.
+	lastRetrieved := DateAndTime epoch.
 ]
 
 { #category : #initalization }
 GtTimeCachedObject >> initialize: aBlock timeout: aDuration [
 
+	aDuration > 124 years ifTrue:
+		[ self error: 'Unreasonable timeout: ', aDuration asString ].
 	getBlock := aBlock.
 	cacheTime := aDuration.
 ]
 
 { #category : #testing }
 GtTimeCachedObject >> isExpired [
-	^ DateAndTime now > cacheTimeout
+	^ DateAndTime now > self cacheTimeout
 ]
 
 { #category : #accessing }
@@ -56,7 +58,7 @@ GtTimeCachedObject >> newValue [
 
 	^ mutex critical:
 		[ value := getBlock value.
-		cacheTimeout := DateAndTime now + cacheTime.
+		lastRetrieved := DateAndTime now.
 		value ].
 ]
 
@@ -69,21 +71,24 @@ GtTimeCachedObject >> rawValue [
 GtTimeCachedObject >> setExpired [
 	"Force the value to be updated on the next #value request"
 
-	cacheTimeout := DateAndTime now.
+	lastRetrieved := DateAndTime epoch.
 ]
 
 { #category : #accessing }
 GtTimeCachedObject >> value [
 	"Answer the receiver's value, updating if the timeout has expired"
 
-	DateAndTime now <= cacheTimeout ifTrue: [ ^ value ].
+	^ self valueWithin: cacheTime
+]
+
+{ #category : #accessing }
+GtTimeCachedObject >> valueWithin: aDuration [
+	"Answer the receiver's value, updating it if the value is more than aDuration old"
+
+	DateAndTime now <= self cacheTimeout ifTrue: [ ^ value ].
 	"The whole point of the cached object is that determining the value is slow, so
 	- ensure that it is only being retrieved once at a time (the mutex), and
 	- update cacheTimeout after it has been retrieved.
 	If the value has been updated while waiting for the mutex, just answer it."
-	^ mutex critical:
-		[ DateAndTime now > cacheTimeout ifTrue:
-			[ value := getBlock value.
-			cacheTimeout := DateAndTime now + cacheTime ].
-		value ].
+	^ self newValue.
 ]
