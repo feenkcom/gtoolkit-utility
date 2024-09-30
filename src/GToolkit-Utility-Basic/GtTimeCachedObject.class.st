@@ -90,5 +90,8 @@ GtTimeCachedObject >> valueWithin: aDuration [
 	- ensure that it is only being retrieved once at a time (the mutex), and
 	- update cacheTimeout after it has been retrieved.
 	If the value has been updated while waiting for the mutex, just answer it."
-	^ self newValue.
+	^ mutex critical:
+		[ DateAndTime now <= self cacheTimeout
+ 			ifTrue: [ value ]
+ 			ifFalse: [ self newValue ] ].
 ]
