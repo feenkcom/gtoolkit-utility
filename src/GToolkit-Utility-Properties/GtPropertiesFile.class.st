@@ -10,8 +10,8 @@ GtJsonPropertiesFile is an abstract class that facilitates the use of properties
 ### Implementation Points
 "
 Class {
-	#name : 'GtPropertiesFile',
-	#superclass : 'Object',
+	#name : #GtPropertiesFile,
+	#superclass : #Object,
 	#traits : 'TGtAnnouncer',
 	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
@@ -22,34 +22,34 @@ Class {
 	#category : 'GToolkit-Utility-Properties'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPropertiesFile class >> file: aFileReference [
 	"Answer a new instance of the receiver with the specified properties file"
 
 	^ self new file: aFileReference
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPropertiesFile >> announcer [
 
 	^ announcer
 ]
 
-{ #category : 'accessing - properties' }
+{ #category : #'accessing - properties' }
 GtPropertiesFile >> at: aSymbol [
 	<return: #String or: #Dictionary>
 
 	^ properties at: aSymbol
 ]
 
-{ #category : 'accessing - properties' }
+{ #category : #'accessing - properties' }
 GtPropertiesFile >> at: aSymbol ifAbsent: absentBlock [
 	<return: #String or: #Dictionary>
 
 	^ properties at: aSymbol ifAbsent: absentBlock
 ]
 
-{ #category : 'accessing - properties' }
+{ #category : #'accessing - properties' }
 GtPropertiesFile >> at: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 
 	^ properties 
@@ -58,7 +58,7 @@ GtPropertiesFile >> at: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 		ifAbsent: absentBlock
 ]
 
-{ #category : 'accessing - properties' }
+{ #category : #'accessing - properties' }
 GtPropertiesFile >> at: propertyName put: aJSONObject [
 
 	aJSONObject ifNil: 
@@ -70,21 +70,21 @@ GtPropertiesFile >> at: propertyName put: aJSONObject [
 	^ aJSONObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPropertiesFile >> file [
 	<return: #FileReference>
 
 	^ file
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPropertiesFile >> file: aFileReference [
 
 	file := aFileReference.
 	self loadProperties.
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 GtPropertiesFile >> initialize [ 
 
 	super initialize.
@@ -92,7 +92,7 @@ GtPropertiesFile >> initialize [
 	properties := Dictionary new.
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPropertiesFile >> loadProperties [
 
 	file exists ifFalse: [ ^ self ].
@@ -101,7 +101,7 @@ GtPropertiesFile >> loadProperties [
 
 ]
 
-{ #category : 'printing' }
+{ #category : #printing }
 GtPropertiesFile >> printOn: aStream [
 
 	file
@@ -113,7 +113,7 @@ GtPropertiesFile >> printOn: aStream [
 				<< file parent fullName ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtPropertiesFile >> saveProperties [
 
 	file writeStreamDo: [ :stream |
@@ -124,7 +124,7 @@ GtPropertiesFile >> saveProperties [
 			prettyPrint: true ].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtPropertiesFile >> size [ 
 
 	^ properties size

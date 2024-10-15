@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 GtLinuxSystemInfo class >> platformName [
 
-	^ #unix
+	^ 'unix'
 ]
 
 { #category : #'process info' }

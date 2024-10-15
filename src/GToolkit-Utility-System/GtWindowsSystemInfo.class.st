@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 GtWindowsSystemInfo class >> platformName [
 
-	^ #Win32
+	^ 'Win32'
 ]
 
 { #category : #'process info' }
