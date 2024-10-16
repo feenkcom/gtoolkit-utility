@@ -1,1 +1,1 @@
-Package { #name : 'GToolkit-Utility-Properties' }
+Package { #name : #'GToolkit-Utility-Properties' }

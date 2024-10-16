@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 GtMacSystemInfo class >> platformName [
 
-	^ #'Mac OS'
+	^ 'Mac OS'
 ]
 
 { #category : #'process info' }

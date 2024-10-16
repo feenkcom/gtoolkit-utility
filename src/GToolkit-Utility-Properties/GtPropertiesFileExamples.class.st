@@ -1,12 +1,19 @@
 Class {
-	#name : 'GtPropertiesFileExamples',
-	#superclass : 'Object',
+	#name : #GtPropertiesFileExamples,
+	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
-	#category : 'GToolkit-Utility-Properties-Examples'
+	#category : #'GToolkit-Utility-Properties-Examples'
 }
 
-{ #category : 'examples' }
+{ #category : #asserting }
+GtPropertiesFileExamples >> assert: actual equals: expected [
+	^ self
+		assert: (actual sameContentAs: expected)
+		description: [ self comparingStringBetween: actual and: expected ]
+]
+
+{ #category : #examples }
 GtPropertiesFileExamples >> emptyPropertiesFile [
 	"Answer an empty properties file using a memory file for storage"
 	<gtExample>
@@ -18,7 +25,7 @@ GtPropertiesFileExamples >> emptyPropertiesFile [
 	^ properties
 ]
 
-{ #category : 'examples' }
+{ #category : #examples }
 GtPropertiesFileExamples >> populatedPropertiesFile [
 	<gtExample>
 	| properties fileLocator dictionary fileDictionary readProperties |
