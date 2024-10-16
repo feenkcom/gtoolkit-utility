@@ -2,7 +2,7 @@ Extension { #name : #AllProtocol }
 
 { #category : #'*GToolkit-Utility-System' }
 AllProtocol class >> gtDefaultName [
-	^ 'All'
+	^ #'All'
 ]
 
 { #category : #'*GToolkit-Utility-System' }
