@@ -24,11 +24,15 @@ GtExtensionMethodsBaseImageOverridesBuilder class >> forGToolkit [
 { #category : #analysis }
 GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForComparisonResult: aResult forExtensionMethods: aCollection inProject: aProject [ 
 	| targetMethods |
-	targetMethods := aCollection withIndexSelect: [ :aMethod :anIndex |
-		aResult at: anIndex ].
+	aCollection withIndexDo: [ :aMethodWrapper :anIndex |
+		(aResult at: anIndex) ifNotNil: [ :aSourceCode |
+			aMethodWrapper previousSourceCode: aSourceCode ] ].
+	
+	targetMethods := aCollection withIndexSelect: [ :aMethodWrapper :anIndex |
+		(aResult at: anIndex) notNil ].
 		
 	^ GtExtensionMethodsProjectBuilder new 
-		buildProjectWrapperForMethods: targetMethods 
+		buildProjectWrapperForMethodWrappers: targetMethods 
 		inProject: aProject
 ]
 
@@ -113,8 +117,11 @@ GtExtensionMethodsBaseImageOverridesBuilder >> detectionCodeForMethods: aCollect
 					targetClass := aClass.				
 					isMeta ifTrue: [
 						targetClass := aClass classSide ].
-					(targetClass canUnderstand: array second asSymbol) ]
-				ifAbsent: [ false ] ]
+					targetClass 
+						classAndMethodFor: array second asSymbol
+						do: [ :c :m | m sourceCode  ]
+						ifAbsent: [ nil ] ]
+				ifAbsent: [ nil ] ]
 			] sourceNode sourceCode).
 		aStream << ' value: expensionsData' ]
 ]
