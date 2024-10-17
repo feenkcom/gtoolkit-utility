@@ -7,7 +7,8 @@ Class {
 	#name : #GtExtensionMethodsGToolkitMetrics,
 	#superclass : #Object,
 	#instVars : [
-		'gtoolkitProject'
+		'gtoolkitProject',
+		'gtoolkitProjectForPharoPatchMethods'
 	],
 	#classInstVars : [
 		'defaultInstance'
@@ -42,10 +43,31 @@ GtExtensionMethodsGToolkitMetrics class >> gtoolkitProject [
 ]
 
 { #category : #metrics }
+GtExtensionMethodsGToolkitMetrics class >> gtoolkitProjectForPharoPatchMethods [
+	<gtExample>
+	
+	^ self defaultInstance gtoolkitProjectForPharoPatchMethods
+]
+
+{ #category : #metrics }
 GtExtensionMethodsGToolkitMetrics class >> packageWrappers [
 	<gtExample>
 	
 	^ self gtoolkitProject packageWrappers
+]
+
+{ #category : #metrics }
+GtExtensionMethodsGToolkitMetrics class >> packageWrappersForPharoPatchMethods [
+	<gtExample>
+	
+	^ self gtoolkitProjectForPharoPatchMethods packageWrappers
+]
+
+{ #category : #metrics }
+GtExtensionMethodsGToolkitMetrics class >> pharoPatchMethods [
+	<gtExample>
+	
+	^ self gtoolkitProjectForPharoPatchMethods extensionMethods
 ]
 
 { #category : #metrics }
@@ -59,4 +81,10 @@ GtExtensionMethodsGToolkitMetrics class >> repositoryWrappersWithExtensions [
 GtExtensionMethodsGToolkitMetrics >> gtoolkitProject [
 	^ gtoolkitProject ifNil: [
 		gtoolkitProject := GtExtensionMethodsProjectBuilder forGToolkit ]
+]
+
+{ #category : #metrics }
+GtExtensionMethodsGToolkitMetrics >> gtoolkitProjectForPharoPatchMethods [
+	^ gtoolkitProjectForPharoPatchMethods ifNil: [
+		gtoolkitProjectForPharoPatchMethods := GtExtensionMethodsProjectBuilder forGTPharoPatchMethods ]
 ]

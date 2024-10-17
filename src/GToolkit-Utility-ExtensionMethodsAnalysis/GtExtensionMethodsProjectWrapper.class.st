@@ -78,6 +78,13 @@ GtExtensionMethodsProjectWrapper >> numberOfPackages [
 ]
 
 { #category : #accessing }
+GtExtensionMethodsProjectWrapper >> numberOfRepositoriesWithExtensions [
+	^ self repositoryWrappers 
+		count: [ :aRepository |
+			aRepository hasExtensionMethods ]
+]
+
+{ #category : #accessing }
 GtExtensionMethodsProjectWrapper >> packageWrappers [
 	^ self repositoryWrappers flatCollect: [ :aRepository |
 		aRepository packageWrappers ]
