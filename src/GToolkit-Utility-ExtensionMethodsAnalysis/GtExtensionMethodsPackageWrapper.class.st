@@ -56,10 +56,13 @@ GtExtensionMethodsPackageWrapper >> gtViewExtensionMethodsByClassFor: aView [
 GtExtensionMethodsPackageWrapper >> gtViewExtensionMethodsFor: aView [
 	<gtView>
 	
-	^ aView forward 
-		title: 'Extension methods';
-		object: [ extensionMethods ];
-		view: #gtItemsFor:
+	^ aView columnedList 
+		title: 'Extension Methods';
+		priority: 50;
+		items: [ self extensionMethods sorted: [ :each |
+			each printString ] ascending ];
+		column: 'Method' text: [ :aMethod | aMethod printString ];
+		column: 'Package' text: [ :aMethod | aMethod package name ]
 ]
 
 { #category : #testing }

@@ -40,7 +40,7 @@ GtExtensionMethodsProjectBuilder >> allSystemPackages [
 ]
 
 { #category : #analysis }
-GtExtensionMethodsProjectBuilder >> buildProjectWrapperForMethods: aCollection inProject: aProject [
+GtExtensionMethodsProjectBuilder >> buildProjectWrapperForMethodWrappers: aCollection inProject: aProject [
 	| packageWrappers repositoryWrappers |
 	packageWrappers := self packageWrappersForMethods: aCollection.
 	
@@ -51,6 +51,17 @@ GtExtensionMethodsProjectBuilder >> buildProjectWrapperForMethods: aCollection i
 	^ GtExtensionMethodsProjectWrapper new 
 		project: aProject;
 		repositoryWrappers: repositoryWrappers
+]
+
+{ #category : #analysis }
+GtExtensionMethodsProjectBuilder >> buildProjectWrapperForMethods: aCollection inProject: aProject [
+	| methodWrappers |
+	methodWrappers := aCollection collect: [ :each |
+		GtExtensionMethodWrapper forCompiledMethod: each ].
+	
+	^ self 
+		buildProjectWrapperForMethodWrappers: methodWrappers 
+		inProject: aProject
 ]
 
 { #category : #analysis }
@@ -76,11 +87,11 @@ GtExtensionMethodsProjectBuilder >> extensionsToSystemClassesForProject: aProjec
 ]
 
 { #category : #utils }
-GtExtensionMethodsProjectBuilder >> packageWrappersForMethods: aCollection [
+GtExtensionMethodsProjectBuilder >> packageWrappersForMethods: aCollectionOfMethods [
 	| wrappersByName |
 	wrappersByName := Dictionary new.
 
-	(aCollection groupedBy: [ :aMethod | aMethod package ] )
+	(aCollectionOfMethods groupedBy: [ :aMethod | aMethod package ] )
 		associations do: [ :assoc |
 			wrappersByName 
 				at: assoc key name
