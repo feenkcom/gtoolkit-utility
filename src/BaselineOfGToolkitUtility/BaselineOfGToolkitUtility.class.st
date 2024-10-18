@@ -82,30 +82,30 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec postLoadDoIt: #'postLoadChanges:'.
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.334/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.335/src' ].
 		spec
 			baseline: 'GToolkitAnnouncerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.334/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.335/src' ].
 		spec
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.334/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.335/src' ].
 		spec
 			baseline: 'GToolkitFileUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.334/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.335/src' ].
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.334/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.335/src' ].
 		spec
 			baseline: 'GToolkitSessionManagerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.334/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.335/src' ].
 
 		spec package: 'GToolkit-Utility-MessageTally'.
 		spec package: 'GToolkit-Utility-SpaceTally'.
 		spec package: 'GToolkit-Utility-StackOverflow'.
 		spec package: 'GToolkit-Utility-Tests' with: [
-			spec requires: #('GToolkitFileUtility') ].
+			spec requires: #(#GToolkitFileUtility) ].
 		spec package: 'GToolkit-Utility-Logging' with: [
-			spec requires: #('GToolkitFileUtility') ].
+			spec requires: #(#GToolkitFileUtility) ].
 		spec package: 'GToolkit-Utility-Properties'.
 		spec package: 'GToolkit-Utility-ClassLoader'.
 		spec package: 'GToolkit-Utility-UndeclaredReferences'.
@@ -117,7 +117,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec package: 'GToolkit-Utility-RB'.
 		spec package: 'GToolkit-Utility-ProcessAnalysis'.
 		spec package: 'GToolkit-Releaser-Logging-Analysis' with: [
-			spec requires: #('GToolkit-Utility-Logging') ].
+			spec requires: #(#'GToolkit-Utility-Logging') ].
 		spec package: 'GToolkit-Utility-ObjectConnections'.
 		spec package: 'GToolkit-Utility-Network'.
 	]
