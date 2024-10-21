@@ -52,7 +52,7 @@ GtOsSystemInfo >> currentProcessId [
 
 { #category : #accessing }
 GtOsSystemInfo >> findExecutable: aString [
-	"Do a which/where on the supplied executable name
+	"Do a `which` on the supplied executable name
 	Run this is a shell to ensure that all logon configuration is performed."
 	| builder output path |
 

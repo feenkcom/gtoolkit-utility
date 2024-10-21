@@ -18,8 +18,7 @@ GtWindowsSystemInfo >> currentProcessId [
 
 { #category : #accessing }
 GtWindowsSystemInfo >> findExecutable: aString [
-	"Do a which/where on the supplied executable name
-	Run this is a shell to ensure that all logon configuration is performed."
+	"Do a `where` on the supplied executable name"
 	| builder output path lines |
 
 	builder := GtExternalProcessBuilder new
@@ -27,13 +26,13 @@ GtWindowsSystemInfo >> findExecutable: aString [
 		args: { aString }.
 	output := builder output.
 	output status isSuccess
-		ifFalse: [ ^ self error: 'Unable to find: ', aString asString, ', process failed to run' ].
+		ifFalse: [ ^ self error: 'Unable to find: ', aString asString ].
 	path := output stdout trimBoth.
-	path ifEmpty: [ self error: 'Unable to find: ', aString asString, ', executable not found' ].
+	path ifEmpty: [ self error: 'Unable to find: ', aString asString ].
 	lines := path lines
 		collect: [ :line | line trimBoth asFileReference ]
 		thenSelect: [ :each | #(bat exe) includes: each extension asLowercase ].
-	lines ifEmpty: [ self error: 'Unable to find: ', aString asString, ', executable not found' ].
+	lines ifEmpty: [ self error: 'Unable to find: ', aString asString ].
 	^ lines first.
 ]
 
