@@ -1,5 +1,5 @@
 "
-{{gtClass:GtExtensionMethodsBaseImageOverridesBuilder}} provides an overview of extension methods that change  or override methods from a reference image. 
+{{gtClass:GtExtensionMethodsBaseImageOverridesReportBuilder}} provides an overview of extension methods that change  or override methods from a reference image. 
 
 To perform this:
 	- it detects all extensions methods added by a project using {{gtClass:GtExtensionMethodsProjectBuilder}}
