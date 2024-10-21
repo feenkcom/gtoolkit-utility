@@ -50,6 +50,26 @@ GtOsSystemInfo >> currentProcessId [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #accessing }
+GtOsSystemInfo >> findExecutable: aString [
+	"Do a which/where on the supplied executable name
+	Run this is a shell to ensure that all logon configuration is performed."
+	| builder output path |
+
+	builder := GtExternalProcessBuilder new
+		command: (Smalltalk os environment at: 'SHELL');
+		args: {
+			'-l'.
+			'-c'.
+			'which ', aString asString }.
+	output := builder output.
+	output status isSuccess
+		ifFalse: [ ^ self error: 'Unable to find: ', aString asString, ', process failed to run' ].
+	path := output stdout trimBoth.
+	path ifEmpty: [ self error: 'Unable to find: ', aString asString, ', executable not found' ].
+	^ path asFileReference
+]
+
 { #category : #'cpu info' }
 GtOsSystemInfo >> freeMemory [
 	"Answer the free RAM of the host in bytes"
