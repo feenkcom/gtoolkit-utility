@@ -32,10 +32,25 @@ GtExtensionMethodsPackageWrapper >> extensionsDescription [
 			<< ('extension method' asPluralBasedOn: self numberOfExtensions) ]
 ]
 
+{ #category : #accessing }
+GtExtensionMethodsPackageWrapper >> groupByMethodChangeType [
+	| extensionMethodsGroup |
+	extensionMethodsGroup := self extensionMethods 
+		groupedBy: [ :each | each changeType ].
+	
+	^ extensionMethodsGroup 
+]
+
 { #category : #'accessing - grouping' }
 GtExtensionMethodsPackageWrapper >> groupedByClass [
 	^ self extensionMethods groupedBy: [ :aMethod |
 	 aMethod methodClass ]
+]
+
+{ #category : #'accessing - grouping' }
+GtExtensionMethodsPackageWrapper >> groupedByExtendedClassPackage [
+	^ self extensionMethods groupedBy: [ :aMethod |
+		 aMethod methodClass package ]
 ]
 
 { #category : #'gt - extensions' }
@@ -43,11 +58,25 @@ GtExtensionMethodsPackageWrapper >> gtViewExtensionMethodsByClassFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'By class';
+		title: 'By extended class';
 		priority: 45;
 		items: [ self groupedByClass associations 
 			sorted: [ :assoc | assoc value size ] descending ];
 		column: 'Class' text: [ :assoc | assoc key ];
+		column: 'Number of Extension Methods' text: [ :assoc | assoc value size ];
+		send: [ :assoc | assoc value ]
+]
+
+{ #category : #'gt - extensions' }
+GtExtensionMethodsPackageWrapper >> gtViewExtensionMethodsByExtendedClassPackageFor: aView [
+	<gtView>
+	
+	^ aView columnedList 
+		title: 'By extended class package';
+		priority: 46;
+		items: [ self groupedByExtendedClassPackage associations 
+			sorted: [ :assoc | assoc value size ] descending ];
+		column: 'Package' text: [ :assoc | assoc key ];
 		column: 'Number of Extension Methods' text: [ :assoc | assoc value size ];
 		send: [ :assoc | assoc value ]
 ]
@@ -63,6 +92,23 @@ GtExtensionMethodsPackageWrapper >> gtViewExtensionMethodsFor: aView [
 			each printString ] ascending ];
 		column: 'Method' text: [ :aMethod | aMethod printString ];
 		column: 'Package' text: [ :aMethod | aMethod package name ]
+]
+
+{ #category : #'gt - extensions' }
+GtExtensionMethodsPackageWrapper >> gtViewGroupsByChangeTypeFor: aView [
+	<gtView>
+	 
+	^ aView columnedList 
+		title: 'By change type';
+		priority: 49;
+		items: [ 
+			self groupByMethodChangeType associations ];
+		column: 'Change type' text: [ :assoc | 
+			assoc key capitalized "piecesCutWhereCamelCase asCommaString" ];
+		column: 'Number of methods' text: [ :assoc | 
+			assoc value size ];
+		send: [ :assoc |
+			assoc value ]
 ]
 
 { #category : #testing }
