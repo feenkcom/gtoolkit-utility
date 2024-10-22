@@ -21,7 +21,7 @@ GtExtensionMethodsProjectBuilder class >> forGToolkit [
 	<gtExample>
 		
 	^ self new 
-		buildWrapperForProject: BaselineOfGToolkit fullBaselineProject
+		buildReportForProject: BaselineOfGToolkit fullBaselineProject
 ]
 
 { #category : #analysis }
@@ -65,7 +65,7 @@ GtExtensionMethodsProjectBuilder >> buildProjectWrapperForMethods: aCollection i
 ]
 
 { #category : #analysis }
-GtExtensionMethodsProjectBuilder >> buildWrapperForProject: aProject [
+GtExtensionMethodsProjectBuilder >> buildReportForProject: aProject [
 	| systemExtensions |
 	systemExtensions := self extensionsToSystemClassesForProject:  aProject.
 	

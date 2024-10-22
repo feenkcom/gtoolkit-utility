@@ -1,12 +1,12 @@
 "
-{{gtClass:GtExtensionMethodsBaseImageOverridesBuilder}} provides an overview of extension methods that change  or override methods from a reference image. 
+{{gtClass:GtExtensionMethodsBaseImageOverridesReportBuilder}} provides an overview of extension methods that change  or override methods from a reference image. 
 
 To perform this:
 	- it detects all extensions methods added by a project using {{gtClass:GtExtensionMethodsProjectBuilder}}
 	- it checks if any of those methods replaces or overrides a method in a reference image
 "
 Class {
-	#name : #GtExtensionMethodsBaseImageOverridesBuilder,
+	#name : #GtExtensionMethodsBaseImageOverridesReportBuilder,
 	#superclass : #Object,
 	#instVars : [
 		'imageName',
@@ -17,36 +17,34 @@ Class {
 }
 
 { #category : #analysis }
-GtExtensionMethodsBaseImageOverridesBuilder class >> forGToolkit [
-	^ self new buildWrapperForGToolkit
+GtExtensionMethodsBaseImageOverridesReportBuilder class >> forGToolkit [
+	^ self new buildReportForGToolkit
 ]
 
 { #category : #analysis }
-GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForComparisonResult: aResult forExtensionMethods: aCollection inProject: aProject [ 
-	| targetMethods |
+GtExtensionMethodsBaseImageOverridesReportBuilder >> buildReportForComparisonResult: aResult forExtensionMethods: aCollection inProject: aProject [ 
 	aCollection withIndexDo: [ :aMethodWrapper :anIndex |
-		(aResult at: anIndex) ifNotNil: [ :aSourceCode |
-			aMethodWrapper previousSourceCode: aSourceCode ] ].
-	
-	targetMethods := aCollection withIndexSelect: [ :aMethodWrapper :anIndex |
-		(aResult at: anIndex) notNil ].
+		aMethodWrapper changeType: (aResult at: anIndex) first.
+		aMethodWrapper isOverrideOrReplace ifTrue: [
+			aMethodWrapper previousSourceCode: (aResult 
+				at: anIndex) second  ] ].
 		
 	^ GtExtensionMethodsProjectBuilder new 
-		buildProjectWrapperForMethodWrappers: targetMethods 
+		buildProjectWrapperForMethodWrappers: aCollection 
 		inProject: aProject
 ]
 
 { #category : #analysis }
-GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForGToolkit [
-	^ self buildWrapperForProject: BaselineOfGToolkit fullBaselineProject
+GtExtensionMethodsBaseImageOverridesReportBuilder >> buildReportForGToolkit [
+	^ self buildReportForProject: BaselineOfGToolkit fullBaselineProject
 ]
 
 { #category : #analysis }
-GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForProject: aProject [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> buildReportForProject: aProject [
 	| wrapperProject extensionMethods analysisCode analysisResult |
 	
 	wrapperProject := GtExtensionMethodsProjectBuilder new 
-		buildWrapperForProject: aProject.
+		buildReportForProject: aProject.
 	
 	extensionMethods := wrapperProject extensionMethods.
 	analysisCode := self detectionCodeForMethods: extensionMethods.
@@ -55,13 +53,13 @@ GtExtensionMethodsBaseImageOverridesBuilder >> buildWrapperForProject: aProject 
 	analysisResult := self comparisonResultsForAnalysisCode: analysisCode.
 	
 	^ self 
-		buildWrapperForComparisonResult: analysisResult
+		buildReportForComparisonResult: analysisResult
 		forExtensionMethods: extensionMethods
 		inProject: aProject
 ]
 
 { #category : #utils }
-GtExtensionMethodsBaseImageOverridesBuilder >> comparisonResultsForAnalysisCode: analysisSourceCode [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> comparisonResultsForAnalysisCode: analysisSourceCode [
 	| command newProcess arguments resultString |
 	
 	command := GtVirtualMachine instance 
@@ -89,11 +87,11 @@ GtExtensionMethodsBaseImageOverridesBuilder >> comparisonResultsForAnalysisCode:
 ]
 
 { #category : #utils }
-GtExtensionMethodsBaseImageOverridesBuilder >> detectionCodeForMethods: aCollection [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> detectionCodeForMethods: aCollection [
 	| expensionsData |
 	
 	expensionsData := aCollection asArray collect: [ :aMethod |
-		{aMethod methodClass name . aMethod selector asString } ].
+		{ aMethod methodClass name . aMethod selector asString } ].
 	
 	^ String streamContents: [ :aStream |
 		aStream << '| expensionsData |'; lf.
@@ -104,10 +102,10 @@ GtExtensionMethodsBaseImageOverridesBuilder >> detectionCodeForMethods: aCollect
 		
 			isMeta := false.
 			(className endsWith: ' class') ifTrue: [
-				className := className withoutSuffix: ' class'.
+				className := (className withoutSuffix: ' class') asSymbol.
 				isMeta := true ].
 			(className endsWith: ' classTrait') ifTrue: [
-				className := className withoutSuffix: ' classTrait'.
+				className := (className withoutSuffix: ' classTrait') asSymbol.
 				isMeta := true ].
 		
 			Smalltalk globals  
@@ -119,15 +117,26 @@ GtExtensionMethodsBaseImageOverridesBuilder >> detectionCodeForMethods: aCollect
 						targetClass := aClass classSide ].
 					targetClass 
 						classAndMethodFor: array second asSymbol
-						do: [ :c :m | m sourceCode  ]
-						ifAbsent: [ nil ] ]
-				ifAbsent: [ nil ] ]
+						do: [ :methodClas :foundMethod | 
+							targetClass = methodClas
+								ifTrue: [
+									{
+										#isReplacingMethodInClass. 
+										foundMethod sourceCode
+									}]
+								ifFalse: [
+									{
+										#isOverridingSupperclassMethod. 
+										foundMethod sourceCode
+									} ] ]
+						ifAbsent: [ {#isNewMethod} ] ]
+				ifAbsent: [ {#isMissingClass} ] ]
 			] sourceNode sourceCode).
 		aStream << ' value: expensionsData' ]
 ]
 
 { #category : #utils }
-GtExtensionMethodsBaseImageOverridesBuilder >> ensureImageDownloaded [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> ensureImageDownloaded [
 	| targetFolder |
 	targetFolder := self targetFolder.
 	(targetFolder / self imageName) exists 
@@ -143,39 +152,39 @@ GtExtensionMethodsBaseImageOverridesBuilder >> ensureImageDownloaded [
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> imageArchiveName [ 
+GtExtensionMethodsBaseImageOverridesReportBuilder >> imageArchiveName [ 
 	^ imageArchiveName ifNil: [
 		'Pharo10-SNAPSHOT.build.521.sha.14f5413.arch.64bit.zip' ]
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> imageArchiveName: anArchiveName [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> imageArchiveName: anArchiveName [
 	imageArchiveName := anArchiveName
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> imageName [ 
+GtExtensionMethodsBaseImageOverridesReportBuilder >> imageName [ 
 	^ imageName ifNil: [
 		'Pharo10-SNAPSHOT-64bit-14f5413.image' ]
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> imageName: anImageName [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> imageName: anImageName [
 	imageName := anImageName
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> imageUrl [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> imageUrl [
 	^ imageUrl ifNil: [
 		'https://dl.feenk.com/pharo/', self imageArchiveName ]
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> imageUrl: anUrlString [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> imageUrl: anUrlString [
 	imageUrl := anUrlString
 ]
 
 { #category : #accessing }
-GtExtensionMethodsBaseImageOverridesBuilder >> targetFolder [
+GtExtensionMethodsBaseImageOverridesReportBuilder >> targetFolder [
 	^ FileLocator localDirectory / 'analysis-extension-methods'
 ]

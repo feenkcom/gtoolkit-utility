@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'currentCompiledMethod',
-		'previousSourceCode'
+		'previousSourceCode',
+		'changeType'
 	],
 	#category : #'GToolkit-Utility-ExtensionMethodsAnalysis'
 }
@@ -12,6 +13,16 @@ Class {
 GtExtensionMethodWrapper class >> forCompiledMethod: aCompiledMethod [ 
 	^ self new 
 		currentCompiledMethod: aCompiledMethod
+]
+
+{ #category : #accessing }
+GtExtensionMethodWrapper >> changeType [
+	^ changeType
+]
+
+{ #category : #accessing }
+GtExtensionMethodWrapper >> changeType: aSymbol [
+	changeType := aSymbol
 ]
 
 { #category : #accessing }
@@ -55,6 +66,27 @@ GtExtensionMethodWrapper >> gtViewTwoPanesDiffFor: aView [
 					using: GtSmaCCDiffSplitter forPharo);
 				styler: GtCodeDiffRBTextStyler new ];
 		yourself
+]
+
+{ #category : #testing }
+GtExtensionMethodWrapper >> isNewMethod [
+	^ changeType = #isNewMethod
+]
+
+{ #category : #testing }
+GtExtensionMethodWrapper >> isOverrideOrReplace [
+	^ self isOverridingSupperclassMethod or: [
+		self isReplacingMethodInClass ]
+]
+
+{ #category : #testing }
+GtExtensionMethodWrapper >> isOverridingSupperclassMethod [
+	^ changeType = #isOverridingSupperclassMethod
+]
+
+{ #category : #testing }
+GtExtensionMethodWrapper >> isReplacingMethodInClass [
+	^ changeType = #isReplacingMethodInClass
 ]
 
 { #category : #accessing }

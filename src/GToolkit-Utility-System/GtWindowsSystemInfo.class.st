@@ -16,6 +16,26 @@ GtWindowsSystemInfo >> currentProcessId [
 	^ self ffiCall: #(#uint #GetCurrentProcessId #()) module: 'Kernel32.dll'
 ]
 
+{ #category : #accessing }
+GtWindowsSystemInfo >> findExecutable: aString [
+	"Do a `where` on the supplied executable name"
+	| builder output path lines |
+
+	builder := GtExternalProcessBuilder new
+		command: 'where';
+		args: { aString }.
+	output := builder output.
+	output status isSuccess
+		ifFalse: [ ^ self error: 'Unable to find: ', aString asString ].
+	path := output stdout trimBoth.
+	path ifEmpty: [ self error: 'Unable to find: ', aString asString ].
+	lines := path lines
+		collect: [ :line | line trimBoth asFileReference ]
+		thenSelect: [ :each | #(bat exe) includes: each extension asLowercase ].
+	lines ifEmpty: [ self error: 'Unable to find: ', aString asString ].
+	^ lines first.
+]
+
 { #category : #'cpu info' }
 GtWindowsSystemInfo >> freeMemory [
 	"Answer the free RAM of the host"

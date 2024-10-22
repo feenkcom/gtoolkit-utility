@@ -19,6 +19,18 @@ GtExtensionMethodsProjectWrapper >> extensionMethods [
 		aPackage extensionMethods ]
 ]
 
+{ #category : #'accessing - grouping' }
+GtExtensionMethodsProjectWrapper >> groupByMethodChangeType [
+	| extensionMethodsGroup |
+	extensionMethodsGroup := self extensionMethods 
+		groupedBy: [ :each | each changeType ].
+	
+	^ extensionMethodsGroup collect: [ :aGroup |
+		GtExtensionMethodsProjectBuilder new 
+			buildProjectWrapperForMethodWrappers: aGroup 
+			inProject: self project ]
+]
+
 { #category : #'gt - extensions' }
 GtExtensionMethodsProjectWrapper >> gtViewExtensionMethodsFor: aView [
 	<gtView>
@@ -29,6 +41,23 @@ GtExtensionMethodsProjectWrapper >> gtViewExtensionMethodsFor: aView [
 		items: [ self extensionMethods ];
 		column: 'Method' text: [ :aMethod | aMethod printString ];
 		column: 'Package' text: [ :aMethod | aMethod package name ]
+]
+
+{ #category : #'gt - extensions' }
+GtExtensionMethodsProjectWrapper >> gtViewGroupsByChangeTypeFor: aView [
+	<gtView>
+	 
+	^ aView columnedList 
+		title: 'Extension Methods (by change type)';
+		priority: 55;
+		items: [ 
+			self groupByMethodChangeType associations ];
+		column: 'Change type' text: [ :assoc | 
+			assoc key capitalized "piecesCutWhereCamelCase asCommaString" ];
+		column: 'Number of methods' text: [ :assoc | 
+			assoc value numberOfExtensions ];
+		send: [ :assoc |
+			assoc value ]
 ]
 
 { #category : #'gt - extensions' }
