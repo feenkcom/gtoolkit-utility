@@ -56,7 +56,7 @@ GtTimeCachedObject >> mutexStatus [
 GtTimeCachedObject >> newValue [
 	"Answer the receiver's value, updating it regardless of the timeout"
 
-	^ mutex critical:
+	^ mutex criticalReleasingOnError:
 		[ value := getBlock value.
 		lastRetrieved := DateAndTime now.
 		value ].
@@ -90,7 +90,7 @@ GtTimeCachedObject >> valueWithin: aDuration [
 	- ensure that it is only being retrieved once at a time (the mutex), and
 	- update cacheTimeout after it has been retrieved.
 	If the value has been updated while waiting for the mutex, just answer it."
-	^ mutex critical:
+	^ mutex criticalReleasingOnError:
 		[ DateAndTime now <= self cacheTimeout
  			ifTrue: [ value ]
  			ifFalse: [ self newValue ] ].
