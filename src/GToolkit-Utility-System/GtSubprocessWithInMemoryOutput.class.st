@@ -148,7 +148,7 @@ GtSubprocessWithInMemoryOutput >> commandLineString [
 		builder arguments 
 			do: [ :arg |
 				stream << ((arg includes: Character space)
-					ifTrue: [ arg printString ]
+					ifTrue: [ arg storeString ]
 					ifFalse: [ arg ]) ]
 			separatedBy: [ stream nextPut: Character space ] ]
 ]
