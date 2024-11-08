@@ -6,10 +6,11 @@ Class {
 
 { #category : #'close on exec' }
 SqWindowsSocket >> closeOnExec [
-	| flagsOutPtr result |
+	| flagsOutPtr result status |
 	
 	flagsOutPtr := ExternalAddress allocate: FFIUInt32 externalTypeSize.
-	self getHandleInformation: self fileDescriptor mask: flagsOutPtr.
+	status := self getHandleInformation: self fileDescriptor mask: flagsOutPtr.
+	status = 0 ifTrue: [ self error: 'Unable to get socket status' ].
 	result := flagsOutPtr uint32AtOffset: 0.
 	flagsOutPtr free.
 	^ result = 0.

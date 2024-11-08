@@ -14,7 +14,10 @@ SqSocketExamples >> closeOnExec [
 	| newSocket |
 
 	newSocket := Socket newTCP.
-	self assert: newSocket closeOnExec.
+	self assert: newSocket closeOnExec
+		description: 'Socket closeOnExec not set'.
 	newSocket closeOnExec: false.
-	self deny: newSocket closeOnExec.
+	self deny: newSocket closeOnExec
+		description: 'Socket closeOnExec set'.
+	newSocket closeAndDestroy.
 ]
