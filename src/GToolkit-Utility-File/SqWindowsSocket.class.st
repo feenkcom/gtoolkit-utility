@@ -22,7 +22,7 @@ SqWindowsSocket >> closeOnExec: aBoolean [
 
 	status := self setHandleInformation: self fileDescriptor
 		mask: 1 "HANDLE_FLAG_INHERIT=1"
-		flags: 0.
+		flags: aBoolean not asBit.
 	self assert: status ~= 0.
 ]
 
