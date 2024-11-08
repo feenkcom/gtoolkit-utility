@@ -1,25 +1,38 @@
 Extension { #name : #Socket }
 
 { #category : #'*GToolkit-Utility-File' }
-Socket >> getCloseOnExec [
+Socket >> closeOnExec [
 	"Answer a boolean indicating whether the CloseOnExec bit is set.
 	Only valid after the socket has been opened."
 
-	^ self sqSocket getCloseOnExec
+	^ self sqSocket closeOnExec
 
 ]
 
 { #category : #'*GToolkit-Utility-File' }
-Socket >> setCloseOnExec: aBoolean [
+Socket >> closeOnExec: aBoolean [
 	"Set/Clear the CLOEXEC bit on the receiver.
 	Must be called after the socket has been opened."
 
-	self sqSocket setCloseOnExec: aBoolean
+	self sqSocket closeOnExec: aBoolean
 
+]
+
+{ #category : #'*GToolkit-Utility-File' }
+Socket class >> newTCP [
+	"Create a socket and initialize it for TCP.
+	Set the flags so the file descriptor is not inherited by child processes."
+	| newSocket |
+
+	self initializeNetwork.
+	newSocket := [ super new initialize: TCPSocketType ] repeatWithGCIf: 
+		[ :socket | socket isValid not ].
+	newSocket closeOnExec: true.
+	^ newSocket
 ]
 
 { #category : #'*GToolkit-Utility-File' }
 Socket >> sqSocket [
 
-	^ SqSocket fromHandle: socketHandle
+	^ SqSocket forPlatform fromHandle: socketHandle
 ]

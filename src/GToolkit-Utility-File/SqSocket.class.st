@@ -24,27 +24,33 @@ SqSocket class >> fieldsDesc [
 		)
 ]
 
+{ #category : #'instance creation' }
+SqSocket class >> forPlatform [
+
+	^ OSPlatform current isWindows 
+		ifTrue: [ SqWindowsSocket ]
+		ifFalse: [ SqUnixSocket ].
+]
+
+{ #category : #'close on exec' }
+SqSocket >> closeOnExec [
+	"Answer a boolean indicating whether the receiver will not be inherited by child processes"
+
+	^ self subclassResponsibility
+]
+
+{ #category : #'close on exec' }
+SqSocket >> closeOnExec: aBoolean [
+	"Set the receiver's flags so that the file descriptor isn't inherited by child processes"
+
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 SqSocket >> fileDescriptor [
 	"Answer the receiver's file descriptor"
 
 	^ self privateSocketPtr s
-]
-
-{ #category : #'close on exec' }
-SqSocket >> getCloseOnExec [
-	"Get the CLOEXEC bit for the receiver"
-	| result |
-
-	"Windows doesn't transfer open file descriptors"
-	OSPlatform current isWindows ifTrue: [ ^ true ].
-
-	result := LibC uniqueInstance
-		fcntl: self fileDescriptor 
-		_: 1 "F_GETFD".
-	self assert: [ result ~= -1 ]
-		description: 'Unable to retrieve CLOEXEC'.
-	^ (result bitAnd: 1) = 1
 ]
 
 { #category : #'accessing - structure variables' }
@@ -69,30 +75,6 @@ SqSocket >> sessionID [
 SqSocket >> sessionID: anObject [
 	"This method was automatically generated"
 	handle signedLongAt: OFFSET_SESSIONID put: anObject
-]
-
-{ #category : #'close on exec' }
-SqSocket >> setCloseOnExec: aBoolean [
-	"Set/Clear the CLOEXEC bit on the receiver.
-	The code follows a GNU manual recommendation [1].
-	[1] https://www.gnu.org/software/libc/manual/html_node/Descriptor-Flags.html"
-	| old status |
-
-	"Ignore on Windows: sockets aren't transferred to subprocesses"
-	OSPlatform current isWindows ifTrue: [ ^ self ].
-
-	old := LibC uniqueInstance
-		fcntl: self fileDescriptor 
-		_: 1 "F_GETFD".
-	self assert: [ old ~= -1 ]
-		description: 'fcntl() failed'.
-
-	status := LibC uniqueInstance
-		fcntl: self fileDescriptor 
-		_: 2 "F_SETFD"
-		_: (old bitAt: 1 put: aBoolean asBit).
-	self assert: [ status ~= -1 ]
-		description: 'fcntl() failed'.
 ]
 
 { #category : #initialization }

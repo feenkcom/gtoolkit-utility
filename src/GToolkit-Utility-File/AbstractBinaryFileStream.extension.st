@@ -1,20 +1,20 @@
 Extension { #name : #AbstractBinaryFileStream }
 
 { #category : #'*GToolkit-Utility-File' }
-AbstractBinaryFileStream >> getCloseOnExec [
+AbstractBinaryFileStream >> closeOnExec [
 	"Answer a boolean indicating whether the CloseOnExec bit is set.
 	Only valid while the file is open."
 
-	^ self sqFile getCloseOnExec
+	^ self sqFile closeOnExec
 
 ]
 
 { #category : #'*GToolkit-Utility-File' }
-AbstractBinaryFileStream >> setCloseOnExec: aBoolean [
+AbstractBinaryFileStream >> closeOnExec: aBoolean [
 	"Set/Clear the CLOEXEC bit on the receiver.
 	Must be called while the file is open."
 
-	self sqFile setCloseOnExec: aBoolean
+	self sqFile closeOnExec: aBoolean
 
 ]
 
