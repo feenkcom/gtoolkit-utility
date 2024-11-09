@@ -21,7 +21,7 @@ Socket >> closeOnExec: aBoolean [
 { #category : #'*GToolkit-Utility-File' }
 Socket >> sqSocket [
 
-	^ SqSocket forPlatform fromHandle: socketHandle
+	^ SqSocket fromHandle: socketHandle
 ]
 
 { #category : #'*GToolkit-Utility-File' }

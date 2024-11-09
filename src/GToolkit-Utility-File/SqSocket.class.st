@@ -24,14 +24,6 @@ SqSocket class >> fieldsDesc [
 		)
 ]
 
-{ #category : #'instance creation' }
-SqSocket class >> forPlatform [
-
-	^ OSPlatform current isWindows 
-		ifTrue: [ SqWindowsSocket ]
-		ifFalse: [ SqUnixSocket ].
-]
-
 { #category : #'close on exec' }
 SqSocket >> closeOnExec [
 	"Answer a boolean indicating whether the receiver will not be inherited by child processes"
