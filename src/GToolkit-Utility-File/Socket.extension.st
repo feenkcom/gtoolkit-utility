@@ -19,20 +19,24 @@ Socket >> closeOnExec: aBoolean [
 ]
 
 { #category : #'*GToolkit-Utility-File' }
-Socket class >> newTCP [
-	"Create a socket and initialize it for TCP.
-	Set the flags so the file descriptor is not inherited by child processes."
-	| newSocket |
-
-	self initializeNetwork.
-	newSocket := [ super new initialize: TCPSocketType ] repeatWithGCIf: 
-		[ :socket | socket isValid not ].
-	newSocket closeOnExec: true.
-	^ newSocket
-]
-
-{ #category : #'*GToolkit-Utility-File' }
 Socket >> sqSocket [
 
 	^ SqSocket forPlatform fromHandle: socketHandle
+]
+
+{ #category : #'*GToolkit-Utility-File' }
+Socket >> waitForConnectionFor: timeout ifTimedOut: timeoutBlock [
+	"Wait up until the given deadline for a connection to be established. Return true if it is established by the deadline, false if not."
+
+	| startTime msecsDelta msecsEllapsed status |
+	startTime := Time millisecondClockValue.
+	msecsDelta := (timeout * 1000) truncated.
+	status := self primSocketConnectionStatus: socketHandle.
+	[(status = WaitingForConnection) and: [(msecsEllapsed := Time millisecondsSince: startTime) < msecsDelta]]
+		whileTrue: [
+			semaphore waitTimeoutMSecs: msecsDelta - msecsEllapsed.
+			status := self primSocketConnectionStatus: socketHandle].
+	self closeOnExec: true.
+	status = Connected ifFalse: [^timeoutBlock value].
+	^ true
 ]
