@@ -52,13 +52,6 @@ FileDescriptorExamples >> socketCloseOnExecFlag [
 	self assert: socket isNil.
 	socket := Socket tcpCreateIfFail: [ self error: 'Unable to create socket' ].
 
-	"On Windows: sockets are never transferred to subprocesses"
-	OSPlatform current isWindows ifTrue: 
-		[ "Setting shouldn't raise an exception"
-		socket closeOnExec: false.
-		self assert: socket closeOnExec.
-		^ self ].
-
 	socket closeOnExec: false.
 	self deny: socket closeOnExec.
 
