@@ -31,16 +31,16 @@ FileDescriptorExamples >> fileCloseOnExecFlag [
 		"On Windows: sockets are never transferred to subprocesses"
 		OSPlatform current isWindows ifTrue: 
 			[ "Setting shouldn't raise an exception"
-			binaryStream setCloseOnExec: false.
-			self assert: binaryStream getCloseOnExec.
+			binaryStream closeOnExec: false.
+			self assert: binaryStream closeOnExec.
 			^ self ].
 			
-		originalValue := binaryStream getCloseOnExec.
-		binaryStream setCloseOnExec: false.
-		self deny: binaryStream getCloseOnExec.
-		binaryStream setCloseOnExec: true.
-		self assert: binaryStream getCloseOnExec.
-		binaryStream setCloseOnExec: originalValue ].
+		originalValue := binaryStream closeOnExec.
+		binaryStream closeOnExec: false.
+		self deny: binaryStream closeOnExec.
+		binaryStream closeOnExec: true.
+		self assert: binaryStream closeOnExec.
+		binaryStream closeOnExec: originalValue ].
 ]
 
 { #category : #examples }
@@ -52,16 +52,9 @@ FileDescriptorExamples >> socketCloseOnExecFlag [
 	self assert: socket isNil.
 	socket := Socket tcpCreateIfFail: [ self error: 'Unable to create socket' ].
 
-	"On Windows: sockets are never transferred to subprocesses"
-	OSPlatform current isWindows ifTrue: 
-		[ "Setting shouldn't raise an exception"
-		socket setCloseOnExec: false.
-		self assert: socket getCloseOnExec.
-		^ self ].
+	socket closeOnExec: false.
+	self deny: socket closeOnExec.
 
-	socket setCloseOnExec: false.
-	self deny: socket getCloseOnExec.
-
-	socket setCloseOnExec: true.
-	self assert: socket getCloseOnExec.
+	socket closeOnExec: true.
+	self assert: socket closeOnExec.
 ]
