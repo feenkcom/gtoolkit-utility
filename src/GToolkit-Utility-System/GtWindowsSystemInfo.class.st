@@ -19,11 +19,12 @@ GtWindowsSystemInfo >> currentProcessId [
 { #category : #accessing }
 GtWindowsSystemInfo >> findExecutable: aString [
 	"Do a `where` on the supplied executable name"
+
 	| builder output path lines |
 
 	builder := GtExternalProcessBuilder new
 		command: 'where';
-		args: { aString }.
+		args: { aString asString }.
 	output := builder output.
 	output status isSuccess
 		ifFalse: [ ^ self error: 'Unable to find: ', aString asString ].
