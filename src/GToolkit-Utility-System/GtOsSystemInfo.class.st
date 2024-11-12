@@ -53,13 +53,16 @@ GtOsSystemInfo >> currentProcessId [
 { #category : #accessing }
 GtOsSystemInfo >> findExecutable: aString [
 	"Do a `which` on the supplied executable name
-	Run this is a shell to ensure that all logon configuration is performed."
-	| builder output path |
+	Run this in a shell to ensure that all logon configuration is performed
+	and the PATH is fully expanded."
 
+	| shell builder output path |
+
+	shell := Smalltalk os environment at: 'SHELL' ifAbsent: '/bin/sh'.
 	builder := GtExternalProcessBuilder new
-		command: (Smalltalk os environment at: 'SHELL');
+		command: shell;
 		args: {
-			'-l'.
+			(shell endsWith: 'csh') ifTrue: [ '-d' ] ifFalse: [ '-l' ].
 			'-c'.
 			'which ', aString asString }.
 	output := builder output.
