@@ -30,6 +30,46 @@ SqFile class >> fieldsDesc [
 	)
 ]
 
+{ #category : #'close on exec' }
+SqFile >> closeOnExec [
+	"Get the CLOEXEC bit for the receiver"
+	| result |
+
+	"Windows doesn't transfer open file descriptors"
+	OSPlatform current isWindows ifTrue: [ ^ true ].
+
+	result := LibC uniqueInstance
+		fcntl: self fileDescriptor 
+		_: 1. "F_GETFD"
+	self assert: [ result ~= -1 ]
+		description: 'Unable to retrieve CLOEXEC'.
+	^ (result bitAnd: 1) = 1
+]
+
+{ #category : #'close on exec' }
+SqFile >> closeOnExec: aBoolean [
+	"Set/Clear the CLOEXEC bit on the receiver.
+	The code follows a GNU manual recommendation [1].
+	[1] https://www.gnu.org/software/libc/manual/html_node/Descriptor-Flags.html"
+	| old status |
+
+	"Ignore on Windows: sockets aren't transferred to subprocesses"
+	OSPlatform current isWindows ifTrue: [ ^ self ].
+
+	old := LibC uniqueInstance
+		fcntl: self fileDescriptor 
+		_: 1. "F_GETFD"
+	self assert: [ old ~= -1 ]
+		description: 'fcntl() failed'.
+
+	status := LibC uniqueInstance
+		fcntl: self fileDescriptor 
+		_: 2 "F_SETFD"
+		_: (old bitAt: 1 put: aBoolean asBit).
+	self assert: [ status ~= -1 ]
+		description: 'fcntl() failed'.
+]
+
 { #category : #'accessing - structure variables' }
 SqFile >> file [
 	"This method was automatically generated"
@@ -46,22 +86,6 @@ SqFile >> file: anObject [
 SqFile >> fileDescriptor [
 
 	^ LibC uniqueInstance fileno: self file
-]
-
-{ #category : #'close on exec' }
-SqFile >> getCloseOnExec [
-	"Get the CLOEXEC bit for the receiver"
-	| result |
-
-	"Windows doesn't transfer open file descriptors"
-	OSPlatform current isWindows ifTrue: [ ^ true ].
-
-	result := LibC uniqueInstance
-		fcntl: self fileDescriptor 
-		_: 1. "F_GETFD"
-	self assert: [ result ~= -1 ]
-		description: 'Unable to retrieve CLOEXEC'.
-	^ (result bitAnd: 1) = 1
 ]
 
 { #category : #'accessing - structure variables' }
@@ -110,30 +134,6 @@ SqFile >> sessionID [
 SqFile >> sessionID: anObject [
 	"This method was automatically generated"
 	handle signedLongAt: OFFSET_SESSIONID put: anObject
-]
-
-{ #category : #'close on exec' }
-SqFile >> setCloseOnExec: aBoolean [
-	"Set/Clear the CLOEXEC bit on the receiver.
-	The code follows a GNU manual recommendation [1].
-	[1] https://www.gnu.org/software/libc/manual/html_node/Descriptor-Flags.html"
-	| old status |
-
-	"Ignore on Windows: sockets aren't transferred to subprocesses"
-	OSPlatform current isWindows ifTrue: [ ^ self ].
-
-	old := LibC uniqueInstance
-		fcntl: self fileDescriptor 
-		_: 1. "F_GETFD"
-	self assert: [ old ~= -1 ]
-		description: 'fcntl() failed'.
-
-	status := LibC uniqueInstance
-		fcntl: self fileDescriptor 
-		_: 2 "F_SETFD"
-		_: (old bitAt: 1 put: aBoolean asBit).
-	self assert: [ status ~= -1 ]
-		description: 'fcntl() failed'.
 ]
 
 { #category : #initialization }
