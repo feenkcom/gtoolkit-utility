@@ -19,14 +19,17 @@ GtMacSystemInfo >> currentProcessId [
 { #category : #'cpu info' }
 GtMacSystemInfo >> freeMemory [
 	"Answer the free RAM of the host in bytes"
-	| proc |
 
-	proc := (GtSubprocessWithInMemoryOutput 
-		command: 'vm_stat'
-		arguments: #())
+	| proc pageSize freePages output inactivePages |
+	proc := (GtSubprocessWithInMemoryOutput command: 'vm_stat' arguments: #())
 			errorBlock: [ :ex | self error: 'Unable to retrieve free memory' ];
 			runAndWait.
-	^ (self colonSeparatedGet: 'Pages free' fromString: proc stdout) asNumber * 4096.
+	pageSize := self pageSize.
+	output := proc stdout.
+	freePages := (self colonSeparatedGet: 'Pages free' fromString: output) asNumber.
+	inactivePages := (self colonSeparatedGet: 'Pages inactive' fromString: output)
+			asNumber.
+	^ (freePages + inactivePages) * pageSize
 ]
 
 { #category : #'cpu info' }
@@ -40,6 +43,15 @@ GtMacSystemInfo >> numberOfCores [
 			errorBlock: [ :ex | self error: 'Unable to retrieve number of cores' ];
 			runAndWait.
 	^ (self colonSeparatedGet: 'machdep.cpu.core_count' fromString: proc stdout) asNumber.
+]
+
+{ #category : #'cpu info' }
+GtMacSystemInfo >> pageSize [
+	| proc |
+	proc := (GtSubprocessWithInMemoryOutput command: 'pagesize' arguments: #())
+			errorBlock: [ :ex | self error: 'Unable to retrieve pagesize' ];
+			runAndWait.
+	^proc stdout asNumber
 ]
 
 { #category : #'cpu info' }
