@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit-Utility-File'
 }
 
-{ #category : #'storing and loading file' }
+{ #category : #testing }
 GtFileUtility class >> contentsOf: aFileReference [
 	"This should be replaced with ZnStreamingEntity usage"
 	| mime |
@@ -14,6 +14,11 @@ GtFileUtility class >> contentsOf: aFileReference [
 			bytes := aFileReference binaryReadStreamDo: [ :aStream | 
 				aStream contents ] ] 
 		ifFalse: [ aFileReference contents ]
+]
+
+{ #category : #'as yet unclassified' }
+GtFileUtility class >> doesFile: aFile haveExtension: aListOfExtensions [
+	^ aListOfExtensions includes: aFile asFileReference extension asLowercase
 ]
 
 { #category : #'accessing - file' }
@@ -49,6 +54,11 @@ GtFileUtility class >> fileReferenceOfUri: aUriFileName relativeTo: directoryFil
 	<return: #FileReference or: nil>
 	^ (self fileNameOfUri: aUriFileName) ifNotNil: [ :aFileName | 
 		self fileReferenceOfFileName: aFileName relativeTo: directoryFileReference ]
+]
+
+{ #category : #'as yet unclassified' }
+GtFileUtility class >> isImageFile: aString [
+	^ self doesFile: aString haveExtension: #('jpeg' 'gif' 'jpg' 'png' 'svg')
 ]
 
 { #category : #'accessing - mime type' }
