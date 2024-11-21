@@ -97,6 +97,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-MessageTally';
 			package: 'GToolkit-Utility-SpaceTally';
 			package: 'GToolkit-Utility-StackOverflow';
+			package: 'GToolkit-Utility-Streams';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #('GToolkitFileUtility' ). ];
 			package: 'GToolkit-Utility-Logging'  with: [
