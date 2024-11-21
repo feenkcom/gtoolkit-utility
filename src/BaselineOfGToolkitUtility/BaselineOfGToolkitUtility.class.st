@@ -82,26 +82,27 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec postLoadDoIt: #'postLoadChanges:'.
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.346/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.347/src' ].
 		spec
 			baseline: 'GToolkitAnnouncerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.346/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.347/src' ].
 		spec
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.346/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.347/src' ].
 		spec
 			baseline: 'GToolkitFileUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.346/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.347/src' ].
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.346/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.347/src' ].
 		spec
 			baseline: 'GToolkitSessionManagerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.346/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.347/src' ].
 
 		spec package: 'GToolkit-Utility-MessageTally'.
 		spec package: 'GToolkit-Utility-SpaceTally'.
 		spec package: 'GToolkit-Utility-StackOverflow'.
+		spec package: 'GToolkit-Utility-Streams'.
 		spec package: 'GToolkit-Utility-Tests' with: [
 			spec requires: #(#GToolkitFileUtility) ].
 		spec package: 'GToolkit-Utility-Logging' with: [
