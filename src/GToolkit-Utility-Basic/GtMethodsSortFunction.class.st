@@ -114,11 +114,6 @@ GtMethodsSortFunction >> compareMethodNameOf: aMethodOrName1 withMethodNameOf: a
 		ifFalse: [ methodName2 isBinary threeWayCompareTo: methodName1 isBinary ]
 ]
 
-{ #category : #comparing }
-GtMethodsSortFunction >> hash [
-	^ self class hash
-]
-
 { #category : #'private - comparison' }
 GtMethodsSortFunction >> hasMethodNameOf: aMethodOrName [
 	<return: #Symbol>
@@ -130,6 +125,11 @@ GtMethodsSortFunction >> hasMethodNameOf: aMethodOrName [
 		ifTrue: [ ^ true ].
 
 	^ [ aMethodOrName selector notNil ] on: Error do: [ :ex | ex return: false ]
+]
+
+{ #category : #comparing }
+GtMethodsSortFunction >> hash [
+	^ self class hash
 ]
 
 { #category : #'private - comparison' }
