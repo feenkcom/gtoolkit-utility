@@ -8,7 +8,7 @@ Class {
 	#superclass : #GtTimeCachedObject,
 	#instVars : [
 		'announcer',
-		'retrievingMessage'
+		'retrievingValue'
 	],
 	#category : #'GToolkit-Utility-Basic'
 }
@@ -27,11 +27,11 @@ GtAnnouncingTimeCachedObject class >> get: aBlock timeout: aDuration announcer: 
 ]
 
 { #category : #'instance creation' }
-GtAnnouncingTimeCachedObject class >> get: aBlock timeout: aDuration announcer: anAnnouncer retrievingMessage: aString [
+GtAnnouncingTimeCachedObject class >> get: aBlock timeout: aDuration announcer: anAnnouncer retrievingValue: aString [
 
 	^ (self new initialize: aBlock timeout: aDuration)
 		announcer: anAnnouncer;
-		retrievingMessage: aString
+		retrievingValue: aString
 ]
 
 { #category : #accessing }
@@ -44,20 +44,29 @@ GtAnnouncingTimeCachedObject >> announcer: anObject [
 	announcer := anObject
 ]
 
-{ #category : #accessing }
-GtAnnouncingTimeCachedObject >> retrievingMessage [
-	^ retrievingMessage
+{ #category : #'as yet unclassified' }
+GtAnnouncingTimeCachedObject >> initialize [
+
+	super initialize.
+	"Self is a flag that the value hasn't been set,
+	allowing nil to be a retrievingMessage"
+	retrievingValue := self.
 ]
 
 { #category : #accessing }
-GtAnnouncingTimeCachedObject >> retrievingMessage: anObject [
-	retrievingMessage := anObject
+GtAnnouncingTimeCachedObject >> retrievingValue [
+	^ retrievingValue
+]
+
+{ #category : #accessing }
+GtAnnouncingTimeCachedObject >> retrievingValue: anObject [
+	retrievingValue := anObject
 ]
 
 { #category : #private }
 GtAnnouncingTimeCachedObject >> updateAndAnnounce [
 
-	[ self newValue ] asAsyncPromise
+	[ super valueWithin: cacheTime ] asAsyncPromise
 		then: [ :newValue |
 			[ announcer announce: (GtTimeCachedObjectAnnouncement
 				newValue: newValue cache: self) ]
@@ -73,5 +82,7 @@ GtAnnouncingTimeCachedObject >> valueWithin: aDuration [
 
 	DateAndTime now <= self cacheTimeout ifTrue: [ ^ value ].
 	self updateAndAnnounce.
-	^ retrievingMessage ifNil: [ value ].
+	^ retrievingValue == self
+		ifTrue: [ value ]
+		ifFalse: [ retrievingValue ].
 ]
