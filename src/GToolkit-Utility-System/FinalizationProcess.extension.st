@@ -1,7 +1,7 @@
-Extension { #name : #WeakArray }
+Extension { #name : #FinalizationProcess }
 
 { #category : #'*GToolkit-Utility-System' }
-WeakArray class >> finalizationProcess [
+FinalizationProcess class >> finalizationProcess [
 	"The finalization process arranges to send mourn to each element of the VM's finalization queue,
 	 which is accessed via primitiveFetchMourner.  The VM signals FinalizationSemaphore whenever
 	 the queue is non-empty.  This process loops, waiting on the semaphore, fetches the first element
@@ -15,9 +15,7 @@ WeakArray class >> finalizationProcess [
 	| throttle firstMourner |
 	throttle := Semaphore new.
 	[true] whileTrue: [FinalizationSemaphore wait; initSignals.
-	 "Support the old scheme until things have changed over..."
-	 self forPharo11OrNewer: []
-	 	forPharo10: [ self doOldFinalization ].
+
 	 [firstMourner := self primitiveFetchMourner.
 	  firstMourner notNil] whileTrue:
 		[MournLoopProcess := [
@@ -30,7 +28,7 @@ WeakArray class >> finalizationProcess [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-WeakArray class >> gtSummaryFor: aView [
+FinalizationProcess class >> gtSummaryFor: aView [
 	<gtView>
 	<gtClassView>
 
@@ -49,7 +47,7 @@ WeakArray class >> gtSummaryFor: aView [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-WeakArray class >> mournLoopWith: firstMourner [
+FinalizationProcess class >> mournLoopWith: firstMourner [
 	"Send mourn to all the objects available in the mourn queue, starting
 	 with firstMourner which the sender has already extracted for us.  If
 	 an error occurs here, it will break this loop but the sender will spawn
@@ -68,13 +66,59 @@ WeakArray class >> mournLoopWith: firstMourner [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-WeakArray class >> stopRequested [
+FinalizationProcess class >> restartFinalizationProcess [
+	"kill any old process, just in case"
+	<gtPharoPatch: #Pharo11>
+
+	self stopFinalizationProcess.
+
+	FinalizationSemaphore := Smalltalk specialObjectsArray at: 42.
+	StopRequested := false.
+	TheFinalizationProcess := [self finalizationProcess]
+		forkAt: Processor userInterruptPriority.
+	TheFinalizationProcess name: 'WeakArray Finalization Process'
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+FinalizationProcess class >> shutDown: quitting [
+	<gtPharoPatch: #Pharo11>
+	"DO NOT EDIT HERE"
+
+	self stopFinalizationProcess
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+FinalizationProcess class >> startUp: resuming [
+	<gtPharoPatch: #Pharo11>
+	"DO NOT EDIT HERE"
+
+	self restartFinalizationProcess
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+FinalizationProcess class >> stopFinalizationProcess [
+	<gtPharoPatch: #Pharo11>
+	"DO NOT EDIT HERE"
+
+	TheFinalizationProcess ifNotNil: 
+		[TheFinalizationProcess terminate.
+		TheFinalizationProcess := nil].
+
+	(MournLoopProcess isNil or: [ MournLoopProcess isTerminated ])
+		ifTrue: [ ^ self ].
+	self assert: self stoppedSemaphore isSignaled not.
+	StopRequested := true.
+	StoppedSemaphore wait.
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+FinalizationProcess class >> stopRequested [
 
 	^ StopRequested ifNil: [ false ]
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-WeakArray class >> stoppedSemaphore [
+FinalizationProcess class >> stoppedSemaphore [
 
 	^ StoppedSemaphore ifNil: [ StoppedSemaphore := Semaphore new ]
 ]
