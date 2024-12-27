@@ -68,50 +68,6 @@ WeakArray class >> mournLoopWith: firstMourner [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-WeakArray class >> restartFinalizationProcess [
-	"kill any old process, just in case"
-	<gtPharoPatch: #Pharo11>
-
-	self stopFinalizationProcess.
-
-	FinalizationSemaphore := Smalltalk specialObjectsArray at: 42.
-	StopRequested := false.
-	FinalizationProcess := [self finalizationProcess]
-		forkAt: Processor userInterruptPriority.
-	FinalizationProcess name: 'WeakArray Finalization Process'
-]
-
-{ #category : #'*GToolkit-Utility-System' }
-WeakArray class >> shutDown: quitting [
-	<gtPharoPatch: #Pharo11>
-
-	self stopFinalizationProcess
-]
-
-{ #category : #'*GToolkit-Utility-System' }
-WeakArray class >> startUp: resuming [
-	<gtPharoPatch: #Pharo11>
-
-	self restartFinalizationProcess
-]
-
-{ #category : #'*GToolkit-Utility-System' }
-WeakArray class >> stopFinalizationProcess [
-	<gtPharoPatch: #Pharo11>
-
-	FinalizationProcess ifNotNil: 
-		[FinalizationProcess terminate.
-		FinalizationProcess := nil].
-
-	(MournLoopProcess isNil or: [ MournLoopProcess isTerminated ])
-		ifTrue: [ ^ self ].
-	self assert: self stoppedSemaphore isSignaled not.
-	StopRequested := true.
-	StoppedSemaphore wait.
-
-]
-
-{ #category : #'*GToolkit-Utility-System' }
 WeakArray class >> stopRequested [
 
 	^ StopRequested ifNil: [ false ]
