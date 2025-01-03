@@ -36,7 +36,7 @@ FinalizationProcess class >> gtSummaryFor: aView [
 		title: 'Summary';
 		priority: 10;
 		items: [ {
-			'FinalizationProcess' -> FinalizationProcess.
+			'FinalizationProcess' -> TheFinalizationProcess.
 			'FinalizationSemaphore' -> FinalizationSemaphore size.
 			'MournLoopProcess' -> MournLoopProcess.
 			'StopRequested' -> StopRequested.
