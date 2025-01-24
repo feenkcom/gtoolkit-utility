@@ -113,11 +113,11 @@ GtFileUtility class >> secureFileName: fileNameStringOrNil extension: extensionS
 	^ self 
 		secureFileName: fileNameStringOrNil 
 		extension: extensionString 
-		maxLenght: GtFileUtilityConstants maxFileNameLenght
+		maxLength: GtFileUtilityConstants maxFileNameLength
 ]
 
 { #category : #'accessing - file' }
-GtFileUtility class >> secureFileName: aFileNameString extension: anExtensionStringOrNil maxLenght: anInteger [
+GtFileUtility class >> secureFileName: aFileNameString extension: anExtensionStringOrNil maxLength: anInteger [
 	"Return a filename that is file system secure, e.g., does not include special characters"
 	<return: #String>
 	| aBasename |
