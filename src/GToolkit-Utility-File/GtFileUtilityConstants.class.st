@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtFileUtilityConstants class >> maxFileNameLenght [
+GtFileUtilityConstants class >> maxFileNameLength [
 	"Return a maximum file name lenght, excluding extensions and parent directories."
 	^ 25
 ]
