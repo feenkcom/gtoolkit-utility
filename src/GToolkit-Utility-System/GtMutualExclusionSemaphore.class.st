@@ -5,7 +5,7 @@ While the semaphore is locked the Stack view shows the stack trace of the owning
 "
 Class {
 	#name : #GtMutualExclusionSemaphore,
-	#superclass : #Semaphore,
+	#superclass : #AsyncSemaphoreForMutualExclusion,
 	#instVars : [
 		'process'
 	],
