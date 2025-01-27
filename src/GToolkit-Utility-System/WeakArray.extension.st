@@ -25,7 +25,13 @@ WeakArray class >> finalizationProcess [
 				on: Error
 				fork: [ :ex | ex pass ] ]
 					ensure: [ throttle signal ].
-		] forkAt: Processor activePriority + 1.
+		] newProcess.
+		MournLoopProcess priority: Processor activePriority + 1.
+		AsyncProcessProperties
+			process: MournLoopProcess
+			property: #parentProcess
+			put: Processor activeProcess.
+		MournLoopProcess resume.
 		 throttle wait]]
 ]
 

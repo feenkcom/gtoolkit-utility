@@ -11,6 +11,23 @@ Duration >> gtHumanReadableString [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
+Duration >> gtPreciseHumanReadableString [	
+	^ String streamContents: [ :s |
+		self > 1 second
+			ifTrue: [
+				s print: self seconds.
+				s nextPutAll: 's ' ].
+				
+		self > 1 milliSecond
+			ifTrue: [
+				s print: self wholeMilliseconds.
+				s nextPutAll: 'ms ' ].
+				
+		s print: self wholeMicroseconds.
+		s nextPutAll: 'μs' ]
+]
+
+{ #category : #'*GToolkit-Utility-System' }
 Duration >> gtShortPrintOn: aStream [
 	"Print the receiver in a compact format, omitting leading 0s."
 	"Format as per ANSI 5.8.2.16: [-]D:HH:MM:SS[.S]"
