@@ -252,7 +252,7 @@ GtSubprocessWithInMemoryOutput >> initialize [
 	super initialize.
 	builder := GtExternalProcessBuilder new.
 	terminateOnShutdown := false.
-	retryCount := 1.
+	retryCount := 0.
 ]
 
 { #category : #private }
@@ -424,7 +424,7 @@ GtSubprocessWithInMemoryOutput >> runWithRetry [
 	"Run the requested command as a separate process"
 	| retriesLeft completed |
 
-	retriesLeft := retryCount.
+	retriesLeft := retryCount + 1.
 	completed := false.
 	[ retriesLeft = 0 or: [ completed ] ] whileFalse:
 		[ self runOnce.
