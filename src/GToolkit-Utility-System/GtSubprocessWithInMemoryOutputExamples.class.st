@@ -156,7 +156,7 @@ GtSubprocessWithInMemoryOutputExamples >> retryCommand [
 	fr ensureDelete.
 	process := GtSubprocessWithInMemoryOutput new
 		shellCommand: 'echo -n x >> retryCommand-example.stdout; exit 1';
-		retryCount: 3;
+		retryCount: 2;
 		runAndWait.
 	self assert: fr contents trimBoth equals: 'xxx'.
 	fr ensureDelete.
