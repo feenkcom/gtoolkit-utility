@@ -296,7 +296,7 @@ GtSubprocessWithInMemoryOutput >> isSuccess [
 { #category : #actions }
 GtSubprocessWithInMemoryOutput >> kill [
 
-	process kill
+	process ifNotNil: [ process kill ].
 ]
 
 { #category : #printing }
