@@ -299,6 +299,11 @@ GtSubprocessWithInMemoryOutput >> kill [
 	process ifNotNil: [ process kill ].
 ]
 
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> pollException [
+	^pollException
+]
+
 { #category : #printing }
 GtSubprocessWithInMemoryOutput >> printOn: aStream [
 	process ifNil: [ ^ super printOn: aStream ].
@@ -413,8 +418,11 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 	outputPoll := 
 		[ [ self runWithRetry ]
 			on: Error
-			do: [ :ex | errorBlock ifNotNil:
-				[ errorBlock cull: self cull: false ].
+			do: [ :ex | 
+				pollException ifNotNil:
+					[ pollException := ex ].
+				errorBlock ifNotNil:
+					[ errorBlock cull: self cull: false ].
 				semaphore ifNotNil: #signal ]
 		] forkAt: Processor activeProcess priority + 1.
 ]
@@ -530,7 +538,7 @@ GtSubprocessWithInMemoryOutput >> wait [
 	Only valid when the process was started with #runAndSignal."
 
 	semaphore wait.
-	(errorBlock isNotNil and: [ self isSuccess not ])
+	(errorBlock isNotNil and: [ self isComplete and: [ self isSuccess not ] ])
 		ifTrue: [ errorBlock cull: self cull: false ]
 ]
 
