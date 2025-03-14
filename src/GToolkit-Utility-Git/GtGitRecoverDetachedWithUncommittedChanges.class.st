@@ -25,7 +25,7 @@ Class {
 { #category : #private }
 GtGitRecoverDetachedWithUncommittedChanges >> commitImageChanges [
 
-	self halt.
+	self notYetImplemented.
 	self workingCopy
 		commitChanges: self repository workingCopyDiff 
 		withMessage: commitMessage
