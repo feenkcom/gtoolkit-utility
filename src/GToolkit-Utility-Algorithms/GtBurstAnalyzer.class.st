@@ -58,15 +58,13 @@ GtBurstAnalyzer >> gtViewBurstsFor: aView [
 			chart
 				barElement: [ :aGtPlotterContext | 
 					BlElement new
-						aptitude: (BrGlamorousWithTooltipAptitude
-								content: [ BrLabel new
-										text: aGtPlotterContext originalValue value;
-										aptitude: (BrGlamorousLabelAptitude new padding: (BlInsets all: 1)) ]) ].
+						aptitude: (BrGlamorousWithExplicitTooltipAptitude
+								text: aGtPlotterContext originalValue value) ].
 			chart barHeightScale: scale.
 			chart barWidthScale constant: 3.
 			chart barHeightData: [ :eachValue | eachValue value ].
 			chart amountOfTicks: 10.
-			chart with: data]
+			chart with: data ]
 ]
 
 { #category : #accessing }
