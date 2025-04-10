@@ -21,7 +21,7 @@ Class {
 		'lastRetrievedTime',
 		'updateState'
 	],
-	#category : #'GToolkit-Utility-Basic-Cache'
+	#category : #'GToolkit-Utility-System-Cache'
 }
 
 { #category : #'instance creation' }
@@ -143,9 +143,6 @@ GtUpdatingTimeCachedObject >> mutexStatus [
 { #category : #private }
 GtUpdatingTimeCachedObject >> process: newValue exception: exception [
 
-Stdio stdout
-	<< 'AKG process:';
-	lf; flush.
 	value := newValue.
 	latestException := exception.
 	lastRetrievedTime := DateAndTime now.

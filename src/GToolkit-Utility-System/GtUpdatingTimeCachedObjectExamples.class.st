@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'cache'
 	],
-	#category : #'GToolkit-Utility-Basic-Examples'
+	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #examples }
