@@ -10,7 +10,7 @@ Class {
 		'announcer',
 		'retrievingValue'
 	],
-	#category : #'GToolkit-Utility-Basic'
+	#category : #'GToolkit-Utility-Basic-Cache'
 }
 
 { #category : #'instance creation' }
