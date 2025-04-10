@@ -81,9 +81,9 @@ BaselineOfGToolkitUtility >> baseline: spec [
 	spec for: #'common' do: [
 		spec postLoadDoIt: #postLoadChanges:.
 		spec 
-			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitAnnouncerUtility' with: [
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
+			baseline: 'GToolkitBasicUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitAssertionUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
