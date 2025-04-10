@@ -5,7 +5,7 @@ Class {
 		'newValue',
 		'cache'
 	],
-	#category : #'GToolkit-Utility-Basic'
+	#category : #'GToolkit-Utility-Basic-Cache'
 }
 
 { #category : #'instance creation' }

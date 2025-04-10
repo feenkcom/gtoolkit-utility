@@ -8,7 +8,7 @@ Class {
 		'mutex',
 		'lastRetrieved'
 	],
-	#category : #'GToolkit-Utility-Basic'
+	#category : #'GToolkit-Utility-Basic-Cache'
 }
 
 { #category : #'instance creation' }
