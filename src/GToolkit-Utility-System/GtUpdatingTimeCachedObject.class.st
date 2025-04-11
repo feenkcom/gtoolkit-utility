@@ -146,8 +146,9 @@ GtUpdatingTimeCachedObject >> process: newValue exception: exception [
 	value := newValue.
 	latestException := exception.
 	lastRetrievedTime := DateAndTime now.
-	mutex critical: [ updatePromise := nil ].
-	self scheduleNextUpdate.
+	mutex critical: 
+		[ updatePromise := nil.
+		self scheduleNextUpdate. ].
 	announcer announce: (GtTimeCachedObjectAnnouncement
 		newValue: newValue
 		cache: self).
@@ -159,9 +160,10 @@ GtUpdatingTimeCachedObject >> scheduleNextUpdate [
 	| now |
 
 	now := DateAndTime now.
-	(lastRequestedTime + activeDuration) <= now ifTrue: [ ^ self ].
-	scheduleTask scheduledTime: lastRetrievedTime + cacheDuration - averageDuration.
-	TaskAtQueue schedule: scheduleTask.
+	mutex critical:
+		[ (lastRequestedTime + activeDuration) <= now ifTrue: [ ^ self ].
+		scheduleTask scheduledTime: lastRetrievedTime + cacheDuration - averageDuration.
+		TaskAtQueue schedule: scheduleTask. ].
 ]
 
 { #category : #'start - stop' }
