@@ -278,6 +278,11 @@ TGtGroup >> removeAll [
 ]
 
 { #category : #accessing }
+TGtGroup >> removeLast [
+	self items removeLast
+]
+
+{ #category : #accessing }
 TGtGroup >> reversed [
 	^ self items reversed
 ]
