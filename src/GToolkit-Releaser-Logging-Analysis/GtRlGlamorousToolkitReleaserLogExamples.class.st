@@ -7,11 +7,12 @@ Class {
 { #category : #accessing }
 GtRlGlamorousToolkitReleaserLogExamples >> eventsGrouperWithLoadedData [
 	<gtExample>
+	<return: #GtRlReleaserEventsGrouper>
 	| eventsGrouper |
-	eventsGrouper := GtRlReleaserSignalsLogReader readFromFile:  self logFile.
-	
+	eventsGrouper := GtRlReleaserSignalsLogReader readFromFile: self logFile.
+
 	self assert: eventsGrouper numberOfRootEvents equals: 159.
-	
+
 	^ eventsGrouper
 ]
 

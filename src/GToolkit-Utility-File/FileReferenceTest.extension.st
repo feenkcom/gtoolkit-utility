@@ -33,29 +33,30 @@ FileReferenceTest >> testSymbolicLink [
 FileReferenceTest >> testSymbolicLinkTargetPath [
 	<gtExample>
 	<gtPharoPatch: #Pharo12>
+	<return: #FileReferenceTest>
 	| tempDir dDir symbolicLink symlinkCommand status |
-
 	OSPlatform current isWindows ifTrue: [ ^ self ].
 
-	[ tempDir := FileReference newTempFilePrefix: 'testSymbolLinkTargetPath' suffix: 'dir'.
+	[ tempDir := FileReference
+			newTempFilePrefix: 'testSymbolLinkTargetPath'
+			suffix: 'dir'.
 	tempDir ensureCreateDirectory.
 	dDir := tempDir / 'a/b/c/d'.
 	dDir ensureCreateDirectory.
 	symbolicLink := tempDir / 'a/sl'.
 
-	symlinkCommand := 'cd ', (tempDir / 'a') fullName, ' && ln -s ', dDir fullName, ' sl'.
+	symlinkCommand := 'cd ' , (tempDir / 'a') fullName , ' && ln -s '
+			, dDir fullName , ' sl'.
 	status := LibC uniqueInstance system: symlinkCommand.
 	status = 0 ifFalse: [ self error: 'Unable to create symbolic link' ].
 
 	self assert: symbolicLink isSymlink.
-	self assert: (tempDir / 'a/sl/../abc') canonicalize path
-		equals: (tempDir / 'a/b/c/abc') path.
-
-	"Symbolic link operations shouldn't raise an error if the target doesn't exist"
+	self
+		assert: (tempDir / 'a/sl/../abc') canonicalize path
+		equals: (tempDir / 'a/b/c/abc') path.	"Symbolic link operations shouldn't raise an error if the target doesn't exist"
 	dDir deleteAll.
 	self assert: symbolicLink isSymlink.
-	self assert: (tempDir / 'a/sl/../abc') canonicalize path
-		equals: (tempDir / 'a/b/c/abc') path ]
-			ensure: [ tempDir ensureDeleteAll ].
-
+	self
+		assert: (tempDir / 'a/sl/../abc') canonicalize path
+		equals: (tempDir / 'a/b/c/abc') path ] ensure: [ tempDir ensureDeleteAll ]
 ]

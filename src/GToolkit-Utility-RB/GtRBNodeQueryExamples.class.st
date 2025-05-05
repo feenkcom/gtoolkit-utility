@@ -7,6 +7,7 @@ Class {
 { #category : #accessing }
 GtRBNodeQueryExamples >> blocksFromArgs [
 	<gtExample>
+	<return: #GtRBNodeQuery>
 	| result |
 	result := self exampleMethod // 'variable' \ 'block'.
 	self assert: result size equals: 1.
@@ -16,6 +17,7 @@ GtRBNodeQueryExamples >> blocksFromArgs [
 { #category : #accessing }
 GtRBNodeQueryExamples >> blocksWithoutArgs [
 	<gtExample>
+	<return: #GtRBNodeQuery>
 	| result |
 	result := self exampleMethod // 'block'
 			select: [ :each | each arguments isEmpty ].
@@ -26,6 +28,7 @@ GtRBNodeQueryExamples >> blocksWithoutArgs [
 { #category : #accessing }
 GtRBNodeQueryExamples >> exampleMethod [
 	<gtExample>
+	<return: #RBMethodNode>
 	^ RBParser
 		parseMethod: 'test
 	| var1 var2 |
@@ -37,6 +40,7 @@ GtRBNodeQueryExamples >> exampleMethod [
 { #category : #accessing }
 GtRBNodeQueryExamples >> literalParentLiterals [
 	<gtExample>
+	<return: #GtRBNodeQuery>
 	| result |
 	result := self literals \ 'literal'.
 	self assert: result size equals: 2.
@@ -46,6 +50,7 @@ GtRBNodeQueryExamples >> literalParentLiterals [
 { #category : #accessing }
 GtRBNodeQueryExamples >> literals [
 	<gtExample>
+	<return: #GtRBNodeQuery>
 	| result |
 	result := self exampleMethod // 'literal'.
 	self assert: result size equals: 11.
@@ -55,6 +60,7 @@ GtRBNodeQueryExamples >> literals [
 { #category : #accessing }
 GtRBNodeQueryExamples >> literalsInLiterals [
 	<gtExample>
+	<return: #GtRBNodeQuery>
 	| result |
 	result := self literals // 'literal'.
 	self assert: result size equals: 9.
@@ -64,6 +70,7 @@ GtRBNodeQueryExamples >> literalsInLiterals [
 { #category : #accessing }
 GtRBNodeQueryExamples >> sequenceNodeParent [
 	<gtExample>
+	<return: #GtRBNodeQuery>
 	| result |
 	result := self literals \\ 'sequence'.
 	self assert: result size equals: 1.

@@ -13,27 +13,27 @@ GtStackOverflowCheckerExamples >> recurseUntil: aBlock [
 { #category : #running }
 GtStackOverflowCheckerExamples >> testStackOverflow [
 	<gtExample>
-
-	GtStackOverflowChecker suspendStackOverflowWatchersDuring: 
-			[| end overflowed |
+	<return: #GtStackOverflowCheckerExamples>
+	GtStackOverflowChecker
+		suspendStackOverflowWatchersDuring: [ | end overflowed |
 			overflowed := false.
 			GtStackOverflowChecker startStackOverflowWatcher.
 			end := DateAndTime now + 2 seconds.
-			[self recurseUntil: [DateAndTime now > end]] 
+			[ self recurseUntil: [ DateAndTime now > end ] ]
 				on: GtStackOverflowError
-				do: [overflowed := true].
-			self assert: overflowed]
+				do: [ overflowed := true ].
+			self assert: overflowed ]
 ]
 
 { #category : #running }
 GtStackOverflowCheckerExamples >> testStackOverflowDisabled [
 	<gtExample>
-
-	GtStackOverflowChecker suspendStackOverflowWatchersDuring: 
-			[| end overflowed |
+	<return: #GtStackOverflowCheckerExamples>
+	GtStackOverflowChecker
+		suspendStackOverflowWatchersDuring: [ | end overflowed |
 			overflowed := false.
 			end := DateAndTime now + 2 seconds.
-			[self recurseUntil: [DateAndTime now > end]] 
+			[ self recurseUntil: [ DateAndTime now > end ] ]
 				on: GtStackOverflowError
 				do: [ overflowed := true ].
 			self assert: overflowed not ]

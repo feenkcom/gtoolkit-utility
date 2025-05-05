@@ -90,6 +90,7 @@ GtAutomaticNetworkProxySetter >> isEnabled [
 { #category : #example }
 GtAutomaticNetworkProxySetter >> itself [
 	<gtExample>
+	<return: #GtAutomaticNetworkProxySetter>
 	| isProxyEmpty isNoProxyEmpty |
 	isProxyEmpty := isNoProxyEmpty := true.
 	self proxyVariableNamesDo: [ :aName | isProxyEmpty := false ].

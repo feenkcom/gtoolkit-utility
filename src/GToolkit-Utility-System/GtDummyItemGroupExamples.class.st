@@ -7,6 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 GtDummyItemGroupExamples >> groupedByCommonValueY [
 	<gtExample>
+	<return: #Dictionary>
 	| grouped |
 	grouped := self sourceGroupWithTwoKindsOfItems groupedByCommonValueY.
 	self assert: grouped size equals: 1.
@@ -17,6 +18,7 @@ GtDummyItemGroupExamples >> groupedByCommonValueY [
 { #category : #'as yet unclassified' }
 GtDummyItemGroupExamples >> groupedByCommonValueZ [
 	<gtExample>
+	<return: #Dictionary>
 	| grouped |
 	grouped := self sourceGroupWithTwoKindsOfItems groupedByCommonValueZ.
 	self assert: grouped size equals: 2.
@@ -28,20 +30,22 @@ GtDummyItemGroupExamples >> groupedByCommonValueZ [
 { #category : #'as yet unclassified' }
 GtDummyItemGroupExamples >> sourceGroupWithTwoKindsOfItems [
 	<gtExample>
+	<return: #GtDummyItemGroup>
 	| group |
-	group := GtDummyItemGroup withAll: {GtDummyGroupBItem
-					valueY: 42
-					valueZ: 40
-					valueB1: 3
-					valueB2: 4.
-				GtDummyGroupBItem
-					valueY: 42
-					valueZ: 40
-					valueB1: 30
-					valueB2: 4.
-				GtDummyGroupAItem
-					valueY: 42
-					valueZ: 41
-					valueA: 100}.
+	group := GtDummyItemGroup
+			withAll: {GtDummyGroupBItem
+						valueY: 42
+						valueZ: 40
+						valueB1: 3
+						valueB2: 4.
+					GtDummyGroupBItem
+						valueY: 42
+						valueZ: 40
+						valueB1: 30
+						valueB2: 4.
+					GtDummyGroupAItem
+						valueY: 42
+						valueZ: 41
+						valueA: 100}.
 	^ group
 ]

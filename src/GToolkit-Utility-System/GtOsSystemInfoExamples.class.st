@@ -10,9 +10,10 @@ Class {
 GtOsSystemInfoExamples >> findPing [
 	"Demonstrate using {{gtMethod:GtOsSystemInfo>>findExecutable:}}.
 	Ping is usually available on Linux, Mac and Windows"
-	<gtExample>
-	| ping |
 
+	<gtExample>
+	<return: #GtOsSystemInfoExamples>
+	| ping |
 	ping := GtOsSystemInfo current findExecutable: 'ping'.
 	self assert: (ping basename asLowercase includesSubstring: 'ping')
 ]

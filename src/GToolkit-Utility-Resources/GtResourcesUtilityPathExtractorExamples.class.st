@@ -12,12 +12,14 @@ Class {
 { #category : #'examples - basic' }
 GtResourcesUtilityPathExtractorExamples >> basicExtractor [
 	<gtExample>
+	<return: #GtResourcesUtilityPathExtractor>
 	^ GtResourcesUtilityPathExtractor new
 ]
 
 { #category : #'examples - valid paths' }
 GtResourcesUtilityPathExtractorExamples >> permitedLongPath [
 	<gtExample>
+	<return: #RelativePath>
 	| aString anExtranctor aPath |
 	aString := self permitedLongPathString.
 	anExtranctor := self basicExtractor.
@@ -30,12 +32,14 @@ GtResourcesUtilityPathExtractorExamples >> permitedLongPath [
 { #category : #'examples - valid paths' }
 GtResourcesUtilityPathExtractorExamples >> permitedLongPathString [
 	<gtExample>
+	<return: #ByteString>
 	^ 'Path * ''feenkcom'' / ''gtoolkit-inspector'' / ''doc'' / ''gt.png'''
 ]
 
 { #category : #'examples - valid paths' }
 GtResourcesUtilityPathExtractorExamples >> permitedShortPath [
 	<gtExample>
+	<return: #RelativePath>
 	| aString anExtranctor aPath |
 	aString := 'Path * '''''.
 	anExtranctor := self basicExtractor.
@@ -48,6 +52,7 @@ GtResourcesUtilityPathExtractorExamples >> permitedShortPath [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedBinarySender [
 	<gtExample>
+	<return: #ByteString>
 	| aString anExtranctor aPath |
 	aString := 'Path * ''feenkcom'' / ''gtoolkit-inspector'' / ''doc'' // ''gt.png'''.
 	anExtranctor := self basicExtractor.
@@ -60,6 +65,7 @@ GtResourcesUtilityPathExtractorExamples >> unwantedBinarySender [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedGlobal [
 	<gtExample>
+	<return: #ByteString>
 	| aString anExtranctor aPath |
 	aString := 'Path * ''feenkcom'' / Object / ''doc'' / ''gt.png'''.
 	anExtranctor := self basicExtractor.
@@ -72,6 +78,7 @@ GtResourcesUtilityPathExtractorExamples >> unwantedGlobal [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedLiteralNumber [
 	<gtExample>
+	<return: #ByteString>
 	| aString anExtranctor aPath |
 	aString := 'Path * ''feenkcom'' / ''gtoolkit-inspector'' / ''doc'' / 42'.
 	anExtranctor := self basicExtractor.
@@ -84,6 +91,7 @@ GtResourcesUtilityPathExtractorExamples >> unwantedLiteralNumber [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedMessage [
 	<gtExample>
+	<return: #ByteString>
 	| aString anExtranctor aPath |
 	aString := 'Path with: ''feenkcom'''.
 	anExtranctor := self basicExtractor.
@@ -96,6 +104,7 @@ GtResourcesUtilityPathExtractorExamples >> unwantedMessage [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedUnarySender [
 	<gtExample>
+	<return: #ByteString>
 	| aString anExtranctor aPath |
 	aString := 'Path * ''feenkcom'' new / ''gtoolkit-inspector'' / ''doc'' / ''gt.png'''.
 	anExtranctor := self basicExtractor.
@@ -108,6 +117,7 @@ GtResourcesUtilityPathExtractorExamples >> unwantedUnarySender [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedUnarySender2 [
 	<gtExample>
+	<return: #ByteString>
 	| aString anExtranctor aPath |
 	aString := self unwantedUnarySender2String.
 	anExtranctor := self basicExtractor.
@@ -120,5 +130,6 @@ GtResourcesUtilityPathExtractorExamples >> unwantedUnarySender2 [
 { #category : #'examples - invalid code' }
 GtResourcesUtilityPathExtractorExamples >> unwantedUnarySender2String [
 	<gtExample>
+	<return: #ByteString>
 	^ '(Path * ''feenkcom'') asFileReference'
 ]

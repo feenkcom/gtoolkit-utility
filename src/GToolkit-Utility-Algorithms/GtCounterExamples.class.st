@@ -7,6 +7,7 @@ Class {
 { #category : #accessing }
 GtCounterExamples >> gtLetterCounts [
 	<gtExample>
+	<return: #GtCounter>
 	| counter |
 	counter := GtCounter new.
 
