@@ -25,100 +25,83 @@ GtPrimitiveExamples >> primitiveCopyFrom: src at: srcStart to: dest at: destStar
 { #category : #tests }
 GtPrimitiveExamples >> testByteArrayToExternalAddressBadArguments [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba null |
-
 	ea := ExternalAddress allocate: 8.
-	ba := ByteArray new: 8.
-	"Source isn't a ByteArray"
-	self should:
-		[ self
-			primitiveCopyFrom: Object new
-			at: 1
-			to: ea
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"Null address isn't allowed"
+	ba := ByteArray new: 8.	"Source isn't a ByteArray"
+	self
+		should: [ self
+				primitiveCopyFrom: Object new
+				at: 1
+				to: ea
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"Null address isn't allowed"
 	null := ByteArray new: 8.
 	ExternalAddress adoptInstance: null.
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 1
-			to: null
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"Destination isn't a ExternalAddress"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 1
-			to: Object new
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"Size isn't an integer"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 1
-			to: ea
-			at: 1
-			size: 8.3 ]
-		raise: PrimitiveFailed.
-
-	"Size must be >= 0"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 1
-			to: ea
-			at: 1
-			size: -1 ]
-		raise: PrimitiveFailed.
-
-	"start isn't an integer"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 1.2
-			to: ea
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"start must be >= 1"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 0
-			to: ea
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"ByteArray buffer overflow from starting position"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 10
-			to: ea
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"ByteArray buffer overflow from size"
-	self should:
-		[ self
-			primitiveCopyFrom: ba
-			at: 1
-			to: ea
-			at: 1
-			size: 80  ]
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 1
+				to: null
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"Destination isn't a ExternalAddress"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 1
+				to: Object new
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"Size isn't an integer"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 1
+				to: ea
+				at: 1
+				size: 8.3 ]
+		raise: PrimitiveFailed.	"Size must be >= 0"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 1
+				to: ea
+				at: 1
+				size: -1 ]
+		raise: PrimitiveFailed.	"start isn't an integer"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 1.2
+				to: ea
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"start must be >= 1"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 0
+				to: ea
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"ByteArray buffer overflow from starting position"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 10
+				to: ea
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"ByteArray buffer overflow from size"
+	self
+		should: [ self
+				primitiveCopyFrom: ba
+				at: 1
+				to: ea
+				at: 1
+				size: 80 ]
 		raise: PrimitiveFailed.
 
 	ea free.
@@ -128,6 +111,7 @@ GtPrimitiveExamples >> testByteArrayToExternalAddressBadArguments [
 { #category : #tests }
 GtPrimitiveExamples >> testByteArrayToExternalStartingAt1 [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba size result |
 	size := 24.
 	ba := ByteArray new: size.
@@ -140,7 +124,12 @@ GtPrimitiveExamples >> testByteArrayToExternalStartingAt1 [
 			at: 1
 			size: size.
 	self assert: result equals: size.
-	self assert: (self eaCopy: ea from: 1 to: size) equals: ba.
+	self
+		assert: (self
+				eaCopy: ea
+				from: 1
+				to: size)
+		equals: ba.
 	ea free.
 	^ ba
 ]
@@ -148,11 +137,12 @@ GtPrimitiveExamples >> testByteArrayToExternalStartingAt1 [
 { #category : #tests }
 GtPrimitiveExamples >> testByteArrayToExternalStartingAt11 [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba size result |
 	size := 24.
 	ba := ByteArray new: size.
 	1 to: size do: [ :i | ba byteAt: i put: i \\ 256 ].
-	ea := ExternalAddress allocate: size+10.
+	ea := ExternalAddress allocate: size + 10.
 	result := self
 			primitiveCopyFrom: ba
 			at: 1
@@ -160,7 +150,12 @@ GtPrimitiveExamples >> testByteArrayToExternalStartingAt11 [
 			at: 11
 			size: size.
 	self assert: result equals: size.
-	self assert: (self eaCopy: ea from: 11 to: size+10) equals: ba.
+	self
+		assert: (self
+				eaCopy: ea
+				from: 11
+				to: size + 10)
+		equals: ba.
 	ea free.
 	^ ba
 ]
@@ -168,100 +163,83 @@ GtPrimitiveExamples >> testByteArrayToExternalStartingAt11 [
 { #category : #tests }
 GtPrimitiveExamples >> testExternalAddressToByteArrayBadArguments [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba null |
-
 	ea := ExternalAddress allocate: 8.
-	ba := ByteArray new: 8.
-	"Source isn't an ExternalAddress"
-	self should:
-		[ self
-			primitiveCopyFrom: Object new
-			at: 1
-			to: ba 
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"Null address isn't allowed"
+	ba := ByteArray new: 8.	"Source isn't an ExternalAddress"
+	self
+		should: [ self
+				primitiveCopyFrom: Object new
+				at: 1
+				to: ba
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"Null address isn't allowed"
 	null := ByteArray new: 8.
 	ExternalAddress adoptInstance: null.
-	self should:
-		[ self
-			primitiveCopyFrom: null
-			at: 1
-			to: ba 
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"Destination isn't a ByteArray"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: Object new
-			at: 1
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"Size isn't an integer"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: ba
-			at: 1
-			size: 8.3 ]
-		raise: PrimitiveFailed.
-
-	"Size must be >= 0"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: ba
-			at: 1
-			size: -1 ]
-		raise: PrimitiveFailed.
-
-	"start isn't an integer"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: ba
-			at: 1.2
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"start must be >= 1"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: ba
-			at: 0
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"ByteArray buffer overflow from starting position"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: ba 
-			at: 10
-			size: 8 ]
-		raise: PrimitiveFailed.
-
-	"ByteArray buffer overflow from size"
-	self should:
-		[ self
-			primitiveCopyFrom: ea
-			at: 1
-			to: ba 
-			at: 1
-			size: 80 ]
+	self
+		should: [ self
+				primitiveCopyFrom: null
+				at: 1
+				to: ba
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"Destination isn't a ByteArray"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: Object new
+				at: 1
+				size: 8 ]
+		raise: PrimitiveFailed.	"Size isn't an integer"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: ba
+				at: 1
+				size: 8.3 ]
+		raise: PrimitiveFailed.	"Size must be >= 0"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: ba
+				at: 1
+				size: -1 ]
+		raise: PrimitiveFailed.	"start isn't an integer"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: ba
+				at: 1.2
+				size: 8 ]
+		raise: PrimitiveFailed.	"start must be >= 1"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: ba
+				at: 0
+				size: 8 ]
+		raise: PrimitiveFailed.	"ByteArray buffer overflow from starting position"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: ba
+				at: 10
+				size: 8 ]
+		raise: PrimitiveFailed.	"ByteArray buffer overflow from size"
+	self
+		should: [ self
+				primitiveCopyFrom: ea
+				at: 1
+				to: ba
+				at: 1
+				size: 80 ]
 		raise: PrimitiveFailed.
 
 	ea free.
@@ -271,6 +249,7 @@ GtPrimitiveExamples >> testExternalAddressToByteArrayBadArguments [
 { #category : #tests }
 GtPrimitiveExamples >> testExternalToByteArrayStartingAt1 [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba size result |
 	size := 24.
 	ea := ExternalAddress allocate: size.
@@ -283,7 +262,12 @@ GtPrimitiveExamples >> testExternalToByteArrayStartingAt1 [
 			at: 1
 			size: size.
 	self assert: result equals: size.
-	self assert: ba equals: (self eaCopy: ea from: 1 to: size).
+	self
+		assert: ba
+		equals: (self
+				eaCopy: ea
+				from: 1
+				to: size).
 	ea free.
 	^ ba
 ]
@@ -291,6 +275,7 @@ GtPrimitiveExamples >> testExternalToByteArrayStartingAt1 [
 { #category : #tests }
 GtPrimitiveExamples >> testExternalToByteArrayStartingAt11 [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba size result |
 	size := 24.
 	ea := ExternalAddress allocate: size.
@@ -303,7 +288,12 @@ GtPrimitiveExamples >> testExternalToByteArrayStartingAt11 [
 			at: 11
 			size: size.
 	self assert: result equals: size.
-	self assert: (ba copyFrom: 11 to: ba size) equals: (self eaCopy: ea from: 1 to: size).
+	self
+		assert: (ba copyFrom: 11 to: ba size)
+		equals: (self
+				eaCopy: ea
+				from: 1
+				to: size).
 	ea free.
 	^ ba
 ]
@@ -311,22 +301,23 @@ GtPrimitiveExamples >> testExternalToByteArrayStartingAt11 [
 { #category : #tests }
 GtPrimitiveExamples >> testLibCByteStringToExternalDataAndBack [
 	<gtExample>
+	<return: #ExternalData>
 	| string ed size result wsCopy |
-
 	string := 'hello, world'.
 	size := string byteSize.
 	ed := ExternalData
-		fromHandle: (ExternalAddress allocate: size)
-		type: ExternalType string.
-	result := LibC memCopy: string
+			fromHandle: (ExternalAddress allocate: size)
+			type: ExternalType string.
+	result := LibC
+			memCopy: string
 			to: ed
 			size: size.
 	self assert: result equals: ed getHandle.
 	wsCopy := ByteString new: string size.
 	result := LibC
-		memCopy: ed
-		to: wsCopy
-		size: size.
+			memCopy: ed
+			to: wsCopy
+			size: size.
 	self assert: result class equals: ExternalAddress.
 	self assert: wsCopy equals: string.
 	ed free.
@@ -336,23 +327,38 @@ GtPrimitiveExamples >> testLibCByteStringToExternalDataAndBack [
 { #category : #tests }
 GtPrimitiveExamples >> testReplaceByteArrayToExternalStartingAt11 [
 	<gtExample>
+	<return: #ByteArray>
 	| ea ba size |
 	size := 24.
-	ea := ExternalAddress allocate: size+10.
+	ea := ExternalAddress allocate: size + 10.
 	ba := ByteArray new: size.
-	1 to: size do: [ :i | 
-		ba byteAt: i put: i \\ 256.
-		ea byteAt: i put: 0 ].
+	1
+		to: size
+		do: [ :i | 
+			ba byteAt: i put: i \\ 256.
+			ea byteAt: i put: 0 ].
 	ea
-		replaceFrom: 3 
+		replaceFrom: 3
 		to: 12
 		with: ba
 		startingAt: 10.
-	self assert: (self eaCopy: ea from: 1 to: 2)
+	self
+		assert: (self
+				eaCopy: ea
+				from: 1
+				to: 2)
 		equals: (ByteArray new: 2).
-	self assert: (self eaCopy: ea from: 3 to: 12) 
+	self
+		assert: (self
+				eaCopy: ea
+				from: 3
+				to: 12)
 		equals: (ba copyFrom: 10 to: 19).
-	self assert: (self eaCopy: ea from: 20 to: size)
+	self
+		assert: (self
+				eaCopy: ea
+				from: 20
+				to: size)
 		equals: (ByteArray new: 5).
 	ea free.
 	^ ba
@@ -361,8 +367,8 @@ GtPrimitiveExamples >> testReplaceByteArrayToExternalStartingAt11 [
 { #category : #tests }
 GtPrimitiveExamples >> testWideStringToExternalAddressAndBack [
 	<gtExample>
+	<return: #ExternalAddress>
 	| ws ea size result wsCopy |
-
 	ws := 'Řepy'.
 	self assert: ws isWideString.
 	size := ws byteSize.
@@ -376,11 +382,11 @@ GtPrimitiveExamples >> testWideStringToExternalAddressAndBack [
 	self assert: result equals: size.
 	wsCopy := WideString new: ws size.
 	result := self
-		primitiveCopyFrom: ea
-		at: 1
-		to: wsCopy
-		at: 1
-		size: size.
+			primitiveCopyFrom: ea
+			at: 1
+			to: wsCopy
+			at: 1
+			size: size.
 	self assert: result equals: size.
 	self assert: wsCopy equals: ws.
 	ea free.
@@ -390,14 +396,14 @@ GtPrimitiveExamples >> testWideStringToExternalAddressAndBack [
 { #category : #tests }
 GtPrimitiveExamples >> testWideStringToExternalDataAndBack [
 	<gtExample>
+	<return: #ExternalData>
 	| ws ed size result wsCopy |
-
 	ws := 'Řepy'.
 	self assert: ws isWideString.
 	size := ws byteSize.
 	ed := ExternalData
-		fromHandle: (ExternalAddress allocate: size)
-		type: ExternalType string.
+			fromHandle: (ExternalAddress allocate: size)
+			type: ExternalType string.
 	result := self
 			primitiveCopyFrom: ws
 			at: 1
@@ -407,11 +413,11 @@ GtPrimitiveExamples >> testWideStringToExternalDataAndBack [
 	self assert: result equals: size.
 	wsCopy := WideString new: ws size.
 	result := self
-		primitiveCopyFrom: ed gtMemcpyAddress
-		at: 1
-		to: wsCopy
-		at: 1
-		size: size.
+			primitiveCopyFrom: ed gtMemcpyAddress
+			at: 1
+			to: wsCopy
+			at: 1
+			size: size.
 	self assert: result equals: size.
 	self assert: wsCopy equals: ws.
 	ed free.

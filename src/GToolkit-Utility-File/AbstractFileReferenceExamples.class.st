@@ -29,6 +29,7 @@ AbstractFileReferenceExamples >> rootDirectoryParent [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_rootDirectory [
 	<gtExample>
+	<return: #SubclassResponsibility>
 	| aReference aResult |
 	aReference := self rootDirectory.
 	aResult := aReference withParents.
@@ -36,7 +37,7 @@ AbstractFileReferenceExamples >> withParents_rootDirectory [
 	self
 		assert: aResult isEmpty not
 		description: [ 'Root directory collection must be non-empty' ].
-		
+
 	self
 		assert: aResult size = 1
 		description: [ 'Root directory collection must have one item' ].
@@ -47,6 +48,7 @@ AbstractFileReferenceExamples >> withParents_rootDirectory [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_rootDirectoryChild [
 	<gtExample>
+	<return: #SubclassResponsibility>
 	| aReference aResult |
 	aReference := self rootDirectoryChild.
 	aResult := aReference withParents.
@@ -54,7 +56,7 @@ AbstractFileReferenceExamples >> withParents_rootDirectoryChild [
 	self
 		assert: aResult isEmpty not
 		description: [ 'Root directory collection must be non-empty' ].
-		
+
 	self
 		assert: aResult size = 2
 		description: [ 'Root directory collection must have two items' ].
@@ -65,15 +67,11 @@ AbstractFileReferenceExamples >> withParents_rootDirectoryChild [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_rootDirectoryParent [
 	<gtExample>
+	<return: #SubclassResponsibility>
 	| aReference aResult |
-
 	aReference := self rootDirectoryParent.
-	aResult := aReference withParents.
-
-	"The parent of the root directory is itself, but we don't want to loop forever, so the result is just the root directory"
-	self
-		assert: aResult size
-		equals: 1.
+	aResult := aReference withParents.	"The parent of the root directory is itself, but we don't want to loop forever, so the result is just the root directory"
+	self assert: aResult size equals: 1.
 
 	^ aResult
 ]
@@ -81,14 +79,11 @@ AbstractFileReferenceExamples >> withParents_rootDirectoryParent [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_workingDirectory [
 	<gtExample>
+	<return: #SubclassResponsibility>
 	| aReference aResult |
 	aReference := self workingDirectory.
-	aResult := aReference withParents.
-
-	"There should be an entry for each segment in the path + the root directory"
-	self
-		assert: aResult size
-		equals: aReference asAbsolute path segments size + 1.
+	aResult := aReference withParents.	"There should be an entry for each segment in the path + the root directory"
+	self assert: aResult size equals: aReference asAbsolute path segments size + 1.
 
 	^ aResult
 ]
@@ -96,18 +91,21 @@ AbstractFileReferenceExamples >> withParents_workingDirectory [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_workingDirectoryParent [
 	<gtExample>
+	<return: #SubclassResponsibility>
 	| aParentReference aParentResult aChildResult |
 	aParentReference := self workingDirectoryParent.
 	aParentResult := aParentReference withParents.
-	
+
 	aChildResult := self withParents_workingDirectory.
 
 	self
 		assert: aParentResult isEmpty not
 		description: [ 'Parents collection must be non-empty' ].
-		
+
 	self assert: aParentResult size equals: aChildResult size - 1.
-	self assert: aParentResult last equals: (aChildResult at: aChildResult size - 1).
+	self
+		assert: aParentResult last
+		equals: (aChildResult at: aChildResult size - 1).
 
 	^ aParentResult
 ]
@@ -115,18 +113,21 @@ AbstractFileReferenceExamples >> withParents_workingDirectoryParent [
 { #category : #accessing }
 AbstractFileReferenceExamples >> withParents_workingDirectoryParentParent [
 	<gtExample>
+	<return: #SubclassResponsibility>
 	| aParentReference aParentResult aChildResult |
 	aParentReference := self workingDirectoryParentParent.
 	aParentResult := aParentReference withParents.
-	
+
 	aChildResult := self withParents_workingDirectoryParent.
 
 	self
 		assert: aParentResult isEmpty not
 		description: [ 'Parents collection must be non-empty' ].
-		
+
 	self assert: aParentResult size equals: aChildResult size - 1.
-	self assert: aParentResult last equals: (aChildResult at: aChildResult size - 1).
+	self
+		assert: aParentResult last
+		equals: (aChildResult at: aChildResult size - 1).
 
 	^ aParentResult
 ]

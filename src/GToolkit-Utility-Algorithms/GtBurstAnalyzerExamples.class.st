@@ -7,6 +7,7 @@ Class {
 { #category : #accessing }
 GtBurstAnalyzerExamples >> burstAnalyzerWithCustomCutoff [
 	<gtExample>
+	<return: #GtBurstAnalyzer>
 	| analyzer runs |
 	analyzer := self simpleBurstAnalyzer cutoff: 30.
 	runs := analyzer run.
@@ -20,6 +21,7 @@ GtBurstAnalyzerExamples >> burstAnalyzerWithCustomCutoff [
 { #category : #accessing }
 GtBurstAnalyzerExamples >> simpleBurstAnalyzer [
 	<gtExample>
+	<return: #GtBurstAnalyzer>
 	| analyzer runs |
 	analyzer := GtBurstAnalyzer new timeSeries: self timeSeries.
 	runs := analyzer run.
@@ -33,6 +35,7 @@ GtBurstAnalyzerExamples >> simpleBurstAnalyzer [
 { #category : #accessing }
 GtBurstAnalyzerExamples >> timeSeries [
 	<gtExample>
+	<return: #Array>
 	^ {1.
 		2.
 		3.

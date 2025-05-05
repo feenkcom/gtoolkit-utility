@@ -16,10 +16,12 @@ GtPropertiesFileExamples >> assert: actual equals: expected [
 { #category : #examples }
 GtPropertiesFileExamples >> emptyPropertiesFile [
 	"Answer an empty properties file using a memory file for storage"
-	<gtExample>
-	| properties |
 
-	properties := GtPropertiesFile file: FileSystem memory root / 'gemstone.properties'.
+	<gtExample>
+	<return: #GtPropertiesFile>
+	| properties |
+	properties := GtPropertiesFile
+			file: FileSystem memory root / 'gemstone.properties'.
 	self deny: properties file exists.
 	self assert: properties size equals: 0.
 	^ properties
@@ -28,8 +30,8 @@ GtPropertiesFileExamples >> emptyPropertiesFile [
 { #category : #examples }
 GtPropertiesFileExamples >> populatedPropertiesFile [
 	<gtExample>
+	<return: #GtPropertiesFile>
 	| properties fileLocator dictionary fileDictionary readProperties |
-
 	properties := self emptyPropertiesFile.
 	fileLocator := FileLocator home / 'file.txt'.
 	properties at: #aFile put: fileLocator.
@@ -48,7 +50,7 @@ GtPropertiesFileExamples >> populatedPropertiesFile [
 	readProperties := GtPropertiesFile file: properties file.
 	self assert: readProperties size equals: 1.
 	self assert: readProperties file exists.
-	self assert: (readProperties at: #aFile) equals: (FileLocator home / 'file.txt').
+	self assert: (readProperties at: #aFile) equals: FileLocator home / 'file.txt'.
 
 	^ properties
 ]

@@ -13,28 +13,28 @@ GtProcessStackOverflowCheckerExamples >> recurseUntil: aBlock [
 { #category : #tests }
 GtProcessStackOverflowCheckerExamples >> testStackOverflow [
 	<gtExample>
-
-	GtStackOverflowChecker suspendStackOverflowWatchersDuring: 
-		[ | end overflowed |
-		overflowed := false.
-		GtProcessStackOverflowChecker startForProcess: Processor activeProcess.
-		end := DateAndTime now + 2 seconds.
-		[self recurseUntil: [DateAndTime now > end]] 
-			on: GtStackOverflowError
-			do: [overflowed := true].
-		self assert: overflowed]
+	<return: #GtProcessStackOverflowCheckerExamples>
+	GtStackOverflowChecker
+		suspendStackOverflowWatchersDuring: [ | end overflowed |
+			overflowed := false.
+			GtProcessStackOverflowChecker startForProcess: Processor activeProcess.
+			end := DateAndTime now + 2 seconds.
+			[ self recurseUntil: [ DateAndTime now > end ] ]
+				on: GtStackOverflowError
+				do: [ overflowed := true ].
+			self assert: overflowed ]
 ]
 
 { #category : #tests }
 GtProcessStackOverflowCheckerExamples >> testStackOverflowDisabled [
 	<gtExample>
-
-	GtStackOverflowChecker suspendStackOverflowWatchersDuring: 
-			[| end overflowed |
+	<return: #GtProcessStackOverflowCheckerExamples>
+	GtStackOverflowChecker
+		suspendStackOverflowWatchersDuring: [ | end overflowed |
 			overflowed := false.
 			end := DateAndTime now + 2 seconds.
-			[self recurseUntil: [DateAndTime now > end]] 
+			[ self recurseUntil: [ DateAndTime now > end ] ]
 				on: GtStackOverflowError
-				do: [overflowed := true].
-			self assert: overflowed not]
+				do: [ overflowed := true ].
+			self assert: overflowed not ]
 ]
