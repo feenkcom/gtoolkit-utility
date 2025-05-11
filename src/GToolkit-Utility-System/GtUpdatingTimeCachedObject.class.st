@@ -45,6 +45,13 @@ GtUpdatingTimeCachedObject >> cacheTimeout [
 ]
 
 { #category : #private }
+GtUpdatingTimeCachedObject >> expirationTime [
+	"Answer the time at which updates will stop if the receiver is not kept alive, i.e. no further requests for the value are made."
+
+	^lastRequestedTime + activeDuration
+]
+
+{ #category : #private }
 GtUpdatingTimeCachedObject >> getNewValue [
 	| newValue getTime |
 
@@ -158,12 +165,12 @@ GtUpdatingTimeCachedObject >> process: newValue exception: exception [
 GtUpdatingTimeCachedObject >> scheduleNextUpdate [
 	"Schedule the next update unless the receiver should no longer be active"
 	| now |
-
 	now := DateAndTime now.
-	mutex critical:
-		[ (lastRequestedTime + activeDuration) <= now ifTrue: [ ^ self ].
-		scheduleTask scheduledTime: lastRetrievedTime + cacheDuration - averageDuration.
-		TaskAtQueue schedule: scheduleTask. ].
+	mutex critical: 
+			[self expirationTime <= now ifTrue: [^self].
+			scheduleTask
+				scheduledTime: lastRetrievedTime + cacheDuration - averageDuration.
+			TaskAtQueue schedule: scheduleTask]
 ]
 
 { #category : #'start - stop' }
@@ -210,6 +217,8 @@ GtUpdatingTimeCachedObject >> summaryAttributes [
 	^ {
 		{ 'State'. self state }.
 		{ 'Value'. value }.
+		{ 'Last Requested'. lastRequestedTime. }.
+		{ 'Expiration Time'. self expirationTime. }.
 		{ 'View updated'. lastRetrievedTime. }.
 	}
 ]
