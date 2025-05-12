@@ -217,9 +217,10 @@ GtUpdatingTimeCachedObject >> summaryAttributes [
 	^ {
 		{ 'State'. self state }.
 		{ 'Value'. value }.
+		{ 'Last Retrieved'. lastRetrievedTime. }.
 		{ 'Last Requested'. lastRequestedTime. }.
 		{ 'Expiration Time'. self expirationTime. }.
-		{ 'View updated'. lastRetrievedTime. }.
+		{ 'View updated'. DateAndTime now. }.
 	}
 ]
 
@@ -240,5 +241,30 @@ GtUpdatingTimeCachedObject >> value [
 	"Answer the receiver's value"
 
 	self keepAlive.
+	^ value
+]
+
+{ #category : #'as yet unclassified' }
+GtUpdatingTimeCachedObject >> waitForAValue: maxSeconds [
+	"Answer the receiver's value, whether it is stale or not."
+
+	self isStale ifTrue: [ self keepAlive ].
+	value ifNotNil: [ ^ value ].
+	^ self waitForValue: maxSeconds.
+]
+
+{ #category : #'as yet unclassified' }
+GtUpdatingTimeCachedObject >> waitForValue: maxSeconds [
+	"Answer the receiver's value, waiting if it isn't yet available."
+
+	self isStale ifTrue: [ | maxRetries retryCount delay |
+		maxRetries := maxSeconds.
+		delay := 1 second.
+		retryCount := 0.
+		self keepAlive.
+		[ self isStale and: [ retryCount <= maxRetries ] ] whileTrue: 
+			[ retryCount := retryCount + 1.
+			delay wait ] ].
+	value ifNil: [self error: 'Unable to retrieve value'].
 	^ value
 ]
