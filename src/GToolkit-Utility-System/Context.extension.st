@@ -2,6 +2,8 @@ Extension { #name : #Context }
 
 { #category : #'*GToolkit-Utility-System' }
 Context >> errorReportOn: stream [
+	<gtPharoPatch: #Pharo>
+	
 	"Write a detailed error report on the stack (above me) on a
 	stream.  For both the error file, and emailing a bug report.
 	Suppress any errors while getting printStrings.  Limit the length."
@@ -18,9 +20,14 @@ Context >> errorReportOn: stream [
 		nextPutAll: ' - ';
 		nextPutAll: Smalltalk vm version asString;
 		cr.
-	stream nextPutAll: 'GT Image: ';
-		nextPutAll: GtImage version versionString;
-		cr.
+	
+	#GtImage asClassIfPresent: [ :aClass |
+		stream nextPutAll: 'GT Image: ';
+			nextPutAll: (aClass version 
+				ifNil: [ 'missing version']
+				ifNotNil: [ :aVersion | aVersion versionString]);
+			cr. ] .
+	
 	stream nextPutAll: 'Pharo Image: ';
 		nextPutAll:  SystemVersion current version asString;
 		nextPutAll: ' [';
