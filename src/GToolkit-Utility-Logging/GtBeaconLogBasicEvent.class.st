@@ -146,17 +146,6 @@ GtBeaconLogBasicEvent >> gtViewExecutionTimelineListFor: aView [
 								anItem identifier ] ] ]
 ]
 
-{ #category : #accessing }
-GtBeaconLogBasicEvent >> gtViewSubEventsFor: aView [
-	<gtView>
-	
-	^ aView forward
-		title: 'Sub events';
-		priority: 10;
-		object: [ self subEvents ];
-		view: #gtItemsFor:
-]
-
 { #category : #ui }
 GtBeaconLogBasicEvent >> gtViewSubEventTimelineListFor: aView [
 	<gtView>
@@ -173,6 +162,17 @@ GtBeaconLogBasicEvent >> gtViewSubEventTimelineListFor: aView [
 							colorComputation: [ :anItem |
 								(Color r: 92 g: 204 b: 231 range: 255) alpha: 0.8 ];
 							selectionTransformation: [ :anItem | anItem identifier] ] ]
+]
+
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> gtViewSubEventsFor: aView [
+	<gtView>
+	
+	^ aView forward
+		title: 'Sub events';
+		priority: 10;
+		object: [ self subEvents ];
+		view: #gtItemsFor:
 ]
 
 { #category : #initialization }
@@ -207,19 +207,6 @@ GtBeaconLogBasicEvent >> startTimestamp [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #accessing }
-GtBeaconLogBasicEvent >> subEvents [
-	^ subEvents
-]
-
-{ #category : #accessing }
-GtBeaconLogBasicEvent >> subEvents: anEventsGroup [
-	"Overwrite the subEvents.
-	This is only used for post-processing of events."
-
-	subEvents := anEventsGroup
-]
-
 { #category : #ui }
 GtBeaconLogBasicEvent >> subEventTimelineChartItems [
 
@@ -231,6 +218,19 @@ GtBeaconLogBasicEvent >> subEventTimelineChartItems [
 			label: each description;
 			appendDurationToLabel.
 		item ]
+]
+
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> subEvents [
+	^ subEvents
+]
+
+{ #category : #accessing }
+GtBeaconLogBasicEvent >> subEvents: anEventsGroup [
+	"Overwrite the subEvents.
+	This is only used for post-processing of events."
+
+	subEvents := anEventsGroup
 ]
 
 { #category : #accessing }

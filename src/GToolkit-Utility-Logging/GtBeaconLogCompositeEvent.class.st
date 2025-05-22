@@ -41,14 +41,14 @@ GtBeaconLogCompositeEvent >> eventStartedSignal [
 ]
 
 { #category : #accessing }
-GtBeaconLogCompositeEvent >> startedEvent [
-	^ self subEvents first
-]
-
-{ #category : #accessing }
 GtBeaconLogCompositeEvent >> startTimestamp [
 	self subEvents ifEmpty: [ ^ nil ].
 	^ self subEvents first startTimestamp
+]
+
+{ #category : #accessing }
+GtBeaconLogCompositeEvent >> startedEvent [
+	^ self subEvents first
 ]
 
 { #category : #accessing }

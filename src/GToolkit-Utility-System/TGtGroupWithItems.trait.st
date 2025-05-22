@@ -21,6 +21,12 @@ TGtGroupWithItems >> asSet [
 ]
 
 { #category : #accessing }
+TGtGroupWithItems >> asStringOn: aStream delimiter: delimString [
+
+	self items asStringOn: aStream delimiter: delimString
+]
+
+{ #category : #accessing }
 TGtGroupWithItems >> groupedBy: aBlock [ 
 	"Override this method here and not reuse the one in collection
 	because we want the keys to be groups, not simple collections"
