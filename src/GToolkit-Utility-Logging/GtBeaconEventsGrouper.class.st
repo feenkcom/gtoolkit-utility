@@ -5,7 +5,8 @@ Class {
 		'rootEvents',
 		'eventsStack',
 		'shouldNotifyUpdates',
-		'announcer'
+		'announcer',
+		'straySignals'
 	],
 	#category : #'GToolkit-Utility-Logging-Core'
 }
@@ -21,6 +22,13 @@ GtBeaconEventsGrouper >> addRootEvent: anEvent [
 { #category : #accessing }
 GtBeaconEventsGrouper >> announcer [
 	^ announcer
+]
+
+{ #category : #accessing }
+GtBeaconEventsGrouper >> averageTimeBetweenEvents [
+
+	rootEvents ifEmpty: [ ^ Duration zero ].
+	^ (rootEvents last startTimestamp - rootEvents first startTimestamp) / rootEvents size
 ]
 
 { #category : #initialization }
@@ -66,6 +74,7 @@ GtBeaconEventsGrouper >> initialize [
 	self reset.
 	shouldNotifyUpdates := false.
 	announcer := Announcer new.
+	straySignals := OrderedCollection new.
 ]
 
 { #category : #notifications }
@@ -88,6 +97,7 @@ GtBeaconEventsGrouper >> overviewData [
 	^ {
 		'Number of Events' -> self numberOfRootEvents.
 		'Total Duration' -> self totalDuration.
+		'Average time between events' -> self averageTimeBetweenEvents.
 	} 
 ]
 
@@ -101,7 +111,7 @@ GtBeaconEventsGrouper >> processEvent: anEvent [
 { #category : #actions }
 GtBeaconEventsGrouper >> processEventSignalFor: aSignal [
 	| latestEvent |
-	
+
 	aSignal isStartSignalType ifTrue: [ 
 		| newEvent topEvent |
 		newEvent := self eventForStartSignal: aSignal.
@@ -116,9 +126,12 @@ GtBeaconEventsGrouper >> processEventSignalFor: aSignal [
 		^ self ].
 		
 	aSignal isEndSignalType ifTrue: [ 
-		eventsStack top addSignal: aSignal.
-		latestEvent := eventsStack pop.
-		self processEvent: latestEvent ] 
+		eventsStack ifEmpty:
+			[ straySignals add: aSignal ]
+		ifNotEmpty:
+			[ eventsStack top addSignal: aSignal.
+			latestEvent := eventsStack pop.
+			self processEvent: latestEvent ] ]
 ]
 
 { #category : #actions }
