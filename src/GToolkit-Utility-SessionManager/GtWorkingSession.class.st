@@ -11,30 +11,43 @@ Class {
 }
 
 { #category : #'gt-extensions' }
-GtWorkingSession >> gtViewDetailsIn: composite [
+GtWorkingSession >> gtViewDetailsIn: aView [
 	<gtView>
-	^ composite columnedList
-		title: 'Details';
-		priority: 30;
-		items: [ {
-			{ #self . self }.
-			{ #id . self id printString . self id }.
-			{ #creationTime . self creationTime  }.
-			{ #deferredStartupActions . 
-				deferredStartupActions size. 
-				deferredStartupActions  } 
-		} , 
-		(self properties associations 
-			collect: [ :association | { association key. association value } ]) ];
-		column: #key text: #first weight: 0.5;
-		column: #value text: #second;
-		send: #last
+	^ self
+		forPharo12: [ aView empty ]
+		forPharo11AndPharo10: [ 
+			aView columnedList
+				title: 'Details';
+				priority: 30;
+				items: [ {{#self.
+							self}.
+						{#id.
+							self id printString.
+							self id}.
+						{#creationTime.
+							self creationTime}.
+						{#deferredStartupActions.
+							deferredStartupActions size.
+							deferredStartupActions}}
+						, (self properties associations
+								collect: [ :association | 
+									{association key.
+										association value} ]) ];
+				column: #key
+					text: #first
+					weight: 0.5;
+				column: #value text: #second;
+				send: #last ]
 ]
 
 { #category : #printing }
 GtWorkingSession >> printOn: stream [
 	super printOn: stream.
-	stream nextPut: $(; print: self id; nextPut: $)
+	
+	self 
+		forPharo12: [] 
+		forPharo11AndPharo10: [
+			stream nextPut: $(; print: self id; nextPut: $)]
 ]
 
 { #category : #'startup - shutdown' }
