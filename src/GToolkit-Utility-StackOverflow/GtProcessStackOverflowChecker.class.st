@@ -110,6 +110,8 @@ GtProcessStackOverflowChecker >> startStackOverflowWatcher [
 GtProcessStackOverflowChecker >> stopStackOverflowWatcher [
 
 	watcherProcess ifNotNil: 
-		[ watcherProcess terminate.
+		[  [ watcherProcess terminate ]
+			on: ProcessAlreadyTerminating
+			do: [ :ex | ].
 		watcherProcess := nil ]
 ]
