@@ -27,13 +27,6 @@ TGtExtraSubscription >> subscribe: anAnnouncementClass send: aSelector to: anObj
 ]
 
 { #category : #'announcer - subscription' }
-TGtExtraSubscription >> when: anAnnouncementClass do: aValuable for: aSubscriber [
-	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
-
-	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
-]
-
-{ #category : #'announcer - subscription' }
 TGtExtraSubscription >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber.
 	A valuable is executed ONCE, and then a subscriber gets unsubscribed"

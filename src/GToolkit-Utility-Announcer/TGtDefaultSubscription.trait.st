@@ -61,6 +61,13 @@ TGtDefaultSubscription >> when: anAnnouncementClass do: aValuable [
 ]
 
 { #category : #'announcer - subscription' }
+TGtDefaultSubscription >> when: anAnnouncementClass do: aValuable for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
+
+	^ self announcer when: anAnnouncementClass do: aValuable for: aSubscriber
+]
+
+{ #category : #'announcer - subscription' }
 TGtDefaultSubscription >> when: anAnnouncementClass send: aSelector to: anObject [
 	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector.
     When the message expects one argument (eg #fooAnnouncement:) the announcement is passed as argument.
