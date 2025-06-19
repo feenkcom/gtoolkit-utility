@@ -53,6 +53,23 @@ TGtGroupWithItems >> groupedBy: aBlock having: conditionBlock [
 	^ (self groupedBy: aBlock) select: conditionBlock
 ]
 
+{ #category : #printing }
+TGtGroupWithItems >> printOn: aStream [
+	super printOn: aStream.
+
+	"Always printing the size can force items to be calculated,
+	which can trigger mutex deadlocks when debugging."
+	items ifNil: [ ^ self ].
+	aStream 
+		<< ' [';
+		print: self size;
+		<< ' ';
+		<< (self size = 1 
+			ifTrue: [ 'item' ]
+			ifFalse: [ 'items' ]);
+		<< ']'
+]
+
 { #category : #enumerating }
 TGtGroupWithItems >> reject: aBlock [
 	^ self species 
