@@ -44,7 +44,9 @@ GtWorkingSession >> gtViewDetailsIn: aView [
 GtWorkingSession >> id [
 	<gtPharoPatch: #Pharo>
 	"Override this here as the id attribute was removed in Pharo 12"
-	^ id ifNil: [ id := UUID new ]
+	^ self 
+		forPharo12: [ self properties at: #id ifAbsentPut: [UUID new] ] 
+		forPharo11AndPharo10: [ super id ]
 ]
 
 { #category : #printing }
