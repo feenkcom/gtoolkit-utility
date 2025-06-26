@@ -22,37 +22,61 @@ Socket >> closeOnExec: aBoolean [
 Socket >> listenOn: port [
 	"Listen for a connection on the given port. This operation will return immediately; follow it with waitForConnectionUntil: to wait until a connection is established."
 
-	| status |
-	status := self primSocketConnectionStatus: socketHandle.
-	(status == Unconnected)
-		ifFalse: [InvalidSocketStatusException signal: 'Socket status must Unconnected before listening for a new connection'].
+	self 
+		forPharo12: [
+			self
+				bindToPort: port;
+				listen.
+			self closeOnExec: true.] 
+		forPharo11AndPharo10: [
+	
+			| status |
+			status := self primSocketConnectionStatus: socketHandle.
+			(status == Unconnected)
+				ifFalse: [InvalidSocketStatusException signal: 'Socket status must Unconnected before listening for a new connection'].
 
-	self primSocket: socketHandle listenOn: port.
-	self closeOnExec: true.
+			self primSocket: socketHandle listenOn: port.
+			self closeOnExec: true.]
 ]
 
 { #category : #'*GToolkit-Utility-File' }
 Socket >> listenOn: portNumber backlogSize: backlog [
 	"Listen for a connection on the given port.
 	If this method succeeds, #accept may be used to establish a new connection"
-	| status |
-	status := self primSocketConnectionStatus: socketHandle.
-	(status == Unconnected)
-		ifFalse: [InvalidSocketStatusException signal: 'Socket status must Unconnected before listening for a new connection'].
-	self primSocket: socketHandle listenOn: portNumber backlogSize: backlog.
-	self closeOnExec: true.
+	
+	self 
+		forPharo12: [
+			self
+				bindToPort: portNumber ;
+				listenWithBacklog: backlog.
+			self closeOnExec: true.] 
+		forPharo11AndPharo10: [
+			| status |
+			status := self primSocketConnectionStatus: socketHandle.
+			(status == Unconnected)
+				ifFalse: [InvalidSocketStatusException signal: 'Socket status must Unconnected before listening for a new connection'].
+			self primSocket: socketHandle listenOn: portNumber backlogSize: backlog.
+			self closeOnExec: true.]
 ]
 
 { #category : #'*GToolkit-Utility-File' }
 Socket >> listenOn: portNumber backlogSize: backlog interface: ifAddr [
 	"Listen for a connection on the given port.
 	If this method succeeds, #accept may be used to establish a new connection"
-	| status |
-	status := self primSocketConnectionStatus: socketHandle.
-	(status == Unconnected)
-		ifFalse: [InvalidSocketStatusException signal: 'Socket status must Unconnected before listening for a new connection'].
-	self primSocket: socketHandle listenOn: portNumber backlogSize: backlog interface: ifAddr.
-	self closeOnExec: true.
+	
+	self 
+		forPharo12: [
+			self
+				bindTo: ifAddr port: portNumber;
+				listenWithBacklog: backlog.
+			self closeOnExec: true. ] 
+		forPharo11AndPharo10: [
+				| status |
+				status := self primSocketConnectionStatus: socketHandle.
+				(status == Unconnected)
+					ifFalse: [InvalidSocketStatusException signal: 'Socket status must Unconnected before listening for a new connection'].
+					self primSocket: socketHandle listenOn: portNumber backlogSize: backlog interface: ifAddr.
+				self closeOnExec: true.]
 ]
 
 { #category : #'*GToolkit-Utility-File' }
