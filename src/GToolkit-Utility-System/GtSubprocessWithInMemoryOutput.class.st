@@ -239,6 +239,15 @@ GtSubprocessWithInMemoryOutput >> gtStdoutFor: aView [
 
 ]
 
+{ #category : #'as yet unclassified' }
+GtSubprocessWithInMemoryOutput >> gtSwitchFor: anAction [
+	<gtAction>
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons shutdown;
+		action: [ self isRunning ifTrue: [ self kill ] ifFalse: [ self run ] ]
+]
+
 { #category : #testing }
 GtSubprocessWithInMemoryOutput >> hasProcess [
 	"Answer a boolean indicating whether the receiver has a process object"
