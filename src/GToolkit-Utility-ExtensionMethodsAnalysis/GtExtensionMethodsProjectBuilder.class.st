@@ -36,7 +36,7 @@ GtExtensionMethodsProjectBuilder class >> forGToolkitMethods: aCollection [
 
 { #category : #accessing }
 GtExtensionMethodsProjectBuilder >> allSystemPackages [
-	^ RPackageOrganizer default  packages.
+	^ self packageOrganizer  packages.
 ]
 
 { #category : #analysis }
