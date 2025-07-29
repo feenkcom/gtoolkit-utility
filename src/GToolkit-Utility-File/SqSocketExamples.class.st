@@ -14,10 +14,10 @@ Class {
 SqSocketExamples >> closeOnExec [
 	"Check that closeOnExec is set by default in sockets,
 	and that it can be cleared"
-
 	<gtExample>
 	<after: #closeSockets>
 	<return: #SqSocketExamples>
+
 	server := Socket newTCP
 			listenOn: 0
 			backlogSize: 4
@@ -25,9 +25,12 @@ SqSocketExamples >> closeOnExec [
 	client := Socket newTCP
 			connectTo: NetNameResolver loopBackAddress
 			port: server port.
-	self assert: client closeOnExec description: 'Socket closeOnExec not set'.
+	self assert: client closeOnExec description: 'Client socket closeOnExec not set'.
+	self assert: server closeOnExec description: 'Server socket closeOnExec not set'.
 	client closeOnExec: false.
-	self deny: client closeOnExec description: 'Socket closeOnExec set'
+	server closeOnExec: false.
+	self deny: client closeOnExec description: 'Client socket closeOnExec set'.
+	self deny: server closeOnExec description: 'Server socket closeOnExec set'
 ]
 
 { #category : #'private - helpers' }

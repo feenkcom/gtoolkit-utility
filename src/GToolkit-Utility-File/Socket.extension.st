@@ -86,6 +86,33 @@ Socket >> sqSocket [
 ]
 
 { #category : #'*GToolkit-Utility-File' }
+Socket >> waitForConnectionFor: timeout ifClosed: closedBlock ifTimedOut: timeoutBlock [
+	"Wait up until the given deadline for a connection to be established.
+	Evaluate closedBlock if the connection is closed locally,
+	or timeoutBlock if the deadline expires.
+	
+	We should separately detect the case of a connection being refused here as well."
+	<gtPharoPatch: #Pharo12>
+	| startTime msecsDelta msecsElapsed status |
+
+	self forPharo12: [] forPharo11AndPharo10: 
+		[ self error: 'Not supported in Pharo11 and earlier' ].
+
+	self closeOnExec: true.
+	startTime := Time millisecondClockValue.
+	msecsDelta := (timeout * 1000) truncated.
+
+	[
+	status := self primSocketConnectionStatus: socketHandle.
+	status == WaitingForConnection and: [
+		(msecsElapsed := Time millisecondsSince: startTime) < msecsDelta ] ]
+		whileTrue: [ semaphore waitTimeoutMilliseconds: msecsDelta - msecsElapsed ].
+
+	status == WaitingForConnection ifTrue: [ ^ timeoutBlock value ].
+	status == Connected ifFalse: [ ^ closedBlock value ]
+]
+
+{ #category : #'*GToolkit-Utility-File' }
 Socket >> waitForConnectionFor: timeout ifTimedOut: timeoutBlock [
 	"Wait up until the given deadline for a connection to be established. Return true if it is established by the deadline, false if not."
 	| startTime msecsDelta msecsEllapsed status |
