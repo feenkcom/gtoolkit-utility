@@ -114,9 +114,7 @@ GtResourcesUtility >> locationsAtPath: aPathOrString [
 { #category : #accessing }
 GtResourcesUtility >> repositoriesLocation [
 	"Return an Iceberg repositories location. 
-	It is a local disk location where source code repositories take place.
-	Always consider using ${method:GtIcebergUtility>>#resourceAtPath:}$ instead of this method.
-	See the ${class:GtIcebergUtility}$ class comment for usage."
+	It is a local disk location where source code repositories take place."
 	<return: #FileReference>
 	^ GtResourcesUtilityConstants icebergRepositoriesLocation
 ]
