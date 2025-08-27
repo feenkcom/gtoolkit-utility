@@ -104,3 +104,10 @@ TGtOptions >> optionAt: aKey put: aValue [
 	self ensureOptions.
 	options at: aKey put: aValue
 ]
+
+{ #category : #'options - basic' }
+TGtOptions >> optionsDo: aBlock [
+	"Iterate all options."
+
+	options ifNotNil: [ options keysAndValuesDo: aBlock ]
+]
