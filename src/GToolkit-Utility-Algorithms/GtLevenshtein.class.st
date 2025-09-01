@@ -19,8 +19,10 @@ Class {
 { #category : #algorithm }
 GtLevenshtein class >> distanceBetween: s and: t [
 	"The algorithm and variable names are taken from 
+	
 		https://en.wikipedia.org/wiki/Levenshtein_distance#Iterative_with_two_matrix_rows
-	NB: in the wikpedia version arrays start from 0, but here they start from 1,
+		
+	NB: in the wikipedia version, arrays start from 0, but here they start from 1,
 	so the lookups need to be offset by 1 is certain cases only."
 
 	| m n v0 v1 |
