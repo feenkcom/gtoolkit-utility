@@ -123,7 +123,7 @@ Socket >> waitForConnectionFor: timeout ifTimedOut: timeoutBlock [
 	status := self primSocketConnectionStatus: socketHandle.
 	[(status = WaitingForConnection) and: [(msecsEllapsed := Time millisecondsSince: startTime) < msecsDelta]]
 		whileTrue: [
-			semaphore waitTimeoutMSecs: msecsDelta - msecsEllapsed.
+			semaphore waitTimeoutMilliseconds: msecsDelta - msecsEllapsed.
 			status := self primSocketConnectionStatus: socketHandle].
 	status = Connected ifFalse: [^timeoutBlock value].
 	^ true
