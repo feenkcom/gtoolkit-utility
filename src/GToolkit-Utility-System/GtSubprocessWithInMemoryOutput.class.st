@@ -557,7 +557,19 @@ GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
 	Only valid when the process was started with #runAndSignal."
 	| timedOut |
 
-	timedOut := semaphore waitTimeoutMSecs: anInteger.
+	timedOut := semaphore waitTimeoutMilliseconds: anInteger.
+	(errorBlock isNotNil and: [ timedOut or: [ self isSuccess not ]])
+		ifTrue: [ errorBlock cull: self cull: timedOut ].
+	^ timedOut
+]
+
+{ #category : #'api - future' }
+GtSubprocessWithInMemoryOutput >> waitTimeoutMilliseconds: anInteger [
+	"Wait for the receiver to finish up anInteger milliSeconds.
+	Only valid when the process was started with #runAndSignal."
+	| timedOut |
+
+	timedOut := semaphore waitTimeoutMilliseconds: anInteger.
 	(errorBlock isNotNil and: [ timedOut or: [ self isSuccess not ]])
 		ifTrue: [ errorBlock cull: self cull: timedOut ].
 	^ timedOut
