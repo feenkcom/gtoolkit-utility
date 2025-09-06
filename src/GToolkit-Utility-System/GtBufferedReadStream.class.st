@@ -17,7 +17,7 @@ No other changes are made to {{gtClass:ZnBufferedReadStream}}, the interface is 
 Class {
 	#name : #GtBufferedReadStream,
 	#superclass : #ZnBufferedReadStream,
-	#category : 'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System'
 }
 
 { #category : #enumerating }
