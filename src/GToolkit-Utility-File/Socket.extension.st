@@ -23,12 +23,12 @@ Socket >> listenOn: port [
 	"Listen for a connection on the given port. This operation will return immediately; follow it with waitForConnectionUntil: to wait until a connection is established."
 
 	self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			self
 				bindToPort: port;
 				listen.
 			self closeOnExec: true.] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 	
 			| status |
 			status := self primSocketConnectionStatus: socketHandle.
@@ -45,12 +45,12 @@ Socket >> listenOn: portNumber backlogSize: backlog [
 	If this method succeeds, #accept may be used to establish a new connection"
 	
 	self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			self
 				bindToPort: portNumber ;
 				listenWithBacklog: backlog.
 			self closeOnExec: true.] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 			| status |
 			status := self primSocketConnectionStatus: socketHandle.
 			(status == Unconnected)
@@ -65,12 +65,12 @@ Socket >> listenOn: portNumber backlogSize: backlog interface: ifAddr [
 	If this method succeeds, #accept may be used to establish a new connection"
 	
 	self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			self
 				bindTo: ifAddr port: portNumber;
 				listenWithBacklog: backlog.
 			self closeOnExec: true. ] 
-		forPharo11AndPharo10: [
+		forPharo11: [
 				| status |
 				status := self primSocketConnectionStatus: socketHandle.
 				(status == Unconnected)
@@ -95,7 +95,7 @@ Socket >> waitForConnectionFor: timeout ifClosed: closedBlock ifTimedOut: timeou
 	<gtPharoPatch: #Pharo12>
 	| startTime msecsDelta msecsElapsed status |
 
-	self forPharo12: [] forPharo11AndPharo10: 
+	self forPharo12AndNewer: [] forPharo11: 
 		[ self error: 'Not supported in Pharo11 and earlier' ].
 
 	self closeOnExec: true.
