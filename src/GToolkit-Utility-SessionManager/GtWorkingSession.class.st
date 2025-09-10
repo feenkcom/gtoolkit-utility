@@ -14,8 +14,8 @@ Class {
 GtWorkingSession >> gtViewDetailsIn: aView [
 	<gtView>
 	^ self
-		forPharo12: [ aView empty ]
-		forPharo11AndPharo10: [ 
+		forPharo12AndNewer: [ aView empty ]
+		forPharo11: [ 
 			aView columnedList
 				title: 'Details';
 				priority: 30;
@@ -45,8 +45,8 @@ GtWorkingSession >> id [
 	<gtPharoPatch: #Pharo>
 	"Override this here as the id attribute was removed in Pharo 12"
 	^ self 
-		forPharo12: [ self properties at: #id ifAbsentPut: [UUID new] ] 
-		forPharo11AndPharo10: [ super id ]
+		forPharo12AndNewer: [ self properties at: #id ifAbsentPut: [UUID new] ] 
+		forPharo11: [ super id ]
 ]
 
 { #category : #printing }
@@ -54,8 +54,8 @@ GtWorkingSession >> printOn: stream [
 	super printOn: stream.
 	
 	self 
-		forPharo12: [] 
-		forPharo11AndPharo10: [
+		forPharo12AndNewer: [] 
+		forPharo11: [
 			stream nextPut: $(; print: self id; nextPut: $)]
 ]
 

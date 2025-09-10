@@ -8,10 +8,10 @@ Protocol class >> gtAllProtocolDefaultName [
 { #category : #'*GToolkit-Utility-System' }
 Protocol class >> isAllProtocolName: aString [
 	^ self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			self unclassified = aString or: [ 
 				self gtAllProtocolDefaultName = aString ]]
-		forPharo11AndPharo10: [ 
+		forPharo11: [ 
 			self defaultName = aString or: [ 
 				self gtAllProtocolDefaultName = aString or: [ 
 					self nullCategory = aString ] ] ]
