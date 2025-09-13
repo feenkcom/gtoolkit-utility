@@ -124,11 +124,30 @@ GtResourcesUtility >> resourceAtPath: aPathOrString [
 	"Return a resource (file, directory) pointing to an Iceberg repository or to a local (deployed) Gt directory.
 	See the ${class:GtResourcesUtility}$ class comment for more details."
 	<return: #FileReference>
-	| aFirstResult aResult |
+	| aFirstResult allResults aResult aPath |
 	aFirstResult := nil.
-	self locations do: [ :eachLocation | 
+	allResults := self locations collect: [ :eachLocation | 
 		aResult := eachLocation resourceAtPath: aPathOrString.
 		aResult exists ifTrue: [ ^ aResult file ].
-		aFirstResult ifNil: [ aFirstResult := aResult ] ].
+		aFirstResult ifNil: [ aFirstResult := aResult ].
+		aResult ].
+		
+	aPath := aPathOrString asPath.
+	aPath isRelative ifFalse: [ 
+		^ aFirstResult file ].
+	
+	"Let's try to find the nearest existing parent and return that location."
+	aPath withParents reversed allButFirst
+		withIndexDo: [ :eachParent :anIndex | 
+			self locations
+				do: [ :eachLocation | 
+					aResult := eachLocation resourceAtPath: eachParent.
+					aResult exists
+						ifTrue: [ | aFile |
+							aFile := aResult file.
+							(aPath segments last: anIndex)
+								do: [ :eachSegment | aFile := aFile / eachSegment ].
+							^ aFile ] ] ].
+	
 	^ aFirstResult file
 ]
