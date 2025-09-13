@@ -9,10 +9,8 @@ Protocol class >> gtAllProtocolDefaultName [
 Protocol class >> isAllProtocolName: aString [
 	^ self 
 		forPharo12AndNewer: [
-			self unclassified = aString or: [ 
-				self gtAllProtocolDefaultName = aString ]]
+			self gtAllProtocolDefaultName = aString ]
 		forPharo11: [ 
-			self defaultName = aString or: [ 
-				self gtAllProtocolDefaultName = aString or: [ 
-					self nullCategory = aString ] ] ]
+			self gtAllProtocolDefaultName = aString or: [ 
+				self nullCategory = aString ] ] 
 ]
