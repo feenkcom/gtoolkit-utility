@@ -543,6 +543,53 @@ GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_ResolveString 
 	^ aReference resolve: 'data/text.txt'
 ]
 
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_UnexistentFileInExistingDirectory [
+	<gtExample>
+	<return: #GtResourceReference>
+	| aReference aChildFile |
+	aReference := self resourceReferenceWithThreeLocations.
+
+	aChildFile := aReference / 'data/text2.txt'.
+
+	self
+		assert: aChildFile exists not
+		description: [ 'data/text2.txt resource must not exist' ].
+	self
+		assert: aChildFile fileReference parent exists
+		description: [ 'data/text2.txt parent resource must exist' ].
+	self
+		assert: aChildFile fileReference parent parent basename 
+		equals: 'resource2'.
+
+	^ aChildFile
+]
+
+{ #category : #'examples - resolve' }
+GtResourcesUtilityExamples >> resourceReferenceWithThreeLocations_UnexistentFileInExistingDirectory2 [
+	<gtExample>
+	<return: #GtResourceReference>
+	| aReference aChildFile |
+	aReference := self resourceReferenceWithThreeLocations.
+
+	aChildFile := aReference / 'data/subdirectory/text2.txt'.
+
+	self
+		assert: aChildFile exists not
+		description: [ 'data/subdirectory/text2.txt resource must not exist' ].
+	self
+		assert: aChildFile fileReference parent exists not
+		description: [ 'data/subdirectory/text2.txt parent resource must not exist' ].
+	self
+		assert: aChildFile fileReference parent parent exists
+		description: [ 'data/subdirectory/text2.txt parent parent resource must exist' ].
+	self
+		assert: aChildFile fileReference parent parent parent basename 
+		equals: 'resource2'.
+
+	^ aChildFile
+]
+
 { #category : #'examples - basic' }
 GtResourcesUtilityExamples >> resourceUtility [
 	<gtExample>

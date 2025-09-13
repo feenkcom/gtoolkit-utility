@@ -1,16 +1,11 @@
 "
 I receive a code snippet string and return a {{gtClass:Path}} as a result of the code snippet.
 My main method to use is {{gtMethod:GtResourcesUtilityPathExtractor>>#canEvaluate:}}. 
-
-1. # Valid Code Snippets
-
-
+#Valid Code Snippets
 The following code snippet {{gtExample:GtResourcesUtilityPathExtractorExamples>>#permitedLongPathString|label=#yourself}} is evaluated and I return:
 {{gtExample:GtResourcesUtilityPathExtractorExamples>>#permitedLongPath|codeExpanded=false|previewExpanded=true}}
 
-1. # Invalid Code Snippets
-
-
+#Invalid Code Snippets
 Only snippets with reference to {{gtClass:Path}}, string literals, and `*` and `/` messages are valid.
 
 For example, the {{gtExample:GtResourcesUtilityPathExtractorExamples>>#unwantedUnarySender2String|label=#yourself}} is not evaluated and I return `nil` instead: 
