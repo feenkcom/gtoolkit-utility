@@ -7,6 +7,11 @@ Trait {
 }
 
 { #category : #accessing }
+TGtGroup >> allSatisfy: aBlock [
+	^ self items allSatisfy: aBlock
+]
+
+{ #category : #accessing }
 TGtGroup >> anyOne [
 	^ self items anyOne
 ]
