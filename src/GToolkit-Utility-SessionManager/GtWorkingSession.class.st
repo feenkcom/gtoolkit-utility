@@ -40,15 +40,6 @@ GtWorkingSession >> gtViewDetailsIn: aView [
 				send: #last ]
 ]
 
-{ #category : #accessing }
-GtWorkingSession >> id [
-	<gtPharoPatch: #Pharo>
-	"Override this here as the id attribute was removed in Pharo 12"
-	^ self 
-		forPharo12AndNewer: [ self properties at: #id ifAbsentPut: [UUID new] ] 
-		forPharo11: [ super id ]
-]
-
 { #category : #printing }
 GtWorkingSession >> printOn: stream [
 	super printOn: stream.
