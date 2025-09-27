@@ -16,8 +16,8 @@ GtGhIssue >> gtActionWebBrowseFor: anAction [
         BrButton new
             aptitude: BrGlamorousButtonWithIconAptitude;
             action:  [ WebBrowser openOn: self htmlUrlString asZnUrl ];
-            icon: BrGlamorousIcons go asElement;
-            label: 'Open in Web Browser' translated ]
+            icon: BrGlamorousVectorIcons web;
+            label: 'Open in browser' translated ]
 ]
 
 { #category : #'gt - extensions' }
