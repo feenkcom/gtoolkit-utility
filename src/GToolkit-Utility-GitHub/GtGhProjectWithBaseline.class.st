@@ -143,8 +143,8 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 				dataBinder: [ :itemElement :aRepository | 
 					| nodeIcon |
 					nodeIcon := ((#(diverged behind) includes: aRepository branchDiffFromSelfToParent reverseStatus)
-						ifTrue: [ BrGlamorousIcons redcircle ]
-						ifFalse: [ BrGlamorousIcons greencircle ]).
+						ifTrue: [ BrGlamorousVectorIcons redcircle ]
+						ifFalse: [ BrGlamorousVectorIcons greencircle ]).
 					 
 					itemElement
 						removeChildren;
