@@ -50,3 +50,10 @@ Object >> gtUpToVersion: versionString do: upToBlock after: afterBlock [
 		do: upToBlock 
 		after: afterBlock.
 ]
+
+{ #category : #'*GToolkit-Utility-System' }
+Object >> notYetTested [
+	"Announce that this message is not yet tested"
+	<debuggerCompleteToSender>
+	NotYetTested signalFor: thisContext sender selector
+]
