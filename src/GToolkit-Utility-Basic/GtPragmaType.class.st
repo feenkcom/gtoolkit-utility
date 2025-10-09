@@ -16,7 +16,7 @@ Class {
 		'keyword',
 		'pragmas'
 	],
-	#category : #'GToolkit-Utility-Basic'
+	#category : #'GToolkit-Utility-Basic-Pragma'
 }
 
 { #category : #accessing }
