@@ -115,6 +115,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Releaser-Logging-Analysis' with: [
 				spec requires: #('GToolkit-Utility-Logging' ). ];
 			package: 'GToolkit-Utility-ObjectConnections';
+			package: 'GToolkit-Utility-GarbageCollectAnalysis';
 			package: 'GToolkit-Utility-Network' ].
 ]
 
