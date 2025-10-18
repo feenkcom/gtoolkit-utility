@@ -37,7 +37,7 @@ GtGarbageCollectsReport >> gtViewEventsFor: aView [
 		title: 'Events';
 		priority: 10;
 		items: [ events ];
-		column: 'Time' text: [ :each | each startTime asTime print24 ];
+		column: 'Time' text: [ :each | each startTime asTime print24 ] width: 70;
 		column: 'Source' text: [ :each | each sourceDescription ];
 		column: 'Duration' text: [ :each | each duration gtShortPrintString ];
 		column: 'Removed Space' text: [ :each | each reducedOldSpaceSizeDescription ];

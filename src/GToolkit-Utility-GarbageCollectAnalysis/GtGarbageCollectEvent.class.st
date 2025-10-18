@@ -156,7 +156,7 @@ GtGarbageCollectEvent >> sourceDescription [
 	^ requestedSize 
 		ifNil: ['<unknowm>'] 
 		ifNotNil: [ :anInteger |
-			'BasicNew [', self requestedSizeDescription, ']' ]
+			'basicNew: ', self requestedSizeDescription ]
 ]
 
 { #category : #accessing }
