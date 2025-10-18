@@ -42,6 +42,11 @@ GtVmAllParametersReport >> extraParameters: aDictionary [
 	extraParameters := aDictionary
 ]
 
+{ #category : #'accessing - parameters' }
+GtVmAllParametersReport >> freeOldSpaceSizeParameter [
+	^ self parameterWithIndex: 54
+]
+
 { #category : #accessing }
 GtVmAllParametersReport >> gtViewVmParametersFor: aView [ 
 	<gtView>
@@ -73,6 +78,17 @@ GtVmAllParametersReport >> gtViewVmParametersFullFor: aView [
 		column: 'Description' text: [ :aVmParameter | aVmParameter description ]
 ]
 
+{ #category : #'accessing - parameters' }
+GtVmAllParametersReport >> oldSpaceSizeParameter [
+	^ self parameterWithIndex: 1
+]
+
+{ #category : #accessing }
+GtVmAllParametersReport >> parameterWithIndex: anIndex [
+	^ self vmParameters detect: [ :each |
+		each index = anIndex ].
+]
+
 { #category : #accessing }
 GtVmAllParametersReport >> parametersWithIndexes: aCollection [
 	^ self vmParameters select: [ :each |
@@ -100,6 +116,12 @@ GtVmAllParametersReport >> recordReportStatistics [
 GtVmAllParametersReport >> timestamp [
 
 	^ timestamp
+]
+
+{ #category : #'accessing - parameters' }
+GtVmAllParametersReport >> usedOldSpaceSize [
+	^ self oldSpaceSizeParameter parameterValue 
+		- self freeOldSpaceSizeParameter  parameterValue 
 ]
 
 { #category : #accessing }

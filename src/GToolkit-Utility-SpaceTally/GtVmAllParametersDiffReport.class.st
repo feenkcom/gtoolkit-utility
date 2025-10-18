@@ -136,6 +136,11 @@ GtVmAllParametersDiffReport >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtVmAllParametersDiffReport >> reducedOldSpaceSize [
+	^ self sourceReport usedOldSpaceSize - self targetReport usedOldSpaceSize
+]
+
+{ #category : #accessing }
 GtVmAllParametersDiffReport >> reportSummaryValues [ 
 	^ self parameterDiffs
 ]
