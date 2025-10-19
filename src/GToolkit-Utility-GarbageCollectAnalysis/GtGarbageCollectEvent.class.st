@@ -5,10 +5,20 @@ Class {
 		'largestFreeChunkSize',
 		'parametersDiffReport',
 		'callerStackTraceRecords',
-		'requestedSize'
+		'eventSource'
 	],
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
+
+{ #category : #accessing }
+GtGarbageCollectEvent >> callerStackTraceRecords [
+	^ callerStackTraceRecords
+]
+
+{ #category : #accessing }
+GtGarbageCollectEvent >> callerStackTraceRecords: anObject [
+	callerStackTraceRecords := anObject
+]
 
 { #category : #accessing }
 GtGarbageCollectEvent >> duration [
@@ -20,8 +30,18 @@ GtGarbageCollectEvent >> endVmParameters [
 	^ self parametersDiffReport targetReport
 ]
 
+{ #category : #accessing }
+GtGarbageCollectEvent >> eventSource [
+	^ eventSource
+]
+
+{ #category : #accessing }
+GtGarbageCollectEvent >> eventSource: anObject [
+	eventSource := anObject
+]
+
 { #category : #recording }
-GtGarbageCollectEvent >> extractRequestedSizeFrom: aStack [
+GtGarbageCollectEvent >> extractSourceFrom: aStack [
 	aStack 
 		detect: [ :aContext |
 			aContext selector = #handleFailingBasicNew: and: [
@@ -30,7 +50,8 @@ GtGarbageCollectEvent >> extractRequestedSizeFrom: aStack [
 			| var |
 			var := aContext lookupVar: #sizeRequested.
 			var isLocalVariable ifTrue: [ 
-				requestedSize := var readInContext: aContext  ] ] 
+				eventSource := GtGarbageCollectEventBasicNewSource new
+					 requestedSize: (var readInContext: aContext) ] ] 
 ]
 
 { #category : #views }
@@ -75,6 +96,18 @@ GtGarbageCollectEvent >> gtViewCallerStackFor: aView [
 		column: 'Program Counter' text: [ :each | each programCounter ] width: 120
 ]
 
+{ #category : #testing }
+GtGarbageCollectEvent >> hasBasicNewSource [
+	^ eventSource isBasicNewSource
+]
+
+{ #category : #testing }
+GtGarbageCollectEvent >> isRelatedToSkiaImage [
+	^ callerStackTraceRecords anySatisfy: [ :aStackRecord |
+		aStackRecord  selector = #asForm and: [
+			aStackRecord receiverClassName = 'SkiaImage'] ]
+]
+
 { #category : #accessing }
 GtGarbageCollectEvent >> largestFreeChunkSize [
 	^ largestFreeChunkSize
@@ -100,6 +133,11 @@ GtGarbageCollectEvent >> parametersDiffReport [
 	^ parametersDiffReport
 ]
 
+{ #category : #accessing }
+GtGarbageCollectEvent >> parametersDiffReport: anObject [
+	parametersDiffReport := anObject
+]
+
 { #category : #printing }
 GtGarbageCollectEvent >> printOn: aStream [ 
 	super printOn: aStream .
@@ -123,7 +161,7 @@ GtGarbageCollectEvent >> recordCallerStackTrace [
 	callerStackTraceRecords := callerStackTrace
 			collect: [ :each | GtBareRecordedStackFrameCall forContext: each ].
 
-	self extractRequestedSizeFrom: callerStackTrace
+	self extractSourceFrom: callerStackTrace
 ]
 
 { #category : #recording }
@@ -145,18 +183,11 @@ GtGarbageCollectEvent >> reducedOldSpaceSizeDescription [
 ]
 
 { #category : #accessing }
-GtGarbageCollectEvent >> requestedSizeDescription [
-	^ requestedSize
-		ifNil: [ '-' ]
-		ifNotNil: [ :anInteger | anInteger humanReadableSISizeString ]
-]
-
-{ #category : #accessing }
 GtGarbageCollectEvent >> sourceDescription [
-	^ requestedSize 
+	^ eventSource 
 		ifNil: ['<unknowm>'] 
-		ifNotNil: [ :anInteger |
-			'basicNew: ', self requestedSizeDescription ]
+		ifNotNil: [ :anEventSource |
+			anEventSource sourceDescription ]
 ]
 
 { #category : #accessing }

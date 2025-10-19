@@ -77,3 +77,8 @@ GtVmReportVmSingleParameterDiff >> printOn: aStream [
 		<< '; ';
 		<< self description.
 ]
+
+{ #category : #accessing }
+GtVmReportVmSingleParameterDiff >> rawDiffValue [
+	^self currentParameter parameterValue - self previousParameter parameterValue
+]

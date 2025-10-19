@@ -93,6 +93,11 @@ GtBareRecordedStackFrameCall >> programCounter: aProgramCounter [
 ]
 
 { #category : #accessing }
+GtBareRecordedStackFrameCall >> receiverClassName [
+	^ self receiverClassRecord targetClassNameDescription
+]
+
+{ #category : #accessing }
 GtBareRecordedStackFrameCall >> receiverClassRecord [
 	^ receiverClassRecord
 ]

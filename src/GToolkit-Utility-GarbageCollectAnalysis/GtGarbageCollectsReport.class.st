@@ -29,22 +29,27 @@ GtGarbageCollectsReport >> gtOverallParametersDiffReportFor: aView [
 ]
 
 { #category : #views }
+GtGarbageCollectsReport >> gtSummaryFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		  title: 'Summary';
+		  priority: 5;
+		  items: [ self summaryAttributes ];
+		  column: #Attribute text: [ :item | item first ];
+		  column: #Value text: [ :item | item second ].
+]
+
+{ #category : #views }
 GtGarbageCollectsReport >> gtViewEventsFor: aView [
 	<gtView>
 	events ifNil: [ ^ aView empty ].
 	
-	^ aView columnedList
+	^ aView forward
 		title: 'Events';
 		priority: 10;
-		items: [ events ];
-		column: 'Time' text: [ :each | each startTime asTime print24 ] width: 70;
-		column: 'Source' text: [ :each | each sourceDescription ];
-		column: 'Duration' text: [ :each | each duration gtShortPrintString ];
-		column: 'Removed Space' text: [ :each | each reducedOldSpaceSizeDescription ];
-		column: 'Largest Free Chunk' text: [ :each | 
-			each largestFreeChunkSizeDescription];
-		column: 'Final Old Space' text: [ :each | 
-			each parametersDiffReport targetReport oldSpaceSizeParameter formattedParameterValue  ]
+		object: [ events ];
+		view: #gtItemsFor:
 ]
 
 { #category : #accessing }
@@ -55,4 +60,25 @@ GtGarbageCollectsReport >> overallParametersDiffReport [
 { #category : #accessing }
 GtGarbageCollectsReport >> overallParametersDiffReport: aVmAllParametersDiffReport [
 	overallParametersDiffReport := aVmAllParametersDiffReport
+]
+
+{ #category : #accessing }
+GtGarbageCollectsReport >> recordedEventsDuration [
+	^ events  
+		inject: 0 seconds 
+		into: [ :total  :anEvent | 
+			total + anEvent duration ]
+]
+
+{ #category : #accessing }
+GtGarbageCollectsReport >> summaryAttributes [
+	"Answer a collection of key/value attributes that can simply be listed as a summary of the receiver"
+
+	^ { 
+		{ 'Total GC Count'. overallParametersDiffReport fullGcCountDiff diffFormattedValue diffDescription }.
+		{ 'Total GC Duration'. overallParametersDiffReport fullGcDurationDiff diffFormattedValue diffDescription }.
+		{'Not-recorded GC events' . overallParametersDiffReport fullGcCountDiff rawDiffValue - events size }.
+		{'Recorded GC events' . events size }.
+		{'Recorded events duation' . self recordedEventsDuration}.
+		{'Events with basicNew source'. events numberOfEventsWithBasicNewSource}}
 ]

@@ -47,6 +47,16 @@ GtVmAllParametersReport >> freeOldSpaceSizeParameter [
 	^ self parameterWithIndex: 54
 ]
 
+{ #category : #'accessing - parameters' }
+GtVmAllParametersReport >> fullGcCountParameter [
+	^ self parameterWithIndex: 7
+]
+
+{ #category : #'accessing - parameters' }
+GtVmAllParametersReport >> fullGcDurationParameter [
+	^ self parameterWithIndex: 8
+]
+
 { #category : #accessing }
 GtVmAllParametersReport >> gtViewVmParametersFor: aView [ 
 	<gtView>

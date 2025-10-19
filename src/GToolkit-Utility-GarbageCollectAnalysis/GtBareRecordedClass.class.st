@@ -70,6 +70,6 @@ GtBareRecordedClass >> targetClassName: aClassName [
 { #category : #printing }
 GtBareRecordedClass >> targetClassNameDescription [
 	^ self isMeta
-		ifTrue: [ self targetClassName asString ]
-		ifFalse: [ self targetClassName asString, ' class' ]
+		ifTrue: [ self targetClassName asString, ' class' ]
+		ifFalse: [ self targetClassName asString ]
 ]
