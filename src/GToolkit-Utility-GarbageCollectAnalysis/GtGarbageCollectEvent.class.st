@@ -104,7 +104,10 @@ GtGarbageCollectEvent >> gtViewCallerStackFor: aView [
 
 { #category : #testing }
 GtGarbageCollectEvent >> hasBasicNewSource [
-	^ eventSource isBasicNewSource
+	^ eventSource 
+		ifNil: [ false ]
+		ifNotNil: [ :anEventSource |
+			anEventSource isBasicNewSource ]
 ]
 
 { #category : #testing }
