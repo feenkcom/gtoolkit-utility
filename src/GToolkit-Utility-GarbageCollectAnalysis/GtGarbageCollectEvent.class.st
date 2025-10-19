@@ -10,6 +10,12 @@ Class {
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
 
+{ #category : #serialization }
+GtGarbageCollectEvent class >> leJsonV4Name [
+
+	^ #gtGarbageCollectEvent
+]
+
 { #category : #accessing }
 GtGarbageCollectEvent >> callerStackTraceRecords [
 	^ callerStackTraceRecords

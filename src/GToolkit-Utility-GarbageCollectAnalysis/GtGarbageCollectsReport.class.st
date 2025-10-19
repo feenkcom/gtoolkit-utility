@@ -8,6 +8,17 @@ Class {
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
 
+{ #category : #serialization }
+GtGarbageCollectsReport class >> fromSerializedString: aString [
+ 	^ LeJsonV4 uniqueInstance deserialize:  aString readStream
+]
+
+{ #category : #serialization }
+GtGarbageCollectsReport class >> leJsonV4Name [
+
+	^ #gtGarbageCollectsReport
+]
+
 { #category : #accessing }
 GtGarbageCollectsReport >> events [
 	^ events
@@ -68,6 +79,11 @@ GtGarbageCollectsReport >> recordedEventsDuration [
 		inject: 0 seconds 
 		into: [ :total  :anEvent | 
 			total + anEvent duration ]
+]
+
+{ #category : #serialization }
+GtGarbageCollectsReport >> serializeForExport [
+	^ LeJsonV4 uniqueInstance serialize: self
 ]
 
 { #category : #accessing }

@@ -14,6 +14,12 @@ GtBareRecordedClass class >> forClass: aClass [
 		initializeForClass: aClass 
 ]
 
+{ #category : #serialization }
+GtBareRecordedClass class >> leJsonV4Name [
+
+	^ #gtBareRecordedClass
+]
+
 { #category : #comparing }
 GtBareRecordedClass >> = anObject [
 

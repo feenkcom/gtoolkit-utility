@@ -7,6 +7,12 @@ Class {
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
 
+{ #category : #serialization }
+GtGarbageCollectEventBasicNewSource class >> leJsonV4Name [
+
+	^ #gtGarbageCollectEventBasicNewSource
+]
+
 { #category : #testing }
 GtGarbageCollectEventBasicNewSource >> isBasicNewSource [
 	^ true

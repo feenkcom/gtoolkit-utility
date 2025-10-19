@@ -16,6 +16,12 @@ GtBareRecordedStackFrameCall class >> forContext: aContext [
 		initializeForContext: aContext
 ]
 
+{ #category : #serialization }
+GtBareRecordedStackFrameCall class >> leJsonV4Name [
+
+	^ #gtBareRecordedStackFrameCall
+]
+
 { #category : #printing }
 GtBareRecordedStackFrameCall >> descriptionOn: aStream [
 	self methodDescriptionOn: aStream.

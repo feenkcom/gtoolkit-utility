@@ -4,6 +4,32 @@ Class {
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
 
+{ #category : #serialization }
+GtGarbageCollectEventsGroup class >> leFromJsonV4Dictionary: aDictionary [
+	"Create a new instance of the receiver from the supplied dictionary."
+
+	^ self withAll: (aDictionary at: #items)
+]
+
+{ #category : #serialization }
+GtGarbageCollectEventsGroup class >> leJsonV4MappingFor: aNeoJSONMapper [
+
+	aNeoJSONMapper for: self do: [ :mapping | 
+		mapping
+			mapProperty: #'__type' 
+			getter: [ :object | object class leJsonV4Name ] 
+			setter: [ :um | self error: 'Objects should not be read here' ].
+		mapping 
+			mapProperty: #items
+			getter: [ :object | object items ]
+			setter: [ :aCollection | self error: 'Do not set values here' ] ].
+]
+
+{ #category : #serialization }
+GtGarbageCollectEventsGroup class >> leJsonV4Name [
+	^ #gtGarbageCollectEventsGroup
+]
+
 { #category : #views }
 GtGarbageCollectEventsGroup >> gtItemsFor: aView [
 	<gtView>
