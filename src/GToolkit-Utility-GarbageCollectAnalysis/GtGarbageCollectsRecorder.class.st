@@ -20,7 +20,7 @@ GtGarbageCollectsRecorder class >> cleanUpDefaultInstance [
 { #category : #accessing }
 GtGarbageCollectsRecorder class >> defaultInstance [
 	^defaultInstance ifNil: [
-		defaultInstance := GtGarbageCollectsNullRecorder uniqueInstance ]
+		defaultInstance := self new ]
 ]
 
 { #category : #accessing }

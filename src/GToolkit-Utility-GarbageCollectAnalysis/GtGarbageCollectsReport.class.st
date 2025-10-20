@@ -95,6 +95,6 @@ GtGarbageCollectsReport >> summaryAttributes [
 		{ 'Total GC Duration'. overallParametersDiffReport fullGcDurationDiff diffFormattedValue diffDescription }.
 		{'Not-recorded GC events' . overallParametersDiffReport fullGcCountDiff rawDiffValue - events size }.
 		{'Recorded GC events' . events size }.
-		{'Recorded events duation' . self recordedEventsDuration}.
+		{'Recorded events duration' . self recordedEventsDuration}.
 		{'Events with basicNew source'. events numberOfEventsWithBasicNewSource}}
 ]
