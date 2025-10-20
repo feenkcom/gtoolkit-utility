@@ -20,6 +20,17 @@ GtGarbageCollectsReport class >> leJsonV4Name [
 ]
 
 { #category : #accessing }
+GtGarbageCollectsReport >> avegareFullGcDuration [
+	| fullGcDuration |
+	fullGcDuration := self overallParametersDiffReport 
+		fullGcDurationDiff rawDiffValue.
+	fullGcDuration = 0 ifTrue:  [ ^ nil ].
+	^Duration
+		milliSeconds: fullGcDuration
+					/ self overallParametersDiffReport fullGcCountDiff rawDiffValue
+]
+
+{ #category : #accessing }
 GtGarbageCollectsReport >> events [
 	^ events
 ]
