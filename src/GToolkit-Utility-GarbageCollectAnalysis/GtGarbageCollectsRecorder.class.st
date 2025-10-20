@@ -51,9 +51,9 @@ GtGarbageCollectsRecorder >> createReport [
 		overallParametersDiffReport: (GtVmAllParametersDiffReport new 
 			sourceReport:  initialVmParametersReport;
 			targetReport: GtVmAllParametersReport recordNewReport);
-		events: ((events itemArray
+		events: (GtGarbageCollectEventsGroup withAll: ((events itemArray
 			reject: [ :each | each isZombie ])
-				collect: [ :item | item object ]) 
+				collect: [ :item | item object ])) 
 ]
 
 { #category : #actions }

@@ -14,6 +14,12 @@ GtBareRecordedClass class >> forClass: aClass [
 		initializeForClass: aClass 
 ]
 
+{ #category : #serialization }
+GtBareRecordedClass class >> leJsonV4Name [
+
+	^ #gtBareRecordedClass
+]
+
 { #category : #comparing }
 GtBareRecordedClass >> = anObject [
 
@@ -70,6 +76,6 @@ GtBareRecordedClass >> targetClassName: aClassName [
 { #category : #printing }
 GtBareRecordedClass >> targetClassNameDescription [
 	^ self isMeta
-		ifTrue: [ self targetClassName asString ]
-		ifFalse: [ self targetClassName asString, ' class' ]
+		ifTrue: [ self targetClassName asString, ' class' ]
+		ifFalse: [ self targetClassName asString ]
 ]

@@ -27,6 +27,20 @@ GtVmAllParametersDiffReport >> defaultReportClass [
 	^ GtVmAllParametersReport
 ]
 
+{ #category : #accessing }
+GtVmAllParametersDiffReport >> fullGcCountDiff [
+	^ GtVmReportVmSingleParameterDiff new 
+		previousParameter: self sourceReport fullGcCountParameter;
+		currentParameter: self targetReport fullGcCountParameter
+]
+
+{ #category : #accessing }
+GtVmAllParametersDiffReport >> fullGcDurationDiff [
+	^ GtVmReportVmSingleParameterDiff new 
+		previousParameter: self sourceReport fullGcDurationParameter;
+		currentParameter: self targetReport fullGcDurationParameter
+]
+
 { #category : #'gt - extensions' }
 GtVmAllParametersDiffReport >> gtViewChangedParametersFor: aView [ 
 	<gtView>

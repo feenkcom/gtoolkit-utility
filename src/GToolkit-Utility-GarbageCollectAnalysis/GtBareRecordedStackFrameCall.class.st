@@ -16,6 +16,12 @@ GtBareRecordedStackFrameCall class >> forContext: aContext [
 		initializeForContext: aContext
 ]
 
+{ #category : #serialization }
+GtBareRecordedStackFrameCall class >> leJsonV4Name [
+
+	^ #gtBareRecordedStackFrameCall
+]
+
 { #category : #printing }
 GtBareRecordedStackFrameCall >> descriptionOn: aStream [
 	self methodDescriptionOn: aStream.
@@ -90,6 +96,11 @@ GtBareRecordedStackFrameCall >> programCounter [
 { #category : #accessing }
 GtBareRecordedStackFrameCall >> programCounter: aProgramCounter [
 	programCounter := aProgramCounter
+]
+
+{ #category : #accessing }
+GtBareRecordedStackFrameCall >> receiverClassName [
+	^ self receiverClassRecord targetClassNameDescription
 ]
 
 { #category : #accessing }
