@@ -15,7 +15,7 @@ Class {
 { #category : #accessing }
 GtGarbageCollectsRecorder class >> cleanUpDefaultInstance [
 	defaultInstance ifNotNil: [ :aRecorder |
-		aRecorder  defaultInstance ].
+		aRecorder  deactivate ].
 	defaultInstance := nil
 ]
 
