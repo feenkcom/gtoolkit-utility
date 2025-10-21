@@ -20,6 +20,17 @@ GtGarbageCollectsReport class >> leJsonV4Name [
 ]
 
 { #category : #accessing }
+GtGarbageCollectsReport >> avegareFullGcDuration [
+	| fullGcDuration |
+	fullGcDuration := self overallParametersDiffReport 
+		fullGcDurationDiff rawDiffValue.
+	fullGcDuration = 0 ifTrue:  [ ^ nil ].
+	^Duration
+		milliSeconds: fullGcDuration
+					/ self overallParametersDiffReport fullGcCountDiff rawDiffValue
+]
+
+{ #category : #accessing }
 GtGarbageCollectsReport >> events [
 	^ events
 ]
@@ -95,6 +106,6 @@ GtGarbageCollectsReport >> summaryAttributes [
 		{ 'Total GC Duration'. overallParametersDiffReport fullGcDurationDiff diffFormattedValue diffDescription }.
 		{'Not-recorded GC events' . overallParametersDiffReport fullGcCountDiff rawDiffValue - events size }.
 		{'Recorded GC events' . events size }.
-		{'Recorded events duation' . self recordedEventsDuration}.
+		{'Recorded events duration' . self recordedEventsDuration}.
 		{'Events with basicNew source'. events numberOfEventsWithBasicNewSource}}
 ]
