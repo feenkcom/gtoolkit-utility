@@ -20,7 +20,7 @@ GtGarbageCollectsRecorder class >> cleanUpDefaultInstance [
 { #category : #accessing }
 GtGarbageCollectsRecorder class >> defaultInstance [
 	^defaultInstance ifNil: [
-		defaultInstance := GtGarbageCollectsNullRecorder uniqueInstance ]
+		defaultInstance := self new ]
 ]
 
 { #category : #accessing }
@@ -43,6 +43,11 @@ GtGarbageCollectsRecorder >> activate [
 { #category : #actions }
 GtGarbageCollectsRecorder >> beDefault [
 	self class defaultInstance: self
+]
+
+{ #category : #updating }
+GtGarbageCollectsRecorder >> clearEvents [
+	events := WaitfreeQueue new
 ]
 
 { #category : #accessing }
@@ -130,12 +135,13 @@ GtGarbageCollectsRecorder >> recordDuring: aBlockDoingGc [
 
 { #category : #updating }
 GtGarbageCollectsRecorder >> reset [
-	events := WaitfreeQueue new
+	self clearEvents.
+	self updateInitialParameters.
 ]
 
 { #category : #actions }
 GtGarbageCollectsRecorder >> startRecording [
-	initialVmParametersReport := GtVmAllParametersReport recordNewReport.
+	self reset.
 	self enable.
 ]
 
@@ -154,4 +160,9 @@ GtGarbageCollectsRecorder >> uninstall [
 	Object flushDependents.
 	^self primitiveGarbageCollect'
 				classified: 'memory space']
+]
+
+{ #category : #actions }
+GtGarbageCollectsRecorder >> updateInitialParameters [
+	initialVmParametersReport := GtVmAllParametersReport recordNewReport.
 ]
