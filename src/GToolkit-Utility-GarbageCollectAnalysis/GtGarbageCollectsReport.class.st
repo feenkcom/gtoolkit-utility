@@ -59,7 +59,8 @@ GtGarbageCollectsReport >> gtSummaryFor: aView [
 		  priority: 5;
 		  items: [ self summaryAttributes ];
 		  column: #Attribute text: [ :item | item first ];
-		  column: #Value text: [ :item | item second ].
+		  column: #Value text: [ :item | item second ];
+		  send: #second.
 ]
 
 { #category : #views }
