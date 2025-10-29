@@ -1,6 +1,9 @@
 Class {
 	#name : #GtCompiledMethodUtilityExamples,
 	#superclass : #Object,
+	#instVars : [
+		'slotForTesting'
+	],
 	#category : #'GToolkit-Utility-Basic-Examples'
 }
 
@@ -18,15 +21,15 @@ GtCompiledMethodUtilityExamples >> methodAccessedSlots [
 { #category : #'as yet unclassified' }
 GtCompiledMethodUtilityExamples >> methodIsGetter [
 	<gtExample>
-	self assert:  (Message>>#arguments) gtIsGetter.
-	self assert: (Message>>#arguments:) gtIsGetter not
+	self assert:  (GtCompiledMethodUtilityExamples>>#slotForTesting) gtIsGetter.
+	self assert: (GtCompiledMethodUtilityExamples>>#slotForTesting:) gtIsGetter not
 ]
 
 { #category : #'as yet unclassified' }
 GtCompiledMethodUtilityExamples >> methodIsSetter [
 	<gtExample>
-	self assert: (Message>>#arguments:) gtIsSetter.
-	self assert:  (Message>>#arguments) gtIsSetter not
+	self assert: (GtCompiledMethodUtilityExamples>>#slotForTesting:) gtIsSetter.
+	self assert:  (GtCompiledMethodUtilityExamples>>#slotForTesting) gtIsSetter not
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,4 +47,14 @@ GtCompiledMethodUtilityExamples >> methodSuperMethods [
 	self
 		assert: (CompiledMethod>>#=) gtSuperMethods
 				equals: {CompiledCode>>#=} asSet
+]
+
+{ #category : #accessing }
+GtCompiledMethodUtilityExamples >> slotForTesting [
+	^ slotForTesting
+]
+
+{ #category : #accessing }
+GtCompiledMethodUtilityExamples >> slotForTesting: anObject [
+	slotForTesting := anObject
 ]
