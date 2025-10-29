@@ -37,3 +37,11 @@ GtCompiledMethodUtilityExamples >> methodSelfMethods [
 				= {CompiledMethod >> #selfMessages.
 						CompiledMethod >> #methodClass} asSet
 ]
+
+{ #category : #'as yet unclassified' }
+GtCompiledMethodUtilityExamples >> methodSuperMethods [
+	<gtExample>
+	self
+		assert: (CompiledMethod>>#=) gtSuperMethods
+				equals: {CompiledCode>>#=} asSet
+]

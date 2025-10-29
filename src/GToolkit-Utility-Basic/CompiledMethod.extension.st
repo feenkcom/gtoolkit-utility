@@ -27,3 +27,9 @@ CompiledMethod >> gtSelfMethods [
 	^ self selfMessages
 		collectAsSet: [ :selector | self methodClass lookupSelector: selector ]
 ]
+
+{ #category : #'*GToolkit-Utility-Basic' }
+CompiledMethod >> gtSuperMethods [
+	^ self superMessages
+		collectAsSet: [ :selector | self methodClass superclass lookupSelector: selector ]
+]
