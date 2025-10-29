@@ -21,3 +21,15 @@ GtSpaceTallyItem >> analyzedPackageName: anObject [
 
 	analyzedPackageName := anObject
 ]
+
+{ #category : #accessing }
+GtSpaceTallyItem >> computeReferencePaths: count [
+	| startIndex increment |
+	3 timesRepeat: [ Smalltalk garbageCollect ].
+	startIndex := instanceCount // count.
+	increment := instanceCount // count.
+	^ analyzedClassName asClass allInstances
+		in: [ :aCollection | 
+			(startIndex to: aCollection size by: increment)
+				collect: [ :anIndex | GtReferencePaths to: (aCollection at: anIndex) ] ]
+]
