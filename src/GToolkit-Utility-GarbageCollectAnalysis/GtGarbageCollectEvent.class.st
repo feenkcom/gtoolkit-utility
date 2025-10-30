@@ -194,7 +194,7 @@ GtGarbageCollectEvent >> reducedOldSpaceSizeDescription [
 { #category : #accessing }
 GtGarbageCollectEvent >> sourceDescription [
 	^ eventSource 
-		ifNil: ['<unknowm>'] 
+		ifNil: ['<unknown>'] 
 		ifNotNil: [ :anEventSource |
 			anEventSource sourceDescription ]
 ]

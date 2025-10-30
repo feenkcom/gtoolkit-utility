@@ -91,16 +91,16 @@ GtGarbageCollectsRecorder >> initialize [
 GtGarbageCollectsRecorder >> install [
 	self 
 		forPharo12AndNewer: [
-			SmalltalkImage compile: 'garbageCollect
-	^GtGarbageCollectsRecorder defaultInstance
-		recordDuring: [ self primitiveGarbageCollect ] '
+			SmalltalkImage compile: ('garbageCollect
+	^{1} defaultInstance
+		recordDuring: [ self primitiveGarbageCollect ]' format: {self class name})
 				classified: 'gt-patch'] 
 		forPharo11: [
-			SmalltalkImage compile: 'garbageCollect
-	^GtGarbageCollectsRecorder defaultInstance
+			SmalltalkImage compile: ('garbageCollect
+	^{1} defaultInstance
 		recordDuring: [ 
 			Object flushDependents.
-			self primitiveGarbageCollect ] '
+			self primitiveGarbageCollect ]' format: {self class name})
 				classified: 'memory space']
 ]
 
