@@ -53,6 +53,11 @@ GtGarbageCollectsRecorder >> clearEvents [
 ]
 
 { #category : #accessing }
+GtGarbageCollectsRecorder >> creatGarbageCollectEvent [
+	^ GtGarbageCollectEvent new
+]
+
+{ #category : #accessing }
 GtGarbageCollectsRecorder >> createReport [
 	^ GtGarbageCollectsReport new
 		overallParametersDiffReport: (GtVmAllParametersDiffReport new 
@@ -123,7 +128,7 @@ GtGarbageCollectsRecorder >> recordDuring: aBlockDoingGc [
 	previousActiveStatus := isEnabled.
 	isEnabled := false.
 	
-	newEvent := GtGarbageCollectEvent new.
+	newEvent := self creatGarbageCollectEvent.
 	newEvent recordStartReport.
 	result := aBlockDoingGc value.
 	newEvent largestFreeChunkSize: result.
