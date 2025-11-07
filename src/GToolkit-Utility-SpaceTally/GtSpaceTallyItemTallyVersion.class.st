@@ -13,7 +13,7 @@ GtSpaceTallyItemTallyVersion >> descriptionOn: aStream [
 	aStream 
 		print:  self tallyVersion index;
 		nextPutAll: ', '.
-	self tallyItem gtDescriptionOn: aStream
+	self tallyItem descriptionOn: aStream
 ]
 
 { #category : #accessing }
