@@ -3,30 +3,34 @@ I extend {{gtClass:SpaceTally}} with extra information by using for tally items 
 "
 Class {
 	#name : #GtSpaceTally,
-	#superclass : #SpaceTally,
+	#superclass : #Object,
 	#instVars : [
-		'label'
+		'label',
+		'results'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
-{ #category : #fileout }
-GtSpaceTally >> computeSpaceUsageResultsForClassesInstancesAssociations: aCollectionOfClasses [
-	results := SpaceTallyResult new: aCollectionOfClasses size.
-	aCollectionOfClasses associations
-		do: [ :assoc | 
-			| instances class |
-			instances := assoc value.
-			class := assoc key.
-			class isMeta
-				ifFalse: [ results
-						addItem:
-							((GtSpaceTallyItem
-								analyzedClassName: class name
-								codeSize: class spaceUsed
-								instanceCount: instances size
-								spaceForInstances: (instances sum: [ :each | each sizeInMemory ]))
-									analyzedPackageName: class package name) ] ]
+{ #category : #'gt - extensions' }
+GtSpaceTally >> gtViewItemsFor: aView [
+	<gtView>
+	results ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Tallies';
+		object: [ results ];
+		view: #gtViewItemsFor:
+]
+
+{ #category : #'gt - extensions' }
+GtSpaceTally >> gtViewOverviewFor: aView [
+	<gtView>
+	results ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Overview';
+		object: [ results ];
+		view: #gtViewOverviewFor:
 ]
 
 { #category : #'gt - extensions' }
@@ -94,4 +98,22 @@ GtSpaceTally >> repositoryTallies [
 					GtSpaceTallyRepositoryTally new
 						analyzedRepositoryName: assoc key; 
 						addPackageTallies: assoc value ]
+]
+
+{ #category : #accessing }
+GtSpaceTally >> results [
+	^ results
+]
+
+{ #category : #'class analysis' }
+GtSpaceTally >> systemWideSpaceTally [
+	"Answer a collection of SpaceTallyItems representing the memory space (in bytes) consumed 	by the code and instances of each class in the system. Note that code sizes do not currently 	report memory consumed by class variables. "
+	| items |
+	items := (GtObjectMemoryTally systemWideSpaceTally results 
+		reject: [ :anObjectsTally |
+			anObjectsTally objectsClass isNil ])
+		collect: [ :anObjectTally |
+			GtSpaceTallyItem
+				objectsTally: anObjectTally ].
+	^ results := GtSpaceTallyItemsGroup withAll: items
 ]
