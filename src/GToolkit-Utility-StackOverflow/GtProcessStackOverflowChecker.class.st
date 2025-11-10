@@ -49,20 +49,6 @@ GtProcessStackOverflowChecker class >> currentCheckerClass: anObject [
 ]
 
 { #category : #accessing }
-GtProcessStackOverflowChecker class >> ensureCheckDuring: aBlock [
-	^ (self anyCheckingProcess: Processor activeProcess)
-		ifTrue: [ aBlock value ]
-		ifFalse: [ self checkDuring: aBlock ]
-]
-
-{ #category : #accessing }
-GtProcessStackOverflowChecker class >> ensureCheckDuring: aBlock depth: anInteger [
-	^ (self anyCheckingProcess: Processor activeProcess)
-		ifTrue: [ aBlock value ]
-		ifFalse: [ self checkDuring: aBlock depth: anInteger ]
-]
-
-{ #category : #accessing }
 GtProcessStackOverflowChecker class >> startForProcess: aProcess [
 	^ self
 		startForProcess: aProcess
