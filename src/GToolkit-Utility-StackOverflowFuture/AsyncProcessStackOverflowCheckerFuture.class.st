@@ -38,7 +38,7 @@ AsyncProcessStackOverflowCheckerFuture >> poll: anAsynchronousContext [
 
 	<return: #AsyncPoll>
 	^ GtProcessStackOverflowChecker currentCheckerClass
-		checkDuring: [ future poll: anAsynchronousContext ]
+		ensureCheckDuring: [ future poll: anAsynchronousContext ]
 		depth: (depth ifNil: [ GtStackOverflowChecker defaultStackOverflowLimit ])
 ]
 
