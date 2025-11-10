@@ -32,7 +32,7 @@ GtSpaceTallyRepositoryTally >> analyzedRepositoryName: anObject [
 ]
 
 { #category : #printing }
-GtSpaceTallyRepositoryTally >> gtDescriptionOn: aStream [
+GtSpaceTallyRepositoryTally >> descriptionOn: aStream [
 
 	aStream print: analyzedRepositoryName.
 	
@@ -99,9 +99,8 @@ GtSpaceTallyRepositoryTally >> packageTallies [
 GtSpaceTallyRepositoryTally >> printOn: aStream [
 	super printOn: aStream.
 	
-	aStream << '('.
-	self gtDescriptionOn: aStream.
-	aStream << ')'.
+	aStream parenthesize: [
+		self descriptionOn: aStream ]
 ]
 
 { #category : #accessing }

@@ -37,7 +37,7 @@ GtSpaceTallyPackageTally >> classTallies [
 ]
 
 { #category : #printing }
-GtSpaceTallyPackageTally >> gtDescriptionOn: aStream [
+GtSpaceTallyPackageTally >> descriptionOn: aStream [
 
 	aStream print: analyzedPackageName .
 	
@@ -88,9 +88,8 @@ GtSpaceTallyPackageTally >> instanceCount [
 GtSpaceTallyPackageTally >> printOn: aStream [
 	super printOn: aStream.
 	
-	aStream << '('.
-	self gtDescriptionOn: aStream.
-	aStream << ')'.
+	aStream parenthesize: [
+		self descriptionOn: aStream ]
 ]
 
 { #category : #accessing }
