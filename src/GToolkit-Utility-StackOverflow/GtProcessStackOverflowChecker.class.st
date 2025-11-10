@@ -64,7 +64,8 @@ GtProcessStackOverflowChecker class >> stopAllStackOverflowWatchers [
 
 { #category : #accessing }
 GtProcessStackOverflowChecker >> checkForStackOverflows [
-	GtStackOverflowChecker checkForStackOverflowsForProcess: self process
+	GtStackOverflowChecker
+		checkForStackOverflowsForProcess: self process
 		depth: depth
 ]
 

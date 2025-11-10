@@ -92,11 +92,15 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			baseline: 'GToolkitResourcesUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitSessionManagerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
+			baseline: 'Futures' with: [
+				spec repository: 'github://feenkcom/pharo-futures:main/src' ].
 		spec 
 			package: 'GToolkit-Utility-MessageTally';
 			package: 'GToolkit-Utility-SpaceTally';
 			package: 'GToolkit-Utility-StackOverflow';
+			package: 'GToolkit-Utility-StackOverflowFuture'  with: [
+				spec requires: #('GToolkit-Utility-StackOverflow' 'Futures' ) ];
 			package: 'GToolkit-Utility-Streams';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #('GToolkitFileUtility' ). ];
