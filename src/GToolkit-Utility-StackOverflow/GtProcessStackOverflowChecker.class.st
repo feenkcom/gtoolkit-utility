@@ -18,6 +18,13 @@ GtProcessStackOverflowChecker class >> anyChecking [
 ]
 
 { #category : #accessing }
+GtProcessStackOverflowChecker class >> anyCheckingProcess: aProcess [
+	<return: #Boolean>
+	^ GtProcessStackOverflowChecker allInstances
+		anySatisfy: [ :i | i isCheckingProcess: aProcess ]
+]
+
+{ #category : #accessing }
 GtProcessStackOverflowChecker class >> checkDuring: aBlock [
 	| checker |
 	checker := self startForProcess: Processor activeProcess.
@@ -43,7 +50,8 @@ GtProcessStackOverflowChecker class >> currentCheckerClass: anObject [
 
 { #category : #accessing }
 GtProcessStackOverflowChecker class >> startForProcess: aProcess [
-	^self startForProcess: aProcess
+	^ self
+		startForProcess: aProcess
 		depth: GtStackOverflowChecker defaultStackOverflowLimit
 ]
 
@@ -64,7 +72,8 @@ GtProcessStackOverflowChecker class >> stopAllStackOverflowWatchers [
 
 { #category : #accessing }
 GtProcessStackOverflowChecker >> checkForStackOverflows [
-	GtStackOverflowChecker checkForStackOverflowsForProcess: self process
+	GtStackOverflowChecker
+		checkForStackOverflowsForProcess: self process
 		depth: depth
 ]
 
@@ -76,6 +85,11 @@ GtProcessStackOverflowChecker >> depth: aNumber [
 { #category : #accessing }
 GtProcessStackOverflowChecker >> isChecking [
 	^watcherProcess notNil
+]
+
+{ #category : #accessing }
+GtProcessStackOverflowChecker >> isCheckingProcess: aProcess [
+	^ self isChecking and: [ process == aProcess ]
 ]
 
 { #category : #accessing }
