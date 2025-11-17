@@ -466,11 +466,12 @@ GtSubprocessWithInMemoryOutput >> setCommand [
 	(self command isNotNil and: [ shellCommand isNotNil ]) ifTrue: 
 		[ self error: 'Only one of a command or shell command may be supplied' ].
 
-	OSPlatform current isUnix ifTrue:
-		[ shellExe := '/bin/sh'.
-		shellArgs := { '-c'. shellCommand. } ]
-	ifFalse:
-		[ shellExe := 'powershell'.
+	(OSPlatform current isUnix or: [
+		OSPlatform current isMacOSX]) ifTrue:	[ 
+			shellExe := '/bin/sh'.
+			shellArgs := { '-c'. shellCommand. } ]
+	ifFalse:[ 
+		shellExe := 'powershell'.
 		shellArgs := { '-Command'. shellCommand. } ].
 
 	self command ifNil: 
