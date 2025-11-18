@@ -459,16 +459,25 @@ GtSubprocessWithInMemoryOutput >> runWithRetry [
 GtSubprocessWithInMemoryOutput >> setCommand [
 	"Set the command or shell command in the process.
 	Either may be specified, but not both :-)"
+	| shellExe shellArgs |
 
 	(self command isNil and: [ shellCommand isNil ]) ifTrue: 
 		[ self error: 'No command supplied' ].
 	(self command isNotNil and: [ shellCommand isNotNil ]) ifTrue: 
 		[ self error: 'Only one of a command or shell command may be supplied' ].
 
+	(OSPlatform current isUnix or: [
+		OSPlatform current isMacOSX]) ifTrue:	[ 
+			shellExe := '/bin/sh'.
+			shellArgs := { '-c'. shellCommand. } ]
+	ifFalse:[ 
+		shellExe := 'powershell'.
+		shellArgs := { '-Command'. shellCommand. } ].
+
 	self command ifNil: 
 		[ self 
-			command:'/bin/sh';
-			arguments: { '-c'. shellCommand. } ]
+			command: shellExe;
+			arguments: shellArgs ]
 
 ]
 
