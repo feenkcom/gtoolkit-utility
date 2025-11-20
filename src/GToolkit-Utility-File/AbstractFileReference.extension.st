@@ -15,6 +15,22 @@ AbstractFileReference >> binaryContents [
 ]
 
 { #category : #'*GToolkit-Utility-File' }
+AbstractFileReference >> gtViewPharoDebugLogFor: aView [
+	<gtView>
+
+	((self extension ~= 'log' and:
+	[ (self basename includesSubstring: 'PharoDebug') not ]) or: 
+		[ self exists not ]) ifTrue:
+			[ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Entries';
+		priority: 10;
+		object: [ GtPharoDebugLogInspector new file: self ];
+		view: #gtViewEntriesFor:
+]
+
+{ #category : #'*GToolkit-Utility-File' }
 AbstractFileReference >> isFileLocator [
 
 	^ false

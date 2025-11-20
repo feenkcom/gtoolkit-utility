@@ -9,7 +9,7 @@ Context >> errorReportOn: stream [
 	Suppress any errors while getting printStrings.  Limit the length."
 	| stackDepth aContext maxDetailedStackDepth maxFullStackDepth|
 
-	stream print: Date today; space; print: Time now; cr.
+	stream nextPutAll: DateAndTime now asIso8601; cr.
 	stream cr.
 	stream nextPutAll: 'VM: ';
 		nextPutAll: Smalltalk os name asString;
