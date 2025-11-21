@@ -8,7 +8,7 @@ Class {
 		'timestamp',
 		'frames'
 	],
-	#category : #'GToolkit-PharoDebug-Model'
+	#category : 'GToolkit-PharoDebug-Model'
 }
 
 { #category : #accessing }

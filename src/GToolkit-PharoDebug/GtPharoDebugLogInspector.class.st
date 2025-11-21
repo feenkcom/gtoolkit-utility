@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'file'
 	],
-	#category : #'GToolkit-PharoDebug-Model'
+	#category : 'GToolkit-PharoDebug-Model'
 }
 
 { #category : #accessing }
@@ -46,7 +46,7 @@ GtPharoDebugLogInspector >> parseLogEntries [
 			linePosition := stream position.
 			line := stream nextLine.
 			(line trimBoth = 'THERE_BE_DRAGONS_HERE') ifTrue:
-				[ startIndex > 0 ifTrue:
+				[ startIndex >= 0 ifTrue:
 					[ entries add: (GtPharoDebugLogEntry new
 						logInspector: self;
 						startIndex: startIndex;
