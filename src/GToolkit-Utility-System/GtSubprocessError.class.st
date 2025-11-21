@@ -30,10 +30,15 @@ GtSubprocessError >> description [
 { #category : #accessing }
 GtSubprocessError >> messageText [
 
-	^ messageText ifNil: 
-		[ process exitStatusInterpreter 
-			ifNil: [ 'Probably an unknown command: ', process command ]
-			ifNotNil: [ self description ] ]
+	^ String streamContents: [ :stream |
+		messageText ifNotNil:
+			[ stream << messageText; cr ].
+		process exitStatusInterpreter ifNil: 
+			[ stream 
+				<< 'Probably an unknown command: ';
+				<< process command ]
+		ifNotNil: 
+			[ stream << self description ] ]
 ]
 
 { #category : #accessing }

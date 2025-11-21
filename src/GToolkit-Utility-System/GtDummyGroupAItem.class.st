@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'valueA'
 	],
-	#category : #'GToolkit-Utility-System-Examples'
+	#category : 'GToolkit-Utility-System-Examples'
 }
 
 { #category : #accessing }
