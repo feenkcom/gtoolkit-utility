@@ -120,7 +120,8 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				spec requires: #('GToolkit-Utility-Logging' ). ];
 			package: 'GToolkit-Utility-ObjectConnections';
 			package: 'GToolkit-Utility-GarbageCollectAnalysis';
-			package: 'GToolkit-Utility-Network' ].
+			package: 'GToolkit-Utility-Network';
+			package: 'GToolkit-PharoDebug' ].
 ]
 
 { #category : #accessing }
