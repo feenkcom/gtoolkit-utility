@@ -293,10 +293,22 @@ GtSubprocessWithInMemoryOutput >> isSuccess [
 
 	pollException ifNotNil: [ ^ false ].
 	self isComplete ifFalse: 
-		[ self hasProcess ifFalse: [ self error: 'Process not yet started' ].
-		process isNull ifTrue: [ self error: 'Process is null' ].
-		process isTerminated ifTrue: [ self error: 'Process not terminated' ].
-		self error: 'Process not yet complete' ].
+		[ self hasProcess ifFalse: [ GtSubprocessError new
+			messageText: 'Process not yet started';
+			process: self;
+			signal ].
+		process isNull ifTrue: [ GtSubprocessError new
+				messageText: 'Process is null';
+				process: self;
+				signal ].
+		process isTerminated ifTrue: [ GtSubprocessError new
+			messageText: 'Process not terminated';
+			process: self;
+			signal ].
+		GtSubprocessError new
+			messageText: 'Process not yet complete';
+			process: self;
+			signal ].
 	^ self exitStatusInterpreter 
 		ifNil: [ false ]
 		ifNotNil: [ :interpreter | interpreter isSuccess ]
