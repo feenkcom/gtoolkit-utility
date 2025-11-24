@@ -51,7 +51,8 @@ Class {
 		'terminateOnShutdown',
 		'stdinStream',
 		'retryCount',
-		'pollException'
+		'pollException',
+		'processStartedSemaphore'
 	],
 	#pools : [
 		'LibCSignalSharedPool'
@@ -294,21 +295,11 @@ GtSubprocessWithInMemoryOutput >> isSuccess [
 	pollException ifNotNil: [ ^ false ].
 	self isComplete ifFalse: 
 		[ self hasProcess ifFalse: [ GtSubprocessError new
-			messageText: 'Process not yet started';
 			process: self;
-			signal ].
-		process isNull ifTrue: [ GtSubprocessError new
-				messageText: 'Process is null';
-				process: self;
-				signal ].
-		process isTerminated ifTrue: [ GtSubprocessError new
-			messageText: 'Process not terminated';
-			process: self;
-			signal ].
-		GtSubprocessError new
-			messageText: 'Process not yet complete';
-			process: self;
-			signal ].
+			messageText: 'Process not yet started' ].
+		process isNull ifTrue: [ self error: 'Process is null' ].
+		process isTerminated ifTrue: [ self error: 'Process not terminated' ].
+		self error: 'Process not yet complete' ].
 	^ self exitStatusInterpreter 
 		ifNil: [ false ]
 		ifNotNil: [ :interpreter | interpreter isSuccess ]
@@ -407,6 +398,7 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 			envVariables
 				keysAndValuesDo: [ :key :value | command setEnv: key value: value ] ].
 	process := command spawn.
+	processStartedSemaphore signal.
 	self initializeStdStreams.
 	stdinStream := process stdin.
 	stdoutBuffer := process asynchronousStdout.
@@ -436,6 +428,7 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 		pipeStderr;
 		pipeStdin.
 
+	processStartedSemaphore := Semaphore new.
 	outputPoll := 
 		[ [ self runWithRetry ]
 			on: Error
@@ -446,6 +439,7 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 					[ errorBlock cull: self cull: false ].
 				semaphore ifNotNil: #signal ]
 		] forkAt: Processor activeProcess priority + 1.
+	processStartedSemaphore wait.
 ]
 
 { #category : #private }
