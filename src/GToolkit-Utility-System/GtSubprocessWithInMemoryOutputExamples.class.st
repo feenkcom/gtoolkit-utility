@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'commands'
 	],
-	#category : 'GToolkit-Utility-System-Examples'
+	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #private }
