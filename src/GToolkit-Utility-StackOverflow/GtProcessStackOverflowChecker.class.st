@@ -117,6 +117,10 @@ GtProcessStackOverflowChecker >> startStackOverflowWatcher [
 					newProcess.
 	watcherProcess priority: Processor highIOPriority.
 	watcherProcess name: 'Process Stack Overflow Watcher'.
+	AsyncProcessProperties
+			process: watcherProcess
+			property: #parentProcess
+			put: process.
 	watcherProcess resume
 ]
 
