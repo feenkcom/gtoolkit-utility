@@ -5,7 +5,7 @@ Class {
 		'commonValueY',
 		'commonValueZ'
 	],
-	#category : 'GToolkit-Utility-System-Examples'
+	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #accessing }

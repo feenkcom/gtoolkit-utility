@@ -51,7 +51,8 @@ Class {
 		'terminateOnShutdown',
 		'stdinStream',
 		'retryCount',
-		'pollException'
+		'pollException',
+		'processStartedSemaphore'
 	],
 	#pools : [
 		'LibCSignalSharedPool'
@@ -153,18 +154,18 @@ GtSubprocessWithInMemoryOutput >> commandLineString [
 			separatedBy: [ stream nextPut: Character space ] ]
 ]
 
-{ #category : #accessing }
-GtSubprocessWithInMemoryOutput >> environmentAt: key put: value [
-
-	self envVariables at: key put: value.
-]
-
 { #category : #'env building' }
 GtSubprocessWithInMemoryOutput >> envVariables [
 	"Answer the dictionary of environment variables that will be passed to the sub-process.
 	If nil, they are inherited from the parent process (Gt)"
 
 	^ envVariables ifNil: [ envVariables := Dictionary new ]
+]
+
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> environmentAt: key put: value [
+
+	self envVariables at: key put: value.
 ]
 
 { #category : #accessing }
@@ -198,7 +199,7 @@ GtSubprocessWithInMemoryOutput >> exitStatus [
 { #category : #status }
 GtSubprocessWithInMemoryOutput >> exitStatusInterpreter [
 
-	^ process tryWait
+	^ process ifNotNil: #tryWait
 ]
 
 { #category : #accessing }
@@ -217,24 +218,29 @@ GtSubprocessWithInMemoryOutput >> gtCommandLineFor: aView [
 GtSubprocessWithInMemoryOutput >> gtStderrFor: aView [
 	<gtView>
 
-	self stderr ifNil: [ ^ aView empty ].
 	^ aView textEditor 
 		title: 'stderr';
 		priority: 20;
-		text: [ self stderr asRopedText glamorousCodeFont ];
+		text: [ [ self stderr asRopedText glamorousCodeFont ] 
+			on: Error
+			do: [ :ex | String streamContents: [ :stream |
+				stream
+					<< '<unable to retrieve stderr: ';
+					print: pollException;
+					<< '>' ] ] ];
 		actionUpdateButtonTooltip: 'Update stderr'
-
 ]
 
 { #category : #ui }
 GtSubprocessWithInMemoryOutput >> gtStdoutFor: aView [
 	<gtView>
 
-	self stdout ifNil: [ ^ aView empty ].
 	^ aView textEditor 
 		title: 'stdout';
 		priority: 20;
-		text: [ self stdout asRopedText glamorousCodeFont ];
+		text: [ [ self stdout asRopedText glamorousCodeFont ] 
+			on: Error
+			do: [ :ex | '' ] ];
 		actionUpdateButtonTooltip: 'Update stdout'
 
 ]
@@ -289,26 +295,10 @@ GtSubprocessWithInMemoryOutput >> isRunning [
 { #category : #testing }
 GtSubprocessWithInMemoryOutput >> isSuccess [
 	"Answer whether the command completed successfully.
-	Only valid after the command has completed."
+	Answers false if the process is not complete."
 
 	pollException ifNotNil: [ ^ false ].
-	self isComplete ifFalse: 
-		[ self hasProcess ifFalse: [ GtSubprocessError new
-			messageText: 'Process not yet started';
-			process: self;
-			signal ].
-		process isNull ifTrue: [ GtSubprocessError new
-				messageText: 'Process is null';
-				process: self;
-				signal ].
-		process isTerminated ifTrue: [ GtSubprocessError new
-			messageText: 'Process not terminated';
-			process: self;
-			signal ].
-		GtSubprocessError new
-			messageText: 'Process not yet complete';
-			process: self;
-			signal ].
+	self isComplete ifFalse: [ ^ false ].
 	^ self exitStatusInterpreter 
 		ifNil: [ false ]
 		ifNotNil: [ :interpreter | interpreter isSuccess ]
@@ -327,6 +317,11 @@ GtSubprocessWithInMemoryOutput >> pollException [
 
 { #category : #printing }
 GtSubprocessWithInMemoryOutput >> printOn: aStream [
+
+	pollException ifNotNil:
+		[ ^ aStream
+			<< 'an Unsuccessful GtSubprocessWithInMemoryOutput: ';
+			print: pollException ].
 	process ifNil: [ ^ super printOn: aStream ].
 	self isRunning
 		ifTrue: [ aStream nextPutAll: 'a Running GtSubprocessWithInMemoryOutput' ]
@@ -396,9 +391,10 @@ GtSubprocessWithInMemoryOutput >> runAndWait [
 
 { #category : #private }
 GtSubprocessWithInMemoryOutput >> runOnce [
+	<sys_ext>
+	<image_versions: #(#gt #gtph12)>
 	"Run the requested command as a separate process"
 
-	| pollString |
 	"Output can be collected after the process has exited.
 	Ensure the buffers are flushed."
 	command := builder createNativeCommand.
@@ -407,6 +403,7 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 			envVariables
 				keysAndValuesDo: [ :key :value | command setEnv: key value: value ] ].
 	process := command spawn.
+	processStartedSemaphore signal.
 	self initializeStdStreams.
 	stdinStream := process stdin.
 	stdoutBuffer := process asynchronousStdout.
@@ -415,18 +412,23 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 	[ process
 		waitForExitDoing: [ stdoutStream nextPutAll: stdoutBuffer pollString.
 			stderrStream nextPutAll: stderrBuffer pollString ].
-	[ stdoutStream nextPutAll: (pollString := stdoutBuffer pollString).
-	pollString isNotEmpty ] whileTrue.
-	[ stderrStream nextPutAll: (pollString := stderrBuffer pollString).
-	pollString isNotEmpty ] whileTrue ]
+	[ | pollString |
+		stdoutStream nextPutAll: (pollString := stdoutBuffer pollString).
+	pollString notEmpty ] whileTrue.
+	[ | pollString |
+	stderrStream nextPutAll: (pollString := stderrBuffer pollString).
+	pollString notEmpty ] whileTrue ]
 		on: Error
 		do: [ :ex | 
 			pollException := ex.
-			semaphore signal ]
+			semaphore signal.
+			processStartedSemaphore signal. ]
 ]
 
 { #category : #private }
 GtSubprocessWithInMemoryOutput >> runProcess [
+	<sys_ext>
+	<image_versions: #(#gt #gtph12)>
 	"Run the requested command as a separate process"
 
 	self setCommand.
@@ -436,16 +438,24 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 		pipeStderr;
 		pipeStdin.
 
+	processStartedSemaphore := Semaphore new.
 	outputPoll := 
 		[ [ self runWithRetry ]
 			on: Error
 			do: [ :ex | 
-				pollException ifNotNil:
+				pollException ifNil:
 					[ pollException := ex ].
+				processStartedSemaphore ifNotNil: #signal.
+				semaphore ifNotNil: #signal.
 				errorBlock ifNotNil:
-					[ errorBlock cull: self cull: false ].
-				semaphore ifNotNil: #signal ]
+					[ errorBlock cull: self cull: false ] ].
 		] forkAt: Processor activeProcess priority + 1.
+	(processStartedSemaphore waitTimeoutSeconds: 5) ifTrue:
+		[ | error |
+		error := GtSubprocessError new
+			process: self;
+			messageText: 'Unable to start process.'.
+		error signal ].
 ]
 
 { #category : #private }
@@ -573,7 +583,7 @@ GtSubprocessWithInMemoryOutput >> wait [
 ]
 
 { #category : #'api - future' }
-GtSubprocessWithInMemoryOutput >> waitTimeoutMilliseconds: anInteger [
+GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
 	"Wait for the receiver to finish up anInteger milliSeconds.
 	Only valid when the process was started with #runAndSignal."
 	| timedOut |
@@ -585,7 +595,7 @@ GtSubprocessWithInMemoryOutput >> waitTimeoutMilliseconds: anInteger [
 ]
 
 { #category : #'api - future' }
-GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
+GtSubprocessWithInMemoryOutput >> waitTimeoutMilliseconds: anInteger [
 	"Wait for the receiver to finish up anInteger milliSeconds.
 	Only valid when the process was started with #runAndSignal."
 	| timedOut |
