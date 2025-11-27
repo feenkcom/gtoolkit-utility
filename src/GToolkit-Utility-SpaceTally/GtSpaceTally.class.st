@@ -114,6 +114,6 @@ GtSpaceTally >> systemWideSpaceTally [
 			anObjectsTally objectsClass isNil ])
 		collect: [ :anObjectTally |
 			GtSpaceTallyItem
-				objectsTally: anObjectTally ].
+				fromObjectsTally: anObjectTally ].
 	^ results := GtSpaceTallyItemsGroup withAll: items
 ]
