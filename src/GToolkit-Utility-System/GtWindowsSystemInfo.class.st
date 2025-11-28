@@ -75,3 +75,11 @@ GtWindowsSystemInfo >> physicalMemory [
 			runAndWait.
 	^ proc stdout lines inject: 0 into: [ :sum :val | sum + val asNumber ].
 ]
+
+{ #category : #'as yet unclassified' }
+GtWindowsSystemInfo >> userName [
+
+	^ OSEnvironment current 
+		at: 'USERNAME'
+		ifAbsent: [ nil ]
+]

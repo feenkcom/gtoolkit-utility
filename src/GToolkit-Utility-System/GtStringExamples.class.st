@@ -1,7 +1,7 @@
 Class {
 	#name : #GtStringExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-System-Examples'
+	#category : 'GToolkit-Utility-System-Examples'
 }
 
 { #category : #accessing }

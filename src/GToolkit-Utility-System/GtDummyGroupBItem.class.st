@@ -5,7 +5,7 @@ Class {
 		'valueB1',
 		'valueB2'
 	],
-	#category : #'GToolkit-Utility-System-Examples'
+	#category : 'GToolkit-Utility-System-Examples'
 }
 
 { #category : #accessing }

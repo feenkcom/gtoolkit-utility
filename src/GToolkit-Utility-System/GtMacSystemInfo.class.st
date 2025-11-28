@@ -66,3 +66,11 @@ GtMacSystemInfo >> physicalMemory [
 			runAndWait.
 	^ (self colonSeparatedGet: 'hw.memsize' fromString: proc stdout) asNumber.
 ]
+
+{ #category : #'as yet unclassified' }
+GtMacSystemInfo >> userName [
+
+	^ OSEnvironment current 
+		at: 'USER'
+		ifAbsent: [ nil ]
+]

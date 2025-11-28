@@ -41,3 +41,11 @@ GtLinuxSystemInfo >> physicalMemory [
 
 	^ (self colonSeparatedGet: 'MemTotal' fromFile: '/proc/meminfo') asNumber * 1024
 ]
+
+{ #category : #'as yet unclassified' }
+GtLinuxSystemInfo >> userName [
+
+	^ OSEnvironment current 
+		at: 'USERNAME'
+		ifAbsent: [ nil ]
+]
