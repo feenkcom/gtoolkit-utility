@@ -7,40 +7,30 @@ Class {
 	#instVars : [
 		'analyzedPackageName',
 		'codeSize',
+		'analyzedClassName',
+		'instanceCount',
+		'spaceForInstances',
+		'detailsPerSpace',
 		'objectsTally'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
 { #category : #'instance creation' }
-GtSpaceTallyItem class >> objectsTally: aTally [ 
-
-	^ self 
-		objectsTally: aTally 
-		codeSize: aTally objectsClass spaceUsed 
-		analyzedPackageName: aTally objectsClass package name 
-]
-
-{ #category : #'instance creation' }
-GtSpaceTallyItem class >> objectsTally: aTally codeSize: codeSize [ 
+GtSpaceTallyItem class >> fromObjectsTally: aTally [ 
 
 	^ self new
-		objectsTally: aTally;
-		codeSize: codeSize 
+		initializeFromObjectsTally: aTally
 ]
 
-{ #category : #'instance creation' }
-GtSpaceTallyItem class >> objectsTally: aTally codeSize: codeSize analyzedPackageName: aPackageName [
-
-	^ self new
-		objectsTally: aTally;
-		codeSize: codeSize;
-		analyzedPackageName: aPackageName
+{ #category : #accessing }
+GtSpaceTallyItem >> amountOfObjects [
+	^ amountOfObjects
 ]
 
 { #category : #accessing }
 GtSpaceTallyItem >> analyzedClassName [
-	^ objectsTally analyzedClassName
+	^ analyzedClassName
 ]
 
 { #category : #accessing }
@@ -113,35 +103,46 @@ GtSpaceTallyItem >> gtDetailsFor: aView [
 ]
 
 { #category : #views }
-GtSpaceTallyItem >> gtObjectTallyPerSpaceFor: aView [
+GtSpaceTallyItem >> gtSpaceDetailsFor: aView [
 	<gtView>
-	^ aView forward
+	
+	detailsPerSpace ifNil: [ ^ aView empty ].
+	
+	^ aView columnedList
 		title: 'Per space';
 		priority: 20;
-		object: [ objectsTally ];
-		view: #gtSpaceDetailsFor:
+		items: [ detailsPerSpace ];
+		column: 'Space'
+		text: [ :each | each printSpaceName ];
+		column: 'Byte size'
+			text: [ :each | each printObjectsByteSize ];
+		column: 'Instances'
+			text: [ :each | each printObjectsSize ]
 ]
 
 { #category : #views }
 GtSpaceTallyItem >> gtSummaryAttributes [
-	^ objectsTally gtSummaryAttributes, {
-		'Code size' -> self printCodeSize.
-		'Package name' -> self analyzedPackageName }
+	^{
+		'Class' -> self analyzedClassName.
+		'Package name' -> self analyzedPackageName.
+		'Size of instances' -> self printObjectsByteSize.
+		'Number of instances' -> self printObjectsSize .
+		'Code size' -> self printCodeSize }
+]
+
+{ #category : #accessing }
+GtSpaceTallyItem >> initializeFromObjectsTally: anObjectsTally [
+	analyzedClassName := anObjectsTally analyzedClassName.
+	spaceForInstances := anObjectsTally objectsByteSize. 
+	instanceCount := anObjectsTally objectsSize.
+	detailsPerSpace := anObjectsTally detailsPerSpace.
+	codeSize := anObjectsTally objectsClass spaceUsed. 
+	analyzedPackageName := anObjectsTally objectsClass package name 
 ]
 
 { #category : #accessing }
 GtSpaceTallyItem >> instanceCount [
-	^ objectsTally objectsSize
-]
-
-{ #category : #accessing }
-GtSpaceTallyItem >> objectTally [
-	^ objectsTally
-]
-
-{ #category : #accessing }
-GtSpaceTallyItem >> objectsTally: anObject [
-	objectsTally := anObject
+	^ instanceCount
 ]
 
 { #category : #accessing }
@@ -151,12 +152,12 @@ GtSpaceTallyItem >> printCodeSize [
 
 { #category : #printing }
 GtSpaceTallyItem >> printObjectsByteSize [
-	^ objectsTally printObjectsByteSize
+	^ spaceForInstances humanReadableSISizeString
 ]
 
 { #category : #printing }
 GtSpaceTallyItem >> printObjectsSize [
-	^ objectsTally printObjectsSize
+	^ (String streamContents: [ :s | instanceCount printSeparatedBy: $' every: 3 signed: false on: s ])
 ]
 
 { #category : #printing }
@@ -169,5 +170,5 @@ GtSpaceTallyItem >> printOn: aStream [
 
 { #category : #accessing }
 GtSpaceTallyItem >> spaceForInstances [
-	^ objectsTally objectsByteSize
+	^ spaceForInstances
 ]
