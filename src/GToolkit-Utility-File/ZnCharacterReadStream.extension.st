@@ -15,3 +15,16 @@ ZnCharacterReadStream >> gtIndexOfLineNumbers: aSortedArray [
 			lastLineNumber := lineNumber.
 			resultStream nextPut: self position ] ].
 ]
+
+{ #category : #'*GToolkit-Utility-File' }
+ZnCharacterReadStream >> indexOfSubCollection: aString [
+	| buffer startIndex |
+
+	buffer := self next: aString size.
+	startIndex := 1.
+	[ self atEnd ] whileFalse:
+		[ buffer = aString ifTrue: [ ^ startIndex ].
+		startIndex := startIndex + 1.
+		buffer := buffer allButFirst, self next asString. ].
+	^ 0
+]

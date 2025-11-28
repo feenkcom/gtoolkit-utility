@@ -1,7 +1,7 @@
 Class {
 	#name : #GtZnBufferedReadStreamExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-File-Examples'
+	#category : 'GToolkit-Utility-File-Examples'
 }
 
 { #category : #examples }
