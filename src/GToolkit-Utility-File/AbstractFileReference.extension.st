@@ -43,6 +43,20 @@ AbstractFileReference >> isFileReference [
 ]
 
 { #category : #'*GToolkit-Utility-File' }
+AbstractFileReference class >> validBasenameFrom: aString [
+	"Answer a string which will be valid on all platforms (i.e. Windows).
+	Exclude dots (.) to allow any added extension to be reliably retrieved."
+	| basename invalidChars |
+
+	basename := aString copy.
+	invalidChars := '<>:"/\?*''`.'.
+	basename doWithIndex: [ :char :index |
+		(invalidChars includes: char) ifTrue:
+			[ basename at: index put: $_ ] ].
+	^ basename
+]
+
+{ #category : #'*GToolkit-Utility-File' }
 AbstractFileReference >> withParents [
 	<return: #Array of: #FileReference>
 	| withParents |

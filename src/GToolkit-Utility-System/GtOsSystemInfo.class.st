@@ -115,3 +115,9 @@ GtOsSystemInfo >> summaryAttributes [
 	#FreeMemory -> self freeMemory humanReadableIsqByteSize.
 	 }
 ]
+
+{ #category : #accessing }
+GtOsSystemInfo >> userName [
+
+	^ self subclassResponsibility
+]

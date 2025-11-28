@@ -108,6 +108,15 @@ FileReferenceExamples >> testSymbolicLinkTargetPath [
 		equals: (tempDir / 'a/b/c/abc') path ] ensure: [ tempDir ensureDeleteAll ]
 ]
 
+{ #category : #examples }
+FileReferenceExamples >> testValidBasename [
+	<gtExample>
+
+	self
+		assert: (FileReference validBasenameFrom: 'a<b>c:d"e/f\g?h*i''j`k.l')
+		equals: 'a_b_c_d_e_f_g_h_i_j_k_l'.
+]
+
 { #category : #accessing }
 FileReferenceExamples >> workingDirectory [
 	| aReference |
