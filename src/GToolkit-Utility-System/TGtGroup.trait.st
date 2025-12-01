@@ -3,7 +3,7 @@ This is a trait for defining basic utilities to be added to a typed group (a cla
 "
 Trait {
 	#name : #TGtGroup,
-	#category : 'GToolkit-Utility-System-GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System-GToolkit-Utility-System'
 }
 
 { #category : #accessing }

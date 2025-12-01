@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
-	#category : 'GToolkit-Utility-System-Examples'
+	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #examples }
