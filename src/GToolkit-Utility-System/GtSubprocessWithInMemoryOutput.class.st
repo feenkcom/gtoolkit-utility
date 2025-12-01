@@ -391,8 +391,6 @@ GtSubprocessWithInMemoryOutput >> runAndWait [
 
 { #category : #private }
 GtSubprocessWithInMemoryOutput >> runOnce [
-	<sys_ext>
-	<image_versions: #(#gt #gtph12)>
 	"Run the requested command as a separate process"
 
 	"Output can be collected after the process has exited.
@@ -427,8 +425,6 @@ GtSubprocessWithInMemoryOutput >> runOnce [
 
 { #category : #private }
 GtSubprocessWithInMemoryOutput >> runProcess [
-	<sys_ext>
-	<image_versions: #(#gt #gtph12)>
 	"Run the requested command as a separate process"
 
 	self setCommand.
