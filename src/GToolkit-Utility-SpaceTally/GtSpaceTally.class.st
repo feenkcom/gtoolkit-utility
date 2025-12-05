@@ -12,6 +12,12 @@ Class {
 }
 
 { #category : #'gt - extensions' }
+GtSpaceTally >> gtSpecificSizeInMemory [
+	^self sizeInMemory 
+		+ results gtSpecificSizeInMemory 
+]
+
+{ #category : #'gt - extensions' }
 GtSpaceTally >> gtViewItemsFor: aView [
 	<gtView>
 	results ifNil: [ ^ aView empty ].

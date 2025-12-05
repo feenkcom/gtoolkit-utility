@@ -94,15 +94,15 @@ GtVmAllParametersReport >> oldSpaceSizeParameter [
 ]
 
 { #category : #accessing }
-GtVmAllParametersReport >> parameterWithIndex: anIndex [
-	^ self vmParameters detect: [ :each |
-		each index = anIndex ].
-]
-
-{ #category : #accessing }
 GtVmAllParametersReport >> parametersWithIndexes: aCollection [
 	^ self vmParameters select: [ :each |
 		aCollection includes: each index ].
+]
+
+{ #category : #accessing }
+GtVmAllParametersReport >> parameterWithIndex: anIndex [
+	^ self vmParameters detect: [ :each |
+		each index = anIndex ].
 ]
 
 { #category : #accessing }

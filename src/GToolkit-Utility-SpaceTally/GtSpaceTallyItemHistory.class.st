@@ -19,6 +19,13 @@ GtSpaceTallyItemHistory >> firstVersion [
 ]
 
 { #category : #'gt - extensions' }
+GtSpaceTallyItemHistory >> gtSpecificSizeInMemory [
+	^self sizeInMemory 
+		+ tallyItemVersions gtSpecificSizeInMemory 
+		+ (tallyItemVersions sumNumbers: [ :each | each sizeInMemory ] )
+]
+
+{ #category : #'gt - extensions' }
 GtSpaceTallyItemHistory >> gtViewTallVersionsFor: aView [
 	<gtView>
 	

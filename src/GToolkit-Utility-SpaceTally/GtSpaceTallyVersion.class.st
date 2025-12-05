@@ -27,6 +27,13 @@ GtSpaceTallyVersion >> descriptionOn: aStream [
 ]
 
 { #category : #'gt - extensions' }
+GtSpaceTallyVersion >> gtSpecificSizeInMemory [
+	^self sizeInMemory 
+		+ spaceTally gtSpecificSizeInMemory 
+		+ vmStatisticsReport gtSpecificSizeInMemory 
+]
+
+{ #category : #'gt - extensions' }
 GtSpaceTallyVersion >> gtViewPackageTalliesFor: aView [
 	<gtView>
 	spaceTally ifNil: [ ^ aView empty ].

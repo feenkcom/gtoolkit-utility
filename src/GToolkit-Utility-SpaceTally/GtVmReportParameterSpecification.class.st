@@ -52,16 +52,16 @@ GtVmReportParameterSpecification >> beNumericalComparableConfig [
 ]
 
 { #category : #accessing }
-GtVmReportParameterSpecification >> formatValue: aValue [
-	^ self parameterType formatValue:  aValue
-]
-
-{ #category : #accessing }
 GtVmReportParameterSpecification >> formattedDiffFrom: aPreviousValue to: aCurrentValue [
 	^ diffStrategy 
 		formattedDiffFrom: aPreviousValue 
 		to: aCurrentValue 
 		forType: self
+]
+
+{ #category : #accessing }
+GtVmReportParameterSpecification >> formatValue: aValue [
+	^ self parameterType formatValue:  aValue
 ]
 
 { #category : #accessing }
