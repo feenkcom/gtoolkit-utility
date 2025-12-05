@@ -13,6 +13,13 @@ GtSpaceTallyItemsGroup >> gtOverviewData [
 ]
 
 { #category : #views }
+GtSpaceTallyItemsGroup >> gtSpecificSizeInMemory [
+	^self sizeInMemory 
+		+ items gtSpecificSizeInMemory 
+		+ (items sumNumbers: [ :each | each gtSpecificSizeInMemory ])
+]
+
+{ #category : #views }
 GtSpaceTallyItemsGroup >> gtViewItemsFor: aView [
 	<gtView>
 

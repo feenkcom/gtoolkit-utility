@@ -121,6 +121,16 @@ GtSpaceTallyItem >> gtSpaceDetailsFor: aView [
 ]
 
 { #category : #views }
+GtSpaceTallyItem >> gtSpecificSizeInMemory [
+	^self sizeInMemory 
+		+ detailsPerSpace gtSpecificSizeInMemory 
+		+ (detailsPerSpace sumNumbers: [ :each | each gtSpecificSizeInMemory ])
+		+ (analyzedClassName class = ByteString 
+				ifTrue: [ analyzedClassName sizeInMemory  ] 
+				ifFalse: [ 0 ])
+]
+
+{ #category : #views }
 GtSpaceTallyItem >> gtSummaryAttributes [
 	^{
 		'Class' -> self analyzedClassName.
