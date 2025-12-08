@@ -1,7 +1,7 @@
 Class {
 	#name : #GtPharoDebugLogMethodFrame,
 	#superclass : #GtPharoDebugLogFrame,
-	#category : 'GToolkit-PharoDebug-Model'
+	#category : #'GToolkit-PharoDebug-Model'
 }
 
 { #category : #'as yet unclassified' }

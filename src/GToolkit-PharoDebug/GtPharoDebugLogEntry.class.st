@@ -8,15 +8,16 @@ Class {
 		'timestamp',
 		'frames'
 	],
-	#category : 'GToolkit-PharoDebug-Model'
+	#category : #'GToolkit-PharoDebug-Model'
 }
 
 { #category : #accessing }
 GtPharoDebugLogEntry >> contents [
-
-	^ logInspector file readStreamDo: [ :stream |
-		stream position: startIndex.
-		stream next: endIndex - startIndex ]
+	^ logInspector source readStreamDo: [ :stream | 
+			stream position: (startIndex = -1 
+				ifTrue: [ 0 ] 
+				ifFalse: [ startIndex ]).
+			stream next: endIndex - startIndex ]
 ]
 
 { #category : #accessing }
@@ -129,7 +130,7 @@ GtPharoDebugLogEntry >> parseFrames [
 GtPharoDebugLogEntry >> printOn: aStream [
 	| ts |
 
-	(logInspector isNil or: [ logInspector file isNil ]) ifTrue:
+	(logInspector isNil or: [ logInspector source isNil ]) ifTrue:
 		[ ^ super printOn: aStream ].
 
 	ts := self timestamp

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : 'GToolkit-PharoDebug-Model'
+	#category : #'GToolkit-PharoDebug-Model'
 }
 
 { #category : #'instance creation' }
