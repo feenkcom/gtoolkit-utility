@@ -2,22 +2,17 @@ Class {
 	#name : #GtPharoDebugLogInspector,
 	#superclass : #Object,
 	#instVars : [
-		'file'
+		'source'
 	],
 	#category : #'GToolkit-PharoDebug-Model'
 }
 
-{ #category : #accessing }
-GtPharoDebugLogInspector >> file [
-	^ file
+{ #category : #'api - initialization' }
+GtPharoDebugLogInspector >> file: aFileReference [
+	source := GtPharoDebugLogFileSource new file: aFileReference
 ]
 
-{ #category : #accessing }
-GtPharoDebugLogInspector >> file: anObject [
-	file := anObject
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtPharoDebugLogInspector >> gtViewEntriesFor: aView [
 	<gtView>
 
@@ -27,11 +22,11 @@ GtPharoDebugLogInspector >> gtViewEntriesFor: aView [
 		items: [ self parseLogEntries ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtPharoDebugLogInspector >> initialize [
 
 	super initialize.
-	file := 'PharoDebug.log' asFileReference
+	source := GtPharoDebugLogFileSource new file: 'PharoDebug.log' asFileReference
 ]
 
 { #category : #private }
@@ -40,7 +35,7 @@ GtPharoDebugLogInspector >> parseLogEntries [
 
 	startIndex := -1.
 	entries := OrderedCollection new.
-	file readStreamDo: [ :stream |
+	source readStreamDo: [ :stream |
 		[ stream atEnd ] whileFalse:
 			[ | line |
 			linePosition := stream position.
@@ -57,4 +52,15 @@ GtPharoDebugLogInspector >> parseLogEntries [
 		startIndex: startIndex;
 		endIndex: linePosition -1).
 	^ entries
+]
+
+{ #category : #accessing }
+GtPharoDebugLogInspector >> source [
+	<return: #GtPharoDebugLogSource>
+	^ source
+]
+
+{ #category : #'api - initialization' }
+GtPharoDebugLogInspector >> string: aString [
+	source := GtPharoDebugLogStringSource new string: aString
 ]
