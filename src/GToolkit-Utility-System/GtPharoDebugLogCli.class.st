@@ -28,6 +28,13 @@ GtPharoDebugLogCli class >> initialize [
 ]
 
 { #category : #initialization }
+GtPharoDebugLogCli class >> pharoDebugLogPresent [
+	"Answer a boolean indicating if the pharoDebugLog option is present on the command line"
+	
+	^ ((Smalltalk argumentsStartingAtIndex: 0) indexOf: '--pharoDebugLog') > 0
+]
+
+{ #category : #initialization }
 GtPharoDebugLogCli class >> startUp: resuming [
 
 	resuming ifTrue: 
