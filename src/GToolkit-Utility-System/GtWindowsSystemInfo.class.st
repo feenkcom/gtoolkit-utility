@@ -53,14 +53,18 @@ GtWindowsSystemInfo >> freeMemory [
 { #category : #'cpu info' }
 GtWindowsSystemInfo >> numberOfCores [
 	"Answer the number of cores on the host"
-	| proc |
+	| proc numberString result |
 
 	proc := (GtSubprocessWithInMemoryOutput 
 		command: 'powershell.exe'
 		arguments: #('(Get-WmiObject Win32_Processor).NumberOfCores'))
-			errorBlock: [ :ex | self error: 'Unable to retrieve number of cores' ];
+			errorBlock: [ :ex | self error: 'Unable to retrieve number of cores: ', ex printString ];
 			runAndWait.
-	^ proc stdout asNumber.
+	[ numberString := proc stdout.
+	result := numberString asNumber ]
+		on: Error
+		do: [ :ex | self error: 'Unable to convert: ', numberString printString, ' to a number: ', ex printString ].
+	^ result.
 ]
 
 { #category : #'cpu info' }

@@ -40,7 +40,7 @@ GtMacSystemInfo >> numberOfCores [
 	proc := (GtSubprocessWithInMemoryOutput 
 		command: 'sysctl'
 		arguments: #('-a' 'machdep.cpu.core_count'))
-			errorBlock: [ :ex | self error: 'Unable to retrieve number of cores' ];
+			errorBlock: [ :ex | self error: 'Unable to retrieve number of cores: ', ex printString ];
 			runAndWait.
 	^ (self colonSeparatedGet: 'machdep.cpu.core_count' fromString: proc stdout) asNumber.
 ]
