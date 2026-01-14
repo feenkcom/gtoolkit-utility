@@ -314,6 +314,11 @@ GtResourceReference >> exists [
 	^ self fileReference exists
 ]
 
+{ #category : #initialization }
+GtResourceReference >> fileIn [
+	self fileReference fileIn
+]
+
 { #category : #accessing }
 GtResourceReference >> fileReference [
 	<return: #FileReference>
