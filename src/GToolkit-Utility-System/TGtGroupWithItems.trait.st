@@ -53,6 +53,14 @@ TGtGroupWithItems >> groupedBy: aBlock having: conditionBlock [
 	^ (self groupedBy: aBlock) select: conditionBlock
 ]
 
+{ #category : #private }
+TGtGroupWithItems >> items: aCollection [
+	"Set the receiver's items.
+	Only for serialization."
+
+	items := aCollection asOrderedCollection
+]
+
 { #category : #printing }
 TGtGroupWithItems >> printOn: aStream [
 	super printOn: aStream.

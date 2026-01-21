@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDummyItemGroupExamples,
 	#superclass : #Object,
-	#category : #'GToolkit-Utility-System-Examples'
+	#category : 'GToolkit-Utility-System-Examples'
 }
 
 { #category : #'as yet unclassified' }

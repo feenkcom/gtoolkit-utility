@@ -154,18 +154,18 @@ GtSubprocessWithInMemoryOutput >> commandLineString [
 			separatedBy: [ stream nextPut: Character space ] ]
 ]
 
+{ #category : #accessing }
+GtSubprocessWithInMemoryOutput >> environmentAt: key put: value [
+
+	self envVariables at: key put: value.
+]
+
 { #category : #'env building' }
 GtSubprocessWithInMemoryOutput >> envVariables [
 	"Answer the dictionary of environment variables that will be passed to the sub-process.
 	If nil, they are inherited from the parent process (Gt)"
 
 	^ envVariables ifNil: [ envVariables := Dictionary new ]
-]
-
-{ #category : #accessing }
-GtSubprocessWithInMemoryOutput >> environmentAt: key put: value [
-
-	self envVariables at: key put: value.
 ]
 
 { #category : #accessing }
@@ -579,7 +579,7 @@ GtSubprocessWithInMemoryOutput >> wait [
 ]
 
 { #category : #'api - future' }
-GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
+GtSubprocessWithInMemoryOutput >> waitTimeoutMilliseconds: anInteger [
 	"Wait for the receiver to finish up anInteger milliSeconds.
 	Only valid when the process was started with #runAndSignal."
 	| timedOut |
@@ -591,7 +591,7 @@ GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
 ]
 
 { #category : #'api - future' }
-GtSubprocessWithInMemoryOutput >> waitTimeoutMilliseconds: anInteger [
+GtSubprocessWithInMemoryOutput >> waitTimeoutMSecs: anInteger [
 	"Wait for the receiver to finish up anInteger milliSeconds.
 	Only valid when the process was started with #runAndSignal."
 	| timedOut |
