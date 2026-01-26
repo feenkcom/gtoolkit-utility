@@ -102,6 +102,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			package: 'GToolkit-Utility-StackOverflowFuture'  with: [
 				spec requires: #('GToolkit-Utility-StackOverflow' 'Futures' ) ];
 			package: 'GToolkit-Utility-Streams';
+			package: 'GToolkit-Utility-SUnit';
 			package: 'GToolkit-Utility-Tests' with: [
 				spec requires: #('GToolkitFileUtility' ). ];
 			package: 'GToolkit-Utility-Logging'  with: [
