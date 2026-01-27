@@ -7,7 +7,7 @@ It is similar to ShouldBeImplemented, with a slightly different meaning.
 Class {
 	#name : #NotYetTested,
 	#superclass : #SelectorException,
-	#category : 'GToolkit-Utility-System-Exceptions'
+	#category : #'GToolkit-Utility-System-Exceptions'
 }
 
 { #category : #printing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExternalProcessExamplesUnixCommands,
 	#superclass : #GtExternalProcessExamplesCommands,
-	#category : 'GToolkit-Utility-System-Examples'
+	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #private }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtDummyItemAGroup,
 	#superclass : #GtDummyItemGroup,
-	#category : 'GToolkit-Utility-System-Examples'
+	#category : #'GToolkit-Utility-System-Examples'
 }
 
 { #category : #accessing }

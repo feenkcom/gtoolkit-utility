@@ -21,7 +21,7 @@ Class {
 		'lastRetrievedTime',
 		'updateState'
 	],
-	#category : 'GToolkit-Utility-System-Cache'
+	#category : #'GToolkit-Utility-System-Cache'
 }
 
 { #category : #'instance creation' }
