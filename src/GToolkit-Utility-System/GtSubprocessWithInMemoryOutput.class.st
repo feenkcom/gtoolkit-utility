@@ -246,6 +246,18 @@ GtSubprocessWithInMemoryOutput >> gtStdoutFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtSubprocessWithInMemoryOutput >> gtSummaryFor: aView [
+	<gtView>
+
+	process ifNil: [ ^ aView empty ].
+	^ aView forward
+		title: 'Summary';
+		priority: 10;
+		object: [ process ];
+		view: #gtSummaryFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtSubprocessWithInMemoryOutput >> gtSwitchFor: anAction [
 	<gtAction>
 	^ anAction button
