@@ -19,6 +19,19 @@ GtSUnitTestWithResult >> gtSourceCodeFor: aView [
 ]
 
 { #category : #views }
+GtSUnitTestWithResult >> gtViewExampleComparisonFailureDiffFor: aView [
+	<gtView>
+
+	self isGtComparisonFailureExample	ifFalse: [ ^ aView empty ].
+	
+	^(aView forward)
+		title: 'Comparison Diff';
+		priority: 6;
+		object: [ self result ];
+		view: #gtViewExampleComparisonFailureDiffFor:
+]
+
+{ #category : #views }
 GtSUnitTestWithResult >> gtViewExceptionMessageFor: aView [
 	<gtView>
 	(self isError or: [ self isFailure ]) ifFalse: [ ^ aView empty ].
@@ -53,6 +66,12 @@ GtSUnitTestWithResult >> isError [
 { #category : #testing }
 GtSUnitTestWithResult >> isFailure [
 	^ self hasResult and: [ self result isFailure ]
+]
+
+{ #category : #views }
+GtSUnitTestWithResult >> isGtComparisonFailureExample [
+	^ self hasResult and: [
+			self result isGtComparisonFailureExample ]
 ]
 
 { #category : #testing }
