@@ -70,6 +70,20 @@ GtSUnitTestResult >> gtSourceCodeFor: aView [
 		view: #gtSourceCodeFor:
 ]
 
+{ #category : #views }
+GtSUnitTestResult >> gtViewExampleComparisonFailureDiffFor: aView [
+	<gtView>
+
+	self isGtComparisonFailureExample ifFalse: [ ^ aView empty  ].
+	
+	^(aView forward)
+		title: 'Comparison Diff';
+		priority: 6;
+		object: [
+				self exception ];
+		view: #gtViewDiffFor:
+]
+
 { #category : #testing }
 GtSUnitTestResult >> isError [
 	^state = 'error'
@@ -97,6 +111,12 @@ GtSUnitTestResult >> isFailure [
 GtSUnitTestResult >> isFailure: aTestCase [
 	"API compatible with TestResult"
 	^ self ifFailure and: [testCase = aTestCase ]
+]
+
+{ #category : #views }
+GtSUnitTestResult >> isGtComparisonFailureExample [
+	^ self isError and: [ 
+			self exception class name = #GtLExampleDataComparisonException ]
 ]
 
 { #category : #testing }
