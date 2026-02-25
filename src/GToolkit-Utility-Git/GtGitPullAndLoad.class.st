@@ -74,10 +74,14 @@ GtGitPullAndLoad >> recover [
 	"Retrieving the repository has the side-effect of creating it if required"
 	self repository.
 	"Don't worry about merge warnings, we'll be overwriting everything anyway."
-	[ self mainBranch pull ]
+	[ | mb |
+	mb := self mainBranch.
+	mb checkout: (IceCheckoutDoNotLoadPackages new
+			committish: mainBranch;
+			yourself).
+	mb pull. ]
 		on: IceExperimentalFeature
 		do: [ :ex | ex resume ].
-	self mainBranch checkout.
 ]
 
 { #category : #accessing }
