@@ -24,3 +24,13 @@ GtObjectComparerValue >> object [
 GtObjectComparerValue >> object: anObject [
 	object := anObject
 ]
+
+{ #category : #'as yet unclassified' }
+GtObjectComparerValue >> valueDisplayOn: s [ 
+	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+GtObjectComparerValue >> valueDisplayString [
+	^ String streamContents: [:s | self valueDisplayOn: s ]
+]

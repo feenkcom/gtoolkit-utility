@@ -80,14 +80,11 @@ GtObjectComparer >> gtParallelListFor: aView [
 	values
 		do: [ :aValue | 
 			tree
-				column: aValue gtDisplayString
+				column: aValue valueDisplayString
 				do: [ :aColumn | 
 					aColumn
 						text: [ :each | 
-							(each stringValueOfObject: aValue) asRopedText glamorousRegularFont
-								, String space asRopedText glamorousRegularFont glamorousRegularSmallSize
-								, ((each stringValueOfObject: aValue) class name asRopedText glamorousRegularFont
-										glamorousRegularSmallSize foreground: Color veryLightGray) ];
+							(each textForValueOfObject: aValue) ];
 						background: [ :cellValue :eachRow | 
 							eachRow hasDifferences
 								ifTrue: [ BrGlamorousColors failureBackgroundColor muchLighter ]
@@ -137,11 +134,11 @@ GtObjectComparer >> parent: anObject [
 ]
 
 { #category : #accessing }
-GtObjectComparer >> stringValueOfObject: anObject [
+GtObjectComparer >> textForValueOfObject: anObject [
 	| aValue index |
 	index := self topMostParent values indexOf: anObject.
 	aValue := values at: index.
-	^ aValue value
+	^ aValue textForValue
 ]
 
 { #category : #private }

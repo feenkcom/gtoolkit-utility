@@ -33,6 +33,14 @@ GtObjectComparerSlotValue >> slotName: eachSlotName [
 	slotName := eachSlotName
 ]
 
+{ #category : #'as yet unclassified' }
+GtObjectComparerSlotValue >> textForValue [
+	^ self valueDisplayString asRopedText glamorousRegularFont
+		, String space asRopedText glamorousRegularFont glamorousRegularSmallSize
+		, (self value class name asRopedText glamorousRegularFont
+				glamorousRegularSmallSize foreground: Color veryLightGray)
+]
+
 { #category : #accessing }
 GtObjectComparerSlotValue >> value [
 	^ value
@@ -41,4 +49,9 @@ GtObjectComparerSlotValue >> value [
 { #category : #accessing }
 GtObjectComparerSlotValue >> value: anObject [
 	value := anObject
+]
+
+{ #category : #printing }
+GtObjectComparerSlotValue >> valueDisplayOn: aStream [
+	self value gtDisplayOn: aStream
 ]

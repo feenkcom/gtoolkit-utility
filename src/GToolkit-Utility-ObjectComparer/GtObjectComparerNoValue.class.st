@@ -16,3 +16,13 @@ GtObjectComparerNoValue >> gtDisplayOn: aStream [
 GtObjectComparerNoValue >> hasValue [
 	^ false
 ]
+
+{ #category : #'as yet unclassified' }
+GtObjectComparerNoValue >> textForValue [
+	^ self valueDisplayString asRopedText glamorousRegularFont
+]
+
+{ #category : #printing }
+GtObjectComparerNoValue >> valueDisplayOn: aStream [
+	aStream nextPutAll: '—'
+]

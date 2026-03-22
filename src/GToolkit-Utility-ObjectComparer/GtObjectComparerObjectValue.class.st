@@ -18,7 +18,20 @@ GtObjectComparerObjectValue >> hasValue [
 	^ true
 ]
 
+{ #category : #'as yet unclassified' }
+GtObjectComparerObjectValue >> textForValue [
+	^ self valueDisplayString asRopedText glamorousRegularFont
+		, String space asRopedText glamorousRegularFont glamorousRegularSmallSize
+		, (self value class name asRopedText glamorousRegularFont
+				glamorousRegularSmallSize foreground: Color veryLightGray)
+]
+
 { #category : #accessing }
 GtObjectComparerObjectValue >> value [
 	^ object
+]
+
+{ #category : #printing }
+GtObjectComparerObjectValue >> valueDisplayOn: aStream [
+	self value gtDisplayOn: aStream
 ]
