@@ -74,13 +74,20 @@ GtObjectComparer >> gtParallelListFor: aView [
 			priority: 10;
 			items: [ {self} ];
 			children: [ :each | each childComparers ];
-			column: 'Slot' text: [ :each | each label ].
-	values do: [ :aValue | 
+			column: 'Slot'
+				text: [ :each | each label ]
+				width: 150.
+	values
+		do: [ :aValue | 
 			tree
 				column: aValue gtDisplayString
 				do: [ :aColumn | 
 					aColumn
-						text: [ :each | each stringValueOfObject: aValue ];
+						text: [ :each | 
+							(each stringValueOfObject: aValue) asRopedText glamorousRegularFont
+								, String space asRopedText glamorousRegularFont glamorousRegularSmallSize
+								, ((each stringValueOfObject: aValue) class name asRopedText glamorousRegularFont
+										glamorousRegularSmallSize foreground: Color veryLightGray) ];
 						background: [ :cellValue :eachRow | 
 							eachRow hasDifferences
 								ifTrue: [ BrGlamorousColors failureBackgroundColor muchLighter ]
