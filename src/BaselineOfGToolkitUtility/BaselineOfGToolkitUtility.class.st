@@ -118,7 +118,13 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				package: 'GToolkit-Utility-ExtensionMethodsAnalysis';
 				package: 'GToolkit-Utility-Deprecation';
 				package: 'GToolkit-Utility-Algorithms';
-				package: 'GToolkit-Utility-RB';
+				package: 'GToolkit-Utility-RB'.
+			self 
+				forPharo13AndNewer: [] 
+				forOlder: [
+						spec package: 'GToolkit-Utility-RB-Pharo12Extensions' with: [ 
+							spec requires: #('GToolkit-Utility-RB') ] ].
+			spec
 				package: 'GToolkit-Utility-ProcessAnalysis';
 				package: 'GToolkit-Releaser-Logging-Analysis'
 					with: [ spec requires: #('GToolkit-Utility-Logging') ];
