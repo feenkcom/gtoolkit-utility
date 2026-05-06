@@ -120,6 +120,26 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 ]
 
 { #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_withAbsolutePath [
+	<gtExample>
+	<return: #GtResourceReference>
+	| aLocator aFileReference aRootFileReference |
+	aLocator := self fileLocator.
+	aFileReference := aLocator asFileReference.
+
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
+
+	aRootFileReference := aFileReference withPath: Path root.
+	
+	self assert: aRootFileReference class equals: FileReference.
+	self assert: aRootFileReference isAbsolute.
+
+	^ aRootFileReference
+]
+
+{ #category : #'examples - file locator' }
 GtResourcesUtilityExamples >> fileLocator_withParents [
 	<gtExample>
 	<return: #Array>

@@ -215,8 +215,10 @@ GtResourceReference >> copyTo: aReference [
 ]
 
 { #category : #copying }
-GtResourceReference >> copyWithPath: newPath [
-	^ self copy path: newPath
+GtResourceReference >> copyWithPath: aNewPath [
+	^ aNewPath isAbsolute
+		ifTrue: [ self fileReference copyWithPath: aNewPath ]
+		ifFalse: [ self copy path: aNewPath ]
 ]
 
 { #category : #operations }
