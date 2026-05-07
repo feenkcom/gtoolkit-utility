@@ -304,7 +304,7 @@ TGtGroup >> size [
 
 { #category : #accessing }
 TGtGroup >> sorted: aPredicate [
-	^ self items sorted: aPredicate
+	^ self species withAll:  (self items sorted: aPredicate)
 ]
 
 { #category : #accessing }
