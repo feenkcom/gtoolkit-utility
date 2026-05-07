@@ -120,6 +120,122 @@ GtResourcesUtilityExamples >> fileLocator_resolve [
 ]
 
 { #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_resourceResolvesResource [
+	"See https://github.com/feenkcom/gtoolkit/issues/3984
+	case: same resource path"
+	<gtExample>
+	<return: #GtResourceReference>
+	| aLocator aFileReference aResolvedReference anotherLocator |
+	aLocator := FileLocator gtResource / 'feenkcom' / 'gtoolkit'.
+	aFileReference := aLocator asFileReference.
+
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
+
+	anotherLocator := (FileLocator gtResource / 'feenkcom' / 'gtoolkit') resolve.
+
+	self assert: anotherLocator class equals: GtResourceReference.
+	self assert: anotherLocator relativePath isAbsolute not.
+	self assert: anotherLocator path isAbsolute.
+
+	aResolvedReference := aLocator resolve: anotherLocator.
+
+	self assert: aResolvedReference class equals: GtResourceReference.
+	self assert: aResolvedReference relativePath isAbsolute not.
+	self assert: aResolvedReference path isAbsolute.
+	self assert: aResolvedReference exists.
+	self assert: aResolvedReference resolve equals: anotherLocator resolve.
+
+	^ aResolvedReference
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_resourceResolvesResource2 [
+	"See https://github.com/feenkcom/gtoolkit/issues/3984
+	case: deeper the second resource path"
+
+	<gtExample>
+	<return: #GtResourceReference>
+	| aLocator aFileReference aResolvedReference anotherLocator |
+	aLocator := FileLocator gtResource / 'feenkcom' / 'gtoolkit'.
+	aFileReference := aLocator asFileReference.
+
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
+
+	anotherLocator := (FileLocator gtResource / 'feenkcom' / 'gtoolkit' / 'doc')
+			resolve.
+
+	self assert: anotherLocator class equals: GtResourceReference.
+	self assert: anotherLocator relativePath isAbsolute not.
+	self assert: anotherLocator path isAbsolute.
+
+	aResolvedReference := aLocator resolve: anotherLocator.
+
+	self assert: aResolvedReference class equals: GtResourceReference.
+	self assert: aResolvedReference relativePath isAbsolute not.
+	self assert: aResolvedReference path isAbsolute.
+	self assert: aResolvedReference exists.
+	self assert: aResolvedReference resolve equals: anotherLocator resolve.
+
+	^ aResolvedReference
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_resourceResolvesResource3 [
+	"See https://github.com/feenkcom/gtoolkit/issues/3984
+	case: deeper the first resource path"
+
+	<gtExample>
+	<return: #GtResourceReference>
+	| aLocator aFileReference aResolvedReference anotherLocator |
+	aLocator := FileLocator gtResource / 'feenkcom' / 'gtoolkit' / 'doc'.
+	aFileReference := aLocator asFileReference.
+
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
+
+	anotherLocator := (FileLocator gtResource / 'feenkcom' / 'gtoolkit') resolve.
+
+	self assert: anotherLocator class equals: GtResourceReference.
+	self assert: anotherLocator relativePath isAbsolute not.
+	self assert: anotherLocator path isAbsolute.
+
+	aResolvedReference := aLocator resolve: anotherLocator.
+
+	self assert: aResolvedReference class equals: GtResourceReference.
+	self assert: aResolvedReference relativePath isAbsolute not.
+	self assert: aResolvedReference path isAbsolute.
+	self assert: aResolvedReference exists.
+	self assert: aResolvedReference resolve equals: anotherLocator resolve.
+
+	^ aResolvedReference
+]
+
+{ #category : #'examples - file locator' }
+GtResourcesUtilityExamples >> fileLocator_withAbsolutePath [
+	<gtExample>
+	<return: #GtResourceReference>
+	| aLocator aFileReference aRootFileReference |
+	aLocator := self fileLocator.
+	aFileReference := aLocator asFileReference.
+
+	self assert: aFileReference class equals: GtResourceReference.
+	self assert: aFileReference relativePath isAbsolute not.
+	self assert: aFileReference path isAbsolute.
+
+	aRootFileReference := aFileReference withPath: Path root.
+	
+	self assert: aRootFileReference class equals: FileReference.
+	self assert: aRootFileReference isAbsolute.
+
+	^ aRootFileReference
+]
+
+{ #category : #'examples - file locator' }
 GtResourcesUtilityExamples >> fileLocator_withParents [
 	<gtExample>
 	<return: #Array>

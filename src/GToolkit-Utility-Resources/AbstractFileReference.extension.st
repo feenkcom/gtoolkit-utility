@@ -22,10 +22,14 @@ AbstractFileReference >> makeRelativeToResourceReference: aGtResourceReference [
 
 { #category : #'*GToolkit-Utility-Resources' }
 AbstractFileReference >> resolveResourceReference: aResource [
-
 	<return: #AbstractFileReference>
 	^ self fileSystem = aResource fileSystem
-		  ifTrue: [ 
-		  	self copyWithPath: (self path resolvePath: aResource relativePath) ]
-		  ifFalse: [ aResource ]
+		ifTrue: [ | myPath itsRelativePath |
+			myPath := self path.
+			itsRelativePath := aResource relativePath.
+			myPath = itsRelativePath ifTrue: [ ^ aResource ].
+			(myPath containsPath: itsRelativePath) ifTrue: [ ^ aResource ].
+			(itsRelativePath containsPath: myPath) ifTrue: [ ^ aResource ].
+			self copyWithPath: (myPath resolvePath: itsRelativePath) ]
+		ifFalse: [ aResource ]
 ]
