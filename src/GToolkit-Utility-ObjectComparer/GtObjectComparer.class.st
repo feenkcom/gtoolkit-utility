@@ -14,11 +14,11 @@ Class {
 
 { #category : #'instance creation' }
 GtObjectComparer class >> compareAll: aCollection [
-	^ self new values: 
-		(aCollection
-				collect: [ :each | 
-					GtObjectComparerObjectValue new
-						object: each ])
+	| comparerValues |
+	comparerValues := aCollection
+			collect: [ :each | GtObjectComparerObjectValue new object: each ].
+	^ self new
+		values: comparerValues
 ]
 
 { #category : #accessing }
@@ -84,7 +84,7 @@ GtObjectComparer >> gtParallelListFor: aView [
 				do: [ :aColumn | 
 					aColumn
 						text: [ :each | 
-							(each textForValueOfObject: aValue) ];
+							(self textForValueFrom: each ofObject: aValue) ];
 						background: [ :cellValue :eachRow | 
 							eachRow hasDifferences
 								ifTrue: [ BrGlamorousColors failureBackgroundColor muchLighter ]
@@ -134,10 +134,10 @@ GtObjectComparer >> parent: anObject [
 ]
 
 { #category : #accessing }
-GtObjectComparer >> textForValueOfObject: anObject [
+GtObjectComparer >> textForValueFrom: aComparer ofObject: anObject [
 	| aValue index |
-	index := self topMostParent values indexOf: anObject.
-	aValue := values at: index.
+	index := self values indexOf: anObject.
+	aValue := aComparer values at: index.
 	^ aValue textForValue
 ]
 
