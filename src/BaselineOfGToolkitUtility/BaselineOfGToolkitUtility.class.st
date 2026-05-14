@@ -126,6 +126,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 							spec requires: #('GToolkit-Utility-RB') ] ].
 			spec
 				package: 'GToolkit-Utility-ProcessAnalysis';
+				package: 'GToolkit-Utility-SystemPerformance';
 				package: 'GToolkit-Releaser-Logging-Analysis'
 					with: [ spec requires: #('GToolkit-Utility-Logging') ];
 				package: 'GToolkit-Utility-ObjectConnections';
