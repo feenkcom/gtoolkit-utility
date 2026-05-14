@@ -4,6 +4,8 @@ GtQpsSamples provides a mechanism for measuring the system load of a specified t
 The result is similar to the `load average` figure from the linux `top` utility, i.e. we want the average load, i.e. the `Count` column in the {{gtClass:GtQpsSamples}} `Samples` view to regular have a value of 0 or 1.  Long sequences where the value is greater than 1 indicates that the system is CPU limited.
 
 For processes that are taking more than the exepected time the call stack is provided with each sample.
+
+Note that the sample should be run at high priority as it only records processes of lower priority than the sample process.
 "
 Class {
 	#name : #GtQpsSamples,
