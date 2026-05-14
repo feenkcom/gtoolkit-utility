@@ -82,25 +82,25 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec postLoadDoIt: #'postLoadChanges:'.
 		spec
 			baseline: 'GToolkitAnnouncerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'GToolkitObjectComparerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'GToolkitFileUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'GToolkitSessionManagerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 		spec
 			baseline: 'Futures' with: [
 				spec repository: 'github://feenkcom/pharo-futures:v0.6.159/src' ].
@@ -128,6 +128,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 		spec package: 'GToolkit-Utility-RB-Pharo12Extensions' with: [
 			spec requires: #(#'GToolkit-Utility-RB') ].
 		spec package: 'GToolkit-Utility-ProcessAnalysis'.
+		spec package: 'GToolkit-Utility-SystemPerformance'.
 		spec package: 'GToolkit-Releaser-Logging-Analysis' with: [
 			spec requires: #(#'GToolkit-Utility-Logging') ].
 		spec package: 'GToolkit-Utility-ObjectConnections'.

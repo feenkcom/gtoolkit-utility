@@ -10,7 +10,7 @@ BaselineOfGToolkitAnnouncerUtility >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.32/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.33/src' ].
 
 		spec package: 'GToolkit-Utility-Announcer' with: [
 			spec requires: #(#GToolkitBasicUtility) ].
