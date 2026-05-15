@@ -13,12 +13,14 @@ BaselineOfGToolkitFileUtility >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'GToolkitAssertionUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
+			baseline: 'GToolkitAnnouncerUtility'
+					with: [ spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ];
 			baseline: 'FFICHeaderExtractor' with: [
 				spec repository: 'github://pharo-contributions/FFICHeaderExtractor:v1.0.2/repository' ].
 		spec 
 			package: 'GToolkit-Utility-URL';
 			package: 'GToolkit-Utility-System' with: [
-				spec requires: #('GToolkitAssertionUtility' 'FFICHeaderExtractor' 'GToolkitResourcesUtility'). ];
+				spec requires: #('GToolkitAssertionUtility' 'FFICHeaderExtractor' 'GToolkitResourcesUtility' 'GToolkitAnnouncerUtility'). ];
 			package: 'GToolkit-Utility-File' with: [
 				spec requires: #('GToolkit-Utility-System' 'GToolkitResourcesUtility' ). ]. ].
 
