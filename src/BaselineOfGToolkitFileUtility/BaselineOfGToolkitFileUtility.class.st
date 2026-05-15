@@ -18,7 +18,7 @@ BaselineOfGToolkitFileUtility >> baseline: spec [
 		spec 
 			package: 'GToolkit-Utility-URL';
 			package: 'GToolkit-Utility-System' with: [
-				spec requires: #('GToolkitAssertionUtility' 'FFICHeaderExtractor'). ];
+				spec requires: #('GToolkitAssertionUtility' 'FFICHeaderExtractor' 'GToolkitResourcesUtility'). ];
 			package: 'GToolkit-Utility-File' with: [
 				spec requires: #('GToolkit-Utility-System' 'GToolkitResourcesUtility' ). ]. ].
 
