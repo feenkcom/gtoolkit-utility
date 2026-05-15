@@ -2,7 +2,7 @@ Trait {
 	#name : #TGtGroupWithItems,
 	#traits : 'TGtGroup + TGtGroupItems',
 	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
-	#category : #'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System-UI-Groups'
 }
 
 { #category : #accessing }

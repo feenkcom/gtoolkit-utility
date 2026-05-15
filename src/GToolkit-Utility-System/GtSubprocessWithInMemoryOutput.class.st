@@ -202,18 +202,6 @@ GtSubprocessWithInMemoryOutput >> exitStatusInterpreter [
 	^ process ifNotNil: #tryWait
 ]
 
-{ #category : #accessing }
-GtSubprocessWithInMemoryOutput >> gtCommandLineFor: aView [
-	<gtView>
-
-	^ aView textEditor
-		title: 'Command line';
-		priority: 30;
-		aptitude: BrGlamorousCodeEditorAptitude;
-		text: [ self commandLineString ];
-		actionUpdateButton
-]
-
 { #category : #ui }
 GtSubprocessWithInMemoryOutput >> gtStderrFor: aView [
 	<gtView>
@@ -255,15 +243,6 @@ GtSubprocessWithInMemoryOutput >> gtSummaryFor: aView [
 		priority: 10;
 		object: [ process ];
 		view: #gtSummaryFor:
-]
-
-{ #category : #'as yet unclassified' }
-GtSubprocessWithInMemoryOutput >> gtSwitchFor: anAction [
-	<gtAction>
-	^ anAction button
-		priority: 1;
-		icon: BrGlamorousVectorIcons shutdown;
-		action: [ self isRunning ifTrue: [ self kill ] ifFalse: [ self run ] ]
 ]
 
 { #category : #testing }

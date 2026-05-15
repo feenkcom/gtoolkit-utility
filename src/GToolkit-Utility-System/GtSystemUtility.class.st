@@ -74,3 +74,19 @@ GtSystemUtility class >> packageDefinitionFromString: aString [
 	
 	^ RGPackage named: aString asSymbol
 ]
+
+{ #category : #exceptions }
+GtSystemUtility class >> reportCatchedException: anException named: aString [
+	"Example:
+	[GtPharoWhenSendToExpanderStyler>>#style:ast:] Instance of GtCSSCoderViewModel did not understand #compositeVariableBindings"
+
+	NonInteractiveTranscript stdout
+		nextPut: $[;
+		nextPutAll: aString asString;
+		nextPut: $];
+		space;
+		print: anException;
+		cr.
+
+	anException emit
+]
