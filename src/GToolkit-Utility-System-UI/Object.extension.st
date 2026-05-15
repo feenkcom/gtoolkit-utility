@@ -1,6 +1,11 @@
 Extension { #name : #Object }
 
 { #category : #'*GToolkit-Utility-System-UI' }
+Object class >> gtGroupType [
+	^ GtBasicGroup
+]
+
+{ #category : #'*GToolkit-Utility-System-UI' }
 Object >> gtUpToVersion: versionString currentVersion: currentString do: upToBlock after: afterBlock [
 	"Evaluate upToBlock if versionString <= currentString, otherwise afterBlock.
 	versionString and currentString are semantic version numbers with an optional leading $v.

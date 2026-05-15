@@ -13,11 +13,6 @@ Object >> gtClassOrTraitFrom: aCollection [
 ]
 
 { #category : #'*GToolkit-Utility-System' }
-Object class >> gtGroupType [
-	^ GtBasicGroup
-]
-
-{ #category : #'*GToolkit-Utility-System' }
 Object >> gtMemcpyAddress [
 	"Answer the object that will be passed to primitiveCopyFromAtToAtSize"
 

@@ -3,5 +3,5 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System-UI-Groups'
 }
