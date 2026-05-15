@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtGroupTypedGrouping,
-	#category : #'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System-UI-Groups'
 }
 
 { #category : #accessing }

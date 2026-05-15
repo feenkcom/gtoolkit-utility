@@ -1,11 +1,11 @@
 Class {
-	#name : #ManifestGToolkitGToolkitUtilityAnnouncer,
+	#name : #ManifestGToolkitUtilityAnnouncer,
 	#superclass : #PackageManifest,
 	#category : #'GToolkit-Utility-Announcer-Manifest'
 }
 
 { #category : #asserting }
-ManifestGToolkitGToolkitUtilityAnnouncer class >> mustNotDependOn [
+ManifestGToolkitUtilityAnnouncer class >> mustNotDependOn [
 	^ { 
 		'Bloc'.
 		'Brick'.
@@ -13,7 +13,7 @@ ManifestGToolkitGToolkitUtilityAnnouncer class >> mustNotDependOn [
 ]
 
 { #category : #asserting }
-ManifestGToolkitGToolkitUtilityAnnouncer class >> mustOnlyDependOn [
+ManifestGToolkitUtilityAnnouncer class >> mustOnlyDependOn [
 	^ {'Announcements-Core'.
 		'Collections-Sequenceable'.
 		'Collections-Support'.
@@ -26,6 +26,6 @@ ManifestGToolkitGToolkitUtilityAnnouncer class >> mustOnlyDependOn [
 ]
 
 { #category : #asserting }
-ManifestGToolkitGToolkitUtilityAnnouncer class >> shouldDependOn [
+ManifestGToolkitUtilityAnnouncer class >> shouldDependOn [
 	^ {}
 ]

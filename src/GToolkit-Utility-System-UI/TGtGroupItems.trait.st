@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'items'
 	],
-	#category : #'GToolkit-Utility-System'
+	#category : #'GToolkit-Utility-System-UI-Groups'
 }
 
 { #category : #'instance - creation' }
