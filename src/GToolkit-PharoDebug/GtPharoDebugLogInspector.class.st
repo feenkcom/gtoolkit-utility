@@ -7,6 +7,28 @@ Class {
 	#category : #'GToolkit-PharoDebug-Model'
 }
 
+{ #category : #views }
+GtPharoDebugLogInspector class >> gtViewCurrentLogFor: aView [ 
+	<gtView>
+	<gtClassView>
+	
+	^ aView forward 
+			title: 'Default ', Smalltalk logFileName;
+			priority: 10;
+			object: [ self logInspectorForCurrentPharoDebugFile ];
+			view: #gtViewEntriesFor:;
+			actionButtonIcon: BrGlamorousVectorIcons inspect 
+				tooltip: 'Inspect instance' 
+				action: [ :aButton | aButton phlow 
+					spawnObject: self logInspectorForCurrentPharoDebugFile ]
+]
+
+{ #category : #accessing }
+GtPharoDebugLogInspector class >> logInspectorForCurrentPharoDebugFile [
+	^ self new 
+		file: FileLocator imageDirectory  /  Smalltalk logFileName
+]
+
 { #category : #'api - initialization' }
 GtPharoDebugLogInspector >> file: aFileReference [
 	source := GtPharoDebugLogFileSource new file: aFileReference
