@@ -44,13 +44,6 @@ GtPharoDebugLogInspector >> gtViewEntriesFor: aView [
 		items: [ self parseLogEntries ]
 ]
 
-{ #category : #initialization }
-GtPharoDebugLogInspector >> initialize [
-
-	super initialize.
-	source := GtPharoDebugLogFileSource new file: 'PharoDebug.log' asFileReference
-]
-
 { #category : #private }
 GtPharoDebugLogInspector >> parseLogEntries [
 	| startIndex entries linePosition |
