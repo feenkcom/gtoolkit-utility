@@ -5,6 +5,18 @@ ClapCommandSpec >> addGtGlobalOptions [
 	"Add global GT flags to the receiver.
 	These flags aren't processed using Clap, however beginning with Pharo 13 Clap doesn't ignore additional flags"
 
+	self class methods
+		select: [ :method | method hasPragmaNamed: #gtClapGlobalOptions ]
+		thenDo: [ :method | 
+			method valueWithReceiver: self ]
+]
+
+{ #category : #'*GToolkit-Utility-System' }
+ClapCommandSpec >> gtGlobalOptions [
+	"Add global GT flags to the receiver.
+	These flags aren't processed using Clap, however beginning with Pharo 13 Clap doesn't ignore additional flags"
+	<gtClapGlobalOptions>
+
 	self
 		add: ((ClapFlag id: #detachChanges) description: 'Close the default changes file for write and create a detached changes file');
 		add: ((ClapFlag id: #detachChangesDir) 
