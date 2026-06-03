@@ -27,4 +27,9 @@ ClapCommandSpec >> gtGlobalOptions [
 		add: ((ClapFlag id: #epiceaMemoryStore) description: 'Switch Epicea to an in-memory store');
 		add: ((ClapFlag id: #noGtImageUpdate) description: 'Don''t process image version preferences');
 		add: ((ClapFlag id: #noLepiterReload) description: 'Don''t reload lepiter on startup').
+	(parameters includesKey: #pharoDebugLog) ifFalse:
+		[ self add: ((ClapFlag id: #pharoDebugLog) 
+				description: 'PharoDebug.log location, see GtPharoDebugLogCli';
+				add: (ClapPositional id: #path);
+				yourself) ].
 ]
