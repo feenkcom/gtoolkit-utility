@@ -248,6 +248,12 @@ TGtGroup >> last: aCount [
 		withAll: (self items last: aCount)
 ]
 
+{ #category : #testing }
+TGtGroup >> notEmpty [
+
+	^ self items notEmpty
+]
+
 { #category : #accessing }
 TGtGroup >> overlappingPairsDo: aBlock [
 	^ self items overlappingPairsDo: aBlock
