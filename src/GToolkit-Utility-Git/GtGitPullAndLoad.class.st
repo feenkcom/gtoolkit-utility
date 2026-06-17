@@ -47,6 +47,15 @@ GtGitPullAndLoad >> ensureRepository [
 	^ newRepository
 ]
 
+{ #category : #actions }
+GtGitPullAndLoad >> forceReload [
+
+	self mainBranch packages 
+		select: [ :icePackage | icePackage isLoaded and: 
+						[ icePackage workingCopy isModified ] ]
+		thenDo: [ :icePackage | icePackage reload ]
+]
+
 { #category : #initialize }
 GtGitPullAndLoad >> initialize [
 
