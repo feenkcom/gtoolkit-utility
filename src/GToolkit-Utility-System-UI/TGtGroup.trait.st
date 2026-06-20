@@ -278,19 +278,24 @@ TGtGroup >> reject: aBlock [
 	^ self items reject: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : #removing }
 TGtGroup >> remove: anItem [
-	self items remove: anItem
+	^ self items remove: anItem
 ]
 
-{ #category : #accessing }
+{ #category : #removing }
 TGtGroup >> removeAll [
 	self items removeAll
 ]
 
-{ #category : #accessing }
+{ #category : #removing }
+TGtGroup >> removeAll: aCollection [
+	^ self items removeAll: aCollection
+]
+
+{ #category : #removing }
 TGtGroup >> removeLast [
-	self items removeLast
+	^ self items removeLast
 ]
 
 { #category : #accessing }

@@ -14,27 +14,27 @@ TGtGroupItems classSide >> withAll: aCollection [
 
 { #category : #accessing }
 TGtGroupItems >> add: anItem [
-	self items add: anItem
+	^ self items add: anItem
 ]
 
 { #category : #accessing }
 TGtGroupItems >> addAll: aCollection [
-	self items addAll: aCollection
+	^ self items addAll: aCollection
 ]
 
 { #category : #accessing }
 TGtGroupItems >> addFirst: anItem [
-	self items addFirst: anItem
+	^ self items addFirst: anItem
 ]
 
 { #category : #accessing }
 TGtGroupItems >> addItem: anItem [
-	self items add: anItem
+	^ self items add: anItem
 ]
 
 { #category : #accessing }
 TGtGroupItems >> addItems: aCollection [
-	self items addAll: aCollection
+	^ self items addAll: aCollection
 ]
 
 { #category : #initialization }
