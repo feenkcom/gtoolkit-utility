@@ -17,12 +17,11 @@ AbstractFileReference >> binaryContents [
 { #category : #'*GToolkit-Utility-File' }
 AbstractFileReference >> gtViewPharoDebugLogFor: aView [
 	<gtView>
+	self extension = 'log' ifFalse: [ ^ aView empty ].
+	(self basename includesSubstring: 'PharoDebug') ifFalse: [ ^ aView empty ].
+	self exists ifFalse: [ ^ aView empty ].
 
-	((self extension ~= 'log' and:
-	[ (self basename includesSubstring: 'PharoDebug') not ]) or: 
-		[ self exists not ]) ifTrue:
-			[ ^ aView empty ].
-	
+
 	^ aView forward
 		title: 'Entries';
 		priority: 10;
