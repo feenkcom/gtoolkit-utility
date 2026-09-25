@@ -7,7 +7,8 @@ Duration >> gtHumanReadableString [
 	self < 1 hour ifTrue: [ ^ self minutes asString , 'm ', self seconds asString, 's' ].
 	self < 1 day ifTrue: [ ^ self hours asString , 'h ', self minutes asString, 'm' ].
 	self < 1 year ifTrue: [ ^ self days asString , 'd ', self hours asString, 'h' ].
-	^ self printString
+	^ (self days // Date daysInMonth sum) asString , 'y '
+		, (self days \\ Date daysInMonth sum // 12) asString , 'm '.
 ]
 
 { #category : #'*GToolkit-Utility-System' }
