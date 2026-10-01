@@ -24,11 +24,12 @@ GtProcessStackOverflowChecker class >> anyCheckingProcess: aProcess [
 		anySatisfy: [ :i | i isCheckingProcess: aProcess ]
 ]
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 GtProcessStackOverflowChecker class >> checkDuring: aBlock [
+	<gsCode: '^ aBlock value'>
 	| checker |
 	checker := self startForProcess: Processor activeProcess.
-	^[aBlock value] ensure: [checker stopStackOverflowWatcher]
+	^ [ aBlock value ] ensure: [ checker stopStackOverflowWatcher ]
 ]
 
 { #category : #accessing }
@@ -40,6 +41,7 @@ GtProcessStackOverflowChecker class >> checkDuring: aBlock depth: anInteger [
 
 { #category : #accessing }
 GtProcessStackOverflowChecker class >> currentCheckerClass [
+	<gsCode: '^ self'>
 	^ CurrentCheckerClass ifNil: [ self ]
 ]
 
