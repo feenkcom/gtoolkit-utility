@@ -86,7 +86,7 @@ GtSystemUtility class >> reportCatchedException: anException named: aString [
 		nextPut: $];
 		space;
 		print: anException;
-		cr.
+		newLine.
 
 	anException emit
 ]
