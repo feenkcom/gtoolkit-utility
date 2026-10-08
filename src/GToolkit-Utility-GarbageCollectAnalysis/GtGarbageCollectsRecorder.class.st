@@ -94,19 +94,11 @@ GtGarbageCollectsRecorder >> initialize [
 
 { #category : #updating }
 GtGarbageCollectsRecorder >> install [
-	self 
-		forPharo12AndNewer: [
-			SmalltalkImage compile: ('garbageCollect
+	
+	SmalltalkImage compile: ('garbageCollect
 	^{1} defaultInstance
 		recordDuring: [ self primitiveGarbageCollect ]' format: {self class name})
-				classified: 'gt-patch'] 
-		forPharo11: [
-			SmalltalkImage compile: ('garbageCollect
-	^{1} defaultInstance
-		recordDuring: [ 
-			Object flushDependents.
-			self primitiveGarbageCollect ]' format: {self class name})
-				classified: 'memory space']
+				classified: 'gt-patch'
 ]
 
 { #category : #accessing }
@@ -154,19 +146,11 @@ GtGarbageCollectsRecorder >> startRecording [
 
 { #category : #updating }
 GtGarbageCollectsRecorder >> uninstall [
-	self 
-		forPharo12AndNewer: [
-			SmalltalkImage compile: 'garbageCollect
+	SmalltalkImage compile: 'garbageCollect
 	"Primitive. Reclaims all garbage and answers the size of the largest free chunk in old space."
 
 	^ self primitiveGarbageCollect'
-				classified: 'memory space'] 
-		forPharo11: [
-			SmalltalkImage compile: 'garbageCollect
-	"Primitive. Reclaims all garbage and answers the number of bytes of available space."
-	Object flushDependents.
-	^self primitiveGarbageCollect'
-				classified: 'memory space']
+				classified: 'memory space'
 ]
 
 { #category : #actions }
