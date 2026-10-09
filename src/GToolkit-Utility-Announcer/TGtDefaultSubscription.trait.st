@@ -57,7 +57,7 @@ TGtDefaultSubscription >> weak [
 { #category : #'announcer - subscription' }
 TGtDefaultSubscription >> when: anAnnouncementClass do: aValuable [
 	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that such method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
-		^ self announcer when: anAnnouncementClass do: aValuable
+		^ self when: anAnnouncementClass do: aValuable for: self
 ]
 
 { #category : #'announcer - subscription' }

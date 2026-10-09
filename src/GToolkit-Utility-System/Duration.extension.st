@@ -1,6 +1,12 @@
 Extension { #name : #Duration }
 
 { #category : #'*GToolkit-Utility-System' }
+Duration >> closeTo: anObject [
+	"For compatibility with code that uses numbers in combination with Duration"
+	^ self = anObject
+]
+
+{ #category : #'*GToolkit-Utility-System' }
 Duration >> gtHumanReadableString [
 	self < 0 seconds ifTrue: [ ^ '-', self negated gtHumanReadableString ].
 	self < 1 minute ifTrue: [ ^ self seconds asString, 's' ].
