@@ -84,9 +84,7 @@ GtProcessReport >> initializeFromProcess: aProcess [
 	id := aProcess gtId. 
 	name := aProcess name.
 	
-	ctx := (self 
-			forPharo12AndNewer: [ aProcess isActive ] 
-			forPharo11: [ aProcess isActiveProcess ])
+	ctx := aProcess isActive
 		ifTrue: [ thisContext sender ] 
 		ifFalse: [ aProcess suspendedContext ].	
 	ctx ifNotNil: [

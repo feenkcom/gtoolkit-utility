@@ -10,46 +10,6 @@ Class {
 	#category : #'GToolkit-Utility-SessionManager-Utilities'
 }
 
-{ #category : #'gt-extensions' }
-GtWorkingSession >> gtViewDetailsIn: aView [
-	<gtView>
-	^ self
-		forPharo12AndNewer: [ aView empty ]
-		forPharo11: [ 
-			aView columnedList
-				title: 'Details';
-				priority: 30;
-				items: [ {{#self.
-							self}.
-						{#id.
-							self id printString.
-							self id}.
-						{#creationTime.
-							self creationTime}.
-						{#deferredStartupActions.
-							deferredStartupActions size.
-							deferredStartupActions}}
-						, (self properties associations
-								collect: [ :association | 
-									{association key.
-										association value} ]) ];
-				column: #key
-					text: #first
-					weight: 0.5;
-				column: #value text: #second;
-				send: #last ]
-]
-
-{ #category : #printing }
-GtWorkingSession >> printOn: stream [
-	super printOn: stream.
-	
-	self 
-		forPharo12AndNewer: [] 
-		forPharo11: [
-			stream nextPut: $(; print: self id; nextPut: $)]
-]
-
 { #category : #'startup - shutdown' }
 GtWorkingSession >> runShutdown: isImageQuitting [
 	manager shutDownEvents removeAll.

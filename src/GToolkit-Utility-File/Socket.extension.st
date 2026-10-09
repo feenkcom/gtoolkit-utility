@@ -95,9 +95,6 @@ Socket >> waitForConnectionFor: timeout ifClosed: closedBlock ifTimedOut: timeou
 	<gtPharoPatch: #Pharo12>
 	| startTime msecsDelta msecsElapsed status |
 
-	self forPharo12AndNewer: [] forPharo11: 
-		[ self error: 'Not supported in Pharo11 and earlier' ].
-
 	self closeOnExec: true.
 	startTime := Time millisecondClockValue.
 	msecsDelta := (timeout * 1000) truncated.
