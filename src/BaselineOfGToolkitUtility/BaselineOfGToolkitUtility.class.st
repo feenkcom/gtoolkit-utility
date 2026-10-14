@@ -111,7 +111,6 @@ BaselineOfGToolkitUtility >> baseline: spec [
 				package: 'GToolkit-Utility-Logging'
 					with: [ spec requires: #('GToolkitFileUtility') ];
 				package: 'GToolkit-Utility-Properties';
-				package: 'GToolkit-Utility-ClassLoader';
 				package: 'GToolkit-Utility-UndeclaredReferences';
 				package: 'GToolkit-Utility-Git';
 				package: 'GToolkit-Utility-GitHub';
