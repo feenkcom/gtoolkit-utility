@@ -153,18 +153,27 @@ GtSpaceTallyHistory >> gtViewAnalyzedRepositoriesFor: aView [
 { #category : #'gt - extensions' }
 GtSpaceTallyHistory >> gtViewVersionsFor: aView [
 	<gtView>
-	
-	^ aView columnedList 
+	^ aView columnedList
 		title: 'Tally versions';
 		items: [ self spaceTallyVersions ];
-		column: 'Version' text: [ :aVersion |
-			aVersion indexWithLabel ];
-		column: 'Instance Count' text: [ :aVersion |
-			aVersion totalInstCount ];
-		column: 'Instances Size' text: [ :aVersion |
-			aVersion totalInstSpace humanReadableIsqByteSize ];
-		column: 'VM Memory Size' text: [ :aVersion |
-			aVersion vmMemorySize humanReadableIsqByteSize ]
+		column: 'Version' text: [ :aVersion | aVersion indexWithLabel ];
+		column: 'Instance Count' text: [ :aVersion | aVersion totalInstCount ];
+		column: 'Instances Size'
+			text: [ :aVersion | aVersion totalInstSpace humanReadableIsqByteSize ];
+		column: 'VM Memory Size'
+			text: [ :aVersion | aVersion vmMemorySize humanReadableIsqByteSize ];
+		withMultipleSelection;
+		contextItemLabel: 'Inspect'
+			action: [ :anElement :aCollection | 
+				anElement phlow
+					spawnObject: (aCollection size = 1 ifTrue: [ aCollection anyOne ] ifFalse: [ aCollection ]) ];
+		contextItemLabel: 'Compare versions'
+			action: [ :anElement :aCollection | 
+				anElement phlow
+					spawnObject: (GtSpaceTallyDiff new
+							sourceVersion: aCollection first;
+							targetVersion: aCollection second) ]
+			showIf: [ :aCollection :aSelection | aCollection size = 2 ]
 ]
 
 { #category : #initialization }
