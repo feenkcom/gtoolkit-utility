@@ -50,10 +50,12 @@ GtGitPullAndLoad >> ensureRepository [
 { #category : #actions }
 GtGitPullAndLoad >> forceReload [
 
-	self mainBranch packages 
-		select: [ :icePackage | icePackage isLoaded and: 
-						[ icePackage workingCopy isModified ] ]
-		thenDo: [ :icePackage | icePackage reload ]
+	[ self mainBranch packages
+		select: [ :icePackage | icePackage isLoaded and:
+				[ icePackage workingCopy isModified ] ]
+    thenDo: [ :icePackage | icePackage reload ] ]
+    	on: MCMergeOrLoadWarning
+      do: [ :ex | ex load ]
 ]
 
 { #category : #initialize }
