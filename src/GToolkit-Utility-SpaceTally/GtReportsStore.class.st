@@ -17,10 +17,18 @@ GtReportsStore >> description [
 ]
 
 { #category : #accessing }
-GtReportsStore >> entryFolderName: aFolderName filePrefix: aPrefix [
+GtReportsStore >> entryFolderName: aFolderName baseName: aBaseName [
 	^ GtReportsStoreEntry
 		store: self
 		folder: (self folderNamed: aFolderName)
+		baseName: aBaseName
+
+]
+
+{ #category : #accessing }
+GtReportsStore >> entryFolderName: aFolderName filePrefix: aPrefix [
+	^ self
+		entryFolderName: aFolderName
 		baseName: (self baseNameWithPrefix: aPrefix)
 
 ]

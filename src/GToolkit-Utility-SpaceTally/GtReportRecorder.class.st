@@ -54,7 +54,7 @@ GtReportRecorder >> gtActionInspectRecordingFor: anAction [
 		menuItemGroup: BrMenuItemGroupConfiguration navigation;
 		menuItemPreview: [ 'Recording of ' , self recordingName ];
 		action: [ :aButton |
-			aButton phlow spawnObject: (self recordingInto: GtReportsLocalStore default) ]
+			aButton phlow spawnObject: self recordingLocally ]
 
 ]
 
@@ -90,7 +90,7 @@ GtReportRecorder >> gtRecordAndSaveLocallyActionFor: anAction [
 		priority: 10;
 		action: [ :aButton |
 			aButton phlow
-				spawnObject: (self recordInBackgroundInto: GtReportsLocalStore default) ]
+				spawnObject: self recordLocallyInBackground ]
 
 ]
 
@@ -127,6 +127,18 @@ GtReportRecorder >> recordInBackgroundInto: aStore [
 ]
 
 { #category : #actions }
+GtReportRecorder >> recordInBackgroundWithoutStoring [
+	^ self recordingWithoutStoring start
+
+]
+
+{ #category : #actions }
+GtReportRecorder >> recordLocallyInBackground [
+	^ self recordingLocally start
+
+]
+
+{ #category : #actions }
 GtReportRecorder >> recordReport [
 	^ self subclassResponsibility
 
@@ -135,6 +147,12 @@ GtReportRecorder >> recordReport [
 { #category : #actions }
 GtReportRecorder >> recordingInto: aStore [
 	^ GtReportRecording recorder: self store: aStore
+
+]
+
+{ #category : #actions }
+GtReportRecorder >> recordingLocally [
+	^ self recordingInto: GtReportsLocalStore default
 
 ]
 
@@ -147,6 +165,12 @@ GtReportRecorder >> recordingName [
 { #category : #accessing }
 GtReportRecorder >> recordingPriority [
 	^ Processor userInterruptPriority
+
+]
+
+{ #category : #actions }
+GtReportRecorder >> recordingWithoutStoring [
+	^ self recordingInto: GtNoReportsStore new
 
 ]
 

@@ -42,7 +42,7 @@ GtMessageTallyReportRecorder >> gtRecordActionFor: anAction [
 		priority: 5;
 		action: [ :aButton |
 			aButton disable.
-			(self recordingInto: GtNoReportsStore new)
+			self recordingWithoutStoring
 				whenEndedSpawnReportFrom: aButton;
 				start ]
 
