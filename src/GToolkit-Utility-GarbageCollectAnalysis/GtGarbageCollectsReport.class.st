@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'events',
-		'overallParametersDiffReport'
+		'overallParametersDiffReport',
+		'imageData'
 	],
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
@@ -41,6 +42,28 @@ GtGarbageCollectsReport >> events: aCollection [
 ]
 
 { #category : #views }
+GtGarbageCollectsReport >> gtImageDataFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Image data';
+		priority: 30;
+		object: [ imageData ];
+		view: #gtSummaryFor:
+
+]
+
+{ #category : #views }
+GtGarbageCollectsReport >> gtJsonFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'JSON';
+		priority: 50;
+		object: [ GtJson forJsonString: (LeJsonV4 uniqueInstance serializePretty: self) ];
+		view: #gtJsonStringFor:
+
+]
+
+{ #category : #views }
 GtGarbageCollectsReport >> gtOverallParametersDiffReportFor: aView [
 	<gtView>
 	^ aView forward
@@ -48,6 +71,34 @@ GtGarbageCollectsReport >> gtOverallParametersDiffReportFor: aView [
 		priority: 40;
 		object: [ overallParametersDiffReport ];
 		view: #gtViewChangedParametersFor:
+]
+
+{ #category : #views }
+GtGarbageCollectsReport >> gtSaveLocallyActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons savetodisk;
+		tooltip: 'Save the report locally';
+		action: [ :aButton | aButton phlow spawnObject: (self storeIn: GtReportsLocalStore default) ]
+
+]
+
+{ #category : #views }
+GtGarbageCollectsReport >> gtStorageFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Storage';
+		priority: 45;
+		items: [ OrderedCollection new
+			add: 'Folder' -> self storageFolderName;
+			add: 'File prefix' -> self storageFilePrefix;
+			add: 'Local folder' -> (GtReportsLocalStore default 
+				folderNamed: self storageFolderName);
+			yourself ];
+		column: 'Attribute' text: [ :each | each key ];
+		column: 'Value' text: [ :each | each value ];
+		send: [ :each | each value ]
+
 ]
 
 { #category : #views }
@@ -76,6 +127,26 @@ GtGarbageCollectsReport >> gtViewEventsFor: aView [
 ]
 
 { #category : #accessing }
+GtGarbageCollectsReport >> imageData [
+	^ imageData
+
+]
+
+{ #category : #accessing }
+GtGarbageCollectsReport >> imageData: aReportImageData [
+	imageData := aReportImageData
+
+]
+
+{ #category : #initialization }
+GtGarbageCollectsReport >> initialize [
+	super initialize.
+	events := GtGarbageCollectEventsGroup new.
+	imageData := GtReportImageData new
+
+]
+
+{ #category : #accessing }
 GtGarbageCollectsReport >> overallParametersDiffReport [
 	^ overallParametersDiffReport
 ]
@@ -83,6 +154,22 @@ GtGarbageCollectsReport >> overallParametersDiffReport [
 { #category : #accessing }
 GtGarbageCollectsReport >> overallParametersDiffReport: aVmAllParametersDiffReport [
 	overallParametersDiffReport := aVmAllParametersDiffReport
+]
+
+{ #category : #printing }
+GtGarbageCollectsReport >> printOn: aStream [
+	super printOn: aStream.
+	aStream parenthesize: [
+		aStream
+			print: events size;
+			nextPutAll: ' recorded GC events' ]
+
+]
+
+{ #category : #accessing }
+GtGarbageCollectsReport >> recordImageData [
+	imageData := GtReportImageData current
+
 ]
 
 { #category : #accessing }
@@ -96,6 +183,26 @@ GtGarbageCollectsReport >> recordedEventsDuration [
 { #category : #serialization }
 GtGarbageCollectsReport >> serializeForExport [
 	^ LeJsonV4 uniqueInstance serialize: self
+]
+
+{ #category : #storage }
+GtGarbageCollectsReport >> storageFilePrefix [
+	^ 'GarbageCollectsReport-'
+
+]
+
+{ #category : #storage }
+GtGarbageCollectsReport >> storageFolderName [
+	^ 'garbage-collector'
+
+]
+
+{ #category : #storage }
+GtGarbageCollectsReport >> storeIn: aStore [
+	^ (aStore entryFolderName: self storageFolderName filePrefix: self storageFilePrefix)
+		writeJsonOf: self;
+		yourself
+
 ]
 
 { #category : #accessing }

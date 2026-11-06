@@ -60,12 +60,15 @@ GtGarbageCollectsRecorder >> creatGarbageCollectEvent [
 { #category : #accessing }
 GtGarbageCollectsRecorder >> createReport [
 	^ GtGarbageCollectsReport new
-		overallParametersDiffReport: (GtVmAllParametersDiffReport new 
+		imageData: self reportImageData;
+		overallParametersDiffReport: (GtVmAllParametersDiffReport new
 			sourceReport:  initialVmParametersReport;
 			targetReport: GtVmAllParametersReport recordNewReport);
 		events: (GtGarbageCollectEventsGroup withAll: ((events itemArray
 			reject: [ :each | each isZombie ])
-				collect: [ :item | item object ])) 
+				collect: [ :item | item object ]));
+		yourself
+
 ]
 
 { #category : #actions }
@@ -130,6 +133,12 @@ GtGarbageCollectsRecorder >> recordDuring: aBlockDoingGc [
 	
 	isEnabled := previousActiveStatus.
 	^result
+]
+
+{ #category : #accessing }
+GtGarbageCollectsRecorder >> reportImageData [
+	^ GtReportImageData current
+
 ]
 
 { #category : #updating }
