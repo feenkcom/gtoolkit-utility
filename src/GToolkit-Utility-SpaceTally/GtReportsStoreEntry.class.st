@@ -76,6 +76,22 @@ GtReportsStoreEntry >> write: aString extension: anExtension [
 ]
 
 { #category : #actions }
+GtReportsStoreEntry >> writeBytes: aByteArray extension: anExtension [
+	| file |
+	file := folder / (baseName , '.' , anExtension).
+	store writeBytes: aByteArray to: file.
+	files add: file.
+	^ file
+
+]
+
+{ #category : #actions }
+GtReportsStoreEntry >> writeGzippedStonOf: aReport [
+	^ self writeBytes: aReport gzippedSton extension: 'ston.gz'
+
+]
+
+{ #category : #actions }
 GtReportsStoreEntry >> writeJsonOf: aReport [
 	^ self write: (LeJsonV4 uniqueInstance serializePretty: aReport) extension: 'json'
 

@@ -63,3 +63,9 @@ GtReportsStore >> write: aString to: aDestination [
 	^ self subclassResponsibility
 
 ]
+
+{ #category : #actions }
+GtReportsStore >> writeBytes: aByteArray to: aDestination [
+	^ self subclassResponsibility
+
+]

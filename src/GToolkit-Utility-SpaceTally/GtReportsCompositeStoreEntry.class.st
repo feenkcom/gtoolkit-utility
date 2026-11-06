@@ -64,6 +64,20 @@ GtReportsCompositeStoreEntry >> storeDescription [
 ]
 
 { #category : #actions }
+GtReportsCompositeStoreEntry >> writeBytes: aByteArray extension: anExtension [
+	entries do: [ :each | each writeBytes: aByteArray extension: anExtension ]
+
+]
+
+{ #category : #actions }
+GtReportsCompositeStoreEntry >> writeGzippedStonOf: aReport [
+	| bytes |
+	bytes := aReport gzippedSton.
+	entries do: [ :each | each writeBytes: bytes extension: 'ston.gz' ]
+
+]
+
+{ #category : #actions }
 GtReportsCompositeStoreEntry >> writeJsonOf: aReport [
 	entries do: [ :each | each writeJsonOf: aReport ]
 

@@ -37,6 +37,16 @@ GtReportsNoStoreEntry >> storeDescription [
 ]
 
 { #category : #actions }
+GtReportsNoStoreEntry >> writeBytes: aByteArray extension: anExtension [
+
+]
+
+{ #category : #actions }
+GtReportsNoStoreEntry >> writeGzippedStonOf: aReport [
+
+]
+
+{ #category : #actions }
 GtReportsNoStoreEntry >> writeJsonOf: aReport [
 
 ]

@@ -72,3 +72,10 @@ GtReportsLocalStore >> write: aString to: aFileReference [
 	aFileReference writeStreamDo: [ :aStream | aStream nextPutAll: aString ]
 
 ]
+
+{ #category : #actions }
+GtReportsLocalStore >> writeBytes: aByteArray to: aFileReference [
+	aFileReference parent ensureCreateDirectory.
+	aFileReference binaryWriteStreamDo: [ :aStream | aStream nextPutAll: aByteArray ]
+
+]
