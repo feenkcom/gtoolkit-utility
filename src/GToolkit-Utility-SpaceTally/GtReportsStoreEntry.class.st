@@ -36,7 +36,11 @@ GtReportsStoreEntry >> gtFilesFor: aView [
 { #category : #printing }
 GtReportsStoreEntry >> printOn: aStream [
 	super printOn: aStream.
-	aStream parenthesize: [ aStream nextPutAll: baseName ]
+	aStream parenthesize: [
+		aStream
+			nextPutAll: self storeDescription;
+			nextPutAll: ', ';
+			nextPutAll: baseName ]
 
 ]
 
@@ -52,6 +56,12 @@ GtReportsStoreEntry >> setStore: aStore folder: aFolder baseName: aString [
 { #category : #accessing }
 GtReportsStoreEntry >> stateDescription [
 	^ 'Saved'
+
+]
+
+{ #category : #printing }
+GtReportsStoreEntry >> storeDescription [
+	^ store description
 
 ]
 

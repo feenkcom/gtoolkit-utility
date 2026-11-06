@@ -17,9 +17,22 @@ GtReportsNoStoreEntry >> gtFilesFor: aView [
 
 ]
 
+{ #category : #printing }
+GtReportsNoStoreEntry >> printOn: aStream [
+	super printOn: aStream.
+	aStream parenthesize: [ aStream nextPutAll: self storeDescription ]
+
+]
+
 { #category : #accessing }
 GtReportsNoStoreEntry >> stateDescription [
 	^ 'Recorded'
+
+]
+
+{ #category : #printing }
+GtReportsNoStoreEntry >> storeDescription [
+	^ 'no store'
 
 ]
 

@@ -35,6 +35,8 @@ GtReportsCompositeStoreEntry >> printOn: aStream [
 	super printOn: aStream.
 	aStream parenthesize: [
 		aStream
+			nextPutAll: self storeDescription;
+			nextPutAll: ', ';
 			print: self files size;
 			nextPutAll: ' files' ]
 
@@ -49,6 +51,15 @@ GtReportsCompositeStoreEntry >> setEntries: anArray [
 { #category : #accessing }
 GtReportsCompositeStoreEntry >> stateDescription [
 	^ 'Saved'
+
+]
+
+{ #category : #printing }
+GtReportsCompositeStoreEntry >> storeDescription [
+	^ String streamContents: [ :aStream |
+		entries
+			do: [ :each | aStream nextPutAll: each storeDescription ]
+			separatedBy: [ aStream nextPutAll: ' and ' ] ]
 
 ]
 
