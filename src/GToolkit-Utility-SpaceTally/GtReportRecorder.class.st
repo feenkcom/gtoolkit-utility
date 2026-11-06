@@ -26,8 +26,14 @@ GtReportRecorder class >> imageData: anImageData [
 ]
 
 { #category : #actions }
+GtReportRecorder >> completeReport: aReport [
+	^ aReport
+
+]
+
+{ #category : #actions }
 GtReportRecorder >> createReport [
-	^ self subclassResponsibility
+	^ self completeReport: self recordReport
 
 ]
 
@@ -78,12 +84,26 @@ GtReportRecorder >> gtImageDataFor: aView [
 GtReportRecorder >> gtRecordAndSaveLocallyActionFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons play;
+		icon: BrGlamorousVectorIcons savetodisk;
+		label: 'Record';
 		tooltip: 'Record in the background and save locally';
 		priority: 10;
 		action: [ :aButton |
-			aButton phlow 
+			aButton phlow
 				spawnObject: (self recordInBackgroundInto: GtReportsLocalStore default) ]
+
+]
+
+{ #category : #'gt - extensions' }
+GtReportRecorder >> gtSettingsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Settings';
+		priority: 10;
+		items: [ self settingsAttributes ];
+		column: 'Attribute' text: [ :each | each key ] width: 150;
+		column: 'Value' text: [ :each | each value ];
+		send: [ :each | each value ]
 
 ]
 
@@ -103,6 +123,12 @@ GtReportRecorder >> printOn: aStream [
 { #category : #actions }
 GtReportRecorder >> recordInBackgroundInto: aStore [
 	^ (self recordingInto: aStore) start
+
+]
+
+{ #category : #actions }
+GtReportRecorder >> recordReport [
+	^ self subclassResponsibility
 
 ]
 
@@ -127,5 +153,15 @@ GtReportRecorder >> recordingPriority [
 { #category : #initialization }
 GtReportRecorder >> setImageData: anImageData [
 	imageData := anImageData
+
+]
+
+{ #category : #accessing }
+GtReportRecorder >> settingsAttributes [
+	^ OrderedCollection new
+		add: 'Recording' -> self recordingName;
+		add: 'Priority' -> self recordingPriority;
+		add: 'Image data' -> imageData;
+		yourself
 
 ]

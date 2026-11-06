@@ -4,14 +4,6 @@ Class {
 	#category : #'GToolkit-Utility-SpaceTally'
 }
 
-{ #category : #actions }
-GtProcessesReportRecorder >> createReport [
-	^ self newReport
-		recordReportStatistics;
-		yourself
-
-]
-
 { #category : #'gt - extensions' }
 GtProcessesReportRecorder >> gtRecordActionFor: anAction [
 	<gtAction>
@@ -29,6 +21,14 @@ GtProcessesReportRecorder >> gtRecordActionFor: anAction [
 GtProcessesReportRecorder >> newReport [
 	^ GtProcessesReport new
 		imageData: imageData;
+		yourself
+
+]
+
+{ #category : #actions }
+GtProcessesReportRecorder >> recordReport [
+	^ self newReport
+		recordReportStatistics;
 		yourself
 
 ]

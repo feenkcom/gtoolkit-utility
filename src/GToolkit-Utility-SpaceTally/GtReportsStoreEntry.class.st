@@ -49,6 +49,12 @@ GtReportsStoreEntry >> setStore: aStore folder: aFolder baseName: aString [
 
 ]
 
+{ #category : #accessing }
+GtReportsStoreEntry >> stateDescription [
+	^ 'Saved'
+
+]
+
 { #category : #private }
 GtReportsStoreEntry >> write: aString extension: anExtension [
 	| file |

@@ -20,6 +20,18 @@ GtReportRecording class >> recorder: aRecorder store: aStore [
 
 ]
 
+{ #category : #private }
+GtReportRecording >> announceEnded [
+	announcer announce: (GtReportRecordingEnded recording: self)
+
+]
+
+{ #category : #private }
+GtReportRecording >> announceStarted [
+	announcer announce: (GtReportRecordingStarted recording: self)
+
+]
+
 { #category : #accessing }
 GtReportRecording >> announcer [
 	^ announcer
@@ -112,12 +124,6 @@ GtReportRecording >> isStarted [
 
 ]
 
-{ #category : #private }
-GtReportRecording >> notify: anAnnouncementClass [
-	announcer announce: (anAnnouncementClass recording: self)
-
-]
-
 { #category : #printing }
 GtReportRecording >> printOn: aStream [
 	super printOn: aStream.
@@ -137,17 +143,18 @@ GtReportRecording >> printOn: aStream [
 
 { #category : #private }
 GtReportRecording >> record [
-	[ report := recorder createReport.
-	"The report is created at the recording priority, above the UI, so that it is not delayed by a busy UI.
-	Storing it (serializing, writing or uploading files) is slow but not urgent: lower the priority first
-	so that the UI stays responsive meanwhile."
+	[ report := recorder recordReport.
+	"The report is recorded at the recording priority, above the UI, so that it is not delayed by a busy UI.
+	Completing it (e.g. building the Message Tally text) and storing it (serializing, writing or uploading
+	files) are slow but not urgent: lower the priority first so that the UI stays responsive meanwhile."
 	Processor activeProcess priority: Processor userBackgroundPriority.
+	recorder completeReport: report.
 	entry := report storeIn: store.
-	self notify: GtReportRecordingEnded ]
+	self announceEnded ]
 		on: Error
 		do: [ :anError |
 			error := anError.
-			self notify: GtReportRecordingEnded.
+			self announceEnded.
 			anError pass ]
 
 ]
@@ -179,7 +186,7 @@ GtReportRecording >> showOutcomeOn: aButton [
 { #category : #actions }
 GtReportRecording >> start [
 	startedAt := DateAndTime now.
-	self notify: GtReportRecordingStarted.
+	self announceStarted.
 	process := [ self record ]
 		forkAt: recorder recordingPriority
 		named: 'Record ' , recorder recordingName.
@@ -189,7 +196,7 @@ GtReportRecording >> start [
 { #category : #accessing }
 GtReportRecording >> stateDescription [
 	self hasFailed ifTrue: [ ^ 'Failed' ].
-	self isSaved ifTrue: [ ^ 'Saved' ].
+	self isSaved ifTrue: [ ^ entry stateDescription ].
 	^ self isStarted ifTrue: [ 'Recording' ] ifFalse: [ 'Not started' ]
 
 ]
@@ -204,11 +211,24 @@ GtReportRecording >> whenEndedShowOutcomeOn: aButton [
 ]
 
 { #category : #ui }
+GtReportRecording >> whenEndedSpawnReportFrom: aButton [
+	announcer
+		when: GtReportRecordingEnded
+		do: [ :anAnnouncement |
+			aButton enqueueTask: (BlTaskAction new action: [
+				aButton enable.
+				self hasFailed ifFalse: [ aButton phlow spawnObject: report ] ]) ]
+		for: aButton
+
+]
+
+{ #category : #ui }
 GtReportRecording >> whenEndedUpdateToolOf: aButton [
 	announcer
 		when: GtReportRecordingEnded
 		do: [ :anAnnouncement |
-			aButton enqueueTask: (BlTaskAction new action: [ aButton phlow fireToolUpdateWish ]) ]
+			aButton enqueueTask: (BlTaskAction new 
+				action: [ aButton phlow fireToolUpdateWish ]) ]
 		for: aButton
 
 ]
