@@ -1,3 +1,8 @@
+"
+I describe the image in which a report was recorded: the GT version and release timestamp, the GT VM version, the Pharo VM version and the Pharo image version. I hold plain copied values only and no identifying data such as host names or paths; images that need more (e.g. a computer name) use a subclass.
+
+Every report carries me, and so does the metadata of every stored report. Record the current values with `GtReportImageData current`.
+"
 Class {
 	#name : #GtReportImageData,
 	#superclass : #Object,
@@ -80,6 +85,12 @@ GtReportImageData >> initialize [
 	gtVmVersion := ''.
 	pharoVmVersion := ''.
 	pharoImageVersion := ''
+
+]
+
+{ #category : #accessing }
+GtReportImageData >> machineName [
+	^ ''
 
 ]
 

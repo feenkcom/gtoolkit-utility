@@ -1,3 +1,6 @@
+"
+I announce that a report recording changed its state.
+"
 Class {
 	#name : #GtReportRecordingChanged,
 	#superclass : #Announcement,

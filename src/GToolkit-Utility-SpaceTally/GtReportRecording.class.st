@@ -1,3 +1,6 @@
+"
+I am one background recording of a report: I record it with my recorder, store it in my store and announce when I start and when I end (`GtReportRecordingStarted`, `GtReportRecordingEnded`). After I end I hold the report and the stored entry, or the error.
+"
 Class {
 	#name : #GtReportRecording,
 	#superclass : #Object,
@@ -41,6 +44,18 @@ GtReportRecording >> announcer [
 { #category : #accessing }
 GtReportRecording >> entry [
 	^ entry
+
+]
+
+{ #category : #'gt - extensions' }
+GtReportRecording >> gtFolderFor: aView [
+	<gtView>
+	entry ifNil: [ ^ aView empty ].
+	^ aView forward
+		title: 'Folder';
+		priority: 11;
+		object: [ entry ];
+		view: #gtFolderFor:
 
 ]
 

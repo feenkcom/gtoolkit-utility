@@ -1,3 +1,6 @@
+"
+I store a report in several stores at once, with the same id and file names in each of them. The files are serialized once and written to every store.
+"
 Class {
 	#name : #GtReportsCompositeStore,
 	#superclass : #GtReportsStore,
@@ -23,11 +26,9 @@ GtReportsCompositeStore >> description [
 ]
 
 { #category : #accessing }
-GtReportsCompositeStore >> entryFolderName: aFolderName filePrefix: aPrefix [
-	| baseName |
-	baseName := self baseNameWithPrefix: aPrefix.
+GtReportsCompositeStore >> entryFor: aReport storageId: aStorageId [
 	^ GtReportsCompositeStoreEntry entries: (stores collect: [ :each |
-		each entryFolderName: aFolderName baseName: baseName ])
+		each entryFor: aReport storageId: aStorageId ])
 
 ]
 

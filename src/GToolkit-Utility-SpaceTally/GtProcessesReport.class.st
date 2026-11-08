@@ -3,10 +3,17 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'processReports',
-		'imageData'
+		'imageData',
+		'reportUid'
 	],
 	#category : #'GToolkit-Utility-SpaceTally'
 }
+
+{ #category : #serialization }
+GtProcessesReport class >> fromStoredFiles: aStoredReportFiles [
+	^ aStoredReportFiles readJson
+
+]
 
 { #category : #serialization }
 GtProcessesReport class >> leJsonV4Name [
@@ -63,9 +70,8 @@ GtProcessesReport >> gtStorageFor: aView [
 		title: 'Storage';
 		priority: 40;
 		items: [ OrderedCollection new
-			add: 'Folder' -> self storageFolderName;
-			add: 'File prefix' -> self storageFilePrefix;
-			add: 'Local folder' -> (GtReportsLocalStore default folderNamed: self storageFolderName);
+			add: 'Report type' -> self reportType;
+			add: 'Local folder' -> (GtReportsLocalStore default folderForType: self reportType);
 			yourself ];
 		column: 'Attribute' text: [ :each | each key ];
 		column: 'Value' text: [ :each | each value ];
@@ -112,7 +118,8 @@ GtProcessesReport >> initialize [
 	super initialize.
 
 	processReports := #().
-	imageData := GtReportImageData new
+	imageData := GtReportImageData new.
+	reportUid := UUID new
 
 ]
 
@@ -159,21 +166,31 @@ GtProcessesReport >> recordReportStatistics [
 ]
 
 { #category : #storage }
-GtProcessesReport >> storageFilePrefix [
-	^ 'ProcessesReport-'
+GtProcessesReport >> reportType [
+	^ 'processes'
 
 ]
 
-{ #category : #storage }
-GtProcessesReport >> storageFolderName [
-	^ 'processes-report'
+{ #category : #accessing }
+GtProcessesReport >> reportUid [
+	^ reportUid
+
+]
+
+{ #category : #accessing }
+GtProcessesReport >> reportUid: aUUID [
+	reportUid := aUUID
 
 ]
 
 { #category : #storage }
 GtProcessesReport >> storeIn: aStore [
-	^ (aStore entryFolderName: self storageFolderName filePrefix: self storageFilePrefix)
-		writeJsonOf: self;
-		yourself
+	^ aStore store: self
+
+]
+
+{ #category : #storage }
+GtProcessesReport >> writeFilesTo: anEntry [
+	anEntry writeJsonOf: self
 
 ]

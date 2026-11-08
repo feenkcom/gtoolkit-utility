@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'textualContent',
 		'imageData',
+		'reportUid',
 		'startTime',
 		'duration',
 		'pollPeriodMilliseconds',
@@ -22,8 +23,16 @@ GtMessageTallyReport class >> fromMessageTally: aMessageTally [
 ]
 
 { #category : #serialization }
+GtMessageTallyReport class >> fromStoredFiles: aStoredReportFiles [
+	^ aStoredReportFiles readJson
+		textualContent: (aStoredReportFiles readText: 'txt');
+		yourself
+
+]
+
+{ #category : #serialization }
 GtMessageTallyReport class >> leJsonV4AttributeMapping [
-	^ #(#imageData #startTime #duration #pollPeriodMilliseconds #numberOfSamples #measuredMilliseconds #vmParametersDiff)
+	^ #(#imageData #reportUid #startTime #duration #pollPeriodMilliseconds #numberOfSamples #measuredMilliseconds #vmParametersDiff)
 		collect: [ :each | each -> each ]
 
 ]
@@ -84,9 +93,8 @@ GtMessageTallyReport >> gtStorageFor: aView [
 		title: 'Storage';
 		priority: 40;
 		items: [ OrderedCollection new
-			add: 'Folder' -> self storageFolderName;
-			add: 'File prefix' -> self storageFilePrefix;
-			add: 'Local folder' -> (GtReportsLocalStore default folderNamed: self storageFolderName);
+			add: 'Report type' -> self reportType;
+			add: 'Local folder' -> (GtReportsLocalStore default folderForType: self reportType);
 			yourself ];
 		column: 'Attribute' text: [ :each | each key ];
 		column: 'Value' text: [ :each | each value ];
@@ -161,6 +169,7 @@ GtMessageTallyReport >> initialize [
 	super initialize.
 	textualContent := ''.
 	imageData := GtReportImageData new.
+	reportUid := UUID new.
 	duration := Duration zero.
 	pollPeriodMilliseconds := 0.
 	numberOfSamples := 0.
@@ -250,6 +259,24 @@ GtMessageTallyReport >> recordText [
 
 ]
 
+{ #category : #storage }
+GtMessageTallyReport >> reportType [
+	^ 'message-tally'
+
+]
+
+{ #category : #accessing }
+GtMessageTallyReport >> reportUid [
+	^ reportUid
+
+]
+
+{ #category : #accessing }
+GtMessageTallyReport >> reportUid: aUUID [
+	reportUid := aUUID
+
+]
+
 { #category : #accessing }
 GtMessageTallyReport >> startTime [
 	^ startTime
@@ -263,23 +290,8 @@ GtMessageTallyReport >> startTime: aDateAndTime [
 ]
 
 { #category : #storage }
-GtMessageTallyReport >> storageFilePrefix [
-	^ 'MessageTally-'
-
-]
-
-{ #category : #storage }
-GtMessageTallyReport >> storageFolderName [
-	^ 'message-tally'
-
-]
-
-{ #category : #storage }
 GtMessageTallyReport >> storeIn: aStore [
-	^ (aStore entryFolderName: self storageFolderName filePrefix: self storageFilePrefix)
-		writeText: textualContent extension: 'txt';
-		writeJsonOf: self;
-		yourself
+	^ aStore store: self
 
 ]
 
@@ -315,5 +327,13 @@ GtMessageTallyReport >> vmParametersDiff [
 { #category : #accessing }
 GtMessageTallyReport >> vmParametersDiff: aVmAllParametersDiffReport [
 	vmParametersDiff := aVmAllParametersDiffReport
+
+]
+
+{ #category : #storage }
+GtMessageTallyReport >> writeFilesTo: anEntry [
+	anEntry
+		writeText: textualContent extension: 'txt';
+		writeJsonOf: self
 
 ]
