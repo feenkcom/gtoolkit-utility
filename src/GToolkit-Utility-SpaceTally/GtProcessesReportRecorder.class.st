@@ -1,3 +1,6 @@
+"
+I record a snapshot of all the processes in the image, with their stacks (`GtProcessesReport`).
+"
 Class {
 	#name : #GtProcessesReportRecorder,
 	#superclass : #GtReportRecorder,

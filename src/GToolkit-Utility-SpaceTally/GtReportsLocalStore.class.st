@@ -1,3 +1,6 @@
+"
+I store reports in a folder on disk, by default `gt-reports` next to the image (`GtReportsLocalStore default`).
+"
 Class {
 	#name : #GtReportsLocalStore,
 	#superclass : #GtReportsStore,
@@ -69,13 +72,15 @@ GtReportsLocalStore >> setRootFolder: aFileReference [
 { #category : #actions }
 GtReportsLocalStore >> write: aString to: aFileReference [
 	aFileReference parent ensureCreateDirectory.
-	aFileReference writeStreamDo: [ :aStream | aStream nextPutAll: aString ]
+	aFileReference writeStreamDo: [ :aStream | aStream nextPutAll: aString ].
+	^ aFileReference size
 
 ]
 
 { #category : #actions }
 GtReportsLocalStore >> writeBytes: aByteArray to: aFileReference [
 	aFileReference parent ensureCreateDirectory.
-	aFileReference binaryWriteStreamDo: [ :aStream | aStream nextPutAll: aByteArray ]
+	aFileReference binaryWriteStreamDo: [ :aStream | aStream nextPutAll: aByteArray ].
+	^ aFileReference size
 
 ]

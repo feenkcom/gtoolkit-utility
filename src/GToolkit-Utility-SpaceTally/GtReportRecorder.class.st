@@ -1,3 +1,8 @@
+"
+I am the abstract recorder of one kind of report. `createReport` records synchronously; `recordInBackgroundInto: aStore` (or the shortcuts `recordLocallyInBackground` and `recordInBackgroundWithoutStoring`) answers a started `GtReportRecording`.
+
+Recording happens in two steps: `recordReport` is the time-sensitive part and runs at the recording priority, `completeReport:` is the slow part and runs at background priority. I carry the image data that goes into the reports I create.
+"
 Class {
 	#name : #GtReportRecorder,
 	#superclass : #Object,

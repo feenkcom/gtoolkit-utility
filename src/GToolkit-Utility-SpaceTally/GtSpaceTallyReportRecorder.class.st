@@ -1,3 +1,6 @@
+"
+I record a space tally of the whole image (`GtSpaceTallyReport`). The VM walks the whole heap while recording, which freezes the image for a few seconds; storing the report takes much longer, so I am meant to run in the background.
+"
 Class {
 	#name : #GtSpaceTallyReportRecorder,
 	#superclass : #GtReportRecorder,

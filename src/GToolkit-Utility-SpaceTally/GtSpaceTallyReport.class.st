@@ -1,8 +1,12 @@
+"
+I hold a space tally of the whole image (the unchanged `GtSpaceTally`), the VM statistics, the time and the image data. I am stored as gzipped STON, because the plain text of a full tally is about a hundred megabytes.
+"
 Class {
 	#name : #GtSpaceTallyReport,
 	#superclass : #Object,
 	#instVars : [
 		'imageData',
+		'reportUid',
 		'timestamp',
 		'spaceTally',
 		'vmStatisticsReport'
@@ -16,9 +20,21 @@ GtSpaceTallyReport class >> fromGzippedSton: aByteArray [
 
 ]
 
+{ #category : #serialization }
+GtSpaceTallyReport class >> fromStoredFiles: aStoredReportFiles [
+	^ aStoredReportFiles readGzippedSton
+
+]
+
 { #category : #'instance creation' }
 GtSpaceTallyReport class >> imageData: anImageData [
 	^ self new setImageData: anImageData
+
+]
+
+{ #category : #serialization }
+GtSpaceTallyReport class >> leJsonV4Name [
+	^ #gtSpaceTallyReport
 
 ]
 
@@ -89,10 +105,9 @@ GtSpaceTallyReport >> gtStorageFor: aView [
 		title: 'Storage';
 		priority: 40;
 		items: [ OrderedCollection new
-			add: 'Folder' -> self storageFolderName;
-			add: 'File prefix' -> self storageFilePrefix;
+			add: 'Report type' -> self reportType;
 			add: 'Format' -> 'gzipped STON (.ston.gz)';
-			add: 'Local folder' -> (GtReportsLocalStore default folderNamed: self storageFolderName);
+			add: 'Local folder' -> (GtReportsLocalStore default folderForType: self reportType);
 			yourself ];
 		column: 'Attribute' text: [ :each | each key ];
 		column: 'Value' text: [ :each | each value ];
@@ -142,9 +157,16 @@ GtSpaceTallyReport >> imageData [
 ]
 
 { #category : #initialization }
+GtSpaceTallyReport >> imageData: anImageData [
+	imageData := anImageData
+
+]
+
+{ #category : #initialization }
 GtSpaceTallyReport >> initialize [
 	super initialize.
-	imageData := GtReportImageData new
+	imageData := GtReportImageData new.
+	reportUid := UUID new
 
 ]
 
@@ -180,10 +202,26 @@ GtSpaceTallyReport >> recordReportStatistics [
 
 ]
 
+{ #category : #storage }
+GtSpaceTallyReport >> reportType [
+	^ 'space-tally'
+
+]
+
+{ #category : #accessing }
+GtSpaceTallyReport >> reportUid [
+	^ reportUid
+
+]
+
+{ #category : #accessing }
+GtSpaceTallyReport >> reportUid: anObject [
+	reportUid := anObject
+]
+
 { #category : #initialization }
 GtSpaceTallyReport >> setImageData: anImageData [
-	imageData := anImageData
-
+	self imageData: anImageData
 ]
 
 { #category : #accessing }
@@ -192,23 +230,14 @@ GtSpaceTallyReport >> spaceTally [
 
 ]
 
-{ #category : #storage }
-GtSpaceTallyReport >> storageFilePrefix [
-	^ 'SpaceTallyReport-'
-
-]
-
-{ #category : #storage }
-GtSpaceTallyReport >> storageFolderName [
-	^ 'space-tally'
-
+{ #category : #accessing }
+GtSpaceTallyReport >> spaceTally: anObject [
+	spaceTally := anObject
 ]
 
 { #category : #storage }
 GtSpaceTallyReport >> storeIn: aStore [
-	^ (aStore entryFolderName: self storageFolderName filePrefix: self storageFilePrefix)
-		writeGzippedStonOf: self;
-		yourself
+	^ aStore store: self
 
 ]
 
@@ -233,7 +262,23 @@ GtSpaceTallyReport >> timestamp [
 ]
 
 { #category : #accessing }
+GtSpaceTallyReport >> timestamp: anObject [
+	timestamp := anObject
+]
+
+{ #category : #accessing }
 GtSpaceTallyReport >> vmStatisticsReport [
 	^ vmStatisticsReport
+
+]
+
+{ #category : #accessing }
+GtSpaceTallyReport >> vmStatisticsReport: anObject [
+	vmStatisticsReport := anObject
+]
+
+{ #category : #storage }
+GtSpaceTallyReport >> writeFilesTo: anEntry [
+	anEntry writeGzippedStonOf: self
 
 ]

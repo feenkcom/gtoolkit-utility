@@ -1,3 +1,6 @@
+"
+I am the entry of the store that keeps nothing: every write does nothing and I have no files.
+"
 Class {
 	#name : #GtReportsNoStoreEntry,
 	#superclass : #Object,
@@ -14,6 +17,19 @@ GtReportsNoStoreEntry >> files [
 GtReportsNoStoreEntry >> gtFilesFor: aView [
 	<gtView>
 	^ aView empty
+
+]
+
+{ #category : #'gt - extensions' }
+GtReportsNoStoreEntry >> gtFolderFor: aView [
+	<gtView>
+	^ aView empty
+
+]
+
+{ #category : #accessing }
+GtReportsNoStoreEntry >> metadata [
+	^ GtReportMetadata new
 
 ]
 
@@ -42,6 +58,11 @@ GtReportsNoStoreEntry >> writeBytes: aByteArray extension: anExtension [
 ]
 
 { #category : #actions }
+GtReportsNoStoreEntry >> writeBytes: aByteArray named: aName extension: anExtension [
+
+]
+
+{ #category : #actions }
 GtReportsNoStoreEntry >> writeGzippedStonOf: aReport [
 
 ]
@@ -52,6 +73,21 @@ GtReportsNoStoreEntry >> writeJsonOf: aReport [
 ]
 
 { #category : #actions }
+GtReportsNoStoreEntry >> writeJsonOf: anObject named: aName [
+
+]
+
+{ #category : #actions }
+GtReportsNoStoreEntry >> writeMetadataOf: aReport [
+
+]
+
+{ #category : #actions }
 GtReportsNoStoreEntry >> writeText: aString extension: anExtension [
+
+]
+
+{ #category : #actions }
+GtReportsNoStoreEntry >> writeText: aString named: aName extension: anExtension [
 
 ]

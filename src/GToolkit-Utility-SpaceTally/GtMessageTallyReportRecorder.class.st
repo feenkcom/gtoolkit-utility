@@ -1,3 +1,6 @@
+"
+I record a Message Tally of the whole image for a fixed duration (30 seconds by default) with a given poll period, into a `GtMessageTallyReport`. I am meant to run in the background, so the UI stays usable and what is done in it is profiled.
+"
 Class {
 	#name : #GtMessageTallyReportRecorder,
 	#superclass : #GtReportRecorder,

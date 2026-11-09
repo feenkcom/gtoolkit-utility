@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'events',
 		'overallParametersDiffReport',
-		'imageData'
+		'imageData',
+		'reportUid'
 	],
 	#category : #'GToolkit-Utility-GarbageCollectAnalysis'
 }
@@ -12,6 +13,12 @@ Class {
 { #category : #serialization }
 GtGarbageCollectsReport class >> fromSerializedString: aString [
  	^ LeJsonV4 uniqueInstance deserialize:  aString readStream
+]
+
+{ #category : #serialization }
+GtGarbageCollectsReport class >> fromStoredFiles: aStoredReportFiles [
+	^ aStoredReportFiles readJson
+
 ]
 
 { #category : #serialization }
@@ -90,10 +97,8 @@ GtGarbageCollectsReport >> gtStorageFor: aView [
 		title: 'Storage';
 		priority: 45;
 		items: [ OrderedCollection new
-			add: 'Folder' -> self storageFolderName;
-			add: 'File prefix' -> self storageFilePrefix;
-			add: 'Local folder' -> (GtReportsLocalStore default 
-				folderNamed: self storageFolderName);
+			add: 'Report type' -> self reportType;
+			add: 'Local folder' -> (GtReportsLocalStore default folderForType: self reportType);
 			yourself ];
 		column: 'Attribute' text: [ :each | each key ];
 		column: 'Value' text: [ :each | each value ];
@@ -142,7 +147,8 @@ GtGarbageCollectsReport >> imageData: aReportImageData [
 GtGarbageCollectsReport >> initialize [
 	super initialize.
 	events := GtGarbageCollectEventsGroup new.
-	imageData := GtReportImageData new
+	imageData := GtReportImageData new.
+	reportUid := UUID new
 
 ]
 
@@ -180,28 +186,32 @@ GtGarbageCollectsReport >> recordedEventsDuration [
 			total + anEvent duration ]
 ]
 
+{ #category : #storage }
+GtGarbageCollectsReport >> reportType [
+	^ 'garbage-collects'
+
+]
+
+{ #category : #accessing }
+GtGarbageCollectsReport >> reportUid [
+	^ reportUid
+
+]
+
+{ #category : #accessing }
+GtGarbageCollectsReport >> reportUid: aUUID [
+	reportUid := aUUID
+
+]
+
 { #category : #serialization }
 GtGarbageCollectsReport >> serializeForExport [
 	^ LeJsonV4 uniqueInstance serialize: self
 ]
 
 { #category : #storage }
-GtGarbageCollectsReport >> storageFilePrefix [
-	^ 'GarbageCollectsReport-'
-
-]
-
-{ #category : #storage }
-GtGarbageCollectsReport >> storageFolderName [
-	^ 'garbage-collector'
-
-]
-
-{ #category : #storage }
 GtGarbageCollectsReport >> storeIn: aStore [
-	^ (aStore entryFolderName: self storageFolderName filePrefix: self storageFilePrefix)
-		writeJsonOf: self;
-		yourself
+	^ aStore store: self
 
 ]
 
@@ -216,4 +226,10 @@ GtGarbageCollectsReport >> summaryAttributes [
 		{'Recorded GC events' . events size }.
 		{'Recorded events duration' . self recordedEventsDuration}.
 		{'Events with basicNew source'. events numberOfEventsWithBasicNewSource}}
+]
+
+{ #category : #storage }
+GtGarbageCollectsReport >> writeFilesTo: anEntry [
+	anEntry writeJsonOf: self
+
 ]
