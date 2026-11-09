@@ -157,6 +157,12 @@ GtSpaceTallyReport >> imageData [
 ]
 
 { #category : #initialization }
+GtSpaceTallyReport >> imageData: anImageData [
+	imageData := anImageData
+
+]
+
+{ #category : #initialization }
 GtSpaceTallyReport >> initialize [
 	super initialize.
 	imageData := GtReportImageData new.
@@ -208,16 +214,25 @@ GtSpaceTallyReport >> reportUid [
 
 ]
 
+{ #category : #accessing }
+GtSpaceTallyReport >> reportUid: anObject [
+	reportUid := anObject
+]
+
 { #category : #initialization }
 GtSpaceTallyReport >> setImageData: anImageData [
-	imageData := anImageData
-
+	self imageData: anImageData
 ]
 
 { #category : #accessing }
 GtSpaceTallyReport >> spaceTally [
 	^ spaceTally
 
+]
+
+{ #category : #accessing }
+GtSpaceTallyReport >> spaceTally: anObject [
+	spaceTally := anObject
 ]
 
 { #category : #storage }
@@ -247,9 +262,19 @@ GtSpaceTallyReport >> timestamp [
 ]
 
 { #category : #accessing }
+GtSpaceTallyReport >> timestamp: anObject [
+	timestamp := anObject
+]
+
+{ #category : #accessing }
 GtSpaceTallyReport >> vmStatisticsReport [
 	^ vmStatisticsReport
 
+]
+
+{ #category : #accessing }
+GtSpaceTallyReport >> vmStatisticsReport: anObject [
+	vmStatisticsReport := anObject
 ]
 
 { #category : #storage }
