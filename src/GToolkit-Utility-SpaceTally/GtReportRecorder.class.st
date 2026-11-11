@@ -112,6 +112,11 @@ GtReportRecorder >> gtSettingsFor: aView [
 
 ]
 
+{ #category : #testing }
+GtReportRecorder >> isAvailable [
+	^true
+]
+
 { #category : #accessing }
 GtReportRecorder >> newReport [
 	^ self subclassResponsibility
@@ -179,6 +184,11 @@ GtReportRecorder >> recordingWithoutStoring [
 
 ]
 
+{ #category : #actions }
+GtReportRecorder >> renewed [
+	^self class current
+]
+
 { #category : #initialization }
 GtReportRecorder >> setImageData: anImageData [
 	imageData := anImageData
@@ -193,4 +203,9 @@ GtReportRecorder >> settingsAttributes [
 		add: 'Image data' -> imageData;
 		yourself
 
+]
+
+{ #category : #accessing }
+GtReportRecorder >> unavailabilityDescription [
+	^''
 ]
