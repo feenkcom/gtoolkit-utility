@@ -59,6 +59,11 @@ GtMessageTallyReportRecorder >> initialize [
 
 ]
 
+{ #category : #testing }
+GtMessageTallyReportRecorder >> isAvailable [
+	^MessageTally isSpying not
+]
+
 { #category : #accessing }
 GtMessageTallyReportRecorder >> newReport [
 	^ GtMessageTallyReport new
@@ -105,6 +110,14 @@ GtMessageTallyReportRecorder >> recordingName [
 
 ]
 
+{ #category : #actions }
+GtMessageTallyReportRecorder >> renewed [
+	^(super renewed)
+		duration: duration;
+		pollPeriodMilliseconds: pollPeriodMilliseconds;
+		yourself
+]
+
 { #category : #accessing }
 GtMessageTallyReportRecorder >> settingsAttributes [
 	^ super settingsAttributes
@@ -112,4 +125,9 @@ GtMessageTallyReportRecorder >> settingsAttributes [
 		add: 'Poll period (ms)' -> pollPeriodMilliseconds;
 		yourself
 
+]
+
+{ #category : #accessing }
+GtMessageTallyReportRecorder >> unavailabilityDescription [
+	^'A Message Tally is already running'
 ]

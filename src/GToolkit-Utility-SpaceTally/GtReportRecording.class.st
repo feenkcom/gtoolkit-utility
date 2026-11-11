@@ -174,6 +174,18 @@ GtReportRecording >> record [
 
 ]
 
+{ #category : #private }
+GtReportRecording >> recordResolving: aPromise [
+	[self record.
+	aPromise fulfillWithValue: self] on: Error
+			do: [:anError | aPromise rejectWithError: anError copy freeze]
+]
+
+{ #category : #accessing }
+GtReportRecording >> recorder [
+	^recorder
+]
+
 { #category : #accessing }
 GtReportRecording >> report [
 	^ report
@@ -206,6 +218,18 @@ GtReportRecording >> start [
 		forkAt: recorder recordingPriority
 		named: 'Record ' , recorder recordingName.
 
+]
+
+{ #category : #actions }
+GtReportRecording >> startAsPromise [
+	| promise |
+	promise := AsyncManualPromise new.
+	startedAt := DateAndTime now.
+	self announceStarted.
+	process := [self recordResolving: promise]
+				forkAt: recorder recordingPriority
+				named: 'Record ' , recorder recordingName.
+	^promise
 ]
 
 { #category : #accessing }

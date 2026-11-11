@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #accessing }
+GtReportsStore >> backgroundConfiguration [
+	^(AsyncFutureExecutionConfiguration default)
+		userBackgroundPriority;
+		customGroup: #gtReportsStoring;
+		maxAmountOfWorkers: 1;
+		errorHandler: (AsyncErrorHandler on: Error do: [:anError | anError freeze]);
+		yourself
+]
+
+{ #category : #accessing }
 GtReportsStore >> dateOf: aStorageId [
 	^ (aStorageId copyFrom: 1 to: 4) , '-' , (aStorageId copyFrom: 5 to: 6) , '-' , (aStorageId copyFrom: 7 to: 8)
 
@@ -77,6 +87,26 @@ GtReportsStore >> newStorageId [
 
 ]
 
+{ #category : #private }
+GtReportsStore >> notifyFailure: anError of: aReport [
+	(GtObjectNotificationMessage new)
+		message: aReport reportType , ' not saved to ' , self description , ': '
+					, anError messageText;
+		tooltip: 'Inspect the error';
+		object: anError;
+		showNotifications;
+		registerNotifications
+]
+
+{ #category : #private }
+GtReportsStore >> notifyStored: anEntry of: aReport [
+	(GtObjectNotificationMessage new)
+		message: aReport reportType , ' saved to ' , self description;
+		tooltip: 'Inspect the stored files';
+		object: anEntry;
+		registerNotifications
+]
+
 { #category : #accessing }
 GtReportsStore >> rootFolder [
 	^ self subclassResponsibility
@@ -91,6 +121,38 @@ GtReportsStore >> store: aReport [
 	entry writeMetadataOf: aReport.
 	^ entry
 
+]
+
+{ #category : #actions }
+GtReportsStore >> storeInBackground: aReport [
+	^[aReport storeIn: self] asAsyncFuture await: self backgroundConfiguration
+]
+
+{ #category : #actions }
+GtReportsStore >> storeInBackground: aReport showingOutcomeOn: aButton [
+	(aButton asyncPromise)
+		whenPending: 
+				[:anElement |
+				anElement
+					disable;
+					effect: (BlOverlayAboveEffect new paint: (Color orange alpha: 0.4))];
+		whenSuccess: 
+				[:anElement :anEntry |
+				anElement
+					effect: BlNullEffect new;
+					enable;
+					addChangingColorAnimationFor: BrGlamorousColors successBackgroundColor.
+				anElement phlow spawnObject: anEntry];
+		whenError: 
+				[:anElement |
+				anElement
+					effect: BlNullEffect new;
+					enable;
+					addChangingColorAnimationFor: BrGlamorousColors errorBackgroundColor];
+		promise: ((self storeInBackground: aReport)
+					then: [:anEntry | self notifyStored: anEntry of: aReport]
+						otherwise: [:anError | self notifyFailure: anError of: aReport];
+					yourself)
 ]
 
 { #category : #private }
