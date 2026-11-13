@@ -7,6 +7,7 @@ Class {
 { #category : #'examples - three subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleDomainModelAndElement_strongSubscription [
 	<gtExample>
+	<timeLimit: 300000>
 	| modelId model graphicalElementId graphicalElement extraSubscriberId extraSubscriber survivors |
 	modelId := UUID new.
 	model := Association new.
