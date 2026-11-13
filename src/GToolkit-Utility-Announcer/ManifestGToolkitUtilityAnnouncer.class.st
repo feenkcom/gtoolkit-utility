@@ -17,6 +17,7 @@ ManifestGToolkitUtilityAnnouncer class >> mustOnlyDependOn [
 	^ {'Announcements-Core'.
 		'Collections-Sequenceable'.
 		'Collections-Support'.
+		'Collections-Weak'.
 		'GToolkit-Utility-Basic'.
 		'Kernel'.
 		'Network-UUID'.

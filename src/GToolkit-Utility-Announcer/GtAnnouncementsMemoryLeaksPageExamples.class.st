@@ -7,7 +7,8 @@ Class {
 { #category : #'examples - three subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleDomainModelAndElement_strongSubscription [
 	<gtExample>
-	| modelId model graphicalElementId graphicalElement extraSubscriberId extraSubscriber  |
+	<timeLimit: 300000>
+	| modelId model graphicalElementId graphicalElement extraSubscriberId extraSubscriber survivors |
 	modelId := UUID new.
 	model := Association new.
 	model key: modelId.
@@ -35,25 +36,23 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleDomainModelAndElement_strongSub
 		send: #yourself
 		to: extraSubscriber.
 	
+	"Watch the graphical element and the model without holding on to them"
+	survivors := WeakArray with: graphicalElement with: model.
 	model := nil.
 	graphicalElement := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
 	"The graphical element is not removed as through the new weak subscription
 	we create a strong reference to it"
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= graphicalElementId ]) not.
+	self assert: (survivors at: 1) notNil.
 	"The model is not removed as the graphical element holds on to it"
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= modelId ]) not.
+	self assert: (survivors at: 2) notNil
 ]
 
 { #category : #'examples - three subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleDomainModelAndElement_weakSubscription [
 	<gtExample>
-	| modelId model graphicalElementId graphicalElement extraSubscriberId extraSubscriber  |
+	| modelId model graphicalElementId graphicalElement extraSubscriberId extraSubscriber survivors |
 	modelId := UUID new.
 	model := Association new.
 	model key: modelId.
@@ -81,22 +80,20 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleDomainModelAndElement_weakSubsc
 		send: #yourself
 		to: extraSubscriber.
 	
+	"Watch the graphical element and the model without holding on to them"
+	survivors := WeakArray with: graphicalElement with: model.
 	model := nil.
 	graphicalElement := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= graphicalElementId ]) .
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= modelId ]) .
+	self assert: (survivors at: 1) isNil.
+	self assert: (survivors at: 2) isNil.
 ]
 
 { #category : #'examples - three subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleThirdWeakSubscription [
 	<gtExample>
-	| targetId subscribedTarget extraTargetId extraSubscribedTagget  |
+	| targetId subscribedTarget extraTargetId extraSubscribedTagget survivors |
 	targetId := UUID new.
 	subscribedTarget := Association new.
 	subscribedTarget key: targetId.
@@ -121,18 +118,18 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleThirdWeakSubscription [
 		when: Announcement 
 		send: #yourself
 		to: extraSubscribedTagget.
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: subscribedTarget.
 	subscribedTarget := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= targetId ]) not "The reference is not removed"
+	self assert: (survivors at: 1) notNil "The reference is not removed"
 ]
 
 { #category : #'examples - two targets - two subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionDifferentObjects_clearBothSubscribers [
 	<gtExample>
-	| stronglyTargetId weakTargetId stronglySubscribedTarget weaklySubscribedTarget  announcer |
+	| stronglyTargetId weakTargetId stronglySubscribedTarget weaklySubscribedTarget  announcer survivors |
 
 	stronglyTargetId := UUID new.
 	weakTargetId := UUID new.
@@ -155,23 +152,21 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionDiffer
 		send: #yourself
 		to: weaklySubscribedTarget.
 	
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: stronglySubscribedTarget with: weaklySubscribedTarget.
 	announcer := nil.	
 	stronglySubscribedTarget := nil.
 	weaklySubscribedTarget := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= stronglyTargetId ]).
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= weakTargetId ]).
+	self assert: (survivors at: 1) isNil.
+	self assert: (survivors at: 2) isNil.
 ]
 
 { #category : #'examples - two targets - two subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionDifferentObjects_clearStrongSubscriber [
 	<gtExample>
-	| stronglyTargetId weakTargetId stronglySubscribedTarget weaklySubscribedTarget  announcer |
+	| stronglyTargetId weakTargetId stronglySubscribedTarget weaklySubscribedTarget  announcer survivors |
 
 	stronglyTargetId := UUID new.
 	weakTargetId := UUID new.
@@ -194,23 +189,21 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionDiffer
 		send: #yourself
 		to: weaklySubscribedTarget.
 	
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: stronglySubscribedTarget with: weaklySubscribedTarget.
 	announcer := nil.	
 	stronglySubscribedTarget := nil.
 	"weaklySubscribedTarget := nil."
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= stronglyTargetId ]) not. "The reference is not removed"
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= weakTargetId ]) not. "The reference is not removed"
+	self assert: (survivors at: 1) notNil. "The reference is not removed"
+	self assert: (survivors at: 2) notNil. "The reference is not removed"
 ]
 
 { #category : #'examples - two targets - two subscriptions' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionDifferentObjects_clearWeakSubscriber [
 	<gtExample>
-	| stronglyTargetId weakTargetId stronglySubscribedTarget weaklySubscribedTarget  announcer |
+	| stronglyTargetId weakTargetId stronglySubscribedTarget weaklySubscribedTarget  announcer survivors |
 
 	stronglyTargetId := UUID new.
 	weakTargetId := UUID new.
@@ -233,23 +226,21 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionDiffer
 		send: #yourself
 		to: weaklySubscribedTarget.
 	
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: stronglySubscribedTarget with: weaklySubscribedTarget.
 		announcer := nil.	
 	"stronglySubscribedTarget := nil."
 	weaklySubscribedTarget := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= stronglyTargetId ]) not. "The reference is not removed"
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | 
-			each key ~= weakTargetId ])
+	self assert: (survivors at: 1) notNil. "The reference is not removed"
+	self assert: (survivors at: 2) isNil
 ]
 
 { #category : #'examples - same target object' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameObject_logFinalization [
 	<gtExample>
-	| finalizationLog targetId subscribedTarget announcer |
+	| finalizationLog targetId subscribedTarget announcer survivors |
 	finalizationLog := OrderedCollection new.
 
 	targetId := UUID new.
@@ -274,6 +265,8 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 			selector: #add:;
 			arguments: {targetId printString}).
 
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: subscribedTarget.
 	announcer := nil.	
 	subscribedTarget := nil.
 
@@ -284,8 +277,7 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 
 	"Secong garbage collect, removes the reference to the receiver"
 	Smalltalk garbageCollect.
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | each key ~= targetId ]).
+	self assert: (survivors at: 1) isNil.
 	
 	^ finalizationLog
 ]
@@ -293,7 +285,7 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 { #category : #'examples - same target object' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameObject_targetAndAnnouncerAsSeparateObjects [
 	<gtExample>
-	| targetId subscribedTarget announcer |
+	| targetId subscribedTarget announcer survivors |
 	targetId := UUID new.
 	subscribedTarget := Association new.
 	subscribedTarget key: targetId.
@@ -309,18 +301,19 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 		send: #yourself
 		to: subscribedTarget.
 	
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: subscribedTarget.
 	announcer := nil.	
 	subscribedTarget := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | each key ~= targetId ])
+	self assert: (survivors at: 1) isNil
 ]
 
 { #category : #'examples - same target object' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameObject_targetHoldsAnnouncer [
 	<gtExample>
-	| targetId subscribedTarget |
+	| targetId subscribedTarget survivors |
 	targetId := UUID new.
 	subscribedTarget := Association new.
 	subscribedTarget key: targetId.
@@ -335,9 +328,10 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 		send: #yourself
 		to: subscribedTarget.
 	
+	"Watch the targets without holding on to them"
+	survivors := WeakArray with: subscribedTarget.
 	subscribedTarget := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (Association allInstances 
-		allSatisfy: [ :each | each key ~= targetId ])
+	self assert: (survivors at: 1) isNil
 ]
