@@ -1,6 +1,6 @@
 {
 	"repositories" : {
-		"github://feenkcom/pharo-futures/src" : "v0.6.167",
+		"github://feenkcom/pharo-futures/src" : "v0.6.168",
 		"github://pharo-contributions/FFICHeaderExtractor/repository" : "v1.0.2"
 	}
 }
