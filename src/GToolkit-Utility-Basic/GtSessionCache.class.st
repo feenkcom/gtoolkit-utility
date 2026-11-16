@@ -48,9 +48,12 @@ GtSessionCache >> session: aGtWorkingSession [
 
 { #category : #accessing }
 GtSessionCache >> value [
+	| currentSession |
 
-	Smalltalk image session == session ifFalse:
-		[ value := getter value ].
-	
+	currentSession := Smalltalk image session.
+	currentSession == session ifFalse:
+		[ value := getter value.
+		session := currentSession ].
+
 	^ value
 ]
