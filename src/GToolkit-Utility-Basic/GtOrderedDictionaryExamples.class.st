@@ -132,7 +132,8 @@ GtOrderedDictionaryExamples >> unorderedSelectCopiesTheAssociations [
 	aResult keysDo: 
 			[:aKey |
 			self
-				deny: (aResult associationAt: aKey) == (aDictionary associationAt: aKey)].
+				assert: ((aResult associationAt: aKey) == (aDictionary associationAt: aKey))
+						not].
 	^aResult
 ]
 
