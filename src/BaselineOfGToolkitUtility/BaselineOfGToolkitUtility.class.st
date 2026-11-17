@@ -101,6 +101,7 @@ BaselineOfGToolkitUtility >> baseline: spec [
 			spec
 				package: 'GToolkit-Utility-MessageTally';
 				package: 'GToolkit-Utility-SpaceTally';
+				package: 'GToolkit-Utility-MemorySpace';
 				package: 'GToolkit-Utility-StackOverflow';
 				package: 'GToolkit-Utility-StackOverflowFuture'
 					with: [ spec requires: #('GToolkit-Utility-StackOverflow' 'Futures') ];
