@@ -928,7 +928,8 @@ GtMemorySpaceEstimatorExamples >> viewChecksFindErrors [
 
 { #category : #'examples - views' }
 GtMemorySpaceEstimatorExamples >> viewChecksOfAWorkingObject [
-	"The views of an object are the ones defined by its class and superclasses below Object"
+	"The views of an object are the ones defined by its class and superclasses below Object.
+	Views that do not apply, like the roots of an estimate that does not record them, are empty."
 
 	<gtExample>
 	<return: #GtMemorySpaceViewsCheck>
@@ -937,8 +938,10 @@ GtMemorySpaceEstimatorExamples >> viewChecksOfAWorkingObject [
 
 	self
 		assert: (check viewChecks collect: [ :each | each selector ]) asSet
-		equals: #(#gtViewCategoriesFor: #gtViewTagsFor:) asSet.
+		equals: #(#gtViewCategoriesFor: #gtViewTagsFor: #gtViewRootGroupsFor: #gtViewRootsFor:)
+				asSet.
 	self assert: (check viewCheckFor: #gtViewCategoriesFor:) rowsCount equals: 4.
+	self assert: (check viewCheckFor: #gtViewRootsFor:) isEmptyView.
 	^ check
 ]
 

@@ -126,13 +126,9 @@ GtMemorySpaceEstimation >> run [
 			expectedObjects: (definition expectedObjectsFor: subject);
 			yourself.
 	[ aTime := [ definition
-			rootsOf: subject
-			do: [ :aRoot :anAttribution | 
-				anAttribution
-					estimate: aRoot
-					with: anEstimator
-					into: anEstimate ] ] timeToRun ]
-		ensure: [ anEstimator releaseVisitedObjects ].
+			estimateRootsOf: subject
+			with: anEstimator
+			into: anEstimate ] timeToRun ] ensure: [ anEstimator releaseVisitedObjects ].
 	estimator := anEstimator.
 	computationTime := aTime.
 	estimate := anEstimate

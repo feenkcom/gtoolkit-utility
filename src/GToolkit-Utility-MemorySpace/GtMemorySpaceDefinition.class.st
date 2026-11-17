@@ -49,6 +49,20 @@ GtMemorySpaceDefinition >> estimate: aSubject [
 		yourself
 ]
 
+{ #category : #estimating }
+GtMemorySpaceDefinition >> estimateRootsOf: aSubject with: anEstimator into: anEstimate [
+	"Estimate the roots of aSubject with their attributions. 
+	Subclasses can also record the memory added by each root."
+
+	self
+		rootsOf: aSubject
+		do: [ :aRoot :anAttribution | 
+			anAttribution
+				estimate: aRoot
+				with: anEstimator
+				into: anEstimate ]
+]
+
 { #category : #accessing }
 GtMemorySpaceDefinition >> expectedObjectsFor: aSubject [
 	"A rough estimate of the number of objects of aSubject, to presize the set of visited objects. 

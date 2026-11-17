@@ -37,6 +37,15 @@ GtMemorySpaceBoundary >> addTag: aTag [
 	tags add: aTag
 ]
 
+{ #category : #copying }
+GtMemorySpaceBoundary >> copyStoppingAtInstancesOf: aCollectionOfClasses [
+	"A copy of me that also stops at the instances of these classes"
+
+	^ self copy
+		stopAtInstancesOf: aCollectionOfClasses;
+		yourself
+]
+
 { #category : #'gt - extensions' }
 GtMemorySpaceBoundary >> gtViewStopClassesFor: aView [
 	<gtView>
@@ -65,6 +74,13 @@ GtMemorySpaceBoundary >> initialize [
 	super initialize.
 	stopClasses := OrderedCollection new.
 	tags := OrderedCollection new
+]
+
+{ #category : #copying }
+GtMemorySpaceBoundary >> postCopy [
+	super postCopy.
+	stopClasses := stopClasses copy.
+	tags := tags copy
 ]
 
 { #category : #testing }

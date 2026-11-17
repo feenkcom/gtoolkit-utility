@@ -7,7 +7,10 @@ Class {
 	#name : #GtMemorySpaceEstimate,
 	#superclass : #Object,
 	#instVars : [
-		'categoryEstimates'
+		'categoryEstimates',
+		'rootEstimates',
+		'totalBytes',
+		'totalObjectsCount'
 	],
 	#category : #'GToolkit-Utility-MemorySpace'
 }
@@ -25,7 +28,9 @@ GtMemorySpaceEstimate class >> forCategories: aCollectionOfCategories [
 GtMemorySpaceEstimate >> addBytes: aNumberOfBytes objectsCount: aNumberOfObjects toCategory: aCategory [
 	(self categoryEstimateAt: aCategory)
 		addBytes: aNumberOfBytes
-		objectsCount: aNumberOfObjects
+		objectsCount: aNumberOfObjects.
+	totalBytes := totalBytes + aNumberOfBytes.
+	totalObjectsCount := totalObjectsCount + aNumberOfObjects
 ]
 
 { #category : #adding }
@@ -42,7 +47,7 @@ GtMemorySpaceEstimate >> addCategories: aCollectionOfCategories [
 
 { #category : #adding }
 GtMemorySpaceEstimate >> addEstimate: anEstimate [
-	"Add the bytes, objects and tags of anEstimate to mine, category by category"
+	"Add the bytes, objects and tags of anEstimate to mine, category by category, and its root estimates"
 
 	anEstimate categoryEstimates
 		do: [ :each | 
@@ -55,7 +60,16 @@ GtMemorySpaceEstimate >> addEstimate: anEstimate [
 					self
 						addBytes: (each bytesOfTag: aTagName)
 						ofTag: aTagName
-						toCategory: each category ] ]
+						toCategory: each category ] ].
+	anEstimate rootEstimates do: [ :each | self addRootEstimate: each ]
+]
+
+{ #category : #adding }
+GtMemorySpaceEstimate >> addRootEstimate: aRootEstimate [
+	"Record the memory added by one root"
+
+	rootEstimates ifNil: [ rootEstimates := OrderedCollection new ].
+	rootEstimates add: aRootEstimate
 ]
 
 { #category : #accessing }
@@ -140,6 +154,55 @@ GtMemorySpaceEstimate >> gtViewCategoriesFor: aView [
 ]
 
 { #category : #'gt - extensions' }
+GtMemorySpaceEstimate >> gtViewRootGroupsFor: aView [
+	<gtView>
+	self rootEstimates ifEmpty: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Root groups';
+		priority: 5;
+		items: [ self rootGroupEstimates ];
+		column: 'Group' text: [ :each | each label ];
+		column: 'Size'
+			text: [ :each | each bytes humanReadableIsqByteSize ]
+			width: 90;
+		column: 'Percentage'
+			text: [ :each | (each bytes * 100 / (self totalBytes max: 1)) rounded asString , '%' ]
+			width: 80;
+		column: 'Objects'
+			text: [ :each | each objectsCount ]
+			width: 80;
+		column: 'Roots'
+			text: [ :each | each rootEstimates size ]
+			width: 60
+]
+
+{ #category : #'gt - extensions' }
+GtMemorySpaceEstimate >> gtViewRootsFor: aView [
+	<gtView>
+	self rootEstimates ifEmpty: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Roots';
+		priority: 30;
+		items: [ self sortedRootEstimates ];
+		column: 'Root' text: [ :each | each label ];
+		column: 'Group'
+			text: [ :each | each group label ]
+			width: 150;
+		column: 'Category'
+			text: [ :each | each categoryName ]
+			width: 180;
+		column: 'Size'
+			text: [ :each | each bytes humanReadableIsqByteSize ]
+			width: 90;
+		column: 'Objects'
+			text: [ :each | each objectsCount ]
+			width: 80;
+		send: [ :each | each root object ]
+]
+
+{ #category : #'gt - extensions' }
 GtMemorySpaceEstimate >> gtViewTagsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -161,7 +224,9 @@ GtMemorySpaceEstimate >> gtViewTagsFor: aView [
 { #category : #initialization }
 GtMemorySpaceEstimate >> initialize [
 	super initialize.
-	categoryEstimates := OrderedDictionary new
+	categoryEstimates := OrderedDictionary new.
+	totalBytes := 0.
+	totalObjectsCount := 0
 ]
 
 { #category : #accessing }
@@ -185,10 +250,43 @@ GtMemorySpaceEstimate >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtMemorySpaceEstimate >> rootEstimates [
+	"The memory added by each root, when the definition records it (GtMemorySpaceRootEstimate)"
+
+	^ rootEstimates ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtMemorySpaceEstimate >> rootGroupEstimates [
+	"The memory added by each group of roots (GtMemorySpaceRootGroupEstimate), in the order of the groups.
+	Computed on each request from the root estimates."
+
+	| groups rootEstimatesOfGroups |
+	groups := OrderedCollection new.
+	rootEstimatesOfGroups := IdentityDictionary new.
+	self rootEstimates
+		do: [ :each | 
+			(rootEstimatesOfGroups includesKey: each group)
+				ifFalse: [ groups add: each group.
+					rootEstimatesOfGroups at: each group put: OrderedCollection new ].
+			(rootEstimatesOfGroups at: each group) add: each ].
+	^ groups asArray
+		collect: [ :aGroup | 
+			GtMemorySpaceRootGroupEstimate
+				group: aGroup
+				rootEstimates: (rootEstimatesOfGroups at: aGroup) ]
+]
+
+{ #category : #accessing }
 GtMemorySpaceEstimate >> sortedCategoryEstimates [
 	"The estimates of the categories, largest first"
 
 	^ self categoryEstimates asArray sort: [ :a :b | a bytes > b bytes ]
+]
+
+{ #category : #accessing }
+GtMemorySpaceEstimate >> sortedRootEstimates [
+	^ self rootEstimates asArray sort: [ :a :b | a bytes > b bytes ]
 ]
 
 { #category : #accessing }
@@ -233,12 +331,12 @@ GtMemorySpaceEstimate >> tags [
 
 { #category : #accessing }
 GtMemorySpaceEstimate >> totalBytes [
-	^ self categoryEstimates inject: 0 into: [ :sum :each | sum + each bytes ]
+	"Kept up to date while adding, as definitions ask for it after every root"
+
+	^ totalBytes
 ]
 
 { #category : #accessing }
 GtMemorySpaceEstimate >> totalObjectsCount [
-	^ self categoryEstimates
-		inject: 0
-		into: [ :sum :each | sum + each objectsCount ]
+	^ totalObjectsCount
 ]
