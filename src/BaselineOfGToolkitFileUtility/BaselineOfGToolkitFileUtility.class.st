@@ -10,13 +10,13 @@ BaselineOfGToolkitFileUtility >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'GToolkitResourcesUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.65/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.66/src' ].
 		spec
 			baseline: 'GToolkitAssertionUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.65/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.66/src' ].
 		spec
 			baseline: 'GToolkitAnnouncerUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.65/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.66/src' ].
 		spec
 			baseline: 'Futures' with: [
 				spec repository: 'github://feenkcom/pharo-futures:v0.6.168/src' ].
