@@ -36,6 +36,18 @@ GtSessionCacheExamples >> doesNotComputeBeforeFirstValueRequest [
 ]
 
 { #category : #examples }
+GtSessionCacheExamples >> doesNotRecomputeWithinTheSameImageSession [
+	<gtExample>
+	self cacheWithCounterGetter.
+	firstComputed := cache value.
+	secondComputed := cache value.
+	self assert: firstComputed equals: 1.
+	self assert: secondComputed equals: 1.
+	self assert: counter equals: 1.
+	^ cache
+]
+
+{ #category : #examples }
 GtSessionCacheExamples >> recomputesWhenStoredSessionDiffersFromCurrentImageSession [
 	<gtExample>
 	self cacheWithCounterGetter.
