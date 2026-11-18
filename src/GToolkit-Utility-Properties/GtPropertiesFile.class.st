@@ -19,7 +19,7 @@ Class {
 		'properties',
 		'announcer'
 	],
-	#category : 'GToolkit-Utility-Properties'
+	#category : #'GToolkit-Utility-Properties'
 }
 
 { #category : #accessing }
