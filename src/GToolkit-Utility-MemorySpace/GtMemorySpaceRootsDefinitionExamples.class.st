@@ -184,20 +184,23 @@ GtMemorySpaceRootsDefinitionExamples >> groupWithItsOwnStopClasses [
 { #category : #examples }
 GtMemorySpaceRootsDefinitionExamples >> retentionOfInstances [
 	"The memory reached through the instances of a class, split into what only they keep alive (retained) 
-	and what other objects also reach (shared).
+	and what other objects also reach (shared), with the roots that share it.
 	All instances in the image are measured: instances kept by earlier runs of this example, 
 	which the roots do not reach, are retained too."
 
 	<gtExample>
 	<return: #GtMemorySpaceRetention>
-	| kept shared contents holder root definition retention ownSize classRetention |
+	| kept shared contents holder root other definition retention ownSize classRetention sharing |
 	kept := 'kept only through the holder' copy.
 	shared := 'also held by the root' copy.
 	contents := Array with: kept with: shared.
 	holder := GtMemorySpaceRetentionExampleHolder new contents: contents.
 	root := Array with: holder with: shared.
+	other := Array with: 'not shared' copy.
 	definition := GtMemorySpaceRootsDefinition new
-			roots: 'Roots' are: {root};
+			roots: 'Roots'
+				are: {root.
+						other};
 			yourself.
 
 	retention := GtMemorySpaceRetention
@@ -211,10 +214,11 @@ GtMemorySpaceRootsDefinitionExamples >> retentionOfInstances [
 		assert: retention reachedBytes
 		equals: retention retainedBytes + shared sizeInMemory.
 	self assert: retention instancesCount >= 1.
-	self assert: retention instancesBytes >= holder sizeInMemory.
-	self
-		assert: retention stoppingEstimate totalBytes
-		equals: root sizeInMemory + shared sizeInMemory.
+	self assert: retention instancesBytes >= holder sizeInMemory.	"only the first root shares memory with the holders"
+	sharing := retention sharingRootEstimates.
+	self assert: sharing size equals: 1.
+	self assert: sharing first root object identicalTo: root.
+	self assert: sharing first bytes equals: shared sizeInMemory.
 
 	classRetention := retention classRetentions first.
 	self

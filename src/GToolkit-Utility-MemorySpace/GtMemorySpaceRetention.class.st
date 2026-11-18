@@ -1,11 +1,13 @@
 "
 I estimate the memory kept by the instances of some classes, for example by the history of a server, and split the memory reached through them in two:
 - the memory reached **only through** the instances (retained): it would be freed without them;
-- the memory **also reached from other places** (shared): it would stay.
+- the memory **also reached from other places** (shared): it would stay. The Shared with view shows which roots also reach it, and how much of it each one reaches.
 
-I start from an estimation ({{gtClass:GtMemorySpaceEstimation}}) of a {{gtClass:GtMemorySpaceRootsDefinition}}. I walk its roots again while stopping at the instances, and then continue the same walk from the instances: what is still new is retained. Both parts of this walk see the same heap, so the retained memory does not depend on changes between walks. A second walk, from the instances alone, gives all the memory reached through them; the shared memory is the difference.
+I start from an estimation ({{gtClass:GtMemorySpaceEstimation}}) of a {{gtClass:GtMemorySpaceRootsDefinition}}. I walk its roots again while stopping at the instances, and then continue the same walk from the instances: what is still new is retained. Both parts of this walk see the same heap, so the retained memory does not depend on changes between walks. A second walk starts from the instances alone, which gives all the memory reached through them; the shared memory is the difference. That walk then continues from the roots: a root that now reaches less than in the first walk also reaches memory of the instances.
 
 The instances are all instances of the classes and their subclasses in the image, also those that the roots do not reach. Each class gets a {{gtClass:GtMemorySpaceClassRetention}} with its instances and the memory retained through them; memory retained through instances of several classes goes to the first class. The split between retained and shared memory is for all classes together.
+
+When the shared memory is surprisingly large, look at the roots that share it: they may be other objects of the same tool that should be retained classes too.
 "
 Class {
 	#name : #GtMemorySpaceRetention,
@@ -16,7 +18,8 @@ Class {
 		'stoppingEstimate',
 		'retainedEstimate',
 		'reachedEstimate',
-		'classRetentions'
+		'classRetentions',
+		'sharingEstimate'
 	],
 	#category : #'GToolkit-Utility-MemorySpace'
 }
@@ -40,9 +43,11 @@ GtMemorySpaceRetention >> classRetentions [
 
 { #category : #computing }
 GtMemorySpaceRetention >> compute [
-	"First walk the roots while stopping at the instances of the retained classes, 
+	"1. Walk the roots while stopping at the instances of the retained classes, 
 	then continue the same walk from the instances: what is still new is reached only through them.
-	Then walk from the instances alone, to know all the memory reached through them."
+	2. Walk from the instances alone, to know all the memory reached through them, 
+	then continue the same walk from the roots: what each root reaches now, compared with the first walk,
+	shows how much of the memory of the instances it also reaches."
 
 	| aDefinition anEstimator instancesOfClasses |
 	aDefinition := estimation definition copyStoppingAtInstancesOf: retainedClasses.
@@ -64,13 +69,20 @@ GtMemorySpaceRetention >> compute [
 		with: anEstimator
 		into: retainedEstimate ] ensure: [ anEstimator releaseVisitedObjects ].
 	reachedEstimate := GtMemorySpaceEstimate new.
+	sharingEstimate := GtMemorySpaceEstimate forCategories: aDefinition categories.
 	anEstimator := GtMemorySpaceEstimator new
 			boundary: estimation definition newBoundary;
+			expectedObjects: (aDefinition expectedObjectsFor: estimation subject);
 			yourself.
 	[ self
 		estimateInstances: instancesOfClasses
 		with: anEstimator
-		into: reachedEstimate ] ensure: [ anEstimator releaseVisitedObjects ].
+		into: reachedEstimate.
+	anEstimator boundary: aDefinition newBoundary.
+	aDefinition
+		estimateRootsOf: estimation subject
+		with: anEstimator
+		into: sharingEstimate ] ensure: [ anEstimator releaseVisitedObjects ].
 	classRetentions := (1 to: retainedClasses size)
 			collect: [ :anIndex | 
 				| aClass |
@@ -122,6 +134,28 @@ GtMemorySpaceRetention >> gtViewClassesFor: aView [
 		column: 'Retained (only through them)'
 			text: [ :each | each retainedBytes humanReadableIsqByteSize ]
 			width: 200
+]
+
+{ #category : #'gt - extensions' }
+GtMemorySpaceRetention >> gtViewSharedWithFor: aView [
+	<gtView>
+	sharingEstimate ifNil: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Shared with';
+		priority: 15;
+		items: [ self sharingRootEstimates ];
+		column: 'Root' text: [ :each | each label ];
+		column: 'Group'
+			text: [ :each | each group label ]
+			width: 150;
+		column: 'Also reaches'
+			text: [ :each | each bytes humanReadableIsqByteSize ]
+			width: 100;
+		column: 'Objects'
+			text: [ :each | each objectsCount ]
+			width: 90;
+		send: [ :each | each root object ]
 ]
 
 { #category : #'gt - extensions' }
@@ -241,6 +275,39 @@ GtMemorySpaceRetention >> sharedBytes [
 	"The memory reached through the instances that is also reached from other places"
 
 	^ self reachedBytes - self retainedBytes
+]
+
+{ #category : #accessing }
+GtMemorySpaceRetention >> sharingEstimate [
+	"What the roots reach after everything reached through the instances was visited"
+
+	^ sharingEstimate
+]
+
+{ #category : #accessing }
+GtMemorySpaceRetention >> sharingRootEstimates [
+	"For each root that also reaches memory reached through the instances, how much of it (GtMemorySpaceRootEstimate), largest first.
+	A root's share is what it reaches when the walk only stops at the instances, 
+	minus what it reaches after everything reached through the instances was visited."
+
+	| after |
+	sharingEstimate ifNil: [ ^ #() ].
+	after := IdentityDictionary new.
+	sharingEstimate rootEstimates
+		do: [ :each | after at: each root object put: each ].
+	^ (stoppingEstimate rootEstimates
+		collect: [ :before | 
+			| other |
+			other := after at: before root object ifAbsent: [ nil ].
+			GtMemorySpaceRootEstimate
+				root: before root
+				group: before group
+				category: before category
+				bytes: before bytes - (other ifNil: [ 0 ] ifNotNil: [ other bytes ])
+				objectsCount: before objectsCount
+						- (other ifNil: [ 0 ] ifNotNil: [ other objectsCount ]) ]
+		thenSelect: [ :each | each bytes > 0 ]) asArray
+		sort: [ :a :b | a bytes > b bytes ]
 ]
 
 { #category : #accessing }
