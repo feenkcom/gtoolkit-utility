@@ -17,6 +17,13 @@ GtOsSystemInfo class >> current [
 	^ cls new.
 ]
 
+{ #category : #'cpu info' }
+GtOsSystemInfo >> availableMemory [
+	"Answer the available memory.  On Mac and Windows this is an estimate."
+
+	^ self freeMemory
+]
+
 { #category : #private }
 GtOsSystemInfo >> colonSeparatedGet: key fromFile: filename [
 	"Answer the specified key from the colon separated file"
