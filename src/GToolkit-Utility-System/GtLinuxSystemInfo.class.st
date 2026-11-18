@@ -10,6 +10,13 @@ GtLinuxSystemInfo class >> platformName [
 	^ 'unix'
 ]
 
+{ #category : #'cpu info' }
+GtLinuxSystemInfo >> availableMemory [
+	"Answer the available RAM of the host"
+
+	^ (self colonSeparatedGet: 'MemAvailable' fromFile: '/proc/meminfo') asNumber * 1024
+]
+
 { #category : #'process info' }
 GtLinuxSystemInfo >> currentProcessId [
 
