@@ -50,10 +50,7 @@ GtQpsSample >> gtSummaryFor: aView [
 
 { #category : #accessing }
 GtQpsSample >> processCount [
-
-	^ processes
-		ifNil: [ 0 ]
-		ifNotNil: #size
+	^ processes ifNil: [ 0 ] ifNotNil: [ :v | v size ]
 ]
 
 { #category : #accessing }

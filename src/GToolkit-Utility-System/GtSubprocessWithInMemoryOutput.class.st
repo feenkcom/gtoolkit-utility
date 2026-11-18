@@ -198,8 +198,7 @@ GtSubprocessWithInMemoryOutput >> exitStatus [
 
 { #category : #status }
 GtSubprocessWithInMemoryOutput >> exitStatusInterpreter [
-
-	^ process ifNotNil: #tryWait
+	^ process ifNotNil: [ :v | v tryWait ]
 ]
 
 { #category : #ui }
@@ -419,30 +418,27 @@ GtSubprocessWithInMemoryOutput >> runProcess [
 	"Run the requested command as a separate process"
 
 	self setCommand.
-	
+
 	builder
 		pipeStdout;
 		pipeStderr;
 		pipeStdin.
 
 	processStartedSemaphore := Semaphore new.
-	outputPoll := 
-		[ [ self runWithRetry ]
+	outputPoll := [ [ self runWithRetry ]
 			on: Error
 			do: [ :ex | 
-				pollException ifNil:
-					[ pollException := ex ].
-				processStartedSemaphore ifNotNil: #signal.
-				semaphore ifNotNil: #signal.
-				errorBlock ifNotNil:
-					[ errorBlock cull: self cull: false ] ].
-		] forkAt: Processor activeProcess priority + 1.
-	(processStartedSemaphore waitTimeoutSeconds: 5) ifTrue:
-		[ | error |
-		error := GtSubprocessError new
-			process: self;
-			messageText: 'Unable to start process.'.
-		error signal ].
+				pollException ifNil: [ pollException := ex ].
+				processStartedSemaphore ifNotNil: [ :v | v signal ].
+				semaphore ifNotNil: [ :v | v signal ].
+				errorBlock ifNotNil: [ errorBlock cull: self cull: false ] ] ]
+			forkAt: Processor activeProcess priority + 1.
+	(processStartedSemaphore waitTimeoutSeconds: 5)
+		ifTrue: [ | error |
+			error := GtSubprocessError new
+					process: self;
+					messageText: 'Unable to start process.'.
+			error signal ]
 ]
 
 { #category : #private }
