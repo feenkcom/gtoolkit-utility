@@ -42,10 +42,10 @@ GtPropertiesFileExamples >> populatedPropertiesFile [
 	dictionary := STONJSON fromString: properties file contents.
 
 	self assert: dictionary size equals: 2.
-	fileDictionary := dictionary at: #aFile.
+	fileDictionary := dictionary at: 'aFile'.
 	self assert: fileDictionary size equals: 2.
-	self assert: (fileDictionary at: #__type) equals: #fileLocator.
-	self assert: (fileDictionary at: #filename) equals: fileLocator printString.
+	self assert: (fileDictionary at: '__type') equals: 'fileLocator'.
+	self assert: (fileDictionary at: 'filename') equals: fileLocator printString.
 
 	readProperties := GtPropertiesFile file: properties file.
 	self assert: readProperties size equals: 1.
