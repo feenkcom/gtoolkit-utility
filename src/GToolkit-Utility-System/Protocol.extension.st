@@ -7,5 +7,5 @@ Protocol class >> gtAllProtocolDefaultName [
 
 { #category : #'*GToolkit-Utility-System' }
 Protocol class >> isAllProtocolName: aString [
-	^	self gtAllProtocolDefaultName = aString
+	^	self gtAllProtocolDefaultName sameContentAs: aString
 ]
