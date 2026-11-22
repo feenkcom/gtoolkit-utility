@@ -285,7 +285,7 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 { #category : #'examples - same target object' }
 GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameObject_targetAndAnnouncerAsSeparateObjects [
 	<gtExample>
-	| targetId subscribedTarget announcer survivors |
+	| targetId subscribedTarget announcer survivors survivorAnnouncer |
 	targetId := UUID new.
 	subscribedTarget := Association new.
 	subscribedTarget key: targetId.
@@ -303,11 +303,13 @@ GtAnnouncementsMemoryLeaksPageExamples >> exampleWeakAndStrongSubscriptionSameOb
 	
 	"Watch the targets without holding on to them"
 	survivors := WeakArray with: subscribedTarget.
+	survivorAnnouncer := WeakArray with: announcer.
 	announcer := nil.	
 	subscribedTarget := nil.
 
 	2 timesRepeat: [ Smalltalk garbageCollect ].
-	self assert: (survivors at: 1) isNil
+	self assert: (survivors at: 1) isNil.
+	self assert: (survivorAnnouncer at: 1) isNil
 ]
 
 { #category : #'examples - same target object' }
