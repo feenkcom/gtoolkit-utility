@@ -11,6 +11,9 @@ BaselineOfGToolkitAnnouncerUtility >> baseline: spec [
 		spec baseline: 'GToolkitBasicUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ].
 		spec package: 'GToolkit-Utility-Announcer' with: [
-				spec requires: #('GToolkitBasicUtility' ). ]. ].
+				spec requires: #('GToolkitBasicUtility' ). ]. 
+		spec package: 'GToolkit-Utility-Announcements-Visualization' with: [
+				spec requires: #('GToolkitBasicUtility' ). ].
+		].
 
 ]
