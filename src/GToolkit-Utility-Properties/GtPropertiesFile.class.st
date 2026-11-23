@@ -89,7 +89,7 @@ GtPropertiesFile >> initialize [
 
 	super initialize.
 	announcer := Announcer new.
-	properties := Dictionary new.
+	properties := GtStringContentDictionary new.
 ]
 
 { #category : #private }

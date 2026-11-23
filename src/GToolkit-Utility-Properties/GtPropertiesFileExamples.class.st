@@ -6,13 +6,6 @@ Class {
 	#category : #'GToolkit-Utility-Properties-Examples'
 }
 
-{ #category : #asserting }
-GtPropertiesFileExamples >> assert: actual equals: expected [
-	^ self
-		assert: (actual sameContentAs: expected)
-		description: [ self comparingStringBetween: actual and: expected ]
-]
-
 { #category : #examples }
 GtPropertiesFileExamples >> emptyPropertiesFile [
 	"Answer an empty properties file using a memory file for storage"
