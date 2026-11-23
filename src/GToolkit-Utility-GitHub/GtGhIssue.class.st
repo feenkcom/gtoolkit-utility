@@ -4,9 +4,27 @@ Class {
 	#category : #'GToolkit-Utility-GitHub'
 }
 
+{ #category : #examples }
+GtGhIssue class >> exampleIssue [
+	"An issue as the GitHub issues API answers it, read the way IceGitHubAPI>>#getIssue:project:number: reads it (STON: String keys)"
+	<gtExample>
+	<return: #GtGhIssue>
+	| issue |
+	issue := self new rawData: (STON fromString:
+		'{"number":1234,"title":"Example issue","state":"open","body":"Sic mundus creatus est.","html_url":"https://github.com/example-owner/example-project/issues/1234"}').
+	self assert: issue number equals: 1234.
+	self assert: issue title equals: 'Example issue'.
+	self assert: issue state equals: 'open'.
+	self assert: issue body equals: 'Sic mundus creatus est.'.
+	self assert: issue htmlUrlString equals: 'https://github.com/example-owner/example-project/issues/1234'.
+	self assert: issue shortReference equals: 'example-owner/example-project#1234'.
+	self assert: issue printString equals: 'a GtGhIssue(example-owner/example-project#1234, Example issue)'.
+	^ issue
+]
+
 { #category : #accessing }
 GtGhIssue >> body [
-	^ self rawData at: #body
+	^ self rawData at: 'body'
 ]
 
 { #category : #'gt - extensions' }
@@ -38,12 +56,12 @@ GtGhIssue >> gtViewIssueBodyFor: aView [
 
 { #category : #accessing }
 GtGhIssue >> htmlUrlString [
-	^ self rawData at: #html_url
+	^ self rawData at: 'html_url'
 ]
 
 { #category : #accessing }
 GtGhIssue >> number [
-	^ self rawData at: #number
+	^ self rawData at: 'number'
 ]
 
 { #category : #printing }
@@ -69,10 +87,10 @@ GtGhIssue >> shortReference [
 
 { #category : #accessing }
 GtGhIssue >> state [
-	^ self rawData at: #state
+	^ self rawData at: 'state'
 ]
 
 { #category : #accessing }
 GtGhIssue >> title [
-	^ self rawData at: #title
+	^ self rawData at: 'title'
 ]
