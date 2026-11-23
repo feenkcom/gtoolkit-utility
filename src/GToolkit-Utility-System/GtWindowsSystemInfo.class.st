@@ -32,7 +32,7 @@ GtWindowsSystemInfo >> findExecutable: aString [
 	path ifEmpty: [ self error: 'Unable to find: ', aString asString ].
 	lines := path lines
 		collect: [ :line | line trimBoth asFileReference ]
-		thenSelect: [ :each | #(bat exe) includes: each extension asLowercase ].
+		thenSelect: [ :each | #('bat' 'exe') includes: each extension asLowercase ].
 	lines ifEmpty: [ self error: 'Unable to find: ', aString asString ].
 	^ lines first.
 ]
