@@ -142,7 +142,7 @@ GtGhProjectWithBaseline >> gtViewForkedRepositoriesStatusFor: aView [
 						alignCenter ];
 				dataBinder: [ :itemElement :aRepository | 
 					| nodeIcon |
-					nodeIcon := ((#(diverged behind) includes: aRepository branchDiffFromSelfToParent reverseStatus)
+					nodeIcon := ((#('diverged' 'behind') includes: aRepository branchDiffFromSelfToParent reverseStatus)
 						ifTrue: [ BrGlamorousVectorIcons redcircle ]
 						ifFalse: [ BrGlamorousVectorIcons greencircle ]).
 					 

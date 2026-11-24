@@ -14,6 +14,62 @@ Class {
 	#category : #'GToolkit-Utility-GitHub'
 }
 
+{ #category : #examples }
+GtGhBranchComparison class >> exampleAheadComparison [
+	"A head branch with commits the base branch does not have"
+	<gtExample>
+	<return: #GtGhBranchComparison>
+	| comparison |
+	comparison := self new
+		baseSpec: 'main';
+		headSpec: 'example-owner:main';
+		rawData: (STON fromString: '{"status":"ahead","ahead_by":1,"behind_by":0,"total_commits":1,"commits":[]}');
+		yourself.
+	self assert: comparison reverseStatus equals: 'behind'.
+	self assert: comparison description equals: 'The branch main is 1 commits ahead with example-owner:main'.
+	self assert: comparison reverseDescription equals: 'The branch main is 1 commits behind with example-owner:main'.
+	^ comparison
+]
+
+{ #category : #examples }
+GtGhBranchComparison class >> exampleDivergedComparison [
+	"A comparison as the GitHub compare API answers it, read the way IceGitHubAPI>>#get: reads it (STON: String keys and values)"
+	<gtExample>
+	<return: #GtGhBranchComparison>
+	| comparison |
+	comparison := self new
+		baseSpec: 'main';
+		headSpec: 'example-owner:main';
+		rawData: (STON fromString: '{"status":"diverged","ahead_by":2,"behind_by":3,"total_commits":2,"commits":[]}');
+		yourself.
+	self assert: comparison status equals: 'diverged'.
+	self assert: comparison reverseStatus equals: 'diverged'.
+	self
+		assert: comparison description
+		equals: 'The branch main is 2 commits ahead, 3 commits behind with example-owner:main'.
+	self
+		assert: comparison reverseDescription
+		equals: 'The branch main is 3 commits ahead, 2 commits behind with example-owner:main'.
+	^ comparison
+]
+
+{ #category : #examples }
+GtGhBranchComparison class >> exampleIdenticalComparison [
+	"Two branches with the same commits"
+	<gtExample>
+	<return: #GtGhBranchComparison>
+	| comparison |
+	comparison := self new
+		baseSpec: 'main';
+		headSpec: 'example-owner:main';
+		rawData: (STON fromString: '{"status":"identical","ahead_by":0,"behind_by":0,"total_commits":0,"commits":[]}');
+		yourself.
+	self assert: comparison reverseStatus equals: 'identical'.
+	self assert: comparison description equals: 'The branch main is up to date with example-owner:main'.
+	self assert: comparison reverseDescription equals: 'The branch main is up to date with example-owner:main'.
+	^ comparison
+]
+
 { #category : #printing }
 GtGhBranchComparison >> aheadBy [
 	^ self rawData at: 'ahead_by'
@@ -64,7 +120,7 @@ GtGhBranchComparison >> descriptionOn: aStream [
 
 { #category : #printing }
 GtGhBranchComparison >> diffStatusOn: aStream [ 
-	(#(diverged behind ahead) includes: self status) ifTrue: [ 
+	(#('diverged' 'behind' 'ahead') includes: self status) ifTrue: [ 
 		| parts |
 		parts := OrderedCollection new.
 		
@@ -120,7 +176,7 @@ GtGhBranchComparison >> reverseDescriptionOn: aStream [
 
 { #category : #printing }
 GtGhBranchComparison >> reverseDiffStatusOn: aStream [ 
-	(#(diverged behind ahead) includes: self status) ifTrue: [ 
+	(#('diverged' 'behind' 'ahead') includes: self status) ifTrue: [ 
 		| parts |
 		parts := OrderedCollection new.
 		
