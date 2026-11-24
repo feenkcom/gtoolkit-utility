@@ -11,7 +11,7 @@ Class {
 { #category : #testing }
 GtVmBasicRuntimeStatisticsDiffReport class >> isAbstract [
 
-	^ self class name = 'GtVmBasicRuntimeStatisticsDiffReport'
+	^ self class name = #GtVmBasicRuntimeStatisticsDiffReport
 ]
 
 { #category : #accessing }
