@@ -33,11 +33,11 @@ GtMemorySpaceViewCheck >> addError: anException [
 { #category : #private }
 GtMemorySpaceViewCheck >> addErrorsIn: aComputedItem [
 	"Add the errors of the cells of rows computed by a declarative view; 
-	rows are dictionaries and arrays"
+	rows are dictionaries (with String keys) and arrays"
 
 	aComputedItem isDictionary
-		ifTrue: [ (aComputedItem at: #valueTypeName ifAbsent: [ nil ]) = 'errorValue'
-				ifTrue: [ errors add: (aComputedItem at: #itemText ifAbsent: [ 'error' ]) asString ].
+		ifTrue: [ (aComputedItem at: 'valueTypeName' ifAbsent: [ nil ]) = 'errorValue'
+				ifTrue: [ errors add: (aComputedItem at: 'itemText' ifAbsent: [ 'error' ]) asString ].
 			aComputedItem do: [ :each | self addErrorsIn: each ].
 			^ self ].
 	(aComputedItem isCollection and: [ aComputedItem isString not ])
