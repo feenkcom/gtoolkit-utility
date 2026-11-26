@@ -1,5 +1,5 @@
 "
-I gate access for multiple waiting processes. Before I am released, processes that send #wait block. Once I am released by sending #signal, all waiting processes are resumed and any future waits proceed immediately. I am a one-shot gate built on top of Semaphore.
+I gate access for multiple waiting processes. Before I am released, #wait blocks and #waitTimeoutMilliseconds: waits until release or timeout. After #signal, all current and future waits proceed immediately. I am a one-shot gate built on Semaphore.
 "
 Class {
 	#name : #GtReleaseLatch,
@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'released',
 		'semaphore',
-		'mutex'
+		'mutex',
+		'waitingCount'
 	],
 	#category : #'GToolkit-Utility-System'
 }
@@ -31,7 +32,8 @@ GtReleaseLatch >> initialize [
 	super initialize.
 	released := false.
 	semaphore := Semaphore new.
-	mutex := Semaphore forMutualExclusion
+	mutex := Semaphore forMutualExclusion.
+	waitingCount := 0
 ]
 
 { #category : #accessing }
@@ -41,16 +43,30 @@ GtReleaseLatch >> isReleased [
 
 { #category : #synchronization }
 GtReleaseLatch >> signal [
-	mutex critical: [
-		released ifTrue: [ ^ self ].
-		released := true.
-		semaphore signalAll. ].
+	mutex
+		critical: [ released ifTrue: [ ^ self ].
+			released := true.
+			semaphore signalAll.
+			(waitingCount ifNil: [ 0 ]) timesRepeat: [ semaphore signal ] ]
 ]
 
 { #category : #synchronization }
 GtReleaseLatch >> wait [
-	mutex critical: [
-		released ifTrue: [ ^ self ].
-	].
-	semaphore wait
+	mutex
+		critical: [ released ifTrue: [ ^ self ].
+			waitingCount := (waitingCount ifNil: [ 0 ]) + 1 ].
+	[ semaphore wait ]
+		ensure: [ mutex critical: [ waitingCount := waitingCount - 1 ] ].
+	^ self
+]
+
+{ #category : #waiting }
+GtReleaseLatch >> waitTimeoutMilliseconds: milliseconds [
+	"Answer true when the timeout expires, false when the latch is released."
+
+	mutex
+		critical: [ released ifTrue: [ ^ false ].
+			waitingCount := (waitingCount ifNil: [ 0 ]) + 1 ].
+	^ [ semaphore waitTimeoutMilliseconds: milliseconds ]
+		ensure: [ mutex critical: [ waitingCount := waitingCount - 1 ] ]
 ]
