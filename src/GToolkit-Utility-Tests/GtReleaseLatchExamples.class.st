@@ -52,3 +52,40 @@ GtReleaseLatchExamples >> signalReleasesCurrentWaitersAndFutureWaiters [
 	Processor activeProcess priority: priority.
 	^ latch
 ]
+
+{ #category : #examples }
+GtReleaseLatchExamples >> signalReleasesTimedWaiter [
+	<gtExample>
+	| latch ready done timedOut |
+	latch := GtReleaseLatch new.
+	ready := Semaphore new.
+	done := Semaphore new.
+	[ ready signal.
+	timedOut := latch waitTimeoutMilliseconds: 1000.
+	done signal ] fork.
+	ready wait.
+	latch signal.
+	self deny: (done waitTimeoutMilliseconds: 1000).
+	self deny: timedOut.
+	^ latch
+]
+
+{ #category : #examples }
+GtReleaseLatchExamples >> timedWaitAfterRelease [
+	<gtExample>
+	| latch |
+	latch := GtReleaseLatch new.
+	latch signal.
+	self deny: (latch waitTimeoutMilliseconds: 1).
+	^ latch
+]
+
+{ #category : #examples }
+GtReleaseLatchExamples >> timedWaitExpiresBeforeRelease [
+	<gtExample>
+	| latch |
+	latch := GtReleaseLatch new.
+	self assert: (latch waitTimeoutMilliseconds: 1).
+	self deny: latch isReleased.
+	^ latch
+]
