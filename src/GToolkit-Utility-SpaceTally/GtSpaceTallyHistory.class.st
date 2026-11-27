@@ -14,6 +14,7 @@ Class {
 { #category : #accessing }
 GtSpaceTallyHistory class >> default [
 	<gtExample>
+	<noTest>
 	^ defaultInstance ifNil: [ 
 		defaultInstance := self new ]
 ]
